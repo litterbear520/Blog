@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://litterbear520.github.io/Blog/blog</id>
+    <title>My Site Blog</title>
+    <updated>2025-07-04T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://litterbear520.github.io/Blog/blog"/>
+    <subtitle>My Site Blog</subtitle>
+    <icon>https://litterbear520.github.io/Blog/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[我的博客]]></title>
+        <id>https://litterbear520.github.io/Blog/blog/mdx-blog-post</id>
+        <link href="https://litterbear520.github.io/Blog/blog/mdx-blog-post"/>
+        <updated>2025-07-04T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[我的博客]]></summary>
+        <content type="html"><![CDATA[<p>我的博客</p>]]></content>
+        <category label="docusaurus" term="docusaurus"/>
+    </entry>
+</feed>

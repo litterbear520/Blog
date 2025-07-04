@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="rss.xsl"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>My Site Blog</title>
+        <link>https://litterbear520.github.io/Blog/blog</link>
+        <description>My Site Blog</description>
+        <lastBuildDate>Fri, 04 Jul 2025 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <item>
+            <title><![CDATA[我的博客]]></title>
+            <link>https://litterbear520.github.io/Blog/blog/mdx-blog-post</link>
+            <guid>https://litterbear520.github.io/Blog/blog/mdx-blog-post</guid>
+            <pubDate>Fri, 04 Jul 2025 00:00:00 GMT</pubDate>
+            <description><![CDATA[我的博客]]></description>
+            <content:encoded><![CDATA[<p>我的博客</p>]]></content:encoded>
+            <category>docusaurus</category>
+        </item>
+    </channel>
+</rss>
