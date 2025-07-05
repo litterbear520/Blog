@@ -1,50 +1,41 @@
 import Layout from '@theme/Layout';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import clsx from 'clsx';
+import styles from './index.module.css';
+import Link from '@docusaurus/Link';
 
 function HomepageHeader() {
-  const startDate = new Date('2025-05-15T00:00:00'); // 设置开始日期为2025年5月15日
-  const [timePassed, setTimePassed] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
-  useEffect(() => {
-    const calculateTime = () => {
-      const now = new Date();
-      const diffTime = now.getTime() - startDate.getTime();
-
-      const seconds = Math.floor(diffTime / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
-
-      setTimePassed({
-        days: days,
-        hours: hours % 24,
-        minutes: minutes % 60,
-        seconds: seconds % 60,
-      });
-    };
-
-    calculateTime(); // 初始计算
-    const intervalId = setInterval(calculateTime, 1000); // 每秒更新一次
-
-    return () => clearInterval(intervalId);
-  }, []);
-
   return (
-    <header className="homepage-header">
+    <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
-      喜欢小雨宝宝的第{timePassed.days}天 {timePassed.hours}小时 {timePassed.minutes}分钟 {timePassed.seconds}秒
+        <h1 className="hero__title">我的博客</h1>
+        {/* <p className="hero__subtitle">真实的记录自己，比获得他人的认同感更重要</p> */}
       </div>
     </header>
   );
 }
 
-export default function Home() {
+function BlogSection() {
+  return (
+    <section className={clsx('container', styles.blogSection)}>
+      <div className="row">
+        <div className="col col--4">
+          <h2>2025</h2>
+          <ul>
+            <li><Link to="/blog/mdx-blog-post">阿里天池二手车价格预测Top2分享</Link></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
 
+export default function Home() {
   return (
     <Layout>
       <HomepageHeader />
       <main>
-
+        <BlogSection />
       </main>
     </Layout>
   );

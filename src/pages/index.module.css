@@ -1,0 +1,59 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally. 
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 300px; /* Adjust height as needed */
+  background-color: #f0f8ff; /* AliceBlue - A light, pleasing blue */
+  color: #333; /* Text color for contrast */
+}
+
+.hero__title {
+  color: #333; /* Make title readable on light background */
+}
+
+.hero__subtitle {
+  color: #555; /* Slightly darker for subtitle */
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.blogSection {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.blogSection h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2.5em;
+  color: #333;
+}
+
+.blogSection ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.blogSection li {
+  margin-bottom: 0.8rem;
+}
+
+.blogSection li a {
+  font-size: 1.1em;
+  color: #007bff; /* Link color */
+  text-decoration: none;
+}
+
+.blogSection li a:hover {
+  text-decoration: underline;
+} 
