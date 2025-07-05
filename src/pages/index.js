@@ -2,7 +2,7 @@ import Layout from '@theme/Layout';
 import React, { useState, useEffect } from 'react';
 
 function HomepageHeader() {
-  const startDate = new Date('2024-05-15T00:00:00'); // 设置开始日期为2024年5月15日
+  const startDate = new Date('2025-05-15T00:00:00'); // 设置开始日期为2025年5月15日
   const [timePassed, setTimePassed] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
