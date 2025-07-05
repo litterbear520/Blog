@@ -1,32 +1,40 @@
 import Layout from '@theme/Layout';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import styles from './index.module.css';
-import Link from '@docusaurus/Link';
 
 function HomepageHeader() {
+  const startDate = new Date('2025-05-15T00:00:00'); // 设置开始日期为2025年5月15日
+  const [timePassed, setTimePassed] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const calculateTimePassed = () => {
+      const now = new Date();
+      const diff = now.getTime() - startDate.getTime();
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      setTimePassed({ days, hours, minutes, seconds });
+    };
+
+    const intervalId = setInterval(calculateTimePassed, 1000);
+    calculateTimePassed(); // Initial call to set time immediately
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">我的博客</h1>
-        {/* <p className="hero__subtitle">真实的记录自己，比获得他人的认同感更重要</p> */}
-      </div>
-    </header>
-  );
-}
-
-function BlogSection() {
-  return (
-    <section className={clsx('container', styles.blogSection)}>
-      <div className="row">
-        <div className="col col--4">
-          <h2>2025</h2>
-          <ul>
-            <li><Link to="/blog/mdx-blog-post">阿里天池二手车价格预测Top2分享</Link></li>
-          </ul>
+        <h1 className="hero__title">Welcome!</h1>
+        <div className={styles.inputLikeBox}>
+          喜欢小雨宝宝的第{timePassed.days}天 {timePassed.hours}小时 {timePassed.minutes}分钟 {timePassed.seconds}秒
         </div>
       </div>
-    </section>
+    </header>
   );
 }
 
@@ -35,7 +43,7 @@ export default function Home() {
     <Layout>
       <HomepageHeader />
       <main>
-        <BlogSection />
+        {/* No content here, or add other components as needed */}
       </main>
     </Layout>
   );
