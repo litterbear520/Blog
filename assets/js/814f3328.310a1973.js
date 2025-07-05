@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkmy_blog=self.webpackChunkmy_blog||[]).push([[472],{5513:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"\u6211\u7684\u535a\u5ba2","permalink":"/Blog/blog/mdx-blog-post","unlisted":false,"date":"2025-07-04T00:00:00.000Z"}]}')}}]);
