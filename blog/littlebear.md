@@ -3,7 +3,6 @@ slug: mdx-blog-post
 title: 阿里天池二手车价格预测比赛Top2分享
 date: 2025-07-04
 ---
-
 ## 前言
 
 在初步掌握经典神经网络的基本原理之后，导师向我推荐了阿里云的天池比赛，我怀着检验自己学习成果的心态，开始了这次比赛的征程。
@@ -34,6 +33,7 @@ date: 2025-07-04
 - 具体操作：经过与树模型的加权融合，我的分数进一步提升至406。随后，通过凯明初始化参数和添加新的相关性特征交互，分数稳定在398。
 
 ---
+
 以下是模型的详细介绍
 
 ## 1. 特征工程
@@ -314,7 +314,7 @@ for i in tqdm(num_cols, desc="    * 乘积特征"):
 for i in tqdm(num_cols, desc="    * 加法特征"):
     for j in num_cols:
         df['''new'+str(i)+'''+str(j)] = df['''v_'+str(i)] + df['''v_'+str(j)]
-        
+      
 for i in tqdm(num_cols, desc="    * 减法特征"):
     for j in num_cols:
         df['''new'+str(i)+'''-'+str(j)] = df['''v_'+str(i)] - df['''v_'+str(j)]
@@ -377,24 +377,24 @@ class NeuralNetwork(nn.Module):
         self.fc4 = nn.Linear(128, 64)
         self.fc5 = nn.Linear(64, 1)
         self.relu = nn.ReLU()
-        
+      
         # 添加L2正则化
         self.l2_reg = 0.05  # 增大正则化参数以适应更高维度的特征
-        
+      
         # 应用凯明初始化（He初始化）
         nn.init.kaiming_normal_(self.fc1.weight, nonlinearity='''relu''')
         nn.init.kaiming_normal_(self.fc2.weight, nonlinearity='''relu''')
         nn.init.kaiming_normal_(self.fc3.weight, nonlinearity='''relu''')
         nn.init.kaiming_normal_(self.fc4.weight, nonlinearity='''relu''')
         nn.init.kaiming_normal_(self.fc5.weight, nonlinearity='''relu''')
-        
+      
         # 初始化偏置为0
         nn.init.zeros_(self.fc1.bias)
         nn.init.zeros_(self.fc2.bias)
         nn.init.zeros_(self.fc3.bias)
         nn.init.zeros_(self.fc4.bias)
         nn.init.zeros_(self.fc5.bias)
-        
+      
     def forward(self, x):
         x = self.relu(self.fc1(x))
         x = self.relu(self.fc2(x))
@@ -402,7 +402,7 @@ class NeuralNetwork(nn.Module):
         x = self.relu(self.fc4(x))
         x = self.fc5(x)
         return x
-    
+  
     def get_l2_loss(self):
         l2_loss = 0.0
         for param in self.parameters():
@@ -420,7 +420,7 @@ class NeuralNetwork(nn.Module):
 class LRScheduler:
     def __init__(self, optimizer):
         self.optimizer = optimizer
-        
+      
     def step(self, epoch):
         lr = self.optimizer.param_groups[0]['''lr''']
         if epoch == 200:
@@ -431,10 +431,10 @@ class LRScheduler:
             lr *= 0.1
         elif epoch == 420:
             lr *= 0.1
-        
+      
         for param_group in self.optimizer.param_groups:
             param_group['''lr'''] = lr
-        
+      
         return lr
 ```
 
@@ -453,10 +453,10 @@ class EarlyStopping:
         self.early_stop = False
         self.val_loss_min = float('''inf''')
         self.best_model_state = None
-        
+      
     def __call__(self, val_loss, model):
         score = -val_loss # 通常用于最大化某个指标，这里是最小化损失所以取负
-        
+      
         if self.best_score is None:
             self.best_score = score
             self.save_checkpoint(val_loss, model)
@@ -470,13 +470,13 @@ class EarlyStopping:
             self.best_score = score
             self.save_checkpoint(val_loss, model)
             self.counter = 0
-            
+          
     def save_checkpoint(self, val_loss, model):
         if self.verbose:
             print(f'''验证损失减少 ({self.val_loss_min:.6f} --> {val_loss:.6f}). 保存模型...''')
         self.best_model_state = model.state_dict().copy()
         self.val_loss_min = val_loss
-        
+      
     def load_best_model(self, model):
         model.load_state_dict(self.best_model_state)
         return model
@@ -493,22 +493,22 @@ def train_epoch(model, train_loader, optimizer, scheduler, epoch, progress_callb
     model.train()
     total_loss = 0
     progress_callback.on_epoch_begin(epoch)
-    
+  
     for i, (inputs, targets) in enumerate(train_loader):
         inputs, targets = inputs.to(device), targets.to(device)
-        
+      
         optimizer.zero_grad()
         outputs = model(inputs)
         loss = nn.L1Loss()(outputs, targets.view(-1, 1))
         reg_loss = model.get_l2_loss()
         total_loss = loss + reg_loss
-        
+      
         total_loss.backward()
         optimizer.step()
-        
+      
         batch_logs = {'''loss''': total_loss.item()}
         progress_callback.on_batch_end(i, batch_logs)
-    
+  
     return total_loss.item() / len(train_loader)
 
 # 验证一个epoch
@@ -517,16 +517,16 @@ def validate_epoch(model, val_loader):
     val_loss = 0
     predictions = []
     targets_list = []
-    
+  
     with torch.no_grad():
         for inputs, targets in val_loader:
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = model(inputs)
             val_loss += nn.L1Loss()(outputs, targets.view(-1, 1)).item()
-            
+          
             predictions.extend(outputs.cpu().numpy().flatten())
             targets_list.extend(targets.cpu().numpy())
-    
+  
     val_loss /= len(val_loader)
     return val_loss, predictions, targets_list
 ```
@@ -553,7 +553,7 @@ fold_scores = []
 
 # 设置要运行的折数
 total_folds = n_splits
-    
+  
 print(f"将进行{total_folds}次训练验证...")
 
 # 获取所有折的索引
@@ -561,22 +561,22 @@ all_folds = list(skf.split(X_data, Y_data))
 # 只执行指定次数的循环
 for i in range(total_folds):
     # ... (训练和验证循环，早停，预测测试集和验证集) ...
-    
+  
     # 预测测试集
     model.eval()
     test_tensor = torch.FloatTensor(X_test).to(device)
     test_dataset = TensorDataset(test_tensor, torch.zeros(len(X_test)))
     test_loader = DataLoader(test_dataset, batch_size=batch_size_cv)
-    
+  
     test_preds = []
     with torch.no_grad():
         for inputs, _ in test_loader:
             inputs = inputs.to(device)
             outputs = model(inputs)
             test_preds.extend(outputs.cpu().numpy().flatten())
-    
+  
     predictions += np.array(test_preds) / skf.n_splits # 对所有折的预测进行平均
-    
+  
     # 预测验证集 (用于计算oof和当前折的MAE)
     val_preds_final = []
     with torch.no_grad():
@@ -584,7 +584,7 @@ for i in range(total_folds):
             inputs = inputs.to(device)
             outputs = model(inputs)
             val_preds_final.extend(outputs.cpu().numpy().flatten())
-    
+  
     oof[val_idx] = np.array(val_preds_final)
     fold_mae = mean_absolute_error(val_y, oof[val_idx])
     fold_scores.append(fold_mae)
