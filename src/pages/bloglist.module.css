@@ -1,0 +1,53 @@
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally. 
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 300px; /* Adjusted height for blog list header */
+  background-color: #e0f2f7; /* Light blue background, consistent with main page */
+  color: white; /* Text color for '我的博客' */
+}
+
+.hero__title {
+  color: white; /* '我的博客' title color */
+}
+
+.hero__subtitle {
+  color: white; /* Tagline color if present */
+}
+
+.blogSection {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.blogSection h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2.5em;
+  color: #333;
+}
+
+.blogSection ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.blogSection li {
+  margin-bottom: 0.8rem;
+}
+
+.blogSection li a {
+  font-size: 1.1em;
+  color: #007bff; /* Link color */
+  text-decoration: none;
+}
+
+.blogSection li a:hover {
+  text-decoration: underline;
+} 

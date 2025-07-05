@@ -55,6 +55,7 @@ const config = {
         },
         blog: {
           showReadingTime: true,
+          routeBasePath: '/blog',
           // blogSidebarTitle: false, // 禁用博客侧边栏标题
           blogSidebarCount: 0, // 禁用博客侧边栏计数，设置为0
           feedOptions: {
@@ -94,7 +95,7 @@ const config = {
             label: '笔记', 
             position: 'left'
           },
-          {to: '/', label: '博文', position: 'left'},
+          {to: '/bloglist', label: '博文', position: 'left'},
           // {
           //   href: 'https://github.com/facebook/docusaurus',
           //   label: 'GitHub',
