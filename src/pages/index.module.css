@@ -13,7 +13,11 @@
 }
 
 .hero__title {
-  color: black; /* Set Welcome! text color to black */
+  color: black !important; /* Set Welcome! text color to black */
+}
+
+.myCustomTitle {
+  color: black;
 }
 
 /* Remove .hero__subtitle if it was present and is no longer needed */
