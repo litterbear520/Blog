@@ -30,9 +30,11 @@ function HomepageHeader() {
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <h1 className={clsx("hero__title", styles.myCustomTitle)}>Welcome!</h1>
+        {/*
         <div className={styles.inputLikeBox}>
       喜欢小雨宝宝的第{timePassed.days}天 {timePassed.hours}小时 {timePassed.minutes}分钟 {timePassed.seconds}秒
         </div>
+        */}
       </div>
     </header>
   );
