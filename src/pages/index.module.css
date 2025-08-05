@@ -4,20 +4,31 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
+  padding: 0;
   text-align: center;
   position: relative;
   overflow: hidden;
-  min-height: 100vh; /* Make it full screen */
-  background-color: #e0f2f7; /* Light blue background */
+  background-image: url('/img/city.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh; /* Make sure the hero banner takes full viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rainCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Ensure canvas is above the background image */
 }
 
 .hero__title {
   color: black !important; /* Set Welcome! text color to black */
-}
-
-.myCustomTitle {
-  color: black;
 }
 
 /* Remove .hero__subtitle if it was present and is no longer needed */
@@ -29,23 +40,6 @@
   .heroBanner {
     padding: 2rem;
   }
-}
-
-.inputLikeBox {
-  width: 100%;
-  max-width: 500px; /* Adjust as needed */
-  margin: 20px auto 0 auto; /* Centered with top margin */
-  padding: 15px 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1.2em;
-  color: #333;
-  background-color: #ffe0e6; /* Light pink background */
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* Remove all BlogSection related styles */
