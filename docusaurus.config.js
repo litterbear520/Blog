@@ -14,7 +14,7 @@ import rehypeKatex from 'rehype-katex';
 const config = {
   title: '小熊的博客',
   tagline: '专注于学习、开发和分享',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/icon2.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -99,8 +99,8 @@ const config = {
       navbar: {
         // title: 'My Site',
         logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          alt: 'Blog Logo',
+          src: 'img/icon.png',
         },
         items: [
           {

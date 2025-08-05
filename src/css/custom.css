@@ -36,3 +36,14 @@
 .homepage-header {
   background-color: #ffe0e6; /* 温馨的粉红色 */
 }
+
+.navbar__brand .navbar__logo {
+  width: 50px; /* Adjust as needed */
+  height: 50px; /* Adjust as needed */
+}
+
+.navbar__brand img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
