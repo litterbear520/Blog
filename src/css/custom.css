@@ -55,9 +55,9 @@
   border: 1px solid #666666 !important;
 }
 
-/* 注释颜色改为更淡的白色 */
+/* 注释颜色改为更淡的灰白色 */
 [data-theme='dark'] .token.comment {
-  color: #999999 !important;
+  color: #6a9955 !important;
 }
 
 /* 字符串颜色改为淡粉色 */
@@ -65,12 +65,17 @@
   color: #ffb3d9 !important;
 }
 
-/* 关键字颜色改为偏蓝的青蓝色 */
+/* 关键字颜色改为紫色 */
 [data-theme='dark'] .token.keyword {
-  color: #5dcecc !important;
+  color: #c586c0 !important;
 }
 
 /* self 颜色改为橙色 */
 [data-theme='dark'] .token.builtin {
   color: #ce9178 !important;
+}
+
+/* 装饰器颜色改为淡橙色 */
+[data-theme='dark'] .token.decorator {
+  color: #daa520 !important;
 }
