@@ -60,6 +60,12 @@ scp -P 2212 "[这里输入windows文件路径]" teamhd@10.1.1.158:[linux目录]
 scp -P 2212 "C:/Users/Administrator/Desktop/10.1.1.158/dataset/rag.txt" teamhd@10.1.1.158:/tmp/
 ```
 
+### 复制windows目录到linux目录
+
+```bash
+scp -r -P 2212 "[这里输入windows文件路径]" teamhd@10.1.1.158:[linux目录]
+```
+
 ### 编译
 
 注意编译目录包含package.xml才是ROS2包
