@@ -5,13 +5,19 @@
 ### 回退版本
 
 ```bash
-npm install -g @anthropic-ai/claude-code@2.0.25
+npm install -g @anthropic-ai/claude-code@2.0.30
 ```
 
 ### 设置暂停更新
 
 ```bash
 set DISABLE_AUTOUPDATER=1
+```
+
+### 错误码400
+
+```bash
+set CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1
 ```
 
 ### 常用MCP
@@ -82,3 +88,10 @@ cd /home/cst/robot
 rm -rf build/[包含xml的包] install/[包含xml的包]
 ```
 
+## Linux
+
+### 创建数据库权限不足
+
+```bash
+sudo chown -R teamhd:teamhd /home/cst/database
+```
