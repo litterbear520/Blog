@@ -45,13 +45,13 @@ source /opt/ros_jazzy/install/setup.bash && source /home/cst/robot/install/local
 ### 启动Agent节点
 
 ```bash
-ros2 run agent agent_main  -r __ns:=/huoxingmeinv_5a_dd_e4_33_ae_24
+ros2 run agent agent_main --ros-args --remap __ns:=/huoxingmeinv_5a_dd_e4_33_ae_24
 ```
 
 ### 启动数据库节点
 
 ```bash
-ros2 run cst_database_node cst_database -r __ns:=/huoxingmeinv_5a_dd_e4_33_ae_24
+ros2 run cst_database_node cst_database --ros-args --remap __ns:=/huoxingmeinv_5a_dd_e4_33_ae_24
 ```
 
 ### 复制windows文件到linux目录下
