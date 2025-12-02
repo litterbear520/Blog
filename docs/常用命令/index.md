@@ -95,3 +95,35 @@ rm -rf build/[包含xml的包] install/[包含xml的包]
 ```bash
 sudo chown -R teamhd:teamhd /home/cst/database
 ```
+
+## RKLLM
+
+### 激活虚拟环境
+```bash
+source .venv/bin/activate
+```
+
+### 启动模型服务
+
+1.进入Flask服务器目录
+```bash
+cd /home/teamhd/code/rkllm_instructor/rknn-llm-release-v1.2.3/examples/rkllm_server_demo/rkllm_server
+```
+2.设置库路径
+```bash
+export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
+```
+3.设置日志等级
+```bash
+export RKLLM_LOG_LEVEL=2
+```
+4.启动服务
+```bash
+python3 flask_server.py --rkllm_model_path /home/teamhd/code/rkllm_instructor/qwen3-0.6b.rkllm --target_platform rk3588
+```
+
+### 查看npu使用率
+```
+watch -n 0.1 sudo cat /sys/kernel/debug/rknpu/load
+```
+
