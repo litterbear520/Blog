@@ -1,0 +1,688 @@
+# OpenAI结构化输出
+
+除了在 REST API 中支持 JSON Schema 外，OpenAI 的 Python SDK 使用 Pydantic 轻松定义对象模式。
+
+以下是如何从符合代码中定义的模式的非结构化文本中提取信息：
+
+```python
+from openai import OpenAI
+from pydantic import BaseModel
+
+client = OpenAI()
+
+class CalendarEvent(BaseModel):
+    name: str
+    date: str
+    participants: list[str]
+
+response = client.responses.parse(
+    model="gpt-4o-2024-08-06",
+    input=[
+        {"role": "system", "content": "Extract the event information."},
+        {
+            "role": "user",
+            "content": "Alice and Bob are going to a science fair on Friday.",
+        },
+    ],
+    text_format=CalendarEvent,
+)
+
+event = response.output_parsed
+```
+
+## 何时结构化输出`function calling` vs `text.format`？
+
+结构化输出在 OpenAI API 中有两种形式：
+
+1.在使用`function calling`时
+
+2.在使用`json_schema`响应格式时
+
+当您正在构建一个连接模型和应用程序功能的应用程序时，函数调用很有用。
+
+例如，你可以给模型访问查询数据库的函数，以构建一个能帮助用户处理订单的 AI 助手，或者访问能与 UI 交互的函数。
+
+相反，当您希望模型在回复用户时使用结构化模式，而不是模型调用工具时，通过`response_format`生成的结构化输出更为适用。
+
+例如，如果您正在构建一个数学辅导应用程序，您可能希望助手使用特定的 JSON 模式来回复您的用户，以便您能够生成一个 UI，以不同的方式显示模型输出的不同部分。
+
+简单来说：
+如果你需要将模型连接到系统中的工具、函数、数据等，你应该使用函数调用——如果你希望在模型回复用户时对输出进行结构化，你应该使用结构化`text.format`
+
+## 结构化输出与 JSON 模式
+
+结构化输出是 JSON 模式的演进。虽然两者都确保生成有效的 JSON，但只有结构化输出确保遵循模式。结构化输出和 JSON 模式都支持在响应 API、聊天补全 API、助手 API、微调 API 和批量 API 中使用。  
+**建议在可能的情况下始终使用结构化输出而不是 JSON 模式**
+
+| | 结构化输出 | JSON 模式 |
+| :--- | :--- | :--- |
+| **输出有效JSON** | Yes | Yes |
+| **遵循模式** | Yes | No |
+| **启用** | <pre style={{fontSize: '12px', margin: 0}}>text: &#123;<br/>  format: &#123;<br/>    type: "json_schema",<br/>    strict: true,<br/>    schema: ... <br/>  &#125;<br/>&#125;</pre> | <pre style={{fontSize: '12px', margin: 0}}>text: &#123;<br/>  format: &#123;<br/>    type: "json_object"<br/>  &#125;<br/>&#125;</pre> |
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 示例
+
+<Tabs groupId="openai-examples">
+
+  <TabItem value="cot" label="思维链" default>
+
+### 思维链
+
+你可以要求模型以结构化、逐步的方式输出答案，以引导用户完成解决方案。
+
+```python title="思维链数学辅导的结构化输出"
+from openai import OpenAI
+from pydantic import BaseModel
+
+client = OpenAI()
+
+class Step(BaseModel):
+    explanation: str
+    output: str
+
+class MathReasoning(BaseModel):
+    steps: list[Step]
+    final_answer: str
+
+response = client.responses.parse(
+    model="gpt-4o-2024-08-06",
+    input=[
+        {
+            "role": "system",
+            "content": "You are a helpful math tutor. Guide the user through the solution step by step.",
+        },
+        {"role": "user", "content": "how can I solve 8x + 7 = -23"},
+    ],
+    text_format=MathReasoning,
+)
+
+math_reasoning = response.output_parsed
+```
+
+ </TabItem>
+<TabItem value="extraction" label="结构化数据提取">
+
+### 结构化数据提取
+
+你可以从非结构化输入数据（如研究论文）中定义要提取的结构化字段。
+
+```python title="使用结构化输出从研究论文中提取数据"
+from openai import OpenAI
+from pydantic import BaseModel
+
+client = OpenAI()
+
+class ResearchPaperExtraction(BaseModel):
+    title: str
+    authors: list[str]
+    abstract: str
+    keywords: list[str]
+
+response = client.responses.parse(
+    model="gpt-4o-2024-08-06",
+    input=[
+        {
+            "role": "system",
+            "content": "You are an expert at structured data extraction. You will be given unstructured text from a research paper and should convert it into the given structure.",
+        },
+        {"role": "user", "content": "..."},
+    ],
+    text_format=ResearchPaperExtraction,
+)
+
+research_paper = response.output_parsed
+```
+
+ </TabItem>
+<TabItem value="ui" label="UI生成">
+
+### UI 生成
+
+你可以通过将 HTML 表示为具有约束的递归数据结构（如枚举）来生成有效的 HTML。
+
+```python title="使用结构化输出生成 HTML"
+from enum import Enum
+from typing import List
+
+from openai import OpenAI
+from pydantic import BaseModel
+
+client = OpenAI()
+
+class UIType(str, Enum):
+    div = "div"
+    button = "button"
+    header = "header"
+    section = "section"
+    field = "field"
+    form = "form"
+
+class Attribute(BaseModel):
+    name: str
+    value: str
+
+class UI(BaseModel):
+    type: UIType
+    label: str
+    children: List["UI"]
+    attributes: List[Attribute]
+
+UI.model_rebuild()  # This is required to enable recursive types
+
+class Response(BaseModel):
+    ui: UI
+
+response = client.responses.parse(
+    model="gpt-4o-2024-08-06",
+    input=[
+        {
+            "role": "system",
+            "content": "You are a UI generator AI. Convert the user input into a UI.",
+        },
+        {"role": "user", "content": "Make a User Profile Form"},
+    ],
+    text_format=Response,
+)
+
+ui = response.output_parsed
+```
+
+  </TabItem>
+<TabItem value="Moderation" label="内容审核">
+
+### 内容审核
+
+您可以对输入进行多类别分类，这是一种常见的审核方式。
+
+```python title="使用结构化输出进行审核"
+from enum import Enum
+from typing import Optional
+
+from openai import OpenAI
+from pydantic import BaseModel
+
+client = OpenAI()
+
+class Category(str, Enum):
+    violence = "violence"
+    sexual = "sexual"
+    self_harm = "self_harm"
+
+class ContentCompliance(BaseModel):
+    is_violating: bool
+    category: Optional[Category]
+    explanation_if_violating: Optional[str]
+
+response = client.responses.parse(
+    model="gpt-4o-2024-08-06",
+    input=[
+        {
+            "role": "system",
+            "content": "Determine if the user input violates specific guidelines and explain if they do.",
+        },
+        {"role": "user", "content": "How do I prepare for a job interview?"},
+    ],
+    text_format=ContentCompliance,
+)
+
+compliance = response.output_parsed
+```
+
+</TabItem>
+</Tabs>
+
+## 示例响应
+
+<!-- 1. groupId 必须和上面完全一致 -->
+<Tabs groupId="openai-examples">
+
+  <!-- 2. value="cot" 必须对应上面的思维链 -->
+  <TabItem value="cot" label="思维链">
+```json
+{
+  "steps": [
+    {
+      "explanation": "Start with the equation 8x + 7 = -23.",
+      "output": "8x + 7 = -23"
+    },
+    {
+      "explanation": "Subtract 7 from both sides to isolate the term with the variable.",
+      "output": "8x = -23 - 7"
+    },
+    {
+      "explanation": "Simplify the right side of the equation.",
+      "output": "8x = -30"
+    },
+    {
+      "explanation": "Divide both sides by 8 to solve for x.",
+      "output": "x = -30 / 8"
+    },
+    {
+      "explanation": "Simplify the fraction.",
+      "output": "x = -15 / 4"
+    }
+  ],
+  "final_answer": "x = -15 / 4"
+}
+```
+  </TabItem>
+
+<TabItem value="extraction" label="结构化数据提取">
+```json
+{
+  "title": "Application of Quantum Algorithms in Interstellar Navigation: A New Frontier",
+  "authors": [
+    "Dr. Stella Voyager",
+    "Dr. Nova Star",
+    "Dr. Lyra Hunter"
+  ],
+  "abstract": "This paper investigates the utilization of quantum algorithms to improve interstellar navigation systems. By leveraging quantum superposition and entanglement, our proposed navigation system can calculate optimal travel paths through space-time anomalies more efficiently than classical methods. Experimental simulations suggest a significant reduction in travel time and fuel consumption for interstellar missions.",
+  "keywords": [
+    "Quantum algorithms",
+    "interstellar navigation",
+    "space-time anomalies",
+    "quantum superposition",
+    "quantum entanglement",
+    "space travel"
+  ]
+}
+```
+  </TabItem>
+<TabItem value="ui" label="UI 生成">
+```json
+{
+  "type": "form",
+  "label": "User Profile Form",
+  "children": [
+    {
+      "type": "div",
+      "label": "",
+      "children": [
+        {
+          "type": "field",
+          "label": "First Name",
+          "children": [],
+          "attributes": [
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "name",
+              "value": "firstName"
+            },
+            {
+              "name": "placeholder",
+              "value": "Enter your first name"
+            }
+          ]
+        },
+        {
+          "type": "field",
+          "label": "Last Name",
+          "children": [],
+          "attributes": [
+            {
+              "name": "type",
+              "value": "text"
+            },
+            {
+              "name": "name",
+              "value": "lastName"
+            },
+            {
+              "name": "placeholder",
+              "value": "Enter your last name"
+            }
+          ]
+        }
+      ],
+      "attributes": []
+    },
+    {
+      "type": "button",
+      "label": "Submit",
+      "children": [],
+      "attributes": [
+        {
+          "name": "type",
+          "value": "submit"
+        }
+      ]
+    }
+  ],
+  "attributes": [
+    {
+      "name": "method",
+      "value": "post"
+    },
+    {
+      "name": "action",
+      "value": "/submit-profile"
+    }
+  ]
+}
+```
+  </TabItem>
+<TabItem value="Moderation" label="内容审核">
+
+```json
+{
+  "is_violating": false,
+  "category": null,
+  "explanation_if_violating": null
+}
+```
+
+</TabItem>
+</Tabs>
+
+## 如何使用`text.format`结构化输出
+
+### Step 1：定义你的模式
+
+首先你必须设计模型需要遵循的 JSON Schema
+
+虽然结构化输出支持 JSON Schema 的大部分功能，但由于性能或技术原因，某些功能不可用
+
+:::info 提示
+为了最大化模型生成的质量，建议：
+
+- 清晰直观地命名键
+- 为结构中的重要键创建清晰的标题和描述
+- 创建并使用评估来确定最适合用例的结构。
+:::
+
+### Step 2：在 API 调用中提供你的模式
+
+要使用结构化输出，只需指定
+
+```python
+text: {format: {type: "json_schema","strict": true,"schema": … }}
+```
+
+例如：
+
+```python
+response = client.responses.create(
+    model="gpt-4o-2024-08-06",
+    input=[
+        {"role": "system", "content": "You are a helpful math tutor. Guide the user through the solution step by step."},
+        {"role": "user", "content": "how can I solve 8x + 7 = -23"}
+    ],
+    text={
+        "format": {
+            "type": "json_schema",
+            "name": "math_response",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "steps": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "explanation": {"type": "string"},
+                                "output": {"type": "string"}
+                            },
+                            "required": ["explanation", "output"],
+                            "additionalProperties": False
+                        }
+                    },
+                    "final_answer": {"type": "string"}
+                },
+                "required": ["steps", "final_answer"],
+                "additionalProperties": False
+            },
+            "strict": True
+        }
+    }
+)
+
+print(response.output_text)
+```
+
+:::warning 注意
+使用任何模式发起的第一个请求会有额外的延迟，因为API会处理该模式，但后续使用相同模式的请求不会有额外的延迟。
+:::
+
+### Step 3: 处理边缘情况
+
+在某些情况下，模型可能无法生成与提供的 JSON 模式匹配的有效响应。
+
+这种情况可能发生在拒绝的情况下，如果模型因安全原因拒绝回答，或者例如你达到最大 token 限制并且响应不完整。
+
+```python
+try:
+    response = client.responses.create(
+        model="gpt-4o-2024-08-06",
+        input=[
+            {
+                "role": "system",
+                "content": "You are a helpful math tutor. Guide the user through the solution step by step.",
+            },
+            {"role": "user", "content": "how can I solve 8x + 7 = -23"},
+        ],
+        text={
+            "format": {
+                "type": "json_schema",
+                "name": "math_response",
+                "strict": True,
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "steps": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "explanation": {"type": "string"},
+                                    "output": {"type": "string"},
+                                },
+                                "required": ["explanation", "output"],
+                                "additionalProperties": False,
+                            },
+                        },
+                        "final_answer": {"type": "string"},
+                    },
+                    "required": ["steps", "final_answer"],
+                    "additionalProperties": False,
+                },
+                "strict": True,
+            },
+        },
+    )
+except Exception as e:
+    # handle errors like finish_reason, refusal, content_filter, etc.
+    pass
+```
+
+## 使用结构化输出的拒绝
+
+在使用结构化输出与用户生成输入时，OpenAI 模型可能会出于安全原因偶尔拒绝执行请求。由于拒绝执行不一定遵循你在`response_format`中提供的模式，API 响应将包含一个名为 `refusal`的新字段来指示模型拒绝执行请求。
+
+当`refusal`属性出现在你的输出对象中时，你可以在 UI 中展示拒绝执行，或在处理响应的代码中包含条件逻辑来处理拒绝执行的情况。
+
+```python
+class Step(BaseModel):
+    explanation: str
+    output: str
+
+class MathReasoning(BaseModel):
+    steps: list[Step]
+    final_answer: str
+
+completion = client.chat.completions.parse(
+    model="gpt-4o-2024-08-06",
+    messages=[
+        {"role": "system", "content": "You are a helpful math tutor. Guide the user through the solution step by step."},
+        {"role": "user", "content": "how can I solve 8x + 7 = -23"},
+    ],
+    response_format=MathReasoning,
+)
+
+math_reasoning = completion.choices[0].message
+
+# If the model refuses to respond, you will get a refusal message
+
+if math_reasoning.refusal:
+    print(math_reasoning.refusal)
+else:
+    print(math_reasoning.parsed)
+```
+
+拒绝的 API 响应看起来会像这样：
+
+```json {17-20}
+{
+  "id": "resp_1234567890",
+  "object": "response",
+  "created_at": 1721596428,
+  "status": "completed",
+  "error": null,
+  "incomplete_details": null,
+  "input": [],
+  "instructions": null,
+  "max_output_tokens": null,
+  "model": "gpt-4o-2024-08-06",
+  "output": [{
+    "id": "msg_1234567890",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "refusal",
+        "refusal": "I'm sorry, I cannot assist with that request."
+      }
+    ]
+  }],
+  "usage": {
+    "input_tokens": 81,
+    "output_tokens": 11,
+    "total_tokens": 92,
+    "output_tokens_details": {
+      "reasoning_tokens": 0,
+    }
+  },
+}
+```
+
+## 技巧和最佳实践
+
+### 处理用户生成输入
+
+如果应用程序使用用户生成输入，请确保提示中包含处理输入无法产生有效响应情况的说明。
+
+模型将始终尝试遵循提供的架构，如果输入与架构完全无关，可能会导致幻觉。
+
+可以在提示中包含语言，以指定如果模型检测到输入与任务不兼容时，希望返回空参数或特定句子。
+
+### 处理错误
+
+结构化输出仍然可能包含错误。如果你发现错误，可以尝试调整你的指令，在系统指令中提供示例，或将任务拆分为更简单的子任务。请参考[提示工程指南](https://platform.openai.com/docs/guides/prompt-engineering)，以获取更多关于如何调整输入的指导。
+
+### 避免 JSON 模式分歧
+
+为了防止 JSON 模式和在编程语言中对应的类型出现分歧，强烈建议使用原生的 Pydantic/zod SDK 支持。
+
+如果你更喜欢直接指定 JSON 模式，你可以添加 CI 规则，在 JSON 模式或底层数据对象被编辑时发出警告，或者添加一个 CI 步骤，从类型定义自动生成 JSON 模式（反之亦然）。
+
+## 流式传输
+
+可以使用流式处理来处理模型响应或函数调用参数，并在它们生成时解析为结构化数据。
+
+这样，你就不必等待整个响应完成后再处理它。如果你希望逐个显示 JSON 字段，或者一旦可用就处理函数调用参数，这特别有用。
+
+建议使用 SDK 来处理带有结构化输出的流式处理。
+
+```python
+from typing import List
+
+from openai import OpenAI
+from pydantic import BaseModel
+
+class EntitiesModel(BaseModel):
+    attributes: List[str]
+    colors: List[str]
+    animals: List[str]
+
+client = OpenAI()
+
+with client.responses.stream(
+    model="gpt-4.1",
+    input=[
+        {"role": "system", "content": "Extract entities from the input text"},
+        {
+            "role": "user",
+            "content": "The quick brown fox jumps over the lazy dog with piercing blue eyes",
+        },
+    ],
+    text_format=EntitiesModel,
+) as stream:
+    for event in stream:
+        if event.type == "response.refusal.delta":
+            print(event.delta, end="")
+        elif event.type == "response.output_text.delta":
+            print(event.delta, end="")
+        elif event.type == "response.error":
+            print(event.error, end="")
+        elif event.type == "response.completed":
+            print("Completed")
+            # print(event.response.output)
+
+    final_response = stream.get_final_response()
+    print(final_response)
+```
+
+### 支持的架构
+
+结构化输出支持 JSON Schema 语言的一个子集。
+
+以下类型支持结构化输出：
+
+- String  字符串
+- Number  数字
+- Boolean  布尔值
+- Integer  整数
+- Object  对象
+- Array  数组
+- Enum  枚举
+- anyOf
+
+### 支持的属性
+
+除了指定属性的类型外，您还可以指定一组额外的约束：
+
+#### 支持的 string 属性
+
+1.pattern — 字符串必须匹配的正则表达式。
+
+2.format — 字符串的预定义格式。目前支持：
+
+- date-time
+- time
+- data
+- duration
+- email
+- hostname
+- ipv4
+- ipv6
+- uuid
+
+#### 支持的 number 属性
+
+- multipleOf — 这个数字必须是这个值的倍数
+- maximum — 数字必须小于或等于此值。
+- exclusiveMaximum — 数字必须小于此值。
+- minimum — 数字必须大于或等于此值。
+- exclusiveMinimum — 数字必须大于此值。
+
+#### 支持的 array 属性
+
+- minItems — 数组必须至少包含这么多项。
+- maxItems — 数组必须至多包含这么多项。
+
+以下是一些使用这些类型限制的示例：
