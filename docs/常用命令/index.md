@@ -36,10 +36,34 @@ claude mcp add chrome-devtools npx chrome-devtools-mcp@latest
 
 ## ROS2
 
+### 激活虚拟环境
+
+```bash
+source /opt/py310env/bin/activate
+```
+
 ### 激活配置
 
 ```bash
 source /opt/ros_jazzy/install/setup.bash && source /home/cst/robot/install/local_setup.bash
+```
+
+### rk3576数据库节点
+
+```bash
+ros2 run cst_database_node cst_database --ros-args --remap __ns:=/girl_9cb8b4d27eaa
+```
+
+### rk3576智能体节点
+
+```bash
+ros2 run agent agent_main --ros-args --remap __ns:=/girl_9cb8b4d27eaa
+```
+
+### 设置本地模型参数
+
+```bash
+ros2 param set /girl_9cb8b4d27eaa/cst_agent rb_agent.agent.use_local_llm True
 ```
 
 ### 启动Agent节点
