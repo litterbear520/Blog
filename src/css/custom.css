@@ -49,35 +49,117 @@
   object-fit: contain;
 }
 
-/* 代码块背景改为深灰色并添加边框 */
+/* 代码块背景改为深灰色并添加边框 - Cursor 风格 */
 [data-theme='dark'] pre {
   background-color: #1a1a1a !important;
-  border: 1px solid #666666 !important;
+  border: 1px solid #2a2a2a !important;
+  border-radius: 8px !important;
 }
 
-/* 注释颜色改为更淡的灰白色 */
-[data-theme='dark'] .token.comment {
-  color: #6a9955 !important;
+/* 代码块容器样式 */
+[data-theme='dark'] .prism-code {
+  background-color: #1a1a1a !important;
 }
 
-/* 字符串颜色改为淡粉色 */
-[data-theme='dark'] .token.string {
-  color: #ffb3d9 !important;
+/* 代码块行号样式 */
+[data-theme='dark'] .codeLineNumber {
+  color: #505050 !important;
 }
 
-/* 关键字颜色改为紫色 */
-[data-theme='dark'] .token.keyword {
-  color: #c586c0 !important;
+/* 高亮行样式 */
+[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: #292929 !important;
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
 }
 
-/* self 颜色改为橙色 */
+/* 注释颜色 - Cursor 风格 */
+[data-theme='dark'] .token.comment,
+[data-theme='dark'] .token.prolog,
+[data-theme='dark'] .token.doctype,
+[data-theme='dark'] .token.cdata {
+  color: #FFFFFF5C !important;
+  font-style: italic;
+}
+
+/* 字符串颜色 - 粉色 */
+[data-theme='dark'] .token.string,
+[data-theme='dark'] .token.attr-value {
+  color: #E394DC !important;
+}
+
+/* 关键字颜色 - 青色 */
+[data-theme='dark'] .token.keyword,
+[data-theme='dark'] .token.atrule {
+  color: #83D6C5 !important;
+}
+
+/* 函数名颜色 - 橙色 */
+[data-theme='dark'] .token.function {
+  color: #EFB080 !important;
+}
+
+/* 类名/Tag颜色 - 蓝色 */
+[data-theme='dark'] .token.class-name,
+[data-theme='dark'] .token.tag,
 [data-theme='dark'] .token.builtin {
-  color: #ce9178 !important;
+  color: #87C3FF !important;
 }
 
-/* 装饰器颜色改为淡橙色 */
-[data-theme='dark'] .token.decorator {
-  color: #daa520 !important;
+/* 属性/Property颜色 - 紫色 */
+[data-theme='dark'] .token.property {
+  color: #AA9BF5 !important;
+}
+
+/* 数字/布尔值颜色 - 黄色 */
+[data-theme='dark'] .token.number,
+[data-theme='dark'] .token.boolean,
+[data-theme='dark'] .token.constant {
+  color: #EBC88D !important;
+}
+
+/* 操作符颜色 */
+[data-theme='dark'] .token.operator,
+[data-theme='dark'] .token.punctuation {
+  color: #D6D6DD !important;
+}
+
+/* 装饰器颜色 - 绿色 */
+[data-theme='dark'] .token.decorator,
+[data-theme='dark'] .token.annotation {
+  color: #A8CC7C !important;
+}
+
+/* 变量颜色 */
+[data-theme='dark'] .token.variable {
+  color: #94C1FA !important;
+}
+
+/* HTML 属性名 - 紫色 */
+[data-theme='dark'] .token.attr-name {
+  color: #AAA0FA !important;
+}
+
+/* CSS 选择器 - 黄色 */
+[data-theme='dark'] .token.selector {
+  color: #F8C762 !important;
+}
+
+/* 类型注解 - 青色 */
+[data-theme='dark'] .token.type {
+  color: #82D2CE !important;
+}
+
+/* 参数 - 黄色 */
+[data-theme='dark'] .token.parameter {
+  color: #F8C762 !important;
+}
+
+/* 模块/导入 - 紫色 */
+[data-theme='dark'] .token.imports,
+[data-theme='dark'] .token.module {
+  color: #AAA0FA !important;
 }
 
 /* 内联代码背景为淡蓝色（只针对文本中的 code，不影响代码块） */
@@ -85,10 +167,46 @@
   background-color: #e6f2ff !important;
   color: #0066cc !important;
   padding: 2px 6px;
-  border-radius: 3px;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 
 [data-theme='dark'] :not(pre) > code {
-  background-color: #1e3a5f !important;
-  color: #64b5f6 !important;
+  background-color: #2a2a2a !important;
+  color: #88c0d0 !important;
+  border: 1px solid #404040;
 }
+
+/* 浅色模式代码块样式 */
+pre {
+  background-color: #f6f8fa !important;
+  border: 1px solid #e1e4e8 !important;
+  border-radius: 8px !important;
+}
+
+/* 代码块滚动条样式 - Cursor 风格 */
+[data-theme='dark'] pre::-webkit-scrollbar {
+  height: 8px;
+  background-color: #1a1a1a;
+}
+
+[data-theme='dark'] pre::-webkit-scrollbar-thumb {
+  background-color: #404040;
+  border-radius: 4px;
+}
+
+[data-theme='dark'] pre::-webkit-scrollbar-thumb:hover {
+  background-color: #505050;
+}
+
+/* 代码块复制按钮样式 */
+[data-theme='dark'] button[class*='copyButton'] {
+  background-color: #2a2a2a !important;
+  border: 1px solid #404040 !important;
+  color: #cccccc !important;
+}
+
+[data-theme='dark'] button[class*='copyButton']:hover {
+  background-color: #404040 !important;
+}
+

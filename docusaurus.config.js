@@ -4,7 +4,9 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from 'prism-react-renderer';
+import cursorTheme from './src/theme/prism-cursor-theme.js';
+import cursorLightTheme from './src/theme/prism-cursor-light-theme.js';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
@@ -109,11 +111,11 @@ const config = {
         },
         items: [
           {
-            to: '/docs/Agent', 
-            label: '笔记', 
+            to: '/docs/Agent',
+            label: '笔记',
             position: 'left'
           },
-          {to: '/bloglist', label: '博文', position: 'left'},
+          { to: '/bloglist', label: '博文', position: 'left' },
           {
             href: 'https://github.com/facebook/docusaurus',
             label: 'GitHub',
@@ -167,8 +169,9 @@ const config = {
         copyright: 'Copyright © huangsitao 2025',
       },
       prism: {
-        theme: prismThemes.github,
-        darkTheme: prismThemes.shadesOfPurple,
+        theme: cursorLightTheme,
+        darkTheme: cursorTheme,
+        additionalLanguages: ['bash', 'json', 'python', 'java', 'typescript', 'rust', 'go', 'cpp', 'c'],
       },
     }),
 };
