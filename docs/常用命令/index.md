@@ -2,10 +2,22 @@
 
 ## Claude Code
 
-### 回退版本
+### 卸载旧版npm
 
 ```bash
-npm install -g @anthropic-ai/claude-code@2.0.30
+npm uninstall -g @anthropic-ai/claude-code
+```
+
+### 安装
+
+```bash
+winget install Anthropic.ClaudeCode
+```
+
+### 更新
+
+```bash
+winget upgrade Anthropic.ClaudeCode
 ```
 
 ### 设置暂停更新
@@ -58,6 +70,12 @@ ros2 run cst_database_node cst_database --ros-args --remap __ns:=/girl_9cb8b4d27
 
 ```bash
 ros2 run agent agent_main --ros-args --remap __ns:=/girl_9cb8b4d27eaa
+```
+
+### ros2日志位置
+
+```bash
+cd ~/.ros/log/
 ```
 
 ### 设置本地模型参数
