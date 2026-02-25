@@ -1,8 +1,9 @@
 ---
 sidebar_position: 27
+description：RunnablePassthrough使用
 ---
 
-# RunnablePassthrough 的使用
+# RunnablePassthrough的使用
 
 ## 上节回顾
 
