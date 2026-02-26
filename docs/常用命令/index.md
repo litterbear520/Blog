@@ -72,6 +72,26 @@ ros2 run cst_database_node cst_database --ros-args --remap __ns:=/girl_9cb8b4d27
 ros2 run agent agent_main --ros-args --remap __ns:=/girl_9cb8b4d27eaa
 ```
 
+### rk3576音频节点
+
+```bash
+ros2 run cst_audio aliyun_audio  --ros-args --remap __ns:=/girl_9cb8b4d27eaa
+```
+
+### ros参数配置tts模型和音色
+
+切换qwen3流式：
+
+```bash
+ros2 param set /girl_9cb8b4d27eaa/aliyun_audio rb_audio.aliyun_tts.model_dev qwen3_qwen-tts-vd-announcer-voice-20260226095730699-d970
+```
+
+切换火山流式:
+
+```bash
+ros2 param set /girl_9cb8b4d27eaa/aliyun_audio rb_audio.aliyun_tts.model_dev huoshan_ICL_zh_female_wenyinvsheng_v1_tob
+```
+
 ### ros2日志位置
 
 ```bash
