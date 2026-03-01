@@ -114,6 +114,32 @@ def hello():
 | 功能   | 纯字符串替换，解析占位符生成提示词          | Runnable 接口标准方法，解析占位符生成提示词                    |
 ```
 
+### 文字高亮
+
+三种方式实现文字高亮：
+
+1. 使用 `<mark>` 标签 + 自定义样式（橙色高亮，推荐）：
+```markdown
+<mark style={{backgroundColor: '#ff9900', padding: '0 4px', borderRadius: '3px'}}>高亮文字</mark>
+```
+
+2. 使用 `:::warning` admonition（块级高亮）：
+```markdown
+:::warning
+高亮内容
+:::
+```
+
+3. 使用 `<span>` 字体变色（红色文字高亮）：
+```markdown
+<span style={{color: 'red'}}>高亮文字</span>
+```
+
+4. 使用原生 `<mark>` 标签（浏览器默认黄色高亮）：
+```markdown
+<mark>高亮文字</mark>
+```
+
 ## 部署流程
 
 项目使用 GitHub Actions 自动部署：
