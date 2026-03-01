@@ -13,7 +13,7 @@ description: Chain的基础使用
 chain = prompt_template | model
 ```
 
-核心前提：即Runnable子类对象才能入链（以及Callable、Mapping接口子类对象也可加入[后续了解用的不多]）。
+核心前提：即`Runnable`子类对象才能入链（以及`Callable`、`Mapping`接口子类对象也可加入[后续了解用的不多]）。
 
 我们目前所学习到的组件，均是Runnable接口的子类，如下类的继承关系：
 
