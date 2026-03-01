@@ -45,7 +45,7 @@ class KnowledgeBaseService(object):
 md5_path = "./md5.txt"
 ```
 
-完成具体的函数实现
+新建`knowledge_base.py`代码文件完成具体的函数实现
 
 ```python
 # 知识库
