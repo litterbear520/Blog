@@ -54,7 +54,8 @@
   position: relative;
 }
 
-.theme-code-block::before {
+/* 无 title 时：三点显示在代码块左上角 */
+.theme-code-block:not(:has([class*="codeBlockTitle"]))::before {
   content: '';
   position: absolute;
   top: 12px;
@@ -67,8 +68,27 @@
   z-index: 1;
 }
 
-.theme-code-block pre {
+.theme-code-block:not(:has([class*="codeBlockTitle"])) pre {
   padding-top: 36px !important;
+}
+
+/* 有 title 时：三点显示在 title 栏左侧 */
+[class*="codeBlockTitle"] {
+  position: relative;
+  padding-left: 72px !important;
+}
+
+[class*="codeBlockTitle"]::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ff5f57;
+  box-shadow: 20px 0 0 #febc2e, 40px 0 0 #28c840;
 }
 
 /* 代码块背景改为深灰色并添加边框 - Cursor 风格 */
