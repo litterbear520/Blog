@@ -116,28 +116,32 @@ def hello():
 
 ### 文字高亮
 
-三种方式实现文字高亮：
+注意区分：**字体高亮**（改变文字颜色）和**背景高亮**（改变文字背景色）是两种不同效果。
 
-1. 使用 `<mark>` 标签 + 自定义样式（橙色高亮，推荐）：
-```markdown
-<mark style={{backgroundColor: '#ff9900', padding: '0 4px', borderRadius: '3px'}}>高亮文字</mark>
-```
+#### 字体高亮（改变文字颜色）
 
-2. 使用 `:::warning` admonition（块级高亮）：
-```markdown
-:::warning
-高亮内容
-:::
-```
-
-3. 使用 `<span>` 字体变色（红色文字高亮）：
+使用 `<span>` 变色：
 ```markdown
 <span style={{color: 'red'}}>高亮文字</span>
 ```
 
-4. 使用原生 `<mark>` 标签（浏览器默认黄色高亮）：
+#### 背景高亮（改变文字背景色）
+
+1. 使用 `<mark>` 标签 + 自定义样式（橙色背景，推荐）：
+```markdown
+<mark style={{backgroundColor: '#ff9900', padding: '0 4px', borderRadius: '3px'}}>高亮文字</mark>
+```
+
+2. 使用原生 `<mark>` 标签（浏览器默认黄色背景）：
 ```markdown
 <mark>高亮文字</mark>
+```
+
+3. 使用 `:::warning` admonition（块级背景高亮）：
+```markdown
+:::warning
+高亮内容
+:::
 ```
 
 ## 部署流程

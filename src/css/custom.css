@@ -49,6 +49,28 @@
   object-fit: contain;
 }
 
+/* macOS 三点装饰 */
+.theme-code-block {
+  position: relative;
+}
+
+.theme-code-block::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ff5f57;
+  box-shadow: 20px 0 0 #febc2e, 40px 0 0 #28c840;
+  z-index: 1;
+}
+
+.theme-code-block pre {
+  padding-top: 36px !important;
+}
+
 /* 代码块背景改为深灰色并添加边框 - Cursor 风格 */
 [data-theme='dark'] pre {
   background-color: #1a1a1a !important;
