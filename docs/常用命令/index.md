@@ -65,6 +65,7 @@ source /opt/ros_jazzy/install/setup.bash && source /home/cst/robot/install/local
 ```bash
 export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
 export ROS_STATIC_PEERS=10.1.1.214
+export RCUTILS_CONSOLE_OUTPUT_FORMAT="{severity}|{date_time_with_ms}|{name}|:{message}"
 ```
 
 ### rk3576数据库节点
