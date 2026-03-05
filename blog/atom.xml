@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://litterbear520.github.io/Blog/blog</id>
+    <id>https://huangsitao.fun/blog</id>
     <title>小熊的博客 Blog</title>
     <updated>2025-07-04T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://litterbear520.github.io/Blog/blog"/>
+    <link rel="alternate" href="https://huangsitao.fun/blog"/>
     <subtitle>小熊的博客 Blog</subtitle>
-    <icon>https://litterbear520.github.io/Blog/img/icon2.png</icon>
+    <icon>https://huangsitao.fun/img/icon2.png</icon>
     <entry>
         <title type="html"><![CDATA[阿里天池二手车价格预测比赛Top2分享]]></title>
-        <id>https://litterbear520.github.io/Blog/blog/mdx-blog-post</id>
-        <link href="https://litterbear520.github.io/Blog/blog/mdx-blog-post"/>
+        <id>https://huangsitao.fun/blog/mdx-blog-post</id>
+        <link href="https://huangsitao.fun/blog/mdx-blog-post"/>
         <updated>2025-07-04T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[这是关于我在比赛中如何一步步提升分数，最终取得第2名成绩方案的心得分享]]></summary>
     </entry>
