@@ -60,6 +60,13 @@ source /opt/py310env/bin/activate
 source /opt/ros_jazzy/install/setup.bash && source /home/cst/robot/install/local_setup.bash
 ```
 
+### 设置环境变量
+
+```bash
+export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+export ROS_STATIC_PEERS=10.1.1.214
+```
+
 ### rk3576数据库节点
 
 ```bash
