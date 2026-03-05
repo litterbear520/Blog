@@ -372,7 +372,7 @@ export default function PasswordProtect({ children }) {
   }
 
   return (
-    <div className={styles.passwordPage} style={{ backgroundImage: 'url(/Blog/img/city.png)' }}>
+    <div className={styles.passwordPage} style={{ backgroundImage: 'url(/img/city.png)' /* url(/Blog/img/city.png) */ }}>
       <canvas ref={canvasRef} className={styles.rainCanvas}></canvas>
       <div className={styles.overlay}></div>
 
@@ -380,7 +380,8 @@ export default function PasswordProtect({ children }) {
         <div className={`${styles.passwordContainer} ${shakeError ? styles.shake : ''}`}>
           <canvas ref={cardCanvasRef} className={styles.cardCanvas}></canvas>
           <div className={styles.logoContainer}>
-            <img src="/Blog/img/icon2.png" alt="Logo" className={styles.logo} />
+            {/* <img src="/Blog/img/icon2.png" alt="Logo" className={styles.logo} /> */}
+            <img src="/img/icon2.png" alt="Logo" className={styles.logo} />
           </div>
 
           <h1 className={styles.title}>{PASSWORD_CONFIG.title}</h1>
