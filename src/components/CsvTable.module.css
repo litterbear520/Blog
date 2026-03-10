@@ -1,0 +1,61 @@
+.tableWrapper {
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.csvTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background-color: var(--ifm-background-color);
+}
+
+.csvTable thead {
+  background-color: var(--ifm-color-primary);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.csvTable th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.csvTable tbody tr {
+  border-bottom: 1px solid var(--ifm-table-border-color);
+  transition: background-color 0.2s;
+}
+
+.csvTable tbody tr:hover {
+  background-color: var(--ifm-hover-overlay);
+}
+
+.csvTable tbody tr:last-child {
+  border-bottom: 2px solid var(--ifm-color-primary);
+}
+
+.csvTable td {
+  padding: 10px 15px;
+  vertical-align: top;
+}
+
+.csvTable tbody tr:nth-child(even) {
+  background-color: var(--ifm-table-stripe-background);
+}
+
+@media (max-width: 768px) {
+  .csvTable {
+    font-size: 0.8rem;
+  }
+
+  .csvTable th,
+  .csvTable td {
+    padding: 8px 10px;
+  }
+}
