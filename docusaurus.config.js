@@ -47,6 +47,10 @@ const config = {
     locales: ['en'],
   },
 
+  plugins: [
+    './plugins/copy-markdown-source',
+  ],
+
   presets: [
     [
       'classic',
@@ -100,6 +104,11 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
+      colorMode: {
+        defaultMode: 'dark',
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
+      },
       navbar: {
         // title: 'My Site',
         logo: {

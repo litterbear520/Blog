@@ -19,6 +19,12 @@ function BlogSection() {
     <section className={clsx('container', styles.blogSection)}>
       <div className="row">
         <div className="col col--4">
+          <h2>2026</h2>
+          <ul>
+            <li><Link to="/blog/ai-collaboration-and-technical-depth">善用工具弥补技术深度</Link></li>
+          </ul>
+        </div>
+        <div className="col col--4">
           <h2>2025</h2>
           <ul>
             <li><Link to="/blog/mdx-blog-post">阿里天池二手车价格预测Top2分享</Link></li>
