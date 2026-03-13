@@ -9,12 +9,20 @@
   position: relative;
   overflow: hidden;
   min-height: 300px; /* Adjusted height for blog list header */
-  background-color: #e0f2f7; /* Light blue background, consistent with main page */
-  color: black; /* Text color for '我的博客' */
+  background-color: #2a2a2a;
+  background-image: url('/img/blog-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white; /* Text color for '我的博客' */
 }
 
-.hero__title {
-  color: black !important; /* '我的博客' title color */
+.heroBanner .hero__title {
+  display: none !important; /* 隐藏标题，让背景图完全显示 */
+}
+
+.heroBanner h1 {
+  display: none !important;
 }
 
 .hero__subtitle {
@@ -29,6 +37,11 @@
 .blogSection h2 {
   margin-bottom: 1.5rem;
   font-size: 2.5em;
+  color: white;
+}
+
+/* 亮色模式下改为黑色 */
+:global([data-theme='light']) .blogSection h2 {
   color: #333;
 }
 

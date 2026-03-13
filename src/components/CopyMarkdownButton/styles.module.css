@@ -1,0 +1,22 @@
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ifm-color-primary);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin-left: 12px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.copyButton:hover {
+  background: var(--ifm-color-primary);
+  color: #fff;
+}
