@@ -4,10 +4,17 @@
         <title>小熊的博客 Blog</title>
         <link>https://huangsitao.fun/blog</link>
         <description>小熊的博客 Blog</description>
-        <lastBuildDate>Fri, 04 Jul 2025 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 13 Mar 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[善用工具弥补技术深度]]></title>
+            <link>https://huangsitao.fun/blog/ai-collaboration-and-technical-depth</link>
+            <guid>https://huangsitao.fun/blog/ai-collaboration-and-technical-depth</guid>
+            <pubDate>Fri, 13 Mar 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[这是一篇关于小白在没有任何技术深度，但是在善于使用AI工具的情况下，能否弥补技术深度鸿沟的探讨。]]></description>
+        </item>
         <item>
             <title><![CDATA[阿里天池二手车价格预测比赛Top2分享]]></title>
             <link>https://huangsitao.fun/blog/mdx-blog-post</link>

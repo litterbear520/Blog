@@ -2,11 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://huangsitao.fun/blog</id>
     <title>小熊的博客 Blog</title>
-    <updated>2025-07-04T00:00:00.000Z</updated>
+    <updated>2026-03-13T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://huangsitao.fun/blog"/>
     <subtitle>小熊的博客 Blog</subtitle>
     <icon>https://huangsitao.fun/img/icon2.png</icon>
+    <entry>
+        <title type="html"><![CDATA[善用工具弥补技术深度]]></title>
+        <id>https://huangsitao.fun/blog/ai-collaboration-and-technical-depth</id>
+        <link href="https://huangsitao.fun/blog/ai-collaboration-and-technical-depth"/>
+        <updated>2026-03-13T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[这是一篇关于小白在没有任何技术深度，但是在善于使用AI工具的情况下，能否弥补技术深度鸿沟的探讨。]]></summary>
+    </entry>
     <entry>
         <title type="html"><![CDATA[阿里天池二手车价格预测比赛Top2分享]]></title>
         <id>https://huangsitao.fun/blog/mdx-blog-post</id>
