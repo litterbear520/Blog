@@ -1,10 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in this repository.
 
 ## 项目概述
 
-这是一个基于 **Docusaurus 3** 构建的个人技术博客（小熊的博客），部署在 GitHub Pages。
+基于 **Docusaurus 3** 构建的个人技术博客，部署在 GitHub Pages。
 
 - **技术栈**: Docusaurus 3, React 19, Node.js 18+
 - **部署地址**: https://litterbear520.github.io/Blog/
@@ -13,169 +13,113 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 常用命令
 
 ```bash
-# 启动开发服务器 (默认端口 3000)
-npm start
-
-# 构建静态网站
-npm run build
-
-# 本地预览构建结果
-npm run serve
-
-# 部署到 GitHub Pages
-npm run deploy
-
-# 清理缓存
-npm run clear
+npm start        # 启动开发服务器（端口 3000）
+npm run build    # 构建静态网站
+npm run serve    # 本地预览构建结果
+npm run deploy   # 部署到 GitHub Pages
+npm run clear    # 清理缓存
 ```
 
 ## 项目结构
 
 ```
-├── blog/                  # 博客文章
-├── docs/                  # 文档/笔记（主要分类）
-│   ├── Agent/            # 智能体相关
-│   ├── AIGC/             # AI 生成内容
-│   ├── Prompt/           # 提示词工程
-│   ├── Python/           # Python 笔记
-│   └── ...
+├── blog/                        # 博客文章
+├── docs/                        # 文档/笔记
+│   ├── Agent/                   # 智能体
+│   ├── Docker/                  # Docker 容器化
+│   ├── AIGC/                    # AI 生成内容
+│   ├── AI编程/                  # AI 辅助编程
+│   ├── LangChain/               # LangChain 笔记
+│   ├── Prompt/                  # 提示词工程
+│   ├── python/                  # Python 笔记
+│   ├── 云开发/                  # 云开发相关
+│   ├── 大模型应用/              # 大模型应用开发
+│   ├── 常用命令/                # 常用命令速查
+│   ├── 深度学习/                # 深度学习笔记
+│   └── 项目/                    # 项目记录
 ├── src/
-│   ├── components/       # React 组件
-│   ├── pages/            # 自定义页面
-│   │   ├── index.js      # 首页（带雨滴动画）
-│   │   └── bloglist.js   # 博客列表页
-│   ├── css/              # 自定义样式
-│   └── theme/            # 主题配置
-│       ├── prism-cursor-theme.js       # Cursor 暗色代码主题
-│       └── prism-cursor-light-theme.js # Cursor 亮色代码主题
-├── static/img/           # 静态图片资源
-├── docusaurus.config.js  # Docusaurus 配置
-└── sidebars.js           # 侧边栏配置
+│   ├── components/
+│   │   ├── CopyMarkdownButton/  # Markdown 复制按钮
+│   │   ├── CsvTable.jsx         # CSV 表格组件
+│   │   ├── HomepageFeatures/    # 首页特性展示
+│   │   └── PasswordProtect.js   # 密码保护组件
+│   ├── constants/
+│   │   └── passwordConfig.js    # 密码配置
+│   ├── css/
+│   │   └── custom.css           # 全局自定义样式
+│   ├── pages/
+│   │   ├── index.js             # 首页（Canvas 雨滴动画）
+│   │   └── bloglist.js          # 博客列表页
+│   └── theme/
+│       ├── Root.js                      # 主题根组件
+│       ├── prism-cursor-theme.js        # Cursor 暗色代码主题
+│       └── prism-cursor-light-theme.js  # Cursor 亮色代码主题
+├── static/img/                  # 静态图片资源
+├── docusaurus.config.js         # Docusaurus 主配置
+└── sidebars.js                  # 侧边栏配置
 ```
 
 ## 内容编写规范
 
 ### 文档格式
 
-- 使用 Markdown + MDX 格式
-- 文件命名使用英文，如 `intro.md`, `getting-started.md`
-- 在 frontmatter 中设置标题和侧边栏位置：
+- 使用 Markdown / MDX，文件名用英文
+- frontmatter 示例：
 
 ```yaml
 ---
 sidebar_position: 1
 ---
-
 # 页面标题
 ```
 
-### 数学公式支持
-
-项目支持 KaTeX 数学公式：
-
-- 行内公式: `$...$`
-- 块级公式: `$$...$$`
+### 数学公式（KaTeX）
 
 ```markdown
-行内公式: $E = mc^2$
+行内: $E = mc^2$
 
-块级公式:
+块级:
 $$
 \sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n
 $$
 ```
 
-### 代码块
+### Markdown 表格
 
-使用自定义 Cursor 主题，支持语法高亮的语言：bash, json, python, java, typescript, rust, go, cpp, c
-
-```markdown
-```python
-def hello():
-    print("Hello, World!")
-```
-```
-
-### Markdown 表格最佳实践
-
-为避免 markdownlint (MD060/table-column-style) 警告，表格使用**最简格式**，不要添加额外空格对齐竖线：
+使用最简格式，不对齐竖线（避免 markdownlint MD060 警告）：
 
 ```markdown
 | 区别 | format | invoke |
 | ---- | ---- | ---- |
-| 功能 | 纯字符串替换，解析占位符生成提示词 | Runnable 接口标准方法，解析占位符生成提示词 |
+| 功能 | 纯字符串替换 | Runnable 接口标准方法 |
 | 返回值 | 字符串 | PromptValue 类对象 |
-```
-
-错误示例（会触发警告）：
-```markdown
-| 区别   | format                                      | invoke                                                         |
-| ------ | ------------------------------------------- | -------------------------------------------------------------- |
-| 功能   | 纯字符串替换，解析占位符生成提示词          | Runnable 接口标准方法，解析占位符生成提示词                    |
 ```
 
 ### 文字高亮
 
-注意区分：**字体高亮**（改变文字颜色）和**背景高亮**（改变文字背景色）是两种不同效果。
-
-#### 字体高亮（改变文字颜色）
-
-使用 `<span>` 变色：
 ```markdown
-<span style={{color: 'red'}}>高亮文字</span>
-```
+<!-- 字体变色 -->
+<span style={{color: 'red'}}>文字</span>
 
-#### 背景高亮（改变文字背景色）
+<!-- 背景高亮（推荐） -->
+<mark style={{backgroundColor: '#ff9900', padding: '0 4px', borderRadius: '3px'}}>文字</mark>
 
-1. 使用 `<mark>` 标签 + 自定义样式（橙色背景，推荐）：
-```markdown
-<mark style={{backgroundColor: '#ff9900', padding: '0 4px', borderRadius: '3px'}}>高亮文字</mark>
-```
+<!-- 原生黄色背景 -->
+<mark>文字</mark>
 
-2. 使用原生 `<mark>` 标签（浏览器默认黄色背景）：
-```markdown
-<mark>高亮文字</mark>
-```
-
-3. 使用 `:::warning` admonition（块级背景高亮）：
-```markdown
+<!-- 块级高亮 -->
 :::warning
-高亮内容
+内容
 :::
 ```
 
 ## 部署流程
 
-项目使用 GitHub Actions 自动部署：
+GitHub Actions 自动部署（配置：`.github/workflows/update.yaml`）：
 
-1. 触发条件: 推送到任意分支
-2. 构建环境: Ubuntu, Node.js 20
-3. 构建步骤:
-   - 检出代码
-   - 安装依赖 (`npm install`)
-   - 构建静态网站 (`npm run build`)
-   - 部署到 `gh-pages` 分支（仅当推送到 main 分支时）
-
-工作流配置: `.github/workflows/update.yaml`
-
-## 自定义主题
-
-项目使用自定义 Cursor 风格的代码高亮主题：
-
-- **暗色主题**: `src/theme/prism-cursor-theme.js`
-- **亮色主题**: `src/theme/prism-cursor-light-theme.js`
-
-主题在 `docusaurus.config.js` 中配置，并通过 `prism` 配置应用到代码块。
-
-## 首页特效
-
-首页 (`src/pages/index.js`) 实现了 Canvas 雨滴动画效果：
-
-- 动态雨滴粒子系统
-- 响应式设计，适配不同屏幕
-- 页面不可见时自动暂停以节省资源
-- 计时器显示网站运行时间
+1. 推送到任意分支触发构建
+2. 仅推送到 `main` 分支时部署到 `gh-pages`
 
 ---
 
-*版权所有 © huangsitao 2025*
+*© huangsitao 2025*
