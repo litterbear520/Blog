@@ -86,6 +86,12 @@ ros2 run agent agent_main --ros-args --remap __ns:=/girl_9cb8b4d27eaa
 ros2 run cst_audio aliyun_audio  --ros-args --remap __ns:=/girl_9cb8b4d27eaa
 ```
 
+### 查看tts频率话题
+
+```bash
+ros2 topic echo /girl_9cb8b4d27eaa/tts_frequency
+```
+
 ### ros参数配置tts模型和音色
 
 切换qwen3流式：
