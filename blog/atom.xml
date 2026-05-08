@@ -2,11 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://huangsitao.fun/blog</id>
     <title>小熊的博客 Blog</title>
-    <updated>2026-03-13T00:00:00.000Z</updated>
+    <updated>2026-05-08T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://huangsitao.fun/blog"/>
     <subtitle>小熊的博客 Blog</subtitle>
     <icon>https://huangsitao.fun/img/icon2.png</icon>
+    <entry>
+        <title type="html"><![CDATA[如何自己订阅Claude]]></title>
+        <id>https://huangsitao.fun/blog/how-to-subscribe-claude</id>
+        <link href="https://huangsitao.fun/blog/how-to-subscribe-claude"/>
+        <updated>2026-05-08T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[本文介绍如何使用国内银行卡通过 Google Play 订阅 Claude Pro / ChatGPT Plus，提供两种方案，分别适合有外币信用卡和只有普通储蓄卡的用户。]]></summary>
+    </entry>
     <entry>
         <title type="html"><![CDATA[善用工具弥补技术深度]]></title>
         <id>https://huangsitao.fun/blog/ai-collaboration-and-technical-depth</id>
