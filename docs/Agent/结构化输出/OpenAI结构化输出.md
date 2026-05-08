@@ -217,9 +217,9 @@ compliance = response.output_parsed
 
 ## 示例响应
 
-<!-- 1. groupId 必须和上面完全一致 -->
+{/* 1. groupId 必须和上面完全一致 */}
 
-  <!-- 2. value="cot" 必须对应上面的思维链 -->
+  {/* 2. value="cot" 必须对应上面的思维链 */}
 
 ```json
 {
