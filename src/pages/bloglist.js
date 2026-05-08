@@ -21,6 +21,7 @@ function BlogSection() {
         <div className="col col--4">
           <h2>2026</h2>
           <ul>
+            <li><Link to="/blog/how-to-subscribe-claude">如何自己订阅Claude</Link></li>
             <li><Link to="/blog/ai-collaboration-and-technical-depth">善用工具弥补技术深度</Link></li>
           </ul>
         </div>
