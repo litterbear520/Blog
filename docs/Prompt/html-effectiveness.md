@@ -1,4 +1,4 @@
-# HTML 的惊人效率
+# HTML的惊人有效性
 
 > 来源：Anthropic 工程师 [@trq212](https://x.com/trq212) 推荐 —— 在 Claude Code 中使用 HTML 替代 Markdown，可以大幅提高信息表达和工作效率。
 >
