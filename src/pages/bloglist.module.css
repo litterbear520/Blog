@@ -1,66 +1,346 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally. 
- */
+/* ═══════════════════════════════════════════
+   Page — warm editorial palette
+   ═══════════════════════════════════════════ */
+.page {
+  --bg: #faf9f5;
+  --card-bg: #f0eee6;
+  --card-border: #e8e6dc;
+  --text-1: #141413;
+  --text-2: #5e5d59;
+  --text-3: #8a8985;
+  --tag-bg: #e8e6dc;
+  --tag-text: #5e5d59;
+  --filter-bg: transparent;
+  --filter-active-bg: #141413;
+  --filter-active-text: #faf9f5;
+  --radius: 24px;
 
-.heroBanner {
-  padding: 4rem 0;
+  background: var(--bg);
+  min-height: calc(100vh - 60px);
+  padding-bottom: 80px;
+}
+
+:global([data-theme='dark']) .page {
+  --bg: #1a1917;
+  --card-bg: #262521;
+  --card-border: #3a3935;
+  --text-1: #e8e6dc;
+  --text-2: #a8a7a2;
+  --text-3: #6e6d69;
+  --tag-bg: #3a3935;
+  --tag-text: #a8a7a2;
+  --filter-active-bg: #e8e6dc;
+  --filter-active-text: #1a1917;
+}
+
+/* ═══════════════════════════════════════════
+   Hero
+   ═══════════════════════════════════════════ */
+.hero {
   text-align: center;
-  position: relative;
-  overflow: hidden;
-  min-height: 300px; /* Adjusted height for blog list header */
-  background-color: #2a2a2a;
-  background-image: url('/img/blog-bg.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: white; /* Text color for '我的博客' */
+  padding: 80px 24px 40px;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
-.heroBanner .hero__title {
-  display: none !important; /* 隐藏标题，让背景图完全显示 */
+.heroLabel {
+  display: inline-block;
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 16px;
 }
 
-.heroBanner h1 {
-  display: none !important;
+.heroTitle {
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
-.hero__subtitle {
-  color: white; /* Tagline color if present */
-}
-
-.blogSection {
-  padding: 2rem 0;
-  text-align: center;
-}
-
-.blogSection h2 {
-  margin-bottom: 1.5rem;
-  font-size: 2.5em;
-  color: white;
-}
-
-/* 亮色模式下改为黑色 */
-:global([data-theme='light']) .blogSection h2 {
-  color: #333;
-}
-
-.blogSection ul {
-  list-style: none;
-  padding: 0;
+.heroSubtitle {
+  font-size: 17px;
+  color: var(--text-2);
   margin: 0;
+  line-height: 1.6;
 }
 
-.blogSection li {
-  margin-bottom: 0.8rem;
+.heroDivider {
+  width: 48px;
+  height: 2px;
+  background: var(--card-border);
+  margin: 32px auto 0;
+  border-radius: 1px;
 }
 
-.blogSection li a {
-  font-size: 1.1em;
-  color: #007bff; /* Link color */
-  text-decoration: none;
+/* ═══════════════════════════════════════════
+   Filter pills
+   ═══════════════════════════════════════════ */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 24px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
 }
 
-.blogSection li a:hover {
-  text-decoration: underline;
-} 
+.filterBtn {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 8px 20px;
+  border-radius: 100px;
+  border: 1px solid var(--card-border);
+  background: var(--filter-bg);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filterBtn:hover {
+  background: var(--card-border);
+  color: var(--text-1);
+}
+
+.filterActive {
+  background: var(--filter-active-bg) !important;
+  color: var(--filter-active-text) !important;
+  border-color: var(--filter-active-bg) !important;
+}
+
+/* ═══════════════════════════════════════════
+   Grid
+   ═══════════════════════════════════════════ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ═══════════════════════════════════════════
+   Card
+   ═══════════════════════════════════════════ */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none !important;
+  color: inherit !important;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+  animation: fadeSlideUp 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 16px 40px -8px rgba(20, 20, 19, 0.12),
+    0 4px 12px -2px rgba(20, 20, 19, 0.06);
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+:global([data-theme='dark']) .card:hover {
+  box-shadow:
+    0 16px 40px -8px rgba(0, 0, 0, 0.4),
+    0 4px 12px -2px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   Card Visual — abstract decorative top
+   ═══════════════════════════════════════════ */
+.cardVisual {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.coverImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition:
+    opacity 0.4s ease,
+    transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.coverLoaded {
+  opacity: 1;
+}
+
+.card:hover .coverImg {
+  transform: scale(1.05);
+}
+
+/* Amber accent — 教程 */
+.amber {
+  background:
+    radial-gradient(ellipse at 72% 22%, rgba(217, 158, 75, 0.55) 0%, transparent 55%),
+    radial-gradient(ellipse at 18% 78%, rgba(199, 130, 55, 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse at 88% 82%, rgba(240, 195, 120, 0.4) 0%, transparent 42%),
+    linear-gradient(155deg, #f0dec5 0%, #e8d2b4 50%, #dfc8a8 100%);
+}
+
+:global([data-theme='dark']) .amber {
+  background:
+    radial-gradient(ellipse at 72% 22%, rgba(180, 120, 50, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 18% 78%, rgba(160, 100, 40, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 88% 82%, rgba(200, 155, 80, 0.35) 0%, transparent 42%),
+    linear-gradient(155deg, #4a3d28 0%, #3e3420 50%, #352d1c 100%);
+}
+
+/* Sage accent — AI */
+.sage {
+  background:
+    radial-gradient(ellipse at 28% 25%, rgba(130, 170, 140, 0.5) 0%, transparent 55%),
+    radial-gradient(ellipse at 78% 72%, rgba(110, 155, 145, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 48% 88%, rgba(145, 180, 160, 0.35) 0%, transparent 45%),
+    linear-gradient(155deg, #d5e2d3 0%, #c8d8c5 50%, #bed0ba 100%);
+}
+
+:global([data-theme='dark']) .sage {
+  background:
+    radial-gradient(ellipse at 28% 25%, rgba(80, 120, 90, 0.4) 0%, transparent 55%),
+    radial-gradient(ellipse at 78% 72%, rgba(65, 105, 95, 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse at 48% 88%, rgba(90, 130, 105, 0.3) 0%, transparent 45%),
+    linear-gradient(155deg, #2a3528 0%, #243020 50%, #202a1e 100%);
+}
+
+/* Terra accent — 比赛 */
+.terra {
+  background:
+    radial-gradient(ellipse at 62% 28%, rgba(185, 120, 90, 0.5) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 68%, rgba(170, 105, 80, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 82% 82%, rgba(200, 145, 110, 0.35) 0%, transparent 42%),
+    linear-gradient(155deg, #e2cfc0 0%, #d8c2b0 50%, #cfb8a5 100%);
+}
+
+:global([data-theme='dark']) .terra {
+  background:
+    radial-gradient(ellipse at 62% 28%, rgba(140, 80, 55, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 68%, rgba(125, 70, 48, 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse at 82% 82%, rgba(155, 100, 70, 0.3) 0%, transparent 42%),
+    linear-gradient(155deg, #3e2e22 0%, #342820 50%, #2d221a 100%);
+}
+
+/* ═══════════════════════════════════════════
+   Card Content
+   ═══════════════════════════════════════════ */
+.cardContent {
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cardDate {
+  font-size: 12px;
+  color: var(--text-3);
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+
+.cardTitle {
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--text-1);
+  line-height: 1.4;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+
+.cardDesc {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.65;
+  margin: 0;
+  flex: 1;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.cardTag {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+}
+
+.cardArrow {
+  font-size: 18px;
+  color: var(--text-3);
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+}
+
+.card:hover .cardArrow {
+  transform: translateX(4px);
+  color: var(--text-1);
+}
+
+/* ═══════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════ */
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 60px 20px 32px;
+  }
+
+  .heroTitle {
+    font-size: 36px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+    gap: 24px;
+  }
+
+  .cardVisual {
+    height: 150px;
+  }
+}
