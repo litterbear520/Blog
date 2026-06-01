@@ -388,7 +388,7 @@ compliance = response.output_parsed
 
 虽然结构化输出支持 JSON Schema 的大部分功能，但由于性能或技术原因，某些功能不可用
 
-:::info 提示
+:::info[提示]
 为了最大化模型生成的质量，建议：
 
 - 清晰直观地命名键
@@ -445,7 +445,7 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
-:::warning 注意
+:::warning[注意]
 使用任何模式发起的第一个请求会有额外的延迟，因为API会处理该模式，但后续使用相同模式的请求不会有额外的延迟。
 :::
 

@@ -324,7 +324,7 @@ High-fidelity scientific schematic, technical vector illustration, clean white b
 当拿到步骤二生成的初稿后，发现并不满意后，可以根据实际情况选择不同的操作路径：
 
 
-:::info 💡关于抽卡的有效性
+:::info[💡关于抽卡的有效性]
 
 通过测试发现，抽卡对整体的布局和风格改动不会特别大，不过可能会对某些线条的路径、某些元素的颜色、图形的细节有些改变。
 
