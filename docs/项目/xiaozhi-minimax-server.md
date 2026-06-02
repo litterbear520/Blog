@@ -53,7 +53,7 @@ manager-api:
   secret: 你复制的值
 ```
 
-:::info
+:::info[注意]
 注意如果是docker部署，url应该替换成上面的配置，而不是默认复制的url
 :::
 
