@@ -3,7 +3,7 @@ import Head from '@docusaurus/Head';
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 import styles from './bloglist.module.css';
 
 const POSTS = [
@@ -52,6 +52,7 @@ function formatDate(dateStr) {
 
 export default function BlogListPage() {
   const [activeFilter, setActiveFilter] = useState('全部');
+  const { withBaseUrl } = useBaseUrlUtils();
 
   const filtered =
     activeFilter === '全部'
@@ -99,7 +100,7 @@ export default function BlogListPage() {
               style={{ '--delay': `${i * 120}ms` }}
             >
               <div className={clsx(styles.cardVisual, styles[post.accent])}>
-                <CoverImage src={useBaseUrl(post.cover)} alt={post.title} />
+                <CoverImage src={withBaseUrl(post.cover)} alt={post.title} />
               </div>
               <div className={styles.cardContent}>
                 <time className={styles.cardDate}>
@@ -121,18 +122,17 @@ export default function BlogListPage() {
 }
 
 function CoverImage({ src, alt }) {
-  const [loaded, setLoaded] = React.useState(false);
   const [error, setError] = React.useState(false);
 
   if (error) return null;
 
   return (
     <img
-      className={clsx(styles.coverImg, loaded && styles.coverLoaded)}
+      className={styles.coverImg}
       src={src}
       alt={alt}
-      loading="lazy"
-      onLoad={() => setLoaded(true)}
+      loading="eager"
+      fetchPriority="high"
       onError={() => setError(true)}
     />
   );
