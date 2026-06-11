@@ -126,16 +126,14 @@
 }
 
 .installRow {
-  display: flex;
-  align-items: stretch;
-  gap: 8px;
+  position: relative;
 }
 
 .installCommand {
-  flex: 1;
+  display: block;
   font-size: 12px;
   line-height: 1.6;
-  padding: 10px 12px;
+  padding: 10px 40px 10px 12px; /* 右侧留出内嵌复制按钮的位置 */
   border-radius: 8px;
   border: none;
   background: var(--code-bg);
@@ -144,30 +142,37 @@
   white-space: nowrap;
 }
 
+/* 内嵌在命令块右侧的复制按钮（同笔记页代码块风格；命令块两种主题下均为深色，故用白色半透明） */
 .copyBtn {
-  font-size: 12px;
-  padding: 0 14px;
-  border-radius: 8px;
-  border: 1px solid var(--card-border);
-  background: transparent;
-  color: var(--text-2);
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--code-text);
   cursor: pointer;
-  white-space: nowrap;
-  transition:
-    background 0.25s ease,
-    color 0.25s ease;
+  transition: background 0.25s ease;
 }
 
 .copyBtn:hover {
-  background: var(--card-border);
-  color: var(--text-1);
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .repoLink {
-  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
   font-size: 13px;
-  padding: 8px 18px;
-  border-radius: 100px;
+  padding: 10px 16px;
+  border-radius: 10px;
   background: var(--filter-active-bg);
   color: var(--filter-active-text) !important;
   text-decoration: none !important;

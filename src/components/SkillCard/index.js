@@ -1,6 +1,7 @@
 // src/components/SkillCard/index.js
 import React, { useState } from 'react';
 import clsx from 'clsx';
+import { Check, Copy, Github, X } from 'lucide-react';
 import styles from './styles.module.css';
 
 function CopyButton({ command, tabbable }) {
@@ -24,8 +25,16 @@ function CopyButton({ command, tabbable }) {
       onClick={handleCopy}
       type="button"
       tabIndex={tabbable ? 0 : -1}
+      aria-label={state === 'failed' ? '复制失败，请手动复制' : '复制命令'}
+      title={state === 'failed' ? '复制失败，请手动复制' : '复制'}
     >
-      {state === 'copied' ? '已复制 ✓' : state === 'failed' ? '复制失败，请手动复制' : '复制'}
+      {state === 'copied' ? (
+        <Check size={14} />
+      ) : state === 'failed' ? (
+        <X size={14} />
+      ) : (
+        <Copy size={14} />
+      )}
     </button>
   );
 }
@@ -79,7 +88,8 @@ export default function SkillCard({ skill, expanded, onToggle, delay }) {
               tabIndex={expanded ? 0 : -1}
               onClick={(e) => e.stopPropagation()}
             >
-              GitHub 仓库 ↗
+              <Github size={15} />
+              GitHub 仓库 →
             </a>
           </div>
         </div>
