@@ -122,6 +122,7 @@ const config = {
             position: 'left'
           },
           { to: '/bloglist', label: '博文', position: 'left' },
+          { to: '/skills', label: 'Skills', position: 'left' },
           {
             href: 'https://github.com/facebook/docusaurus',
             label: 'GitHub',
