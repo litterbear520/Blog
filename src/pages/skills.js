@@ -40,11 +40,15 @@ export default function SkillsPage() {
           {SOURCES.map((src) => (
             <button
               key={src}
+              type="button"
               className={clsx(
                 styles.filterBtn,
                 activeSource === src && styles.filterActive,
               )}
-              onClick={() => setActiveSource(src)}
+              onClick={() => {
+                setActiveSource(src);
+                setExpandedId(null); // 切换筛选时收起已展开卡片，避免"幽灵展开"
+              }}
             >
               {src}
             </button>
