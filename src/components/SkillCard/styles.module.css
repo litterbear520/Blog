@@ -125,46 +125,44 @@
   margin-bottom: 6px;
 }
 
-/* 深色命令块容器：命令文字在自己的区域内滚动，复制按钮固定在右侧不遮挡文字 */
 .installRow {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: var(--code-bg);
-  border-radius: 8px;
-  padding-right: 6px;
+  position: relative;
 }
 
 .installCommand {
-  flex: 1;
-  min-width: 0; /* 允许收缩，长命令在块内横向滚动 */
+  display: block;
   font-size: 12px;
   line-height: 1.6;
-  padding: 10px 8px 10px 12px;
+  padding: 10px 44px 10px 12px; /* 右侧留出复制按钮位置，滚到末尾文字不被盖住 */
+  border-radius: 8px;
   border: none;
-  background: transparent;
+  background: var(--code-bg);
   color: var(--code-text);
   overflow-x: auto;
   white-space: nowrap;
 }
 
-/* 命令块两种主题下均为深色，故用白色半透明 */
+/* Hermes 风格：不透明小按钮叠在命令块右侧，文字滚动经过时被按钮干净盖住
+   （命令块两种主题下均为深色，故直接用固定深色） */
 .copyBtn {
-  flex-shrink: 0;
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 5px;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: #2e2d29;
   color: var(--code-text);
   cursor: pointer;
   transition: background 0.25s ease;
 }
 
 .copyBtn:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: #3a3935;
 }
 
 .repoLink {
