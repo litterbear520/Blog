@@ -1,0 +1,173 @@
+/* src/components/SkillCard/styles.module.css */
+/* 颜色变量由页面根元素（skills.module.css 的 .page）定义，经级联获得 */
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 24px;
+  cursor: pointer;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.2, 0.9, 0.3, 1),
+    border-color 0.3s ease;
+  animation: fadeSlideUp 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 40px -8px rgba(20, 20, 19, 0.12),
+    0 4px 12px -2px rgba(20, 20, 19, 0.06);
+}
+
+:global([data-theme='dark']) .card:hover {
+  box-shadow:
+    0 16px 40px -8px rgba(0, 0, 0, 0.4),
+    0 4px 12px -2px rgba(0, 0, 0, 0.2);
+}
+
+.cardExpanded {
+  border-color: var(--text-3);
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cardName {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin: 0 0 10px;
+}
+
+.cardDesc {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.cardDescClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.cardBadge {
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  border-radius: 100px;
+  padding: 3px 10px;
+}
+
+.cardChevron {
+  margin-left: auto;
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.chevronUp {
+  transform: rotate(180deg);
+}
+
+/* ── 展开详情：grid-rows 0fr→1fr 过渡 ── */
+.cardDetail {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.cardExpanded .cardDetail {
+  grid-template-rows: 1fr;
+}
+
+.cardDetailInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.cardDetailContent {
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.installLabel {
+  display: block;
+  font-size: 12px;
+  color: var(--text-3);
+  margin-bottom: 6px;
+}
+
+.installRow {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.installCommand {
+  flex: 1;
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  background: var(--code-bg);
+  color: var(--code-text);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.copyBtn {
+  font-size: 12px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.copyBtn:hover {
+  background: var(--card-border);
+  color: var(--text-1);
+}
+
+.repoLink {
+  align-self: flex-start;
+  font-size: 13px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: var(--filter-active-bg);
+  color: var(--filter-active-text) !important;
+  text-decoration: none !important;
+  transition: opacity 0.25s ease;
+}
+
+.repoLink:hover {
+  opacity: 0.85;
+}
