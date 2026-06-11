@@ -125,29 +125,32 @@
   margin-bottom: 6px;
 }
 
+/* 深色命令块容器：命令文字在自己的区域内滚动，复制按钮固定在右侧不遮挡文字 */
 .installRow {
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding-right: 6px;
 }
 
 .installCommand {
-  display: block;
+  flex: 1;
+  min-width: 0; /* 允许收缩，长命令在块内横向滚动 */
   font-size: 12px;
   line-height: 1.6;
-  padding: 10px 40px 10px 12px; /* 右侧留出内嵌复制按钮的位置 */
-  border-radius: 8px;
+  padding: 10px 8px 10px 12px;
   border: none;
-  background: var(--code-bg);
+  background: transparent;
   color: var(--code-text);
   overflow-x: auto;
   white-space: nowrap;
 }
 
-/* 内嵌在命令块右侧的复制按钮（同笔记页代码块风格；命令块两种主题下均为深色，故用白色半透明） */
+/* 命令块两种主题下均为深色，故用白色半透明 */
 .copyBtn {
-  position: absolute;
-  top: 50%;
-  right: 6px;
-  transform: translateY(-50%);
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
