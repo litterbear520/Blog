@@ -32,6 +32,10 @@
   border-color: var(--text-3);
 }
 
+.cardExpanded:hover {
+  transform: none;
+}
+
 @keyframes fadeSlideUp {
   from {
     opacity: 0;
@@ -149,7 +153,9 @@
   color: var(--text-2);
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.25s ease;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
 }
 
 .copyBtn:hover {

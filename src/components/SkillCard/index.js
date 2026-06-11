@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
 
-function CopyButton({ command }) {
+function CopyButton({ command, tabbable }) {
   // 状态：idle → copied / failed，2 秒后回到 idle
   const [state, setState] = useState('idle');
 
@@ -19,7 +19,12 @@ function CopyButton({ command }) {
   };
 
   return (
-    <button className={styles.copyBtn} onClick={handleCopy} type="button">
+    <button
+      className={styles.copyBtn}
+      onClick={handleCopy}
+      type="button"
+      tabIndex={tabbable ? 0 : -1}
+    >
       {state === 'copied' ? '已复制 ✓' : state === 'failed' ? '复制失败，请手动复制' : '复制'}
     </button>
   );
@@ -31,6 +36,16 @@ export default function SkillCard({ skill, expanded, onToggle, delay }) {
       className={clsx(styles.card, expanded && styles.cardExpanded)}
       style={{ '--delay': `${delay}ms` }}
       onClick={onToggle}
+      role="button"
+      tabIndex={0}
+      aria-expanded={expanded}
+      onKeyDown={(e) => {
+        if (e.target !== e.currentTarget) return; // 内部按钮/链接的按键不触发卡片开合
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onToggle();
+        }
+      }}
     >
       <h2 className={styles.cardName}>{skill.name}</h2>
       <p className={clsx(styles.cardDesc, !expanded && styles.cardDescClamp)}>
@@ -52,7 +67,7 @@ export default function SkillCard({ skill, expanded, onToggle, delay }) {
                 <span className={styles.installLabel}>{item.label}</span>
                 <div className={styles.installRow}>
                   <code className={styles.installCommand}>{item.command}</code>
-                  <CopyButton command={item.command} />
+                  <CopyButton command={item.command} tabbable={expanded} />
                 </div>
               </div>
             ))}
@@ -61,6 +76,7 @@ export default function SkillCard({ skill, expanded, onToggle, delay }) {
               href={skill.repo}
               target="_blank"
               rel="noopener noreferrer"
+              tabIndex={expanded ? 0 : -1}
               onClick={(e) => e.stopPropagation()}
             >
               GitHub 仓库 ↗
