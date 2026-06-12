@@ -25,3 +25,7 @@ docs/多模态探索/image/index/1755149583346.png
 
 # superpowers brainstorm mockups
 .superpowers/
+
+# 设计文档（仅本地保留，不进仓库）
+/specs
+/plans
