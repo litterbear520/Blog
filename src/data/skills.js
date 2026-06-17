@@ -63,4 +63,36 @@ export const SKILLS = [
     ],
     repo: 'https://github.com/upstash/context7',
   },
+  {
+    id: 'boss-job-analyzer',
+    name: 'boss-job-analyzer',
+    author: 'litterbear520',
+    source: '自建',
+    description:
+      '抓取 BOSS直聘某类岗位的真实 JD：模型读岗位标技术栈、脚本做确定性统计，产出含技术栈/语言、学历薪资分布与可点开原文的岗位卡片墙的单文件 HTML 报告。',
+    install: [
+      {
+        label: 'npx',
+        command:
+          'npx skills add litterbear520/littlebear-skills --skill boss-job-analyzer',
+      },
+    ],
+    repo: 'https://github.com/litterbear520/littlebear-skills/tree/main/boss-job-analyzer',
+  },
+  {
+    id: 'worldcup-bet-advisor',
+    name: 'worldcup-bet-advisor',
+    author: 'litterbear520',
+    source: '自建',
+    description:
+      '综合多个 AI 模型对世界杯比赛的预测与讨论，叠加实时倍率去水找价值，给出稳健/平衡/激进三档玩法方案，并产出可复盘进化的单文件 HTML 报告。',
+    install: [
+      {
+        label: 'npx',
+        command:
+          'npx skills add litterbear520/littlebear-skills --skill worldcup-bet-advisor',
+      },
+    ],
+    repo: 'https://github.com/litterbear520/littlebear-skills/tree/main/worldcup-bet-advisor',
+  },
 ];
