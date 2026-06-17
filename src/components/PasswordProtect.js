@@ -308,9 +308,9 @@ export default function PasswordProtect({ children }) {
           if (dB > MOUSE_RADIUS * 1.5) continue;
           const dAB = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
           if (dAB < CONNECT_DIST) {
-            const lineAlpha = (1 - dAB / CONNECT_DIST) * 0.25;
+            const lineAlpha = (1 - dAB / CONNECT_DIST) * 0.14;
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(0, 245, 255, ${lineAlpha})`;
+            ctx.strokeStyle = `rgba(170, 200, 255, ${lineAlpha})`;
             ctx.lineWidth = 0.5;
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
