@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Source+Serif+4:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #171714; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<svg id="cover" width="2400" height="1140" viewBox="0 0 2400 1140" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="2400" height="1140" fill="#171714"/>
+
+  <!-- 背景装饰 -->
+  <path d="M -100 1170 Q 500 1010 1150 1170" stroke="#232320" stroke-width="3" fill="none"/>
+  <path d="M 1250 1190 Q 1800 1040 2450 1190" stroke="#1f1f1b" stroke-width="3" fill="none"/>
+  <circle cx="190" cy="300" r="22" stroke="#3a3a33" stroke-width="4" stroke-dasharray="8 10" fill="none"/>
+  <circle cx="2210" cy="220" r="17" stroke="#c2593d" stroke-width="4" stroke-dasharray="7 9" fill="none" opacity="0.75"/>
+  <circle cx="2320" cy="700" r="20" stroke="#33332d" stroke-width="4" stroke-dasharray="7 9" fill="none"/>
+  <text x="240" y="990" font-family="'Source Serif 4', serif" font-size="62" fill="#262620">¥</text>
+  <text x="2200" y="960" font-family="'Source Serif 4', serif" font-size="54" fill="#26261f">$</text>
+  <text x="120" y="640" font-family="'Source Serif 4', serif" font-size="46" fill="#242420">$</text>
+
+  <!-- 标题（居中） -->
+  <text x="1200" y="172" text-anchor="middle" font-family="'Source Serif 4', serif"
+        font-style="italic" font-size="60" fill="#c2593d">A Practical Guide</text>
+  <text x="1200" y="330" text-anchor="middle" font-family="'Source Serif 4', 'Noto Serif SC', serif"
+        font-weight="900" font-size="128" fill="#f5f0e4">如何自己订阅 Claude</text>
+  <rect x="1136" y="386" width="128" height="7" rx="3.5" fill="#c2593d"/>
+
+  <!-- 票据（整体微微倾斜） -->
+  <g transform="rotate(-2 1200 700)">
+    <!-- 票身 -->
+    <rect x="330" y="470" width="1740" height="460" rx="26" fill="#f7f3e9"/>
+    <!-- 左右打孔 -->
+    <circle cx="330" cy="700" r="27" fill="#171714"/>
+    <circle cx="2070" cy="700" r="27" fill="#171714"/>
+    <!-- 票根分隔虚线 -->
+    <line x1="1680" y1="496" x2="1680" y2="904" stroke="#b9b19c" stroke-width="4" stroke-dasharray="14 16"/>
+
+    <!-- 票面小字：左上票种 / 右上编号（取文章日期） -->
+    <text x="420" y="562" font-family="'Source Serif 4', serif" font-size="28"
+          letter-spacing="6" fill="#a89f8a">SUBSCRIPTION TICKET</text>
+    <text x="1600" y="562" text-anchor="end" font-family="'Source Serif 4', serif" font-size="28"
+          letter-spacing="4" fill="#a89f8a">NO. 2026-0508</text>
+
+    <!-- 第一站：银行卡 -->
+    <g stroke="#23231f" stroke-width="5" fill="none">
+      <rect x="500" y="640" width="128" height="84" rx="11"/>
+      <rect x="518" y="660" width="26" height="19" rx="4"/>
+      <line x1="518" y1="702" x2="612" y2="702"/>
+    </g>
+    <text x="564" y="800" text-anchor="middle" font-family="'Source Serif 4', serif" font-size="26"
+          letter-spacing="5" fill="#8a8272">BANK CARD</text>
+
+    <!-- 连接虚线 1 -->
+    <line x1="682" y1="682" x2="920" y2="682" stroke="#55554c" stroke-width="5"
+          stroke-dasharray="2 16" stroke-linecap="round"/>
+
+    <!-- 第二站：Google Play（点状圆 + 三角） -->
+    <circle cx="1010" cy="682" r="62" stroke="#23231f" stroke-width="4.5"
+            stroke-dasharray="2 13" stroke-linecap="round" fill="none"/>
+    <polygon points="988,650 988,714 1046,682" stroke="#23231f" stroke-width="4.5"
+             fill="none" stroke-linejoin="round"/>
+    <text x="1010" y="800" text-anchor="middle" font-family="'Source Serif 4', serif" font-size="26"
+          letter-spacing="5" fill="#8a8272">GOOGLE PLAY</text>
+
+    <!-- 连接虚线 2 -->
+    <line x1="1100" y1="682" x2="1338" y2="682" stroke="#55554c" stroke-width="5"
+          stroke-dasharray="2 16" stroke-linecap="round"/>
+
+    <!-- 第三站：Claude 星芒（珊瑚色，终点） -->
+    <g stroke="#c2593d" stroke-width="9" stroke-linecap="round">
+      <line x1="1430" y1="628" x2="1430" y2="736"/>
+      <line x1="1383" y1="655" x2="1477" y2="709"/>
+      <line x1="1477" y1="655" x2="1383" y2="709"/>
+    </g>
+    <text x="1430" y="800" text-anchor="middle" font-family="'Source Serif 4', serif" font-size="26"
+          letter-spacing="5" fill="#c2593d">CLAUDE PRO</text>
+
+    <!-- 票根：条形码 + ADMIT ONE -->
+    <g fill="#23231f">
+      <rect x="1758" y="560" width="10" height="220"/>
+      <rect x="1780" y="560" width="5" height="220"/>
+      <rect x="1797" y="560" width="16" height="220"/>
+      <rect x="1826" y="560" width="6" height="220"/>
+      <rect x="1844" y="560" width="11" height="220"/>
+      <rect x="1868" y="560" width="5" height="220"/>
+      <rect x="1885" y="560" width="14" height="220"/>
+      <rect x="1912" y="560" width="7" height="220"/>
+      <rect x="1931" y="560" width="5" height="220"/>
+      <rect x="1948" y="560" width="12" height="220"/>
+      <rect x="1974" y="560" width="6" height="220"/>
+      <rect x="1992" y="560" width="10" height="220"/>
+    </g>
+    <text x="1880" y="856" text-anchor="middle" font-family="'Source Serif 4', serif" font-size="30"
+          letter-spacing="7" fill="#c2593d">ADMIT ONE</text>
+  </g>
+</svg>
+</body>
+</html>

@@ -4,6 +4,8 @@ title: 如何自己订阅Claude
 date: 2026-05-08
 ---
 
+![如何自己订阅 Claude](/img/blog/hero-subscribe-claude.png)
+
 本文介绍如何使用国内银行卡通过 Google Play 订阅 Claude Pro / ChatGPT Plus，提供两种方案，分别适合有外币信用卡和只有普通储蓄卡的用户。
 
 {/* truncate */}

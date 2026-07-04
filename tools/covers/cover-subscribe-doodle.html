@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>html,body{margin:0;padding:0}svg{display:block}</style>
+</head>
+<body>
+<svg id="cover" width="2400" height="1140" viewBox="0 0 2400 1140" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="./cover-lib.js"></script>
+<script>
+const svg = document.getElementById('cover');
+const d = makeDraw(svg, 508);
+const BG = '#C96442';
+
+// 陶土橘底
+d.el('rect', { width: 2400, height: 1140, fill: BG });
+
+const paper = Object.assign(d.stroke(15), { fill: PAPER });
+
+// 大票据
+d.wobblyRect(840, 400, 880, 380, 7, paper);
+
+// 左右打孔（背景色圆，带墨线）
+d.blob(840, 590, 30, 6, 3, Object.assign(d.stroke(13), { fill: BG }));
+d.blob(1720, 590, 30, 6, 3, Object.assign(d.stroke(13), { fill: BG }));
+
+// 撕票虚线
+d.wobblyLine([[1480, 435], [1480, 745]], 5,
+  Object.assign(d.stroke(13), { 'stroke-dasharray': '28 32' }));
+
+// 票面涂鸦文字行
+d.wobblyLine([[905, 505], [1265, 505]], 5, d.stroke(12));
+d.wobblyLine([[905, 585], [1175, 585]], 5, d.stroke(12));
+d.wobblyLine([[905, 665], [1225, 665]], 5, d.stroke(12));
+
+// 票根上的 Claude 星芒
+d.sparkle(1600, 590, 104, 14);
+
+// 银行卡（微微倾斜，叠在票据左下角）
+d.wobblyPoly([[715, 670], [1012, 712], [985, 900], [688, 858]], 5,
+  Object.assign(d.stroke(15), { fill: PAPER }));
+d.wobblyPoly([[743, 706], [806, 715], [800, 761], [737, 752]], 3, d.stroke(12));
+d.wobblyLine([[740, 815], [948, 844]], 4, d.stroke(12));
+</script>
+</body>
+</html>
