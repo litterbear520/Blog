@@ -4,16 +4,23 @@
         <title>小熊的博客 Blog</title>
         <link>https://huangsitao.fun/blog</link>
         <description>小熊的博客 Blog</description>
-        <lastBuildDate>Fri, 08 May 2026 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 04 Jul 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[A Field Guide to Fable: Finding Your Unknowns]]></title>
+            <link>https://huangsitao.fun/blog/a-field-guide-to-fable</link>
+            <guid>https://huangsitao.fun/blog/a-field-guide-to-fable</guid>
+            <pubDate>Sat, 04 Jul 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[A Field Guide to Fable: Finding Your Unknowns]]></description>
+        </item>
         <item>
             <title><![CDATA[如何自己订阅Claude]]></title>
             <link>https://huangsitao.fun/blog/how-to-subscribe-claude</link>
             <guid>https://huangsitao.fun/blog/how-to-subscribe-claude</guid>
             <pubDate>Fri, 08 May 2026 00:00:00 GMT</pubDate>
-            <description><![CDATA[本文介绍如何使用国内银行卡通过 Google Play 订阅 Claude Pro / ChatGPT Plus，提供两种方案，分别适合有外币信用卡和只有普通储蓄卡的用户。]]></description>
+            <description><![CDATA[如何自己订阅 Claude]]></description>
         </item>
         <item>
             <title><![CDATA[善用工具弥补技术深度]]></title>
