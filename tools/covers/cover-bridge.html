@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>html,body{margin:0;padding:0}svg{display:block}</style>
+</head>
+<body>
+<svg id="cover" width="2400" height="1140" viewBox="0 0 2400 1140" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="./cover-lib.js"></script>
+<script>
+const svg = document.getElementById('cover');
+const d = makeDraw(svg, 7);
+
+// 板岩蓝底
+d.el('rect', { width: 2400, height: 1140, fill: '#6493C6' });
+
+const brick = Object.assign(d.stroke(14), { fill: PAPER });
+
+// 左边矮砖堆（技术地基浅）
+d.wobblyRect(620, 748, 176, 118, 5, brick);
+d.wobblyRect(806, 748, 176, 118, 5, brick);
+d.wobblyRect(712, 626, 176, 118, 5, brick);
+
+// 右边高砖堆（要到达的深度）
+d.wobblyRect(1432, 748, 176, 118, 5, brick);
+d.wobblyRect(1618, 748, 176, 118, 5, brick);
+d.wobblyRect(1524, 626, 176, 118, 5, brick);
+d.wobblyRect(1432, 626, 82, 118, 5, brick);
+d.wobblyRect(1478, 504, 176, 118, 5, brick);
+
+// 虚线弧桥跨过鸿沟
+d.wobblyLine([[966, 600], [1090, 468], [1205, 420], [1320, 442], [1452, 486]], 5,
+  Object.assign(d.stroke(16), { 'stroke-dasharray': '36 26' }));
+
+// 桥顶上的星芒（AI 之光）
+d.sparkle(1205, 305, 118, 15);
+</script>
+</body>
+</html>

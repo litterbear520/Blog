@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>html,body{margin:0;padding:0}svg{display:block}</style>
+</head>
+<body>
+<svg id="cover" width="2400" height="1140" viewBox="0 0 2400 1140" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="./cover-lib.js"></script>
+<script>
+const svg = document.getElementById('cover');
+const d = makeDraw(svg, 42);
+
+// 淡紫底（避免与订阅篇的陶土橘撞色）
+d.el('rect', { width: 2400, height: 1140, fill: '#C6C1DC' });
+
+// 白色纸片"地图"
+d.blob(1080, 590, 340, 10, 42, Object.assign(d.stroke(15), { fill: PAPER }));
+
+// 上升路线：实心起点 → 空心节点 → 空心终点
+d.wobblyLine([[880, 770], [990, 690], [1090, 590], [1195, 500], [1280, 430]], 6, d.stroke(16));
+d.el('circle', { cx: 880, cy: 770, r: 21, fill: INK });
+d.blob(1090, 592, 25, 6, 2, Object.assign(d.stroke(14), { fill: PAPER }));
+d.blob(1280, 430, 25, 6, 2, Object.assign(d.stroke(14), { fill: PAPER }));
+
+// 虚线冲出纸片，指向未知
+d.wobblyLine([[1320, 400], [1440, 335], [1560, 280]], 5,
+  Object.assign(d.stroke(16), { 'stroke-dasharray': '2 46' }));
+
+// 大问号（手绘）
+d.el('g', {});
+const q = d.el('g', { transform: 'rotate(8 1680 280)' });
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const p = document.createElementNS(NS, 'path');
+  p.setAttribute('d', 'M 1600 240 C 1598 158 1728 150 1736 228 C 1741 285 1668 296 1662 362');
+  Object.entries(d.stroke(19)).forEach(([k, v]) => p.setAttribute(k, v));
+  q.appendChild(p);
+  const dot = document.createElementNS(NS, 'circle');
+  dot.setAttribute('cx', 1660); dot.setAttribute('cy', 428); dot.setAttribute('r', 16);
+  dot.setAttribute('fill', INK);
+  q.appendChild(dot);
+})();
+
+// 左下角一个小问号（旋转、缩小）
+const q2 = d.el('g', { transform: 'translate(560 760) rotate(-14) scale(0.55)' });
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const p = document.createElementNS(NS, 'path');
+  p.setAttribute('d', 'M 0 60 C -2 -22 128 -30 136 48 C 141 105 68 116 62 182');
+  Object.entries(d.stroke(19)).forEach(([k, v]) => p.setAttribute(k, v));
+  q2.appendChild(p);
+  const dot = document.createElementNS(NS, 'circle');
+  dot.setAttribute('cx', 60); dot.setAttribute('cy', 248); dot.setAttribute('r', 16);
+  dot.setAttribute('fill', INK);
+  q2.appendChild(dot);
+})();
+</script>
+</body>
+</html>

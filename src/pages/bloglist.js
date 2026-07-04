@@ -8,6 +8,16 @@ import styles from './bloglist.module.css';
 
 const POSTS = [
   {
+    title: 'A Field Guide to Fable: Finding Your Unknowns',
+    date: '2026-07-04',
+    slug: 'a-field-guide-to-fable',
+    description:
+      '一篇关于 Fable 的实用指南：如何找到你的"未知之未知"。',
+    category: 'AI',
+    accent: 'sage',
+    cover: '/img/blog/cover-fable-unknowns.png',
+  },
+  {
     title: '如何自己订阅Claude',
     date: '2026-05-08',
     slug: 'how-to-subscribe-claude',
@@ -15,7 +25,7 @@ const POSTS = [
       '使用国内银行卡通过 Google Play 订阅 Claude Pro / ChatGPT Plus，两种方案分别适合不同用户。',
     category: '教程',
     accent: 'amber',
-    cover: '/img/blog/cover-subscribe-claude.png',
+    cover: '/img/blog/cover-subscribe-claude-doodle.png',
   },
   {
     title: '善用工具弥补技术深度',
@@ -25,7 +35,7 @@ const POSTS = [
       '探讨在没有技术深度但善于使用AI工具的情况下，能否弥补技术深度鸿沟。',
     category: 'AI',
     accent: 'sage',
-    cover: '/img/blog/cover-ai-tools.png',
+    cover: '/img/blog/cover-ai-tools-bridge.png',
   },
   {
     title: '阿里天池二手车价格预测Top2分享',
@@ -35,7 +45,7 @@ const POSTS = [
       '从迷茫到第二名，分享比赛中一步步提升分数的方案与心得。',
     category: '比赛',
     accent: 'terra',
-    cover: '/img/blog/cover-tianchi.png',
+    cover: '/img/blog/cover-tianchi-top2.png',
   },
 ];
 

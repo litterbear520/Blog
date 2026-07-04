@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>html,body{margin:0;padding:0}svg{display:block}</style>
+</head>
+<body>
+<svg id="cover" width="2400" height="1140" viewBox="0 0 2400 1140" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="./cover-lib.js"></script>
+<script>
+const svg = document.getElementById('cover');
+const d = makeDraw(svg, 2024);
+
+// 牛皮纸金底（奖牌色）
+d.el('rect', { width: 2400, height: 1140, fill: '#D4A27F' });
+
+const paper = Object.assign(d.stroke(15), { fill: PAPER });
+
+// 领奖台：2 / 1 / 3
+d.wobblyRect(760, 570, 280, 310, 6, paper);   // 第 2 名（我们的位置）
+d.wobblyRect(1320, 668, 280, 212, 6, paper);  // 第 3 名
+d.wobblyRect(1040, 470, 280, 410, 6, paper);  // 第 1 名（居中最高）
+
+// 台面数字（手绘）
+const num = d.stroke(16);
+// "2"
+d.wobblyLine([[856, 688], [860, 652], [900, 640], [940, 655], [944, 690], [900, 728], [856, 768]], 4, num);
+d.wobblyLine([[856, 768], [948, 768]], 3, num);
+// "1"
+d.wobblyLine([[1152, 622], [1186, 596], [1186, 762]], 3, num);
+d.wobblyLine([[1140, 762], [1234, 762]], 3, num);
+// "3"
+d.wobblyLine([[1408, 728], [1452, 720], [1466, 752], [1432, 772]], 4, num);
+d.wobblyLine([[1432, 772], [1472, 788], [1452, 826], [1404, 818]], 4, num);
+
+// 第 2 名台上的二手车
+d.wobblyPoly([
+  [790, 552], [802, 506], [838, 498], [856, 462],
+  [908, 454], [950, 462], [964, 500], [1008, 508], [1020, 552],
+], 4, Object.assign(d.stroke(15), { fill: PAPER }));
+d.blob(842, 548, 27, 6, 2, Object.assign(d.stroke(13), { fill: PAPER }));
+d.blob(972, 548, 27, 6, 2, Object.assign(d.stroke(13), { fill: PAPER }));
+
+// 车顶星芒（Top 2 高光）
+d.sparkle(905, 350, 104, 15);
+</script>
+</body>
+</html>
