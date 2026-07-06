@@ -16,7 +16,7 @@
 ## 常用命令
 
 ```bash
-npm start                    # 开发服务器（端口 3000，热更新，日常写内容用这个）
+npm start                    # 开发服务器（端口 3003，热更新，日常写内容用这个）
 npm run build                # 构建静态网站
 npm run serve                # 本地预览构建结果
 npm run build && npm run serve  # 构建后预览（模拟生产环境，提交前确认用这个）
