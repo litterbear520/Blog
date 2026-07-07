@@ -90,7 +90,7 @@ I'm working on adding a new auth provider but I know nothing about the auth modu
 <TabItem value="zh" label="中文">
 
 ```text
-我正在尝试添加一个新的认证提供商，但我不了解这个代码库中的认证模块。你能帮我做一次盲点排查，找出我相关的未知未知，并帮助我更好地向你提问吗？
+我正在尝试添加一个新的认证提供商，但我不了解这个代码库中的认证模块。你能帮我做一次盲点排查，找出我相关的未知的未知，并帮助我更好地向你提问吗？
 ```
 
 </TabItem>
@@ -107,7 +107,7 @@ I don’t know what color grading is but I need to grade this video. Can you tea
 <TabItem value="zh" label="中文">
 
 ```text
-我不知道什么是调色，但我需要给这段视频调色。你能教我了解我在调色方面的未知未知，这样我就能更好地提问吗？
+我不知道什么是调色，但我需要给这段视频调色。你能教我了解我在调色方面的未知的未知，这样我就能更好地提问吗？
 ```
 
 </TabItem>
