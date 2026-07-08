@@ -20,7 +20,7 @@ const POSTS = [
   {
     title: '探索你的未知领域',
     date: '2026-07-04',
-    slug: 'a-field-guide-to-fable',
+    slug: 'fable-guide',
     description:
       '一篇关于 Fable 的实用指南：如何找到你的"未知之未知"。',
     category: 'AI',
@@ -30,7 +30,7 @@ const POSTS = [
   {
     title: '如何自己订阅Claude',
     date: '2026-05-08',
-    slug: 'how-to-subscribe-claude',
+    slug: 'subscribe-claude',
     description:
       '使用国内银行卡通过 Google Play 订阅 Claude Pro / ChatGPT Plus，两种方案分别适合不同用户。',
     category: '教程',
@@ -40,7 +40,7 @@ const POSTS = [
   {
     title: '善用工具弥补技术深度',
     date: '2026-03-13',
-    slug: 'ai-collaboration-and-technical-depth',
+    slug: 'ai-and-depth',
     description:
       '探讨在没有技术深度但善于使用AI工具的情况下，能否弥补技术深度鸿沟。',
     category: 'AI',
@@ -50,7 +50,7 @@ const POSTS = [
   {
     title: '阿里天池二手车价格预测Top2分享',
     date: '2025-07-04',
-    slug: 'mdx-blog-post',
+    slug: 'tianchi-top2',
     description:
       '从迷茫到第二名，分享比赛中一步步提升分数的方案与心得。',
     category: '比赛',
