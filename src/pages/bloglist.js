@@ -8,7 +8,7 @@ import styles from './bloglist.module.css';
 
 const POSTS = [
   {
-    title: 'HTML 的惊人有效性',
+    title: 'HTML 的惊人效果',
     date: '2026-07-08',
     slug: 'html-effectiveness',
     description:
