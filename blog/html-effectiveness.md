@@ -301,27 +301,27 @@ I'm tuning this system prompt. Make a side-by-side editor: editable prompt on th
 
 我一直向很多人提到我已经转向使用 HTML，也看到了一些反复出现的问题。
 
-1.这样不是更消耗 token 吗？
+1.**这样不是更消耗 token 吗？**
 
 虽然 Markdown 通常使用更少的 token，但我发现 HTML 更强的表现力以及我更愿意阅读它的特性，意味着我能获得整体更优的输出。在 Opus 4.7 的 100 万 token 上下文窗口中，增加的 token 消耗实际上并不明显。
 
-2.你现在什么时候还会用 Markdown？
+2.**你现在什么时候还会用 Markdown？**
 
 老实说，我现在几乎完全不用 Markdown 了，不过我在 HTML 使用上可能属于极端派。
 
-3.如何查看 HTML 文件？
+3.**如何查看 HTML 文件？**
 
 我通常直接在本地浏览器中打开它（你可以让 Claude 来打开），或者如果需要可分享的链接，就上传到 S3。
 
-4.生成 HTML 不是比 Markdown 更耗时吗？
+4.**生成 HTML 不是比 Markdown 更耗时吗？**
 
 确实更耗时！HTML 比 Markdown 多花 2-4 倍的时间，但我发现结果值得。
 
-5.版本控制呢？
+5.**版本控制呢？**
 
 说实话，这是 HTML 最大的缺点之一。与 Markdown 相比，HTML 的差异对比杂乱且难以审查。
 
-6.如何让 Claude 符合我的审美/避免设计丑陋？
+6.**如何让 Claude 符合我的审美/避免设计丑陋？**
 
 前端设计插件能帮助 Claude 生成优质的 HTML 文件。但若要匹配贵公司的自有风格，只需将 Claude 指向您的代码库，即可创建一份统一的设计系统 HTML 文件。随后可将该设计系统文件作为其他 HTML 文件的参考基准。
 
