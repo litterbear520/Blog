@@ -61,6 +61,8 @@ npm run clear                # 清理 Docusaurus 缓存
 │       └── prism-cursor-light-theme.js
 ├── plugins/
 │   └── copy-markdown-source/      # 构建时生成清洗后的 .md 文件供复制
+├── tools/
+│   └── covers/                    # 博客封面生成工具（手绘涂鸦 SVG → 无头浏览器截图导出 PNG）
 ├── static/
 │   ├── CNAME                      # 自定义域名 huangsitao.fun
 │   └── img/                       # 图片资源
@@ -96,6 +98,18 @@ sidebar_position: 1
 ```javascript
 { title, date: 'YYYY-MM-DD', slug, description, category: '教程'|'AI'|'比赛', accent, cover }
 ```
+
+### 博客封面与头图
+
+**列表封面**（`cover` 字段，显示在 `/bloglist` 卡片顶部）统一用 `tools/covers/` 的手绘涂鸦流水线生成，**不要手绘、不要用 AI 生成图片、不要外部找图**：
+
+1. 复制一个现有 `tools/covers/cover-*.html`，改底色和涂鸦内容（用 `cover-lib.js` 的 `wobblyRect` / `wobblyLine` / `blob` / `sparkle`，固定种子保证可复现）
+2. 起服务：`cd tools/covers && python -m http.server 8931`
+3. Playwright 打开页面 → 视口 2400×1140 → 截图导出 PNG（墨黑线条 + 纸白填充 + 纯色底，不放文字）
+4. PNG 放入 `static/img/blog/`，并更新 `tools/covers/README.md` 的封面清单与「已用底色」
+5. 细节见 `tools/covers/README.md`
+
+**文章头图**（正文开头大图）可用编辑排版风或用户提供的图，直接放 `static/img/blog/`，正文首行用 `![alt](/img/blog/xxx)` 引入。
 
 ### 数学公式
 

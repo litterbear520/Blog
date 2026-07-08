@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>html,body{margin:0;padding:0}svg{display:block}</style>
+</head>
+<body>
+<svg id="cover" width="2400" height="1140" viewBox="0 0 2400 1140" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="./cover-lib.js"></script>
+<script>
+const svg = document.getElementById('cover');
+const d = makeDraw(svg, 7);
+
+// 鼠尾草绿底（新色：避开陶土橘/板岩蓝/牛皮纸金/淡紫）
+d.el('rect', { width: 2400, height: 1140, fill: '#A3B79B' });
+
+// ── 中央 HTML 工件窗口（纸白填充 + 墨黑手绘描边）──
+d.wobblyRect(770, 315, 860, 550, 18, Object.assign(d.stroke(15), { fill: PAPER }));
+
+// 窗口标题栏分隔线 + 三个交通灯圆点
+d.wobblyLine([[792, 408], [1608, 408]], 4, d.stroke(9));
+d.el('circle', { cx: 838, cy: 362, r: 17, fill: INK });
+d.blob(892, 362, 17, 6, 2, Object.assign(d.stroke(7), { fill: PAPER }));
+d.blob(946, 362, 17, 6, 2, Object.assign(d.stroke(7), { fill: PAPER }));
+
+// 顶部两行"文本"
+d.wobblyLine([[842, 472], [1180, 472]], 4, d.stroke(11));
+d.wobblyLine([[842, 522], [1052, 522]], 4, d.stroke(9));
+
+// ── 左下：手绘柱状图（中间一根填实）──
+d.wobblyRect(855, 668, 72, 124, 4, Object.assign(d.stroke(10), { fill: PAPER }));
+d.wobblyRect(957, 588, 72, 204, 4, Object.assign(d.stroke(10), { fill: INK }));
+d.wobblyRect(1059, 636, 72, 156, 4, Object.assign(d.stroke(10), { fill: PAPER }));
+d.wobblyLine([[840, 796], [1168, 796]], 3, d.stroke(9));
+
+// ── 右上：交互滑块（轨道 + 实心滑钮）──
+d.wobblyLine([[1252, 548], [1472, 548]], 4, d.stroke(9));
+d.wobblyLine([[1250, 616], [1560, 616]], 5, d.stroke(11));
+d.el('circle', { cx: 1442, cy: 616, r: 27, fill: INK });
+
+// 光标箭头（暗示可交互），指向滑钮下方
+d.wobblyPoly(
+  [[1496, 690], [1496, 752], [1513, 738], [1525, 760], [1536, 754], [1524, 733], [1546, 733]],
+  3, Object.assign(d.stroke(8), { fill: PAPER })
+);
+
+// ── 星芒（Claude 涂鸦标志）──
+d.sparkle(1735, 366, 150, 11);
+d.sparkle(648, 812, 112, 10);
+d.sparkle(1712, 852, 88, 9);
+</script>
+</body>
+</html>
