@@ -1,5 +1,5 @@
 ---
-slug: how-to-subscribe-claude
+slug: subscribe-claude
 title: 如何自己订阅Claude
 date: 2026-05-08
 ---

@@ -1,5 +1,5 @@
 ---
-slug: ai-collaboration-and-technical-depth
+slug: ai-and-depth
 title: 善用工具弥补技术深度
 date: 2026-03-13
 ---
@@ -48,7 +48,7 @@ date: 2026-03-13
 
 首先，这种需要参考一个项目来实现的，直接无脑计划模式就行了，进入计划模式，输入简洁的需求后，加上一句特别的提示词
 
-![1773412277325](image/ai-collaboration-and-technical-depth/1773412277325.png)
+![1773412277325](image/ai-and-depth/1773412277325.png)
 
 这个提示词也没啥神奇，就是让大模型进行提问澄清，但是确实特别有用。
 
@@ -56,11 +56,11 @@ date: 2026-03-13
 
 按下回车键后，它开始探索链接的项目内容，在一段时间的探索后，它开始向我提问：
 
-![1773412730316](image/ai-collaboration-and-technical-depth/1773412730316.png)
+![1773412730316](image/ai-and-depth/1773412730316.png)
 
 紧接着又问了我第二个问题：
 
-![1773412765938](image/ai-collaboration-and-technical-depth/1773412765938.png)
+![1773412765938](image/ai-and-depth/1773412765938.png)
 
 两个问题回答后，它就开始写计划了，下面是它写的计划：
 
@@ -145,7 +145,7 @@ plugins: [
 
 很快它就按照开始执行
 
-![1773413014324](image/ai-collaboration-and-technical-depth/1773413014324.png)
+![1773413014324](image/ai-and-depth/1773413014324.png)
 
 这里细心观察的话会发现，`claude code`用的不再是`todo list`了，而是`task`
 
@@ -153,7 +153,7 @@ plugins: [
 
 这里它发现了一些关键信息：
 
-![1773413468223](image/ai-collaboration-and-technical-depth/1773413468223.png)
+![1773413468223](image/ai-and-depth/1773413468223.png)
 
 ## 开始验证
 
@@ -161,19 +161,19 @@ plugins: [
 
 这里它开始了自己的验证，不过我可没要求它验证，这是它自己的计划
 
-![1773413713968](image/ai-collaboration-and-technical-depth/1773413713968.png)
+![1773413713968](image/ai-and-depth/1773413713968.png)
 
 它发现了一些问题，并尝试调试修复，最后发现是名字不对
 
-![1773413747767](image/ai-collaboration-and-technical-depth/1773413747767.png)
+![1773413747767](image/ai-and-depth/1773413747767.png)
 
 然后就是一顿操作，我就吃着麦当劳，按下回车，这就是我的工作。
 
-![1773413819686](image/ai-collaboration-and-technical-depth/1773413819686.png)
+![1773413819686](image/ai-and-depth/1773413819686.png)
 
-![1773413833638](image/ai-collaboration-and-technical-depth/1773413833638.png)
+![1773413833638](image/ai-and-depth/1773413833638.png)
 
-![1773413839910](image/ai-collaboration-and-technical-depth/1773413839910.png)
+![1773413839910](image/ai-and-depth/1773413839910.png)
 
 这里说一下，其实我也不知道它遇到啥问题了，因为我对这框架不熟悉，但它一直在操作让我感觉有点慌了，我开始怀疑它能不能完成。
 
@@ -181,7 +181,7 @@ plugins: [
 
 这里说构建成功了，接下来就是我验收成果了，说实话这种感觉好像有点爽：
 
-![1773413941292](image/ai-collaboration-and-technical-depth/1773413941292.png)
+![1773413941292](image/ai-and-depth/1773413941292.png)
 
 没错我遇到了同样的错误，按钮不对，然后点击复制竟然不是md，到这里我无奈的笑了，果然AI还是需要技术深度才能用好吗。
 
@@ -191,17 +191,17 @@ plugins: [
 
 我告诉它我遇到的问题：
 
-![1773414288066](image/ai-collaboration-and-technical-depth/1773414288066.png)
+![1773414288066](image/ai-and-depth/1773414288066.png)
 
 它认真分析了出现的bug：
 
-![1773414330696](image/ai-collaboration-and-technical-depth/1773414330696.png)
+![1773414330696](image/ai-and-depth/1773414330696.png)
 
 好的，到这里你就明白为什么我会复制的不是md格式了，因为我启动命令是`npm run start`，是的，就是我前面提到的，我只知道这个启动命令。
 
 然后它指出了我的错误，让我用正确方式启动
 
-![1773414445763](image/ai-collaboration-and-technical-depth/1773414445763.png)
+![1773414445763](image/ai-and-depth/1773414445763.png)
 
 最后也成功实现了这个插件功能，只用了两轮对话。
 
@@ -215,7 +215,7 @@ plugins: [
 
 虽然我通过工具技巧的使用，完成了这次的开发，但如果看token量和时间呢：
 
-![1773414941231](image/ai-collaboration-and-technical-depth/1773414941231.png)
+![1773414941231](image/ai-and-depth/1773414941231.png)
 
 是的，它跑了三十多分钟，花费了8美金，算成人民币就是56块没了，这样说可能没有感觉，换句话说：花五十块加一个按钮，是不是听起来就很痛苦了。
 
