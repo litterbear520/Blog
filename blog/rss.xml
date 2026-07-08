@@ -4,10 +4,17 @@
         <title>小熊的博客 Blog</title>
         <link>https://huangsitao.fun/blog</link>
         <description>小熊的博客 Blog</description>
-        <lastBuildDate>Sat, 04 Jul 2026 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 08 Jul 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[HTML 的惊人有效性]]></title>
+            <link>https://huangsitao.fun/blog/html-effectiveness</link>
+            <guid>https://huangsitao.fun/blog/html-effectiveness</guid>
+            <pubDate>Wed, 08 Jul 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[HTML 的惊人有效性]]></description>
+        </item>
         <item>
             <title><![CDATA[探索你的未知领域]]></title>
             <link>https://huangsitao.fun/blog/a-field-guide-to-fable</link>
