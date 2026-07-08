@@ -1,4 +1,10 @@
-# HTML的惊人有效性
+---
+slug: html-effectiveness
+title: HTML 的惊人有效性
+date: 2026-07-08
+---
+
+![HTML 的惊人有效性](/img/blog/hero-html-effectiveness.jpg)
 
 > 来源：Anthropic 工程师 [@trq212](https://x.com/trq212) 推荐 —— 在 Claude Code 中使用 HTML 替代 Markdown，可以大幅提高信息表达和工作效率。
 >
@@ -9,6 +15,8 @@
 HTML 比 Markdown 更具表现力，可以渲染 diff、注释、流程图、模块、交互式滑块、拖拽界面等。Claude 可以生成单个 HTML 文件作为丰富的工作产物，用于规划、设计、审查、报告和自定义编辑。
 
 以下是六大核心用例，每个用例都附带了原文精华提示词和适用场景，方便在实际工作中随时查阅和复用。
+
+{/* truncate */}
 
 ---
 
@@ -741,5 +749,4 @@ When photography is used (rare — mostly testimonials), avatars crop to perfect
 - Form validation states beyond `{component.text-input-focused}` are not extracted — error / success states would need a sign-up or feedback flow to confirm.
 - The actual Claude product surface (claude.ai chat interface) shares some tokens with the marketing site but adds many product-specific components (chat bubbles, message tools, file upload chips, conversation history sidebar) that are out of scope for this marketing-surface document.
 - The "agent" / "computer use" demo cards on certain pages display animated Claude controlling a browser — the static screenshot doesn't fully capture the animation chrome.
-
 ```

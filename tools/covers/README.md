@@ -11,6 +11,7 @@
 | `cover-subscribe-doodle.html` | `cover-subscribe-claude-doodle.png` | 陶土橘底 · 手绘票据 + 银行卡 |
 | `cover-bridge.html` | `cover-ai-tools-bridge.png` | 板岩蓝底 · 砖堆间的虚线桥 + 星芒 |
 | `cover-tianchi.html` | `cover-tianchi-top2.png` | 牛皮纸金底 · 领奖台 + 2 号台上的小车 |
+| `cover-html.html` | `cover-html-effectiveness.png` | 鼠尾草绿底 · HTML 工件窗口（柱状图 + 滑块 + 光标）+ 星芒 |
 | `hero-subscribe-ticket.html` | `hero-subscribe-claude.png` | 编辑排版风头图（黑底票据，需联网加载 Google Fonts） |
 
 ## 生成新封面
@@ -24,5 +25,5 @@
 
 - 画布 2400×1140；列表卡片是 180px 高的 `object-fit: cover` 裁切，关键图形放画面中央
 - 涂鸦封面（列表用）：纯色底 + 墨黑 `#1A1A18` 线条 + 纸白 `#FAF9F2` 填充，不放文字
-- 已用底色：陶土橘 `#C96442` / 板岩蓝 `#6493C6` / 牛皮纸金 `#D4A27F` / 淡紫 `#C6C1DC`，新文章尽量换新色
+- 已用底色：陶土橘 `#C96442` / 板岩蓝 `#6493C6` / 牛皮纸金 `#D4A27F` / 淡紫 `#C6C1DC` / 鼠尾草绿 `#A3B79B`，新文章尽量换新色
 - 编辑排版风（文章头图用）：深底 + 衬线大标题 + 珊瑚橙 `#C2593D` 点缀，字体 Noto Serif SC + Source Serif 4

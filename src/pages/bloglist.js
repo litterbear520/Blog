@@ -8,7 +8,17 @@ import styles from './bloglist.module.css';
 
 const POSTS = [
   {
-    title: 'A Field Guide to Fable: Finding Your Unknowns',
+    title: 'HTML 的惊人有效性',
+    date: '2026-07-08',
+    slug: 'html-effectiveness',
+    description:
+      'HTML 比 Markdown 更具表现力——用它渲染 diff、原型、报告和一次性编辑器。六大核心用例与提示词精华。',
+    category: 'AI',
+    accent: 'sage',
+    cover: '/img/blog/cover-html-effectiveness.png',
+  },
+  {
+    title: '探索你的未知领域',
     date: '2026-07-04',
     slug: 'a-field-guide-to-fable',
     description:
