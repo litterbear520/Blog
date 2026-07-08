@@ -2,11 +2,18 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://huangsitao.fun/blog</id>
     <title>小熊的博客 Blog</title>
-    <updated>2026-07-04T00:00:00.000Z</updated>
+    <updated>2026-07-08T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://huangsitao.fun/blog"/>
     <subtitle>小熊的博客 Blog</subtitle>
     <icon>https://huangsitao.fun/img/icon2.png</icon>
+    <entry>
+        <title type="html"><![CDATA[HTML 的惊人有效性]]></title>
+        <id>https://huangsitao.fun/blog/html-effectiveness</id>
+        <link href="https://huangsitao.fun/blog/html-effectiveness"/>
+        <updated>2026-07-08T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[HTML 的惊人有效性]]></summary>
+    </entry>
     <entry>
         <title type="html"><![CDATA[探索你的未知领域]]></title>
         <id>https://huangsitao.fun/blog/a-field-guide-to-fable</id>
