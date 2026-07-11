@@ -145,25 +145,25 @@ ssh littlebear-vpn
 
 ### 4. Windows 10/11 使用密码登录
 
-Windows 10/11 可以使用系统自带的 OpenSSH Client。先在 PowerShell 中检查：
+Windows 10/11 可以使用系统自带的 OpenSSH Client。先打开“命令提示符（CMD）”检查：
 
-```powershell
-Get-Command ssh
+```batch
+where ssh
 ssh -V
 ```
 
-如果找不到 `ssh`，以管理员身份打开 PowerShell，只安装 OpenSSH Client：
+如果找不到 `ssh`，以管理员身份打开 CMD，只安装 OpenSSH Client：
 
-```powershell
-Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
-Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+```batch
+dism /Online /Get-Capabilities | findstr /I OpenSSH.Client
+dism /Online /Add-Capability /CapabilityName:OpenSSH.Client~~~~0.0.1.0
 ```
 
 这里不需要安装或启动 OpenSSH Server，因为 Windows 是发起连接的客户端。图形界面也可以在“设置 → 应用 → 可选功能”中搜索并安装“OpenSSH 客户端”。安装方式参考 [Microsoft Learn：安装 Windows OpenSSH](https://learn.microsoft.com/windows-server/administration/openssh/openssh_install_firstuse)。
 
-在腾讯云控制台为 `ubuntu` 用户设置或重置登录密码，并确认服务器允许 SSH 密码登录。然后在普通 PowerShell 中执行：
+在腾讯云控制台为 `ubuntu` 用户设置或重置登录密码，并确认服务器允许 SSH 密码登录。然后在普通 CMD 中执行：
 
-```powershell
+```batch
 ssh ubuntu@YOUR_SERVER_IP
 ```
 
@@ -190,7 +190,7 @@ ssh -vvv littlebear-vpn
 
 Windows 使用密码登录时，可以显示详细连接过程：
 
-```powershell
+```batch
 ssh -vvv ubuntu@YOUR_SERVER_IP
 ```
 
@@ -459,13 +459,13 @@ Mac：
 nc -vz -w 5 YOUR_SERVER_IP 443
 ```
 
-Windows PowerShell：
+Windows CMD：
 
-```powershell
-Test-NetConnection YOUR_SERVER_IP -Port 443
+```batch
+curl.exe -vkI --connect-timeout 5 --max-time 10 https://YOUR_SERVER_IP/
 ```
 
-Windows 结果中的 `TcpTestSucceeded` 应为 `True`。
+在输出中看到 `Connected to ... port 443` 说明 TCP 443 可以连接。这里的 `-k` 只用于忽略 IP 与目标证书不匹配，完成端口排查后无需在其他命令中长期使用。
 
 看到 `succeeded` 只代表 TCP 端口可达，最终还要使用客户端做真实代理请求。
 
@@ -531,13 +531,11 @@ scp littlebear-vpn:~/littlebear-vpn.yaml \
 chmod 600 ~/.config/littlebear-vpn/littlebear-vpn.yaml
 ```
 
-Windows PowerShell 使用：
+Windows CMD 使用：
 
-```powershell
-$VpnDir = "$env:USERPROFILE\.config\littlebear-vpn"
-New-Item -ItemType Directory -Force $VpnDir
-
-scp ubuntu@YOUR_SERVER_IP:~/littlebear-vpn.yaml "$VpnDir\littlebear-vpn.yaml"
+```batch
+mkdir "%USERPROFILE%\.config\littlebear-vpn"
+scp ubuntu@YOUR_SERVER_IP:~/littlebear-vpn.yaml "%USERPROFILE%\.config\littlebear-vpn\littlebear-vpn.yaml"
 ```
 
 Windows 执行 `scp` 时会提示输入服务器密码。Mac 如果没有配置 SSH 别名，也可以把 `littlebear-vpn:` 换成 `ubuntu@YOUR_SERVER_IP:`。
@@ -594,13 +592,11 @@ scp littlebear-vpn:~/littlebear-vpn-uri.txt \
 chmod 600 ~/.config/littlebear-vpn/littlebear-vpn-uri.txt
 ```
 
-Windows PowerShell 下载到同一个配置目录：
+Windows CMD 下载到同一个配置目录：
 
-```powershell
-$VpnDir = "$env:USERPROFILE\.config\littlebear-vpn"
-New-Item -ItemType Directory -Force $VpnDir
-
-scp ubuntu@YOUR_SERVER_IP:~/littlebear-vpn-uri.txt "$VpnDir\littlebear-vpn-uri.txt"
+```batch
+mkdir "%USERPROFILE%\.config\littlebear-vpn"
+scp ubuntu@YOUR_SERVER_IP:~/littlebear-vpn-uri.txt "%USERPROFILE%\.config\littlebear-vpn\littlebear-vpn-uri.txt"
 ```
 
 导入步骤：
@@ -676,10 +672,10 @@ sudo ufw status
 nc -vz -w 5 YOUR_SERVER_IP 443
 ```
 
-Windows PowerShell 使用：
+Windows CMD 使用：
 
-```powershell
-Test-NetConnection YOUR_SERVER_IP -Port 443
+```batch
+curl.exe -vkI --connect-timeout 5 --max-time 10 https://YOUR_SERVER_IP/
 ```
 
 如果服务器在监听、本地电脑却无法连接，优先检查腾讯云防火墙是否放行“全部 IPv4”的 TCP 443。
