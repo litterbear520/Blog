@@ -105,7 +105,7 @@ sudo ufw status
 ### 1. 分清公钥和私钥
 
 - 云服务器保存公钥，通常位于 `~/.ssh/authorized_keys`；
-- Mac 保存私钥，例如 `server-key.pem`；
+- Mac 或 Windows 电脑保存私钥，例如 `server-key.pem`；
 - 登录时私钥不会发送给服务器，本地只用它签名；
 - `.pem` 文件通常是私钥，不要上传到服务器或发给别人。
 
@@ -122,7 +122,7 @@ chmod 600 ~/.ssh/server-key.pem
 
 `600` 表示只有当前 Mac 用户可以读写这个文件，用户组和其他用户没有权限。
 
-### 3. 添加 SSH 别名
+### 3. 在 Mac 上添加 SSH 别名
 
 编辑 `~/.ssh/config`：
 
@@ -143,7 +143,74 @@ ssh littlebear-vpn
 
 以后不需要再输入完整 IP 和私钥路径。
 
-### 4. 常见 SSH 问题
+### 4. Windows 10/11 配置方法
+
+Windows 10/11 可以使用系统自带的 OpenSSH Client。先在 PowerShell 中检查：
+
+```powershell
+Get-Command ssh
+ssh -V
+```
+
+如果找不到 `ssh`，以管理员身份打开 PowerShell，只安装 OpenSSH Client：
+
+```powershell
+Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
+Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+```
+
+这里不需要安装或启动 OpenSSH Server，因为 Windows 是发起连接的客户端。图形界面也可以在“设置 → 应用 → 可选功能”中搜索并安装“OpenSSH 客户端”。安装方式参考 [Microsoft Learn：安装 Windows OpenSSH](https://learn.microsoft.com/windows-server/administration/openssh/openssh_install_firstuse)。
+
+普通 PowerShell 中创建 SSH 目录并移动下载的私钥：
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.ssh"
+
+Move-Item "$env:USERPROFILE\Downloads\server-key.pem" "$env:USERPROFILE\.ssh\server-key.pem"
+```
+
+Windows 不使用 `chmod 600`，而是使用 ACL。移除继承权限，只允许当前 Windows 用户读取私钥：
+
+```powershell
+$Key = "$env:USERPROFILE\.ssh\server-key.pem"
+icacls.exe $Key /inheritance:r
+icacls.exe $Key /grant:r "$($env:USERNAME):(R)"
+icacls.exe $Key
+```
+
+ACL 命令参考 [Microsoft Learn：icacls](https://learn.microsoft.com/windows-server/administration/windows-commands/icacls)。私钥权限过宽时，Windows OpenSSH 可能拒绝使用它。
+
+用记事本打开 Windows SSH 配置：
+
+```powershell
+notepad "$env:USERPROFILE\.ssh\config"
+```
+
+如果提示文件不存在，选择创建，然后加入：
+
+```sshconfig
+Host littlebear-vpn
+    HostName YOUR_SERVER_IP
+    User ubuntu
+    IdentityFile ~/.ssh/server-key.pem
+    IdentitiesOnly yes
+```
+
+保存后在 PowerShell 测试：
+
+```powershell
+ssh littlebear-vpn
+```
+
+Windows 的配置文件位置是：
+
+```text
+C:\Users\你的Windows用户名\.ssh\config
+```
+
+成功 SSH 进入 Ubuntu 后，本文后续所有 Xray 服务端命令与 Mac 完全相同。
+
+### 5. 常见 SSH 问题
 
 如果使用密码登录，终端输入密码时不会显示字符、星号或圆点，这是正常的。直接输入后按回车即可。
 
@@ -157,6 +224,13 @@ ssh -i ~/.ssh/server-key.pem ubuntu@YOUR_SERVER_IP
 ls -l ~/.ssh/server-key.pem
 
 # 显示详细认证过程，但不要把完整输出公开
+ssh -vvv littlebear-vpn
+```
+
+Windows PowerShell 直接指定私钥时使用：
+
+```powershell
+ssh -i "$env:USERPROFILE\.ssh\server-key.pem" ubuntu@YOUR_SERVER_IP
 ssh -vvv littlebear-vpn
 ```
 
@@ -417,11 +491,21 @@ LISTEN ... :443 ... xray
 sudo journalctl -u xray --since "5 minutes ago" --no-pager
 ```
 
-再从 Mac 测试公网端口：
+再从本地电脑测试公网端口。
+
+Mac：
 
 ```bash
 nc -vz -w 5 YOUR_SERVER_IP 443
 ```
+
+Windows PowerShell：
+
+```powershell
+Test-NetConnection YOUR_SERVER_IP -Port 443
+```
+
+Windows 结果中的 `TcpTestSucceeded` 应为 `True`。
 
 看到 `succeeded` 只代表 TCP 端口可达，最终还要使用客户端做真实代理请求。
 
@@ -487,6 +571,15 @@ scp littlebear-vpn:~/littlebear-vpn.yaml \
 chmod 600 ~/.config/littlebear-vpn/littlebear-vpn.yaml
 ```
 
+Windows PowerShell 使用：
+
+```powershell
+$VpnDir = "$env:USERPROFILE\.config\littlebear-vpn"
+New-Item -ItemType Directory -Force $VpnDir
+
+scp littlebear-vpn:~/littlebear-vpn.yaml "$VpnDir\littlebear-vpn.yaml"
+```
+
 如果没有配置 SSH 别名，把 `littlebear-vpn:` 换成 `ubuntu@YOUR_SERVER_IP:`。
 
 ## 十二、导入 Clash Verge Rev
@@ -504,6 +597,12 @@ macOS 的文件选择窗口默认隐藏 `.config`。按 `Command + Shift + G`，
 
 ```text
 ~/.config/littlebear-vpn/littlebear-vpn.yaml
+```
+
+Windows 在文件选择窗口的地址栏输入：
+
+```text
+C:\Users\你的Windows用户名\.config\littlebear-vpn\littlebear-vpn.yaml
 ```
 
 ### 手机 Clash
@@ -535,6 +634,15 @@ scp littlebear-vpn:~/littlebear-vpn-uri.txt \
 chmod 600 ~/.config/littlebear-vpn/littlebear-vpn-uri.txt
 ```
 
+Windows PowerShell 下载到同一个配置目录：
+
+```powershell
+$VpnDir = "$env:USERPROFILE\.config\littlebear-vpn"
+New-Item -ItemType Directory -Force $VpnDir
+
+scp littlebear-vpn:~/littlebear-vpn-uri.txt "$VpnDir\littlebear-vpn-uri.txt"
+```
+
 导入步骤：
 
 1. 在 Mac 打开 `littlebear-vpn-uri.txt`；
@@ -544,6 +652,8 @@ chmod 600 ~/.config/littlebear-vpn/littlebear-vpn-uri.txt
 5. 接受“检测到剪贴板节点”，或点击 `+` 后选择从剪贴板导入；
 6. 选择 `littlebear-vpn` 并连接；
 7. 第一次连接时允许 iOS 添加 VPN 配置。
+
+Windows 用户可以用记事本打开 `littlebear-vpn-uri.txt`，复制完整链接，再通过可信的私人方式传到 iPhone；不要发送到公开群聊或公开网盘。
 
 也可以手动选择 VLESS 类型填写参数，但除了 IP 和端口，还必须填写 UUID、Flow、REALITY、SNI、公钥、Short ID 和客户端指纹。直接导入链接更不容易填错。
 
@@ -606,7 +716,13 @@ sudo ufw status
 nc -vz -w 5 YOUR_SERVER_IP 443
 ```
 
-如果服务器在监听、Mac 却无法连接，优先检查腾讯云防火墙是否放行“全部 IPv4”的 TCP 443。
+Windows PowerShell 使用：
+
+```powershell
+Test-NetConnection YOUR_SERVER_IP -Port 443
+```
+
+如果服务器在监听、本地电脑却无法连接，优先检查腾讯云防火墙是否放行“全部 IPv4”的 TCP 443。
 
 ### 2. Xray 启动失败或退出码 23
 
