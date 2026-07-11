@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: 从零搭建私人代理节点：Xray + VLESS + REALITY
+title: Xray 私人代理节点搭建指南
 description: 在腾讯云 Ubuntu 服务器上部署 Xray，生成 Clash 和 Shadowrocket 客户端配置，并完成验证与维护。
 ---
 
-# 从零搭建私人代理节点：Xray + VLESS + REALITY
+# Xray 私人代理节点搭建指南
 
 这篇笔记记录一次完整的私人代理节点搭建过程：购买并准备腾讯云轻量应用服务器，通过 SSH 密钥登录，在 Ubuntu 上安装 Xray，配置 VLESS + REALITY，最后让 Clash Verge Rev、手机 Clash 和 Shadowrocket 连接节点。
 
@@ -251,7 +251,7 @@ TLS Version: TLS 1.3
 
 ## 八、生成服务端凭据
 
-下面的步骤建议在同一个 SSH 会话中连续完成。
+下面的命令全部在执行 `ssh littlebear-vpn`、进入 Ubuntu 服务器后运行，建议在同一个 SSH 会话中连续完成。
 
 先设置服务器信息：
 
@@ -261,7 +261,15 @@ SERVER_NAME="www.apple.com"
 XRAY="/usr/local/bin/xray"
 ```
 
-把 `YOUR_SERVER_IP` 换成真实公网 IP，然后生成 UUID、REALITY 密钥对和 Short ID：
+`SERVER_IP` 是腾讯云控制台显示的服务器**公网 IPv4**，也就是 SSH 连接时使用的地址；不是服务器内网 IP，也不是 Mac 或手机的 IP。把 `YOUR_SERVER_IP` 换成这个公网 IPv4。
+
+这三行只是在当前终端中保存变量，不会修改服务器网络配置，也不会产生输出：
+
+- `SERVER_IP`：稍后写入客户端配置的服务器地址；
+- `SERVER_NAME`：REALITY 使用的目标域名和 SNI；
+- `XRAY`：Xray 程序的安装路径。
+
+设置完成后，继续生成 UUID、REALITY 密钥对和 Short ID：
 
 ```bash
 UUID="$($XRAY uuid)"
