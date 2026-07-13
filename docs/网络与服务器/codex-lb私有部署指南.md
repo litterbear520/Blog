@@ -414,7 +414,9 @@ Machines → codex-lb-server → … → Share
 
 ## 十五、Clash TUN 模式常见坑
 
-这是整个部署中最容易误判的问题。
+这是整个部署中最容易误判的问题。Clash Verge Rev 可能同时开启
+TUN、系统代理、DNS 覆写和链式代理；关闭“系统代理”并不等于关闭
+Clash，TUN 仍可能接管全部流量。
 
 ### 常见现象
 
@@ -422,33 +424,92 @@ Machines → codex-lb-server → … → Share
 - 关闭“系统代理”后仍然打不开；
 - `*.ts.net` 被解析为 `198.18.x.x`；
 - 端口探测成功，但 TLS 和 HTTP 立即断开；
+- Clash 开启 TUN 后 `tailscale ping` 超时，关闭 TUN 后恢复；
 - `tailscale status` 显示 `Tailscale is stopped`。
 
 ### 原因
 
-Clash Verge 可能同时开启 TUN、系统代理、DNS 覆写和链式代理。只关闭系统代理并不等于关闭 Clash，TUN 仍可能接管全部流量。
+Tailscale 使用 `100.64.0.0/10` CGNAT 网段。如果 Clash TUN 也接管该网段，
+流量可能进入 Clash 的虚拟网卡、Fake IP 或链式代理，而不是 Tailscale 网卡。
+
+“系统代理绕过”和“TUN 路由排除”属于不同层级：
+
+- 系统代理绕过通常接收具体 IP、域名或通配符，不一定支持 CIDR；
+- TUN 路由排除才是填写 `100.64.0.0/10` 的正确位置。
+
+因此，把 `100.64.0.0/10` 只填进“系统代理设置”可能直接提示格式错误，
+即使保存成功也不一定能阻止 TUN 接管流量。
 
 ### 修复
 
-先确保 Tailscale 是 Connected。然后在 Clash Verge Rev 进入：
+先确保 Tailscale 状态为 `Connected`。如果 `tailscale status` 显示
+`Tailscale is stopped`，应先启动 Tailscale；代理绕过无法修复已停止的服务。
+
+然后在 Clash Verge Rev 中分两层配置。
+
+#### 1. 系统代理绕过具体地址
+
+进入：
 
 ```text
 设置 → 系统代理 → 系统代理设置
 ```
 
-关闭“始终使用默认绕过”，保留原有绕过项，并追加：
+保留原有绕过项，追加服务器的具体 Tailscale IP，例如：
+
+```text
+100.114.177.81
+```
+
+这里不要填写 `100.64.0.0/10`。如果客户端支持通配符，也可以使用
+`100.*`，但它会绕过整个 `100.0.0.0/8`，范围比 Tailscale 实际使用的
+网段更大，因此优先填写具体服务器 IP。
+
+#### 2. 在 TUN 中排除 Tailscale 网段
+
+Clash Verge Rev 2.4.5 及以上版本可以直接在 UI 中设置：
+
+```text
+设置 → TUN 模式右侧的设置按钮 → 排除自定义网段
+```
+
+添加：
 
 ```text
 100.64.0.0/10
 ```
 
-保存后优先使用：
+它对应 Mihomo 配置：
+
+```yaml
+tun:
+  route-exclude-address:
+    - 100.64.0.0/10
+```
+
+保存后关闭再开启一次 TUN，或重启 Mihomo 内核，使路由重新生成。
+链式代理可以继续使用；Tailscale 网段在 TUN 层被排除后，不应再进入
+链式代理。
+
+最后优先使用真实 Tailscale IP 访问，先排除 MagicDNS 和 Fake IP 的影响：
 
 ```text
 http://<TAILSCALE_IP>:2455
 ```
 
-macOS 排查命令：
+### 验证
+
+Windows：
+
+```powershell
+tailscale status
+tailscale ping <TAILSCALE_IP>
+route print <TAILSCALE_IP>
+Test-NetConnection <TAILSCALE_IP> -Port 2455
+curl.exe --noproxy "*" http://<TAILSCALE_IP>:2455/health/ready
+```
+
+macOS：
 
 ```bash
 tailscale status
@@ -459,9 +520,15 @@ curl --noproxy '*' \
   http://<TAILSCALE_IP>:2455/health/ready
 ```
 
-正常路由应指向 Tailscale 的 `utun` 接口。如果网关类似 `198.18.0.1`，说明流量仍被 Clash 接管。
+正常路由应指向 Tailscale 网卡：Windows 通常显示 `Tailscale`，macOS
+通常显示对应的 `utun` 接口。如果流量落到 `Meta`、`Mihomo` 或类似
+`198.18.0.1` 的网关，说明仍被 Clash 接管。
 
-Clash Fake IP 可能先接受 TCP 连接，因此 `nc -vz` 成功不代表真实服务器可达。应同时检查 `tailscale status`、`tailscale ping` 和健康接口。
+`*.ts.net` 被解析为 `198.18.x.x` 可能只是 Clash Fake IP 的正常表现，
+但也说明 DNS 请求已被 Clash 接管，不能单凭这个结果判断服务器宕机。
+Clash Fake IP 还可能先接受 TCP 连接，因此 `nc -vz` 或端口探测成功，
+也不代表真实服务器可达。应同时检查 `tailscale status`、
+`tailscale ping`、系统路由和真实 HTTP 健康接口。
 
 ## 十六、与现有 Xray/VPN 共存
 
