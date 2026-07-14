@@ -592,11 +592,15 @@ ssh <SSH_ALIAS> '
 
 ### Dashboard 打不开
 
-```bash
-tailscale status
+如果服务器仍显示在线，但浏览器超时、`tailscale ping` 失败，先运行：
+
+```powershell
+tailscale netcheck
 tailscale ping <TAILSCALE_IP>
-curl --noproxy '*' http://<TAILSCALE_IP>:2455/health/ready
 ```
+
+`tailscale netcheck` 会重新探测 UDP、NAT 和 DERP，并可能重建卡住的
+连接。`ping` 恢复后刷新 Dashboard 即可。
 
 ### 服务器本机不健康
 
