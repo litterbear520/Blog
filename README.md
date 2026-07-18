@@ -15,7 +15,7 @@
 
 ```bash
 npm install        # 安装依赖
-npm start          # 开发服务器（localhost:3000，热更新）
+npm start          # 开发服务器（localhost:3003，热更新）
 ```
 
 ```bash
@@ -28,6 +28,7 @@ npm run clear      # 清理 Docusaurus 缓存
 
 ```
 ├── blog/                  # 博文（元数据同步维护在 src/pages/bloglist.js）
+├── roadmap/               # 路线：开源项目学习日志（/roadmap）
 ├── docs/                  # 笔记（按目录分类，侧边栏自动生成）
 ├── src/
 │   ├── components/        # AgentLoopViz、SkillCard、密码保护等组件
@@ -41,6 +42,7 @@ npm run clear      # 清理 Docusaurus 缓存
 ## 特色功能
 
 - **自定义博文列表**（`/bloglist`）：分类筛选 + 卡片布局
+- **路线**（`/roadmap`）：开源项目学习日志，一个项目一个文件夹，目录树即学习线
 - **SkillHub**（`/skills`）：收录常用的 Claude 技能，卡片展开显示安装命令与仓库链接
 - **KaTeX 数学公式**：`remark-math` + `rehype-katex`
 - **Cursor 代码主题**：自定义 Prism 高亮，适配亮暗模式
@@ -52,6 +54,7 @@ npm run clear      # 清理 Docusaurus 缓存
 | 内容 | 做法 |
 | ---- | ---- |
 | 博文 | `blog/` 下新建文章，并在 `src/pages/bloglist.js` 的 `POSTS` 数组补充元数据 |
+| 学习日志 | `roadmap/<项目>/` 下新建 `YYYY-MM-DD-主题.md`，侧边栏自动生成 |
 | 笔记 | `docs/` 下建目录并添加 `index.md`，侧边栏自动生成 |
 | 技能 | 在 `src/data/skills.js` 的 `SKILLS` 数组追加一个对象 |
 
