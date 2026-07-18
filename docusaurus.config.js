@@ -49,6 +49,17 @@ const config = {
 
   plugins: [
     './plugins/copy-markdown-source',
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'roadmap',
+        path: './roadmap',
+        routeBasePath: 'roadmap',
+        sidebarPath: './sidebarsRoadmap.js',
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
+      },
+    ],
   ],
 
   presets: [
@@ -122,6 +133,7 @@ const config = {
             position: 'left'
           },
           { to: '/bloglist', label: '博文', position: 'left' },
+          { to: '/roadmap', label: '路线', position: 'left' },
           { to: '/skills', label: 'Skills', position: 'left' },
           {
             href: 'https://github.com/facebook/docusaurus',
