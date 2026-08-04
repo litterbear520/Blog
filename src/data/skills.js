@@ -34,6 +34,21 @@ export const SKILLS = [
     repo: 'https://github.com/obra/superpowers',
   },
   {
+    id: 'matt-pocock-skills',
+    name: 'matt-pocock-skills',
+    author: 'mattpocock',
+    source: '社区',
+    description:
+      '面向真实工程工作的轻量、可组合技能合集，覆盖需求澄清、领域建模、任务拆分、TDD、诊断与架构改进，可按需选择并适配现有流程。',
+    install: [
+      {
+        label: 'npx',
+        command: 'npx skills@latest add mattpocock/skills',
+      },
+    ],
+    repo: 'https://github.com/mattpocock/skills',
+  },
+  {
     id: 'web-access',
     name: 'web-access',
     author: 'eze-is',
