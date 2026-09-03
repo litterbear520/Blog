@@ -69,7 +69,9 @@ npm run clear                # 清理 Docusaurus 缓存
 │   └── copy-markdown-source/      # 构建时生成清洗后的 .md 文件供复制
 ├── plans/ + specs/                # 功能规划与设计文档（SkillHub 等）
 ├── tools/
-│   └── covers/                    # 博客封面生成工具（手绘涂鸦 SVG → 无头浏览器截图导出 PNG）
+│   └── covers/                    # 博客封面生成：配方 → 涂鸦 SVG（Node 渲染，无需浏览器），详见其 README
+├── .claude/skills/
+│   └── blog-cover/                # /blog-cover <slug>：读文章 → 视觉隐喻 → 配方 → 渲染 → 登记
 ├── static/
 │   ├── CNAME                      # 自定义域名 huangsitao.fun
 │   └── img/                       # 图片资源
@@ -105,8 +107,10 @@ sidebar_position: 1
 文章放在 `blog/` 目录，同时需要在 `src/pages/bloglist.js` 的 `POSTS` 数组中添加元数据：
 
 ```javascript
-{ title, date: 'YYYY-MM-DD', slug, description, category: '教程'|'AI'|'比赛', accent, cover }
+{ title, date: 'YYYY-MM-DD', slug, description, category: '教程'|'AI'|'比赛', accent, cover, swatch }
 ```
+
+`swatch`（底色名，见 `src/data/swatches.json`）配透明 SVG 封面用；有它时卡片用纯色底、整图居中，没有它时用 `accent` 渐变底 + PNG 裁切。
 
 ### 路线日志
 
@@ -114,13 +118,13 @@ docs 形态（非 blog）：每个项目在 `roadmap/` 下建一个文件夹，�
 
 ### 博客封面与头图
 
-**列表封面**（`cover` 字段，显示在 `/bloglist` 卡片顶部）统一用 `tools/covers/` 的手绘涂鸦流水线生成，**不要手绘、不要用 AI 生成图片、不要外部找图**：
+**列表封面**（`cover` 字段，显示在 `/bloglist` 卡片顶部）统一用 `tools/covers/` 的涂鸦流水线生成，**不要手绘、不要用 AI 生成图片、不要外部找图**。新文章用 `/blog-cover <slug>` skill，或手动：
 
-1. 复制一个现有 `tools/covers/cover-*.html`，改底色和涂鸦内容（用 `cover-lib.js` 的 `wobblyRect` / `wobblyLine` / `blob` / `sparkle`，固定种子保证可复现）
-2. 起服务：`cd tools/covers && python -m http.server 8931`
-3. Playwright 打开页面 → 视口 2400×1140 → 截图导出 PNG（墨黑线条 + 纸白填充 + 纯色底，不放文字）
-4. PNG 放入 `static/img/blog/`，并更新 `tools/covers/README.md` 的封面清单与「已用底色」
-5. 细节见 `tools/covers/README.md`
+1. 复制 `tools/covers/recipes/example.js` 为 `recipes/<slug>.js`，写 `swatch`（底色名）、`seed`、`draw(d, m)`（`lib/doodle.js` 原语 + `lib/motifs.js` 母题）
+2. `npm run cover -- <slug> --preview`，看 `tools/covers/.preview/<slug>.png`，不满意改配方重渲
+3. 产出 `static/img/blog/cover-<slug>.svg`（透明，1000×1000）；bloglist.js 加 `swatch` + `cover`
+4. 更新 `tools/covers/README.md` 封面清单
+5. 风格规则、原语与母题说明见 `tools/covers/README.md`
 
 **文章头图**（正文开头大图）可用编辑排版风或用户提供的图，直接放 `static/img/blog/`，正文首行用 `![alt](/img/blog/xxx)` 引入。
 
