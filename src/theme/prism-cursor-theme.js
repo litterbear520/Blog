@@ -50,12 +50,6 @@ const theme = {
             types: ['keyword', 'atrule', 'storage', 'interpolation-punctuation'],
             style: { color: '#82D2CE' },
         },
-        // keyword.control.import / keyword.control.flow 在 Python 里是斜体
-        {
-            types: ['keyword'],
-            languages: ['python', 'py'],
-            style: { fontStyle: 'italic' },
-        },
         // entity.name.function / support.function
         {
             types: ['function', 'function-variable'],
