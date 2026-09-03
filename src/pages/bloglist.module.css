@@ -2,7 +2,7 @@
    Page — warm editorial palette
    ═══════════════════════════════════════════ */
 .page {
-  --bg: #faf9f5;
+  --bg: var(--ifm-background-color); /* 跟随全局主题（custom.css 的 --th-page） */
   --card-bg: #f0eee6;
   --card-border: #e8e6dc;
   --text-1: #141413;
@@ -21,7 +21,6 @@
 }
 
 :global([data-theme='dark']) .page {
-  --bg: #1a1917;
   --card-bg: #262521;
   --card-border: #3a3935;
   --text-1: #e8e6dc;
