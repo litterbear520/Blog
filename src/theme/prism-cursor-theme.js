@@ -72,6 +72,57 @@ const theme = {
             languages: ['python', 'py'],
             style: { color: '#EFB080' },
         },
+        // meta.function-call.generic.python：调用是紫色（token 由 prism-grammar-tweaks.js 提供）
+        {
+            types: ['function-call'],
+            languages: ['python', 'py'],
+            style: { color: '#AAA0FA' },
+        },
+        // bash：内置命令（cd / echo / export）是 support.function.builtin.shell 橙色；-m 这类选项无规则、正体
+        {
+            types: ['builtin', 'class-name'],
+            languages: ['bash', 'sh', 'shell', 'zsh'],
+            style: { color: '#EFB080' },
+        },
+        {
+            types: ['parameter', 'variable'],
+            languages: ['bash', 'sh', 'shell', 'zsh'],
+            style: { color: INK, fontStyle: 'normal' },
+        },
+        // JSON：constant.language.json（true / false / null）跟正文色
+        {
+            types: ['boolean', 'null', 'keyword'],
+            languages: ['json', 'json5'],
+            style: { color: INK },
+        },
+        // C / C++：keyword.control.directive（#include / #define）绿色；运算符 keyword.operator.*.c 青色；C++ 的 true/false 青色
+        {
+            types: ['directive', 'directive-hash'],
+            languages: ['c', 'cpp'],
+            style: { color: '#A8CC7C' },
+        },
+        {
+            types: ['operator'],
+            languages: ['c', 'cpp'],
+            style: { color: '#82D2CE' },
+        },
+        {
+            types: ['boolean'],
+            languages: ['cpp'],
+            style: { color: '#82D2CE' },
+        },
+        // Rust：宏 println! 是 entity.name.function.macro 橙色（Prism 给 macro 加了 property 别名）；生命周期 'a 橙色
+        {
+            types: ['macro', 'property', 'symbol'],
+            languages: ['rust'],
+            style: { color: '#EFB080' },
+        },
+        // YAML：entity.name.tag.yaml 没有规则，键跟前景色
+        {
+            types: ['key', 'atrule'],
+            languages: ['yaml', 'yml'],
+            style: { color: FG },
+        },
         // support.type.primitive.ts（string / number / boolean 类型）
         {
             types: ['builtin'],
