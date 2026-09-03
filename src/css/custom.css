@@ -350,6 +350,11 @@ html[data-theme='dark'] {
   background-color: #181818 !important;
 }
 
+/* 选区：editor.selectionBackground */
+[data-theme='dark'] pre ::selection {
+  background-color: rgba(64, 64, 64, 0.6);
+}
+
 /* 行号：editorLineNumber.foreground */
 [data-theme='dark'] .codeLineNumber {
   color: #f0f0f05c !important;
