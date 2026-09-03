@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 import styles from './bloglist.module.css';
+import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
@@ -119,8 +120,15 @@ export default function BlogListPage() {
               className={styles.card}
               style={{ '--delay': `${i * 120}ms` }}
             >
-              <div className={clsx(styles.cardVisual, styles[post.accent])}>
-                <CoverImage src={withBaseUrl(post.cover)} alt={post.title} />
+              <div
+                className={clsx(styles.cardVisual, !post.swatch && styles[post.accent])}
+                style={post.swatch ? { background: SWATCHES[post.swatch] } : undefined}
+              >
+                <CoverImage
+                  src={withBaseUrl(post.cover)}
+                  alt={post.title}
+                  illo={Boolean(post.swatch)}
+                />
               </div>
               <div className={styles.cardContent}>
                 <time className={styles.cardDate}>
@@ -141,14 +149,14 @@ export default function BlogListPage() {
   );
 }
 
-function CoverImage({ src, alt }) {
+function CoverImage({ src, alt, illo }) {
   const [error, setError] = React.useState(false);
 
   if (error) return null;
 
   return (
     <img
-      className={styles.coverImg}
+      className={clsx(styles.coverImg, illo && styles.coverIllo)}
       src={src}
       alt={alt}
       loading="eager"

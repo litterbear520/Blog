@@ -193,6 +193,12 @@
   transform: scale(1.05);
 }
 
+/* 涂鸦封面（透明 SVG + swatch 纯色底）：整图居中放入，不裁切 */
+.coverIllo {
+  object-fit: contain;
+  padding: 16px 0;
+}
+
 /* Amber accent — 教程 */
 .amber {
   background:

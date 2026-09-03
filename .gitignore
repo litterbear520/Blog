@@ -29,3 +29,5 @@ docs/多模态探索/image/index/1755149583346.png
 # 设计文档（仅本地保留，不进仓库）
 /specs
 /plans
+# 封面预览图（npm run cover -- --preview 的产物）
+/tools/covers/.preview
