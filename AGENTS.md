@@ -63,6 +63,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │   │   └── skills.js              # SkillHub 页面（/skills 路由）
 │   └── theme/
 │       ├── Root.js                # 主题根组件（挂载密码保护 + CopyMarkdown 按钮）
+│       ├── MDXComponents/Img/     # 包装 markdown 图片：左上角放大按钮 + dialog 弹层看原图
 │       ├── prism-cursor-theme.js  # Cursor 暗色代码高亮主题
 │       └── prism-cursor-light-theme.js
 ├── plugins/
@@ -90,6 +91,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **SkillHub**：`/skills` 路由，技能卡片墙；数据在 `src/data/skills.js`，描述须工具中立、取材自技能仓库 README
 - **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成），记开源项目学习日志；一个项目一个文件夹，侧边栏层级树即学习线
 - **交互式可视化**：`AgentLoopViz` 组件（7 步动画流程图）
+- **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时左上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
 
 ## 内容编写规范
 
