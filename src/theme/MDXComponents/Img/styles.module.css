@@ -6,11 +6,11 @@
   vertical-align: middle;
 }
 
-/* 左上角放大按钮：桌面端悬停显示，触屏常显 */
+/* 右上角放大按钮：桌面端悬停显示，触屏常显 */
 .zoom {
   position: absolute;
   top: 8px;
-  left: 8px;
+  right: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
