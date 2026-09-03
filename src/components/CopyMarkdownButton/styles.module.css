@@ -1,4 +1,5 @@
 .copyButton {
+  --copy-ok: #2f9e6a;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -10,13 +11,120 @@
   background: transparent;
   color: var(--ifm-color-primary);
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
   margin-left: 12px;
   vertical-align: middle;
   white-space: nowrap;
 }
 
+:global([data-theme='dark']) .copyButton {
+  --copy-ok: #5fbf86;
+}
+
 .copyButton:hover {
   background: var(--ifm-color-primary);
   color: #fff;
+}
+
+/* 复制成功：描边和文字转绿 */
+.copied,
+.copied:hover {
+  border-color: var(--copy-ok);
+  color: var(--copy-ok);
+  background: transparent;
+}
+
+/* 图标槽：两个 svg 绝对定位叠放 */
+.icon {
+  position: relative;
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.copyIcon,
+.checkIcon {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.copyIcon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.checkIcon {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.copied .copyIcon {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.copied .checkIcon {
+  opacity: 1;
+  animation: check-pop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4) forwards;
+}
+
+/* 对勾折线总长约 23，用 dashoffset 从左到右画出来 */
+.checkPath {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+}
+
+.copied .checkPath {
+  animation: check-draw 0.3s ease-out 0.08s forwards;
+}
+
+.label {
+  display: inline-block;
+  animation: label-in 0.2s ease-out;
+}
+
+@keyframes check-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes check-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes label-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copyIcon,
+  .checkIcon,
+  .checkPath,
+  .label {
+    animation: none !important;
+    transition: none !important;
+  }
+  .copied .checkIcon {
+    transform: scale(1);
+  }
+  .copied .checkPath {
+    stroke-dashoffset: 0;
+  }
 }
