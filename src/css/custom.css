@@ -5,10 +5,10 @@
  * 字体均来自 Google Fonts：
  *   标题  Source Serif 4 + Noto Serif SC（后者的拉丁字形本就源自 Source Serif）
  *   正文  Inter + Noto Sans SC
- *   代码  Roboto Mono（保持 Cursor 风格，高亮配色见 src/theme/prism-cursor-*.js）
+ *   代码  Cursor 默认等宽栈（Menlo / Consolas / Droid Sans Mono，跟随系统，不走网络字体），高亮配色见 src/theme/prism-cursor-*.js
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Noto+Sans+SC:wght@300..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Noto+Serif+SC:wght@400..700&family=Roboto+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Noto+Sans+SC:wght@300..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Noto+Serif+SC:wght@400..700&display=swap');
 
 /* ═══════════════════════════════════════════
    主题令牌（浅色）
@@ -30,8 +30,9 @@
   /* ── 字体与排版 ── */
   --ifm-font-family-base: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --ifm-heading-font-family: 'Source Serif 4', 'Noto Serif SC', Georgia, 'Times New Roman', serif;
-  --ifm-font-family-monospace: 'Roboto Mono', monospace;
+  --ifm-font-family-monospace: Menlo, Monaco, Consolas, 'Droid Sans Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
   --ifm-code-font-size: 95%;
+  --ifm-pre-line-height: 1.5;
   --ifm-line-height-base: 1.65;
   --ifm-font-weight-semibold: 500;
   --ifm-font-weight-bold: 600;
@@ -331,117 +332,35 @@ html[data-theme='dark'] {
   box-shadow: 20px 0 0 #febc2e, 40px 0 0 #28c840;
 }
 
-/* 代码块背景改为深灰色并添加边框 - Cursor 风格 */
+/* 代码块正文：Cursor 默认 14px、无连字（编辑器默认关闭 fontLigatures） */
+.prism-code {
+  font-size: 14px;
+  font-variant-ligatures: none;
+}
+
+/* 暗色代码块容器：取 Cursor Dark 的 editor.background / editorGroup.border；
+   token 配色全部在 src/theme/prism-cursor-theme.js，这里不再覆盖 .token */
 [data-theme='dark'] pre {
-  background-color: #1a1a1a !important;
-  border: 1px solid #2a2a2a !important;
+  background-color: #181818 !important;
+  border: 1px solid #262626 !important;
   border-radius: 8px !important;
 }
 
-/* 代码块容器样式 */
 [data-theme='dark'] .prism-code {
-  background-color: #1a1a1a !important;
+  background-color: #181818 !important;
 }
 
-/* 代码块行号样式 */
+/* 行号：editorLineNumber.foreground */
 [data-theme='dark'] .codeLineNumber {
-  color: #505050 !important;
+  color: #f0f0f05c !important;
 }
 
-/* 高亮行样式 */
+/* 高亮行：editor.lineHighlightBackground */
 [data-theme='dark'] .docusaurus-highlight-code-line {
-  background-color: #292929 !important;
+  background-color: #262626 !important;
   display: block;
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
-}
-
-/* 注释颜色 - Cursor 风格 */
-[data-theme='dark'] .token.comment,
-[data-theme='dark'] .token.prolog,
-[data-theme='dark'] .token.doctype,
-[data-theme='dark'] .token.cdata {
-  color: #FFFFFF5C !important;
-  font-style: italic;
-}
-
-/* 字符串颜色 - 粉色 */
-[data-theme='dark'] .token.string,
-[data-theme='dark'] .token.attr-value {
-  color: #E394DC !important;
-}
-
-/* 关键字颜色 - 青色 */
-[data-theme='dark'] .token.keyword,
-[data-theme='dark'] .token.atrule {
-  color: #83D6C5 !important;
-}
-
-/* 函数名颜色 - 橙色 */
-[data-theme='dark'] .token.function {
-  color: #EFB080 !important;
-}
-
-/* 类名/Tag颜色 - 蓝色 */
-[data-theme='dark'] .token.class-name,
-[data-theme='dark'] .token.tag,
-[data-theme='dark'] .token.builtin {
-  color: #87C3FF !important;
-}
-
-/* 属性/Property颜色 - 紫色 */
-[data-theme='dark'] .token.property {
-  color: #AA9BF5 !important;
-}
-
-/* 数字/布尔值颜色 - 黄色 */
-[data-theme='dark'] .token.number,
-[data-theme='dark'] .token.boolean,
-[data-theme='dark'] .token.constant {
-  color: #EBC88D !important;
-}
-
-/* 操作符颜色 */
-[data-theme='dark'] .token.operator,
-[data-theme='dark'] .token.punctuation {
-  color: #D6D6DD !important;
-}
-
-/* 装饰器颜色 - 绿色 */
-[data-theme='dark'] .token.decorator,
-[data-theme='dark'] .token.annotation {
-  color: #A8CC7C !important;
-}
-
-/* 变量颜色 */
-[data-theme='dark'] .token.variable {
-  color: #94C1FA !important;
-}
-
-/* HTML 属性名 - 紫色 */
-[data-theme='dark'] .token.attr-name {
-  color: #AAA0FA !important;
-}
-
-/* CSS 选择器 - 黄色 */
-[data-theme='dark'] .token.selector {
-  color: #F8C762 !important;
-}
-
-/* 类型注解 - 青色 */
-[data-theme='dark'] .token.type {
-  color: #82D2CE !important;
-}
-
-/* 参数 - 黄色 */
-[data-theme='dark'] .token.parameter {
-  color: #F8C762 !important;
-}
-
-/* 模块/导入 - 紫色 */
-[data-theme='dark'] .token.imports,
-[data-theme='dark'] .token.module {
-  color: #AAA0FA !important;
 }
 
 /* 行内代码：中性底 + 一圈细边框，文字随正文色（只针对文本中的 code，不影响代码块） */
