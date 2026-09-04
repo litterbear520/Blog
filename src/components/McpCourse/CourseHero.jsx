@@ -2,8 +2,7 @@ import React from 'react';
 import styles from './CourseHero.module.css';
 
 /**
- * 课程索引页顶部的信息卡：难度 / 课数标签、课程简介与"开始学习"链接（写在 children 的 markdown 里，
- * 最后一段的链接会渲染成按钮），底部一行来源链接。
+ * 课程索引页顶部的信息卡：难度 / 课数标签、课程简介（children 里的 markdown），底部一行来源链接。
  */
 export default function CourseHero({ level, lessonCount, sourceHref, sourceLabel = 'Claude Academy', children }) {
   return (
