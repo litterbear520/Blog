@@ -59,17 +59,19 @@
   transition: background 0.15s, opacity 0.15s;
 }
 
+/* 中性色主按钮：浅色主题黑底白字，深色主题白底黑字（emphasis 变量在两套主题里自动反转） */
 .btnPrimary {
-  background: var(--ifm-color-primary);
-  color: #fff;
+  background: var(--ifm-color-emphasis-900);
+  color: var(--ifm-color-emphasis-0);
 }
 
 .btnPrimary:hover:not(:disabled) {
-  background: var(--ifm-color-primary-dark);
+  background: var(--ifm-color-emphasis-800);
 }
 
 .btnPrimary:disabled {
-  opacity: 0.45;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-600);
   cursor: not-allowed;
 }
 
@@ -82,18 +84,11 @@
   background: var(--ifm-color-emphasis-300);
 }
 
-/* ── 布局：桌面左右分栏，窄屏上下堆叠 ── */
+/* ── 布局：步骤面板在上、代码查看器在下，纵向堆叠 ── */
 .layout {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
-}
-
-@media (min-width: 997px) {
-  .layout {
-    grid-template-columns: minmax(260px, 5fr) 8fr;
-    align-items: start;
-  }
 }
 
 /* ── 步骤面板 ── */
@@ -110,7 +105,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-height: 22rem;
+  max-height: 20rem;
   overflow-y: auto;
   border-radius: 8px;
 }

@@ -6,8 +6,8 @@ import WALKTHROUGHS, { UI } from '@site/src/data/mcpWalkthroughs';
 import styles from './styles.module.css';
 
 /**
- * MCP 演练组件：左侧是分步说明（手风琴 + 上一步/下一步），右侧是一个迷你代码查看器
- * （文件树 + 多标签 + 代码），切换步骤时自动打开对应文件、高亮行区间并滚动到视野中央。
+ * MCP 演练组件：上方是分步说明（手风琴 + 上一步/下一步），下方是一个迷你代码查看器
+ * （文件树 + 多标签 + 代码），两块纵向堆叠；切换步骤时自动打开对应文件、高亮行区间并滚动到视野中央。
  * 首次进入有三步引导气泡（教程步骤 / 导航控件 / 代码编辑器）。
  * 数据见 src/data/mcpWalkthroughs/，用法：<McpWalkthrough variant="sampling" />
  */

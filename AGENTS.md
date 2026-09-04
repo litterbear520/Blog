@@ -50,7 +50,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │   │   ├── CopyMarkdownButton/    # 文档页"复制 Markdown"按钮
 │   │   ├── CsvTable.jsx           # CSV 表格渲染组件
 │   │   ├── HomepageFeatures/      # 首页特性卡片
-│   │   ├── McpCourse/             # 课程索引页顶部信息卡（CourseHero：难度/课数、开始学习按钮、来源链接）
+│   │   ├── McpCourse/             # 课程索引页顶部信息卡（CourseHero：难度/课数、来源链接）
 │   │   ├── McpQuiz/               # 单选测验（全部作答后提交，逐题判对错 + 总分/是否通过）
 │   │   ├── McpWalkthrough/        # 代码演练：分步说明 + 迷你代码查看器（文件树/标签/按步高亮定位）
 │   │   ├── PasswordProtect.js     # 密码保护（赛博朋克风星空动画）
@@ -70,6 +70,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │   └── theme/
 │       ├── Root.js                # 主题根组件（挂载密码保护 + CopyMarkdown 按钮）
 │       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图
+│       ├── DocCard/Heading/Icon/  # 覆盖为空组件：去掉 DocCardList 卡片标题前的 🗃️/📄️ emoji
 │       ├── prism-cursor-theme.js  # Cursor 暗色代码高亮主题
 │       └── prism-cursor-light-theme.js
 ├── plugins/
@@ -98,6 +99,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成），记开源项目学习日志；一个项目一个文件夹，侧边栏层级树即学习线
 - **交互式可视化**：`AgentLoopViz` 组件（7 步动画流程图）
 - **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录，`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`
+- **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 720px（对齐课程原站列宽），大图靠放大按钮看原图；博客不受影响
 - **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
 
 ## 内容编写规范
