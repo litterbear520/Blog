@@ -178,8 +178,8 @@ bash, json, python, java, typescript, rust, go, cpp, c
 
 GitHub Actions（`.github/workflows/update.yaml`）：
 
-1. 任意分支 push → 自动 `npm install && npm run build`
-2. 仅 `main` 分支 → 部署到 `gh-pages`（peaceiris/actions-gh-pages）
+1. 任意分支 push → `npm ci`（setup-node 缓存 npm）+ `npm run build`；同一分支新 push 会取消未完成的旧构建
+2. 仅 `main` 分支 → 部署到 `gh-pages`（peaceiris/actions-gh-pages），GitHub 随后自动发布该分支
 
 ## 注意事项
 
