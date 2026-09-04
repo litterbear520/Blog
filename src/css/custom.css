@@ -234,11 +234,11 @@ html[data-theme='dark'] {
   text-align: left;
 }
 
-/* 文档正文图片：宽度封顶 720px（对齐课程原站 768px 列宽），大图靠放大按钮看原图；
+/* 文档正文图片：宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；
    只作用于 docs / roadmap（theme-doc-markdown），博客头图不受影响。
    变量由 src/theme/MDXComponents/Img 的外层容器消费，见那里的说明 */
 .theme-doc-markdown {
-  --md-img-max-width: min(100%, 720px);
+  --md-img-max-width: min(100%, 768px);
 }
 
 /* ═══════════════════════════════════════════
