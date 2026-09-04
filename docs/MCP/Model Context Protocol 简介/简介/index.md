@@ -1,0 +1,12 @@
+---
+sidebar_position: 1
+description: 从理解 MCP 的架构和它为什么存在开始：MCP 解决什么问题、服务器和客户端各做什么、消息如何在两者之间流动。
+---
+
+# 简介
+
+从理解 MCP 的架构和它为什么存在开始：MCP 解决什么问题、服务器和客户端各做什么、消息如何在两者之间流动。
+
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />

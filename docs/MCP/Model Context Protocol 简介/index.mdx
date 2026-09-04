@@ -1,0 +1,48 @@
+---
+sidebar_position: 1
+description: 使用 Python SDK 从零开始构建 MCP 服务器和客户端，涵盖将 Claude 连接到外部服务的三个核心原语——工具、资源和提示。
+---
+
+import DocCardList from '@theme/DocCardList';
+import CourseHero from '@site/src/components/McpCourse/CourseHero';
+
+# Model Context Protocol 简介
+
+<CourseHero
+  level="中级"
+  lessonCount={11}
+  sourceHref="https://academy.claude.com/zh-CN/courses/introduction-to-model-context-protocol"
+>
+
+使用 Python SDK 从零开始构建 MCP 服务器和客户端，涵盖将 Claude 连接到外部服务的三个核心原语——工具、资源和提示。
+
+</CourseHero>
+
+本课程全面介绍 Model Context Protocol（MCP），重点讲解如何使用 Python SDK 构建 MCP 服务器和客户端。您将学习 MCP 的三个核心原语——工具、资源和提示——并了解它们如何与 Claude AI 集成，从而在无需编写大量集成代码的情况下创建强大的应用程序。
+
+## 学习目标
+
+- 理解 MCP 架构，以及它如何将工具定义和执行的负担从您的服务器转移到专门的 MCP 服务器
+- 了解 MCP 与传输方式无关的通信系统，以及客户端和服务器之间使用的消息类型
+- 探索从用户查询经过 MCP 客户端到外部服务，再返回 Claude 的完整请求-响应流程
+- 使用 Python SDK 通过装饰器定义工具来构建 MCP 服务器，而不是手动编写 JSON schema
+- 使用 Field 描述和类型提示实现文档管理功能，包括用于读取和编辑文档的工具
+- 使用内置的 MCP Server Inspector 在基于浏览器的界面中测试和调试您的服务器功能
+- 定义用于公开只读数据的资源，包括具有静态 URI 的直接资源和带参数的模板化资源
+- 在客户端中实现资源读取功能，并正确处理 JSON 和文本内容的 MIME 类型
+- 构建提示，为文档格式化等常见工作流程提供预先制作的高质量指令
+- 理解何时使用每种 MCP 原语：工具（模型控制）、资源（应用控制）和提示（用户控制）
+- 研究实际的集成模式，包括自动补全功能和 AI 对话的上下文注入
+
+## 前提条件
+
+- 具备 Python 编程的实际工作知识
+- 对 JSON 和 HTTP 请求-响应模式有基本了解
+
+## 本课程适合谁
+
+- 希望创建 MCP 服务器的开发者
+
+## 课程内容
+
+<DocCardList />
