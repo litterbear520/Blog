@@ -1,9 +1,17 @@
-/* 图片外层：给放大按钮提供定位基准 */
+/* 图片外层：给放大按钮提供定位基准。
+   宽度上限由外层通过 --md-img-max-width 决定（custom.css 给 docs 正文设了 720px），
+   限制必须加在这一层而不是 img 上：inline-block 按内容收缩时，img 自己的百分比 max-width
+   会被当作无限制，外层就会撑满整行，放大按钮随之跑到图片右边界之外 */
 .wrap {
   position: relative;
   display: inline-block;
-  max-width: 100%;
+  max-width: var(--md-img-max-width, 100%);
   vertical-align: middle;
+}
+
+.wrap img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* 右上角放大按钮：桌面端悬停显示，触屏常显 */
