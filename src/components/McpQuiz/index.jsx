@@ -1,20 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 /**
  * 单选测验：一次只显示一道题，答完点"下一题"，最后一题点"提交"；
- * 有未作答的题会先确认，交卷后显示是否通过和得分，可重新参加。
- * questions: [{ text, options: string[], answer: number }]，answer 为正确选项下标。
- * courseHref：可选，"复习课程"按钮跳转的课程索引页路径（站内绝对路径）。
+ * 有未作答的题会先确认，交卷后显示是否通过、答对题数和得分条，可重新参加。
+ * 每道题的选项顺序在首次进入和每次重新参加时都随机打乱（在挂载后打乱，避免 SSR 水合不一致）。
+ * questions: [{ text, options: string[], answer: number }]，answer 为原始选项下标。
  */
-export default function McpQuiz({ questions, passingPercentage = 70, courseHref }) {
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const identityOrders = (questions) => questions.map((q) => q.options.map((_, i) => i));
+const shuffledOrders = (questions) => questions.map((q) => shuffle(q.options.map((_, i) => i)));
+
+export default function McpQuiz({ questions, passingPercentage = 70 }) {
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [attempt, setAttempt] = useState(1);
+  // orders[qi] = 该题展示顺序对应的原始选项下标；answers 里存的是原始下标
+  const [orders, setOrders] = useState(() => identityOrders(questions));
+
+  useEffect(() => {
+    setOrders(shuffledOrders(questions));
+  }, [questions]);
 
   const total = questions.length;
   const answeredCount = Object.keys(answers).length;
@@ -33,6 +50,7 @@ export default function McpQuiz({ questions, passingPercentage = 70, courseHref 
     setSubmitted(false);
     setConfirming(false);
     setAttempt((n) => n + 1);
+    setOrders(shuffledOrders(questions));
   };
 
   if (submitted) {
@@ -47,20 +65,19 @@ export default function McpQuiz({ questions, passingPercentage = 70, courseHref 
             ? `您答对了 ${total} 题中的 ${correctCount} 题。`
             : `您答对了 ${total} 题中的 ${correctCount} 题。请复习课程材料，准备好后再重试。尝试次数不限。`}
         </p>
-        <p className={styles.resultScore}>
-          <span>您的得分 {score}%</span>
-          <span aria-hidden="true">·</span>
-          <span>通过需达到 {passingPercentage}%</span>
-        </p>
+        <div className={styles.scoreBox}>
+          <div className={styles.scoreLabel}>
+            您的得分 <b className={styles.scoreValue}>{score}%</b>
+          </div>
+          <div aria-hidden="true" className={styles.scoreTrack}>
+            <span className={styles.scoreFill} style={{ width: `${score}%` }} />
+            {!passed && <span className={styles.scoreTick} style={{ left: `${passingPercentage}%` }} />}
+          </div>
+        </div>
         <div className={styles.resultActions}>
-          <button type="button" onClick={retake} className={clsx(styles.btn, styles.btnPrimary)}>
+          <button type="button" onClick={retake} className={clsx(styles.btn, styles.btnSecondary)}>
             重新参加测验
           </button>
-          {courseHref && (
-            <Link to={courseHref} className={clsx(styles.btn, styles.btnSecondary)}>
-              复习课程
-            </Link>
-          )}
         </div>
       </div>
     );
@@ -114,7 +131,8 @@ export default function McpQuiz({ questions, passingPercentage = 70, courseHref 
             {question.text}
           </legend>
           <div className={styles.options} role="radiogroup" aria-labelledby={legendId}>
-            {question.options.map((opt, oi) => {
+            {orders[current].map((oi) => {
+              const opt = question.options[oi];
               const chosen = answers[current] === oi;
               return (
                 <label key={oi} className={clsx(styles.option, chosen && styles.optionChosen)}>
