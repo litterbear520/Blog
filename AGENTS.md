@@ -35,7 +35,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │   ├── Claude Code/               # Claude Code 笔记
 │   ├── Docker/                    # Docker
 │   ├── LangChain/                 # LangChain
-│   ├── MCP/                       # MCP 课程笔记：一门课一个子目录（课程索引页 + 分组 + 课文）
+│   ├── MCP/                       # MCP 课程笔记：两门课各一个子目录（简介 / 高级主题：课程索引页 + 分组 + 课文）
 │   ├── Prompt/                    # 提示词工程
 │   ├── python/                    # Python
 │   ├── 云开发/                    # 云开发（FastAPI / git）
@@ -61,6 +61,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │   │   └── custom.css             # 全局样式（Noto Sans SC / macOS 代码块装饰）
 │   ├── data/
 │   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
+│   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）
 │   │   ├── mcpWalkthroughs/       # 三个演练的示例项目文件 + 步骤文案（sampling / notifications / roots）
 │   │   └── skills.js              # SkillHub 技能数据（SKILLS 数组）
 │   ├── pages/
@@ -98,7 +99,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **SkillHub**：`/skills` 路由，技能卡片墙；数据在 `src/data/skills.js`，描述须工具中立、取材自技能仓库 README
 - **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成），记开源项目学习日志；一个项目一个文件夹，侧边栏层级树即学习线
 - **交互式可视化**：`AgentLoopViz` 组件（7 步动画流程图）
-- **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录，`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`
+- **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录（目前有《Model Context Protocol 简介》和《高级主题》），`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`，题目数据在 `src/data/mcp*Quiz.js`；原站的 `CodeCommand` 组件对应 bash 代码块，`GenericPrompt`（用户提示卡）对应 `:::info[用户提示]`
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
 - **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
 
