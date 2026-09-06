@@ -1,0 +1,276 @@
+.container {
+  --gwv-accent: #2563eb;
+  --gwv-accent-soft: rgba(37, 99, 235, 0.1);
+  --gwv-accent-border: rgba(37, 99, 235, 0.3);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  background: var(--ifm-background-surface-color);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+:global([data-theme='dark']) .container {
+  --gwv-accent: #60a5fa;
+  --gwv-accent-soft: rgba(96, 165, 250, 0.12);
+  --gwv-accent-border: rgba(96, 165, 250, 0.35);
+}
+
+.svgWrap {
+  overflow-x: auto;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  min-width: 520px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-background-color);
+}
+
+/* 区域 */
+.laneLine {
+  stroke: var(--ifm-color-emphasis-300);
+  stroke-width: 1;
+}
+
+.laneHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 24px;
+  color: var(--ifm-font-color-base);
+  white-space: nowrap;
+}
+
+.laneTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.laneSub {
+  font-size: 11px;
+  color: var(--ifm-color-content-secondary);
+}
+
+.empty {
+  font-size: 11px;
+  fill: var(--ifm-color-emphasis-500);
+}
+
+/* 分支标签 */
+.branchLabel {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--ifm-color-content-secondary);
+  transition: fill 0.3s;
+}
+
+.headPill {
+  fill: var(--gwv-accent);
+}
+
+.headText {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  fill: #fff;
+}
+
+/* 提交节点 */
+.node {
+  fill: var(--ifm-color-emphasis-100);
+  stroke: var(--ifm-color-emphasis-400);
+  stroke-width: 1.5;
+  transition: fill 0.3s, stroke 0.3s;
+}
+
+.nodeDirty {
+  fill: transparent;
+  stroke-dasharray: 4 3;
+}
+
+.nodeHl {
+  fill: var(--gwv-accent-soft);
+  stroke: var(--gwv-accent);
+}
+
+.nodeText {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  fill: var(--ifm-font-color-base);
+  transition: fill 0.3s;
+}
+
+.textHl {
+  fill: var(--gwv-accent);
+}
+
+/* 提交之间的连线 */
+.edge {
+  stroke: var(--ifm-color-emphasis-500);
+  stroke-width: 1.5;
+}
+
+.edgeHl {
+  stroke: var(--gwv-accent);
+  stroke-width: 1.5;
+}
+
+.arrowHead {
+  fill: var(--ifm-color-emphasis-500);
+}
+
+.arrowHeadHl {
+  fill: var(--gwv-accent);
+}
+
+/* 跨区域传输箭头 */
+.transfer {
+  stroke: var(--gwv-accent);
+  stroke-width: 1.8;
+}
+
+.appear {
+  animation: gwvAppear 0.35s ease-out;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes gwvAppear {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* 说明区 */
+.annotation {
+  margin-top: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--gwv-accent-border);
+  background: var(--gwv-accent-soft);
+  padding: 0.75rem 1rem;
+}
+
+.annotationHead {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.stepBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--gwv-accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.annotationTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+}
+
+.cmd {
+  font-size: 0.8125rem;
+  color: var(--gwv-accent);
+  background: transparent;
+  border: 1px solid var(--gwv-accent-border);
+  padding: 0.1rem 0.45rem;
+}
+
+.annotationDesc {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--ifm-color-content-secondary);
+}
+
+/* 控制栏 */
+.controls {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.btn {
+  background: transparent;
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.375rem;
+  cursor: pointer;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ifm-color-content-secondary);
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-font-color-base);
+}
+
+.btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dots {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--ifm-color-emphasis-300);
+  transition: background-color 0.3s, transform 0.15s;
+}
+
+.dot:hover {
+  transform: scale(1.4);
+}
+
+.dotPast {
+  background: var(--gwv-accent-border);
+}
+
+.dotActive {
+  background: var(--gwv-accent);
+}
+
+.stepCount {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+}

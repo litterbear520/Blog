@@ -34,11 +34,11 @@ npm run clear                # 清理 Docusaurus 缓存
 │   ├── AI编程/                    # AI 辅助编程
 │   ├── Claude Code/               # Claude Code 笔记
 │   ├── Docker/                    # Docker
+│   ├── Git工作流/                 # Git 功能分支工作流（index.mdx 内嵌 GitWorkflowViz 分步演示）
 │   ├── LangChain/                 # LangChain
 │   ├── MCP/                       # MCP 课程笔记：两门课各一个子目录（简介 / 高级主题：课程索引页 + 分组 + 课文）
 │   ├── Prompt/                    # 提示词工程
-│   ├── python/                    # Python
-│   ├── 云开发/                    # 云开发（FastAPI / git）
+│   ├── python/                    # Python（基础 / FastAPI）
 │   ├── 大模型应用/                # 大模型应用开发
 │   ├── 常用命令/                  # 常用命令速查
 │   ├── 深度学习/                  # 深度学习（PyTorch / Transformer）
@@ -49,6 +49,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │   │   ├── AgentLoopViz/          # Agent Loop 交互式可视化组件
 │   │   ├── CopyMarkdownButton/    # 文档页"复制 Markdown"按钮
 │   │   ├── CsvTable.jsx           # CSV 表格渲染组件
+│   │   ├── GitWorkflowViz/        # Git 工作流分步演示：Remote / Local / Disk 三区域，逐步高亮变化的提交与传输箭头，步骤数据在 steps.js
 │   │   ├── HomepageFeatures/      # 首页特性卡片
 │   │   ├── McpCourse/             # 课程索引页顶部信息卡（CourseHero：难度/课数、来源链接）
 │   │   ├── McpQuiz/               # 单选测验（一次一题、选项每次随机打乱，最后提交，显示是否通过与得分条）
@@ -98,7 +99,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **自定义博客列表**：`/bloglist` 路由，支持分类筛选，不使用 Docusaurus 默认博客列表
 - **SkillHub**：`/skills` 路由，技能卡片墙；数据在 `src/data/skills.js`，描述须工具中立、取材自技能仓库 README
 - **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成），记开源项目学习日志；一个项目一个文件夹，侧边栏层级树即学习线
-- **交互式可视化**：`AgentLoopViz` 组件（7 步动画流程图）
+- **交互式可视化**：`AgentLoopViz` 组件（7 步动画流程图）、`GitWorkflowViz` 组件（Git 工作流 15 步状态演示，在 `docs/Git工作流/index.mdx` 里通过 `BrowserOnly` 挂载）
 - **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录（目前有《Model Context Protocol 简介》和《高级主题》），`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`，题目数据在 `src/data/mcp*Quiz.js`；原站的 `CodeCommand` 组件对应 bash 代码块，`GenericPrompt`（用户提示卡）对应 `:::info[用户提示]`
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
 - **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
