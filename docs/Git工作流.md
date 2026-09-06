@@ -2,6 +2,17 @@
 
 关于工作流，我会以GitHub为例，只介绍一种最常用、最好用的使用git工作的方法，这也是我工作中甚至是很多大厂程序员的方法。
 
+## 全流程演示
+
+先看一遍动画，再读下面每一步的解释。三个区域分别是 GitHub 远端、本地 git 仓库和磁盘上的工作区，蓝色是这一步发生变化的地方。
+
+<BrowserOnly>
+  {() => {
+    const GitWorkflowViz = require('@site/src/components/GitWorkflowViz').default;
+    return <GitWorkflowViz />;
+  }}
+</BrowserOnly>
+
 ## 初始化
 
 我们假设在GitHub上有一个仓库，也就是`repository`，它可以是别人的，也可以是自己的。
@@ -144,7 +155,7 @@ git push -f origin my-feature
 
 意思就是把一个分支上的所有改变合并成一个改变，然后把这个提交放到主分支上，也许叫update2，代码改动会被正常合并到主分支，只是提交到数量结构变化了。
 
-::: info:
+:::info[提示]
 有些大厂中，在提PR前会要求使用`rebase -i`命令在本地压缩提交到一个。
 :::
 
