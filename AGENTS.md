@@ -59,7 +59,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │   ├── constants/
 │   │   └── passwordConfig.js      # 密码及登录页文案配置
 │   ├── css/
-│   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent、-fill、-border、-tint，组件配色应引用这些变量）、字体、代码块装饰
+│   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）、字体、代码块装饰
 │   ├── data/
 │   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
 │   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）

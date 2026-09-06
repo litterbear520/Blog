@@ -1,7 +1,7 @@
 /**
  * 全局样式。
  *
- * 主题：暖灰米白 / 深暖灰两套底色，衬线标题 + 无衬线正文，低对比细分割线，蓝色强调。
+ * 主题：暖灰米白 / 深暖灰两套底色，衬线标题 + 无衬线正文，低对比细分割线，陶土色强调。
  * 字体均来自 Google Fonts：
  *   标题  Source Serif 4 + Noto Serif SC（后者的拉丁字形本就源自 Source Serif）
  *   正文  Inter + Noto Sans SC
@@ -24,12 +24,12 @@
   --th-line-strong: rgba(11, 11, 11, 0.2);
   --th-fill: rgba(11, 11, 11, 0.05);
   --th-fill-2: rgba(11, 11, 11, 0.1);
-  --th-accent: #184f95;          /* 链接、选中文字 */
-  --th-accent-bg: #cde2fb;       /* 标签 / 浅色底 */
-  --th-accent-fill: #2a78d6;     /* 实心填充：按钮、圆点、徽标（深浅模式相同） */
-  --th-accent-fill-hover: #3987e5;
-  --th-accent-border: #86b6ef;   /* 强调边框 */
-  --th-accent-tint: rgba(42, 120, 214, 0.1);  /* 强调填充色的淡底 */
+  --th-accent: #a84b29;          /* 链接、选中文字（陶土，与暖灰同色温） */
+  --th-accent-bg: #f3dccf;       /* 标签 / 浅色底 */
+  --th-accent-fill: #c6613f;     /* 实心填充：按钮、圆点、徽标（深浅模式相同） */
+  --th-accent-fill-hover: #d97757;
+  --th-accent-border: #e9b9a6;   /* 强调边框 */
+  --th-accent-tint: rgba(198, 97, 63, 0.12);  /* 强调填充色的淡底 */
 
   /* ── 字体与排版 ── */
   --ifm-font-family-base: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -45,14 +45,14 @@
   --ifm-heading-color: var(--th-text);
   --ifm-global-radius: 0.5rem;
 
-  /* ── 强调色：蓝 ── */
-  --ifm-color-primary: #184f95;
-  --ifm-color-primary-dark: #104281;
-  --ifm-color-primary-darker: #0d366b;
-  --ifm-color-primary-darkest: #062b57;
-  --ifm-color-primary-light: #256abf;
-  --ifm-color-primary-lighter: #2a78d6;
-  --ifm-color-primary-lightest: #3987e5;
+  /* ── 强调色：陶土 ── */
+  --ifm-color-primary: #a84b29;
+  --ifm-color-primary-dark: #964224;
+  --ifm-color-primary-darker: #7f381f;
+  --ifm-color-primary-darkest: #6a2f1a;
+  --ifm-color-primary-light: #c6613f;
+  --ifm-color-primary-lighter: #d97757;
+  --ifm-color-primary-lightest: #e08a6b;
 
   /* ── 中性色阶（Infima 的 emphasis 用于边框、分割线、次级文字） ── */
   --ifm-color-emphasis-0: #ffffff;
@@ -125,24 +125,24 @@ html[data-theme='dark'] {
   --th-line-strong: rgba(255, 255, 255, 0.2);
   --th-fill: rgba(255, 255, 255, 0.05);
   --th-fill-2: rgba(255, 255, 255, 0.1);
-  --th-accent: #6da7ec;
-  --th-accent-bg: #032042;
-  --th-accent-fill: #2a78d6;
-  --th-accent-fill-hover: #3987e5;
-  --th-accent-border: #0d366b;
-  --th-accent-tint: rgba(42, 120, 214, 0.12);
+  --th-accent: #d97757;
+  --th-accent-bg: #4a2415;
+  --th-accent-fill: #c6613f;
+  --th-accent-fill-hover: #d97757;
+  --th-accent-border: #6b3520;
+  --th-accent-tint: rgba(198, 97, 63, 0.14);
 
   /* 深色下字重略降，抵消浅字在深底上的视觉加粗 */
   --ifm-font-weight-base: 360;
   --ifm-heading-font-weight: 460;
 
-  --ifm-color-primary: #6da7ec;
-  --ifm-color-primary-dark: #5598e7;
-  --ifm-color-primary-darker: #3987e5;
-  --ifm-color-primary-darkest: #2a78d6;
-  --ifm-color-primary-light: #86b6ef;
-  --ifm-color-primary-lighter: #9ec5f4;
-  --ifm-color-primary-lightest: #b7d3f6;
+  --ifm-color-primary: #d97757;
+  --ifm-color-primary-dark: #c6613f;
+  --ifm-color-primary-darker: #b5532f;
+  --ifm-color-primary-darkest: #a84b29;
+  --ifm-color-primary-light: #e08a6b;
+  --ifm-color-primary-lighter: #e8a08a;
+  --ifm-color-primary-lightest: #f0b9a7;
 
   --ifm-color-emphasis-0: #0b0b0b;
   --ifm-color-emphasis-100: #20201f;
