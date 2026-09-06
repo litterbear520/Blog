@@ -24,8 +24,12 @@
   --th-line-strong: rgba(11, 11, 11, 0.2);
   --th-fill: rgba(11, 11, 11, 0.05);
   --th-fill-2: rgba(11, 11, 11, 0.1);
-  --th-accent: #184f95;
-  --th-accent-bg: #cde2fb;
+  --th-accent: #184f95;          /* 链接、选中文字 */
+  --th-accent-bg: #cde2fb;       /* 标签 / 浅色底 */
+  --th-accent-fill: #2a78d6;     /* 实心填充：按钮、圆点、徽标（深浅模式相同） */
+  --th-accent-fill-hover: #3987e5;
+  --th-accent-border: #86b6ef;   /* 强调边框 */
+  --th-accent-tint: rgba(42, 120, 214, 0.1);  /* 强调填充色的淡底 */
 
   /* ── 字体与排版 ── */
   --ifm-font-family-base: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -123,6 +127,10 @@ html[data-theme='dark'] {
   --th-fill-2: rgba(255, 255, 255, 0.1);
   --th-accent: #6da7ec;
   --th-accent-bg: #032042;
+  --th-accent-fill: #2a78d6;
+  --th-accent-fill-hover: #3987e5;
+  --th-accent-border: #0d366b;
+  --th-accent-tint: rgba(42, 120, 214, 0.12);
 
   /* 深色下字重略降，抵消浅字在深底上的视觉加粗 */
   --ifm-font-weight-base: 360;

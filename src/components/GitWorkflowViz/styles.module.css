@@ -1,19 +1,15 @@
 .container {
-  --gwv-accent: #2563eb;
-  --gwv-accent-soft: rgba(37, 99, 235, 0.1);
-  --gwv-accent-border: rgba(37, 99, 235, 0.3);
+  /* 全部取自 custom.css 的主题强调色，改 --th-accent* 即可整体换色 */
+  --gwv-accent: var(--th-accent);
+  --gwv-accent-fill: var(--th-accent-fill);
+  --gwv-accent-soft: var(--th-accent-tint);
+  --gwv-accent-border: var(--th-accent-border);
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 0.75rem;
   padding: 1rem;
   margin: 1.5rem 0;
   background: var(--ifm-background-surface-color);
   font-family: system-ui, -apple-system, sans-serif;
-}
-
-:global([data-theme='dark']) .container {
-  --gwv-accent: #60a5fa;
-  --gwv-accent-soft: rgba(96, 165, 250, 0.12);
-  --gwv-accent-border: rgba(96, 165, 250, 0.35);
 }
 
 .svgWrap {
@@ -70,7 +66,7 @@
 }
 
 .headPill {
-  fill: var(--gwv-accent);
+  fill: var(--gwv-accent-fill);
 }
 
 .headText {
@@ -130,7 +126,7 @@
 
 /* 跨区域传输箭头 */
 .transfer {
-  stroke: var(--gwv-accent);
+  stroke: var(--gwv-accent-fill);
   stroke-width: 1.8;
 }
 
@@ -170,7 +166,7 @@
   height: 1.4rem;
   padding: 0 0.35rem;
   border-radius: 999px;
-  background: var(--gwv-accent);
+  background: var(--gwv-accent-fill);
   color: #fff;
   font-size: 0.75rem;
   font-weight: 700;
@@ -266,7 +262,7 @@
 }
 
 .dotActive {
-  background: var(--gwv-accent);
+  background: var(--gwv-accent-fill);
 }
 
 .stepCount {
