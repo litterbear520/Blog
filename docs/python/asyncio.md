@@ -19,7 +19,7 @@ import asyncio
 
 async def main():
     print("hello")
-    awajt asyncio.sleep(1)
+    await asyncio.sleep(1)
     print("world")
 
 coro = main()
@@ -91,7 +91,9 @@ asyncio.run(main())
 
 这时候就可以用到`create_task`函数，它的参数是一个 coroutine，它会把 coroutine 变成一个 task，并注册到 event loop 里面，告诉循环这个 task 可以开始执行了，但是现在 event loop 并没有办法执行 task ，因为控制权还在 main 手里，main 趁着自己还有控制权此时创建了第二个 task ，在这之后才 await 两个 task 把控制权交还。
 
-```python
+下面每段示例都基于上一段修改，高亮行是改动的部分。
+
+```python {11-12,14-15}
 import asyncio
 import time
 
@@ -103,7 +105,7 @@ async def main():
     print(f"started at {time.strftime('%X')}")
 
     task1 = asyncio.create_task(say_after(1, 'hello'))
-    task2 = asyncio.create_task(say_after(2, 'word'))
+    task2 = asyncio.create_task(say_after(2, 'world'))
 
     await task1
     await task2
@@ -121,7 +123,7 @@ asyncio.run(main())
 
 await 有一个功能是将 task 或者 coroutine 的返回值拿出来，如果不用 await 是拿不到这个值的。
 
-```python
+```python {6,14-15,17-18}
 import asyncio
 import time
 
@@ -133,7 +135,7 @@ async def main():
     print(f"started at {time.strftime('%X')}")
 
     task1 = asyncio.create_task(say_after(1, 'hello'))
-    task2 = asyncio.create_task(say_after(2, 'word'))
+    task2 = asyncio.create_task(say_after(2, 'world'))
 
     result1 = await task1
     result2 = await task2
@@ -155,7 +157,7 @@ asyncio.run(main())
 
 如果参数是 coroutine 的话它会包装成 task，并且注册到 event loop 中，并返回一个 future 值，当你 await 这个 future 的时候，相当于告诉 event loop 我要等待里面的每一个 task 都完成，我才可以继续，同时会把这些 task 的返回值放到一个 list 里返回。
 
-```python
+```python {14,16}
 import asyncio
 import time
 
@@ -167,7 +169,7 @@ async def main():
     print(f"started at {time.strftime('%X')}")
 
     task1 = asyncio.create_task(say_after(1, 'hello'))
-    task2 = asyncio.create_task(say_after(2, 'word'))
+    task2 = asyncio.create_task(say_after(2, 'world'))
 
     ret = await asyncio.gather(task1, task2)
 
@@ -180,7 +182,7 @@ asyncio.run(main())
 
 这个程序的结果的 list 里面的顺序和 task 的顺序是一致的，这样就不需要一个个 await 了。并且还有一个好处是，它会自动把 coroutine 包装成 task，不需要手动 create_task 了。
 
-```python
+```python {11-14}
 import asyncio
 import time
 
@@ -193,7 +195,7 @@ async def main():
 
     ret = await asyncio.gather(
         say_after(1, 'hello'),
-        say_after(2, 'word')
+        say_after(2, 'world')
     )
 
     print(ret)
