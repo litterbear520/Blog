@@ -107,7 +107,9 @@
   --ifm-scrollbar-thumb-background-color: #c3c2b7;
   --ifm-scrollbar-thumb-hover-background-color: #a5a49a;
 
-  --docusaurus-highlighted-code-line-bg: var(--th-accent-tint);
+  /* 代码块高亮行：Cursor Light 的 diffEditor.insertedLineBackground / editorGutter.addedBackground */
+  --docusaurus-highlighted-code-line-bg: #1F8A651F;
+  --th-code-added-bar: #1F8A65;
 }
 
 /* ═══════════════════════════════════════════
@@ -178,7 +180,9 @@ html[data-theme='dark'] {
   --ifm-scrollbar-thumb-background-color: #454442;
   --ifm-scrollbar-thumb-hover-background-color: #6d6b67;
 
-  --docusaurus-highlighted-code-line-bg: var(--th-accent-tint);
+  /* 代码块高亮行：Cursor Dark 的 diffEditor.insertedLineBackground / editorGutter.addedBackground */
+  --docusaurus-highlighted-code-line-bg: #3FA26633;
+  --th-code-added-bar: #3FA266;
 }
 
 /* ═══════════════════════════════════════════
@@ -403,9 +407,10 @@ html[data-theme='dark'] {
 }
 
 /* 高亮行（```python {3-5}）：用于标出相对上一段示例改动的行。
-   底色由上面的 --docusaurus-highlighted-code-line-bg（强调色淡底）控制，这里只补左侧色条 */
+   配色取 Cursor 主题的 diff 新增行：底色由上面的 --docusaurus-highlighted-code-line-bg 控制，
+   左侧色条用 --th-code-added-bar（对应 gutter 里的新增标记） */
 .theme-code-block-highlighted-line {
-  box-shadow: inset 3px 0 0 var(--th-accent);
+  box-shadow: inset 3px 0 0 var(--th-code-added-bar);
 }
 
 /* 行内代码：中性底 + 一圈细边框，文字随正文色（只针对文本中的 code，不影响代码块） */
