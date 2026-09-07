@@ -128,9 +128,10 @@ const config = {
           { to: '/roadmap', label: '路线', position: 'left' },
           { to: '/skills', label: 'Skills', position: 'left' },
           {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
+            href: 'https://github.com/litterbear520/Blog',
             position: 'right',
+            className: 'header-github-link',
+            'aria-label': 'GitHub 仓库',
           },
         ],
       },
@@ -177,7 +178,7 @@ const config = {
         //     ],
         //   },
         // ],
-        copyright: 'Copyright © huangsitao 2025',
+        copyright: 'Copyright © huangsitao 2026',
       },
       prism: {
         theme: cursorLightTheme,
