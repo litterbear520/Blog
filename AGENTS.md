@@ -73,6 +73,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │       ├── Root.js                # 主题根组件（挂载密码保护 + CopyMarkdown 按钮）
 │       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图
 │       ├── DocCard/Heading/Icon/  # 覆盖为空组件：去掉 DocCardList 卡片标题前的 🗃️/📄️ emoji
+│       ├── Icon/LightMode|DarkMode|SystemColorMode/  # 深浅切换按钮图标换成 Lucide 线条版（sun / moon / monitor），与导航栏 GitHub 图标同规格
 │       ├── prism-cursor-theme.js  # Cursor 暗色代码高亮主题
 │       └── prism-cursor-light-theme.js
 ├── plugins/
