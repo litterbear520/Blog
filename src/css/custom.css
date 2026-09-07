@@ -375,14 +375,10 @@ html[data-theme='dark'] {
   color: #f0f0f05c !important;
 }
 
-/* 高亮行（```python {3-5}）：用于标出相对上一段示例改动的行，
-   强调色淡底 + 左侧色条，深浅模式同一套 */
-.docusaurus-highlight-code-line {
-  background-color: var(--th-accent-tint);
+/* 高亮行（```python {3-5}）：用于标出相对上一段示例改动的行。
+   底色由上面的 --docusaurus-highlighted-code-line-bg（强调色淡底）控制，这里只补左侧色条 */
+.theme-code-block-highlighted-line {
   box-shadow: inset 3px 0 0 var(--th-accent);
-  display: block;
-  margin: 0 calc(-1 * var(--ifm-pre-padding));
-  padding: 0 var(--ifm-pre-padding);
 }
 
 /* 行内代码：中性底 + 一圈细边框，文字随正文色（只针对文本中的 code，不影响代码块） */
