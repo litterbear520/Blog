@@ -271,12 +271,24 @@ html[data-theme='dark'] {
 .header-github-link {
   display: flex;
   align-items: center;
-  padding: 0 0.5rem;
+  padding: 0 var(--ifm-navbar-item-padding-horizontal);
+  margin-right: 0.25rem;
   color: var(--th-text-3);
 }
 
 .header-github-link:hover {
   color: var(--th-text);
+}
+
+/* 深浅切换按钮：图标已在 src/theme/Icon/{LightMode,DarkMode,SystemColorMode} 换成 Lucide 线条版，
+   这里让颜色和悬停行为与 GitHub 图标一致，去掉默认的悬停圆底 */
+.navbar__items--right button[class*="toggleButton"] {
+  color: var(--th-text-3);
+}
+
+.navbar__items--right button[class*="toggleButton"]:hover {
+  color: var(--th-text);
+  background: none;
 }
 
 .header-github-link::before {
