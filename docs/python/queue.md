@@ -210,15 +210,15 @@ producer(lst)
 
 ```output hang
 Consume: 0
-Consume: 1
 Consume: 2
-Consume:Consume: 4
+Consume: 3
+Consume: 4
 Consume: 5
 Consume: 6
 Consume: 7
 Consume: 8
 Consume: 9
- 3
+Consume: 1
 ```
 
 会好一些，但是你知道需要 sleep 多久合适吗，短了又要浪费 cpu，长了任务堆积了，你还没来得及做，这里就明显没有阻塞灵活。
