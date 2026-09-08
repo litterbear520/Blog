@@ -178,40 +178,53 @@ Consume: 9
 ```python
 while True:
     if lst:
-    item = lst.pop(0)
-    print('Consume:', item)
+        item = lst.pop(0)
+        print('Consume:', item)
 ```
 
 但是这里有好多问题，第一如果 list 里面没有东西，你就这样一直循环，实际上是一直在做操作的，也就是在浪费 cpu ，那我加一个 sleep 行不行呢？
 
-```python
+```python run
 import threading
-import queue
+import time
 
 
-def consumer(q):
+def consumer(lst):
     while True:
         if lst:
-        item = lst.pop(0)
-        print('Consume:', item)
+            item = lst.pop(0)
+            print('Consume:', item)
         else:
             time.sleep(0.5)
 
 
-def producer(q):
+def producer(lst):
     for i in range(10):
-        q.put(i)
+        lst.append(i)
 
 
-q = queue.Queue()
+lst = []
 
-t1 = threading.Thread(target=consumer, args=(q,))
-t2 = threading.Thread(target=consumer, args=(q,))
+t1 = threading.Thread(target=consumer, args=(lst,))
+t2 = threading.Thread(target=consumer, args=(lst,))
 
 t1.start()
 t2.start()
 
-producer(q)
+producer(lst)
+```
+
+```output hang
+Consume: 0
+Consume: 1
+Consume: 2
+Consume:Consume: 4
+Consume: 5
+Consume: 6
+Consume: 7
+Consume: 8
+Consume: 9
+ 3
 ```
 
 会好一些，但是你知道需要 sleep 多久合适吗，短了又要浪费 cpu，长了任务堆积了，你还没来得及做，这里就明显没有阻塞灵活。
@@ -226,18 +239,15 @@ producer(q)
 
 默认情况下，python进程会等所有的线程结束后退出，所以就卡在那里了，那是不是只要在建立 thread 的时候，加上 daemon=True 就可以了，这个意思是，只要主线程结束，我就结束，但是你会发现加上这个后，运行程序，什么都不会被打印出来。
 
-```python
+```python run
 import threading
 import queue
 
 
 def consumer(q):
     while True:
-        if lst:
-        item = lst.pop(0)
+        item = q.get()
         print('Consume:', item)
-        else:
-            time.sleep(0.5)
 
 
 def producer(q):
@@ -256,6 +266,9 @@ t2.start()
 producer(q)
 ```
 
+```output empty
+```
+
 这是因为生产者飞快的完成了，消费者还什么都没来急的干，这里主线程就结束了，顺带把两个子线程也干掉了，所以什么都没打印出来。
 
 我这里希望的其实是这里的 queue 里面的全部任务结束后，进程再结束。那在后面加一个判断不就好了吗？
@@ -271,15 +284,14 @@ while not q.empty():
 
 那怎么来标记任务完成呢，只有消费者知道任务什么时候完成，所以 python 的 queue 提供了一个特殊的标记方式，就是`q.task_done()`。
 
-```python
+```python run
 import threading
 import queue
 
 
 def consumer(q):
     while True:
-        if lst:
-        item = lst.pop(0)
+        item = q.get()
         print('Consume:', item)
         q.task_done()
 
@@ -299,6 +311,19 @@ t2.start()
 
 producer(q)
 q.join()
+```
+
+```output exit=0
+Consume: 0
+Consume: 1
+Consume: 2
+Consume: 3
+Consume: 4
+Consume: 5
+Consume: 6
+Consume: 7
+Consume: 8
+Consume: 9
 ```
 
 在我们每一次往队列放一个任务的时候，python 会在内部计数器里面 +1 ，而每次运行`task_done`的时候会把计数器 -1，这样消费者在每一次完成任务后只要调用一下这个函数，就可以告诉这个 queue 有多少任务已经完成了。
