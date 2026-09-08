@@ -584,3 +584,31 @@ pre {
     animation: none;
   }
 }
+
+/* ---- 代码块锚点（```python id=xxx）：跳转时避开导航栏，边框用强调色闪一下 ---- */
+.theme-code-block[id] {
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem);
+}
+
+.theme-code-block:target pre,
+.theme-code-block:target .run-output {
+  animation: code-target-flash 2s ease-out;
+}
+
+@keyframes code-target-flash {
+  0%,
+  25% {
+    box-shadow: 0 0 0 2px var(--th-accent);
+  }
+  100% {
+    box-shadow: 0 0 0 2px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-code-block:target pre,
+  .theme-code-block:target .run-output {
+    animation: none;
+    box-shadow: 0 0 0 2px var(--th-accent);
+  }
+}
