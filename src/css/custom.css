@@ -585,6 +585,17 @@ pre {
   }
 }
 
+/* 站内锚点（目录、代码块 id=、标题 #）统一平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 /* ---- 代码块锚点（```python id=xxx）：跳转时避开导航栏，边框用强调色闪一下 ---- */
 .theme-code-block[id] {
   scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem);
