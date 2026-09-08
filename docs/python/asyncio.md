@@ -14,7 +14,7 @@
 
 协程，在 python 语境中一般指两种东西，coroutine function 和 coroutine object，一般所有`async def`开头的东西都叫 coroutine function，例如：
 
-```python
+```python run
 import asyncio
 
 async def main():
@@ -24,6 +24,11 @@ async def main():
 
 coro = main()
 asyncio.run(coro)
+```
+
+```output exit=0
+hello
+world
 ```
 
 它的本质和生产器函数有些像，在做`main()`的时候并不会执行函数，而是返回一个 coroutine object，它不会运行任何这个 coroutine 里面的代码。
@@ -48,7 +53,7 @@ asyncio.run(coro)
 
 我们先看这段代码的执行过程。
 
-```python
+```python run
 import asyncio
 import time
 
@@ -65,6 +70,13 @@ async def main():
     print(f"finished at {time.strftime('%X')}")
 
 asyncio.run(main())
+```
+
+```output exit=0
+started at 02:31:20
+hello
+world
+finished at 02:31:23
 ```
 
 1.首先，这段代码定义了两个函数，此时都没有执行。
@@ -93,7 +105,7 @@ asyncio.run(main())
 
 下面每段示例都基于上一段修改，高亮行是改动的部分。
 
-```python {11-12,14-15}
+```python run {11-12,14-15}
 import asyncio
 import time
 
@@ -115,6 +127,13 @@ async def main():
 asyncio.run(main())
 ```
 
+```output exit=0
+started at 02:31:23
+hello
+world
+finished at 02:31:25
+```
+
 这里的 await 告诉 event loop 我需要这个 task 完成，把控制权交还，并且在控制权回来的时候，从这 task 里面提取所需要的返回值。
 
 这次程序只需要两秒就能完成，因为当 await task1 的时候，event loop 里面实际上已经有了三个 task，分别是 main、task1 和 task2。当task1 和 event loop 说我需要一秒才能完成后，event loop 闲来无事就能发现还有 task2 可以执行，于是就执行了 task2，然后 task2 说需要两秒结束，这样两个 task 就能够同时进行等待了。
@@ -123,7 +142,7 @@ asyncio.run(main())
 
 await 有一个功能是将 task 或者 coroutine 的返回值拿出来，如果不用 await 是拿不到这个值的。
 
-```python {6,14-15,17-18}
+```python run {6,14-15,17-18}
 import asyncio
 import time
 
@@ -148,6 +167,13 @@ async def main():
 asyncio.run(main())
 ```
 
+```output exit=0
+started at 02:31:26
+hello - 1
+world - 2
+finished at 02:31:28
+```
+
 ### gather
 
 这时候就有个问题，如果我有很多个 task，是不是就需要写 10 个 await，这是不是太蠢了，事实确实是这样的。
@@ -156,7 +182,7 @@ asyncio.run(main())
 
 如果参数是 coroutine 的话它会包装成 task，并且注册到 event loop 中，并返回一个 future 值，当你 await 这个 future 的时候，相当于告诉 event loop 我要等待里面的每一个 task 都完成，我才可以继续，同时会把这些 task 的返回值放到一个 list 里返回。
 
-```python {14,16}
+```python run {14,16}
 import asyncio
 import time
 
@@ -179,9 +205,15 @@ async def main():
 asyncio.run(main())
 ```
 
+```output exit=0
+started at 02:31:28
+['hello - 1', 'world - 2']
+finished at 02:31:30
+```
+
 这个程序的结果的 list 里面的顺序和 task 的顺序是一致的，这样就不需要一个个 await 了。并且还有一个好处是，它会自动把 coroutine 包装成 task，不需要手动 create_task 了。
 
-```python {11-14}
+```python run {11-14}
 import asyncio
 import time
 
@@ -202,6 +234,12 @@ async def main():
     print(f"finished at {time.strftime('%X')}")
 
 asyncio.run(main())
+```
+
+```output exit=0
+started at 02:31:30
+['hello - 1', 'world - 2']
+finished at 02:31:32
 ```
 
 这种方式在在拿到正确的返回值的同时，也只用了 2 秒。
