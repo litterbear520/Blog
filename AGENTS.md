@@ -147,7 +147,7 @@ docs 形态（非 blog）：每个项目在 `roadmap/` 下建一个文件夹，�
 
 ### 代码运行输出
 
-代码围栏加 `run`，紧接一个 `output` 围栏（两段之间空一行），`output` 的 meta 写进程状态：`exit=0`（默认）、`exit=1`、`hang`（不退出，需 Ctrl+C）、`empty`（无输出）。docs / roadmap / blog 通用。
+代码围栏加 `run`，紧接一个 `output` 围栏（两段之间空一行），`output` 的 meta 写进程状态：`exit=0`（默认）、`exit=1`、`hang`（不退出，需 Ctrl+C）、`empty`（无输出）。docs / roadmap / blog 通用。只给完整、能独立运行的示例加 `run`；用来示意的片段（如单独一段 `while` 循环、故意写错的反例）不加。
 
 ````markdown
 ```python run
