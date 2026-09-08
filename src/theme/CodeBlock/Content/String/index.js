@@ -27,13 +27,20 @@ function useCodeBlockMetadata(props) {
   });
 }
 
+// 围栏 meta 里的 id=xxx：给代码块一个锚点，正文可用 [文字](#xxx) 跳转。
+// createCodeBlockMetadata 不会把 metastring 透传出来，所以必须在这里解析
+function parseBlockId(metastring) {
+  return metastring?.match(/(?:^|\s)id=([\w-]+)/)?.[1];
+}
+
 export default function CodeBlockString(props) {
   const metadata = useCodeBlockMetadata(props);
   const wordWrap = useCodeWordWrap();
   return (
     <RunOutputProvider
       output={props['data-output']}
-      status={props['data-output-status']}>
+      status={props['data-output-status']}
+      blockId={parseBlockId(props.metastring)}>
       <CodeBlockContextProvider metadata={metadata} wordWrap={wordWrap}>
         <CodeBlockLayout />
       </CodeBlockContextProvider>
