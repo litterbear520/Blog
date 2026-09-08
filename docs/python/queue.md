@@ -8,7 +8,7 @@ queue 是一个非常简单的线性有序数据结构，在大多数情况下�
 
 一个基础的 queue 只需要支持两个功能，放和拿。
 
-```python
+```python run
 import queue
 
 q = queue.Queue()
@@ -23,6 +23,10 @@ while not q.empty():
 print()
 ```
 
+```output exit=0
+0 1 2 3 4 5 6 7 8 9 
+```
+
 最终会打印0到9，数据会按照进入 queue 的顺序被拿出来。
 
 queue 最常见的用法就是用来有序的安排任务，我们可以想象一个在生活中的队列，比如说火车站或者迪士尼卖票的地方。
@@ -33,7 +37,7 @@ queue 最常见的用法就是用来有序的安排任务，我们可以想象�
 
 queue 的有序性经常是保证我们算法正确的基础。举个常见的例子 BFS，广度优先搜索。
 
-```python
+```python run
 class Node:
     def __init__(self, data):
         self.data = data
@@ -59,6 +63,14 @@ root.right.right = Node(5)
 bfs(root)
 ```
 
+```output exit=0
+1
+2
+3
+4
+5
+```
+
 我们定义了一个简单的二叉树，每个节点的数据只有一个 data，根节点有一个左孩子，一个右孩子，左孩子有一个左孩子，右孩子有一个右孩子。
 
 这时候我们想做宽度优先搜索，最常见的方式就是实现一个 queue，它代表应该开始搜哪个节点了。对于每一个节点，我们都是先搜自己，再搜左节点，再搜右节点，这样就保证了宽度优先搜索。
@@ -71,7 +83,7 @@ bfs(root)
 
 逻辑上来说也可以，因为 list 是支持拿出任意一个数据的，用 list 重写一下，可以得到一模一样的结果。
 
-```python
+```python run
 class Node:
     def __init__(self, data):
         self.data = data
@@ -97,6 +109,14 @@ root.right.right = Node(5)
 bfs(root)
 ```
 
+```output exit=0
+1
+2
+3
+4
+5
+```
+
 然而，相比 queue 来说，list 有两个比较严重的问题：
 
 第一个问题比较直观，就是这个 lst.pop(0) 它并不是 o(1) 的，对于 queue 来说，put 和 get 操作都是常数时间的，这里说的是一般实现，你当然也可以实现出来一个 queue 它不是常数时间的，因为 queue 本身是一个抽象的数据结构，它可以由很多其他的数据结构来实现，但是 python 或者其他绝大多数语言中的内置库 queue，写入和读出操作都是 o(1) 的。
@@ -109,7 +129,7 @@ bfs(root)
 
 作为任务的生产方，你根本不需要在意我需要把任务交给谁去解决，只需要把任务放到 queue 即可，同样的对任务的消费者，也不需要想应该去解决谁的任务，只需要从 queue 里面拿就可以了。
 
-```python
+```python run
 import threading
 import queue
 
@@ -134,6 +154,19 @@ t1.start()
 t2.start()
 
 producer(q)
+```
+
+```output hang
+Consume: 0
+Consume: 1
+Consume: 2
+Consume: 3
+Consume: 4
+Consume: 5
+Consume: 6
+Consume: 7
+Consume: 8
+Consume: 9
 ```
 
 作为生产者，只需要把0-9扔到 queue 中，作为消费者，拿到一个数就把它打印出来。这里做了一个生产者和两个消费者，这里的结果就是0-9都会被打出来，但是并不是按顺序打出来的，因为我们只能保证这个任务被开始执行的顺序，并不能保证任务被完成的顺序。

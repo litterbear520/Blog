@@ -468,3 +468,119 @@ pre {
   background-color: #404040 !important;
 }
 
+
+/* ---- 代码块预录输出面板（```python run + ```output，见 plugins/remark-run-output.js）---- */
+.theme-code-block.run-output-open pre {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  margin-bottom: 0;
+}
+
+.run-output {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--th-text-2);
+  background: var(--prism-background-color);
+  border-top: 1px solid var(--th-line);
+  border-bottom-left-radius: var(--ifm-code-border-radius);
+  border-bottom-right-radius: var(--ifm-code-border-radius);
+}
+
+[data-theme='dark'] .run-output {
+  background: #181818;
+  border: 1px solid #262626;
+  border-top-color: #2e2e2e;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.run-output__head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem var(--ifm-pre-padding) 0;
+  font-size: 12px;
+  color: var(--th-text-3);
+}
+
+.run-output__label {
+  letter-spacing: 0.04em;
+  cursor: help;
+  border-bottom: 1px dotted currentColor;
+}
+
+.run-output__running::after {
+  content: '';
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-left: 0.4em;
+  border-radius: 50%;
+  background: var(--th-accent);
+  animation: run-output-blink 0.8s steps(2) infinite;
+}
+
+.run-output__body {
+  margin: 0;
+  padding: 0.4rem var(--ifm-pre-padding) 0.6rem;
+  background: transparent;
+  border: 0 !important;
+  border-radius: 0 !important;
+  white-space: pre;
+  overflow-x: auto;
+  color: var(--th-text);
+}
+
+.theme-code-block.run-output-open .run-output__body {
+  padding-top: 0.4rem !important;
+}
+
+.run-output__line {
+  min-height: 1.6em;
+  animation: run-output-line-in 120ms ease-out;
+}
+
+.run-output__cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  vertical-align: text-bottom;
+  margin-right: 0.4em;
+  background: var(--th-text-3);
+  animation: run-output-blink 1s steps(2) infinite;
+}
+
+.run-output__foot {
+  padding: 0.35rem var(--ifm-pre-padding) 0.5rem;
+  border-top: 1px dashed var(--th-line);
+  font-size: 12px;
+  color: var(--th-text-3);
+}
+
+.run-output__foot--hang {
+  color: var(--th-accent);
+}
+
+@keyframes run-output-blink {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes run-output-line-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .run-output__line,
+  .run-output__cursor,
+  .run-output__running::after {
+    animation: none;
+  }
+}

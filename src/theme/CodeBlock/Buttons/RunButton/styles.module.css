@@ -1,0 +1,20 @@
+/* 与 CopyButton 同尺寸；展开输出后按钮常亮，提示当前处于「已运行」状态 */
+:global(.theme-code-block:hover) .runButtonOpen,
+.runButtonOpen {
+  opacity: 1 !important;
+  color: var(--th-accent);
+}
+
+.runButtonIcons {
+  position: relative;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.runButtonIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: inherit;
+  height: inherit;
+}

@@ -9,6 +9,7 @@ import cursorTheme from './src/theme/prism-cursor-theme.js';
 import cursorLightTheme from './src/theme/prism-cursor-light-theme.js';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import remarkRunOutput from './plugins/remark-run-output.js';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -56,7 +57,7 @@ const config = {
         path: './roadmap',
         routeBasePath: 'roadmap',
         sidebarPath: './sidebarsRoadmap.js',
-        remarkPlugins: [remarkMath],
+        remarkPlugins: [remarkMath, remarkRunOutput],
         rehypePlugins: [rehypeKatex],
       },
     ],
@@ -69,11 +70,12 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          remarkPlugins: [remarkMath],
+          remarkPlugins: [remarkMath, remarkRunOutput],
           rehypePlugins: [rehypeKatex],
         },
         blog: {
           showReadingTime: true,
+          remarkPlugins: [remarkRunOutput],
           routeBasePath: '/blog',
           // blogSidebarTitle: false, // 禁用博客侧边栏标题
           blogSidebarCount: 0, // 禁用博客侧边栏计数，设置为0

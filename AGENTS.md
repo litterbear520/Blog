@@ -74,10 +74,12 @@ npm run clear                # 清理 Docusaurus 缓存
 │       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图
 │       ├── DocCard/Heading/Icon/  # 覆盖为空组件：去掉 DocCardList 卡片标题前的 🗃️/📄️ emoji
 │       ├── Icon/LightMode|DarkMode|SystemColorMode/  # 深浅切换按钮图标换成 Lucide 线条版（sun / moon / monitor），与导航栏 GitHub 图标同规格
+│       ├── CodeBlock/             # 代码块「运行」按钮 + 预录输出面板：Buttons/RunButton、Layout（挂面板）、Content/String（读 data-output）、RunOutput/（context + Panel 逐行打印）
 │       ├── prism-cursor-theme.js  # Cursor 暗色代码高亮主题
 │       └── prism-cursor-light-theme.js
 ├── plugins/
-│   └── copy-markdown-source/      # 构建时生成清洗后的 .md 文件供复制
+│   ├── copy-markdown-source/      # 构建时生成清洗后的 .md 文件供复制
+│   └── remark-run-output.js       # remark 插件：把 ```lang run 与紧随的 ```output 围栏合并成带预录输出的代码块
 ├── plans/ + specs/                # 功能规划与设计文档（SkillHub 等）
 ├── tools/
 │   └── covers/                    # 博客封面生成：配方 → 涂鸦 SVG（Node 渲染，无需浏览器），详见其 README
@@ -103,6 +105,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **交互式可视化**：`AgentLoopViz` 组件（7 步动画流程图）、`GitWorkflowViz` 组件（Git 工作流 15 步状态演示，在 `docs/Git工作流/index.mdx` 里通过 `BrowserOnly` 挂载）
 - **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录（目前有《Model Context Protocol 简介》和《高级主题》），`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`，题目数据在 `src/data/mcp*Quiz.js`；原站的 `CodeCommand` 组件对应 bash 代码块，`GenericPrompt`（用户提示卡）对应 `:::info[用户提示]`
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
+- **代码块预录输出**：代码围栏加 `run`，紧接一个 `output` 围栏写运行结果，构建时由 `plugins/remark-run-output.js` 合并；页面上代码块右上角出现 ▷ 按钮，点击后底部展开「输出」面板逐行打印（悬停标签提示为预录），再点收起。不是真跑代码，输出要先在本地跑一遍如实录入
 - **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
 
 ## 内容编写规范
@@ -141,6 +144,20 @@ docs 形态（非 blog）：每个项目在 `roadmap/` 下建一个文件夹，�
 5. 风格规则、原语与母题说明见 `tools/covers/README.md`
 
 **文章头图**（正文开头大图）可用编辑排版风或用户提供的图，直接放 `static/img/blog/`，正文首行用 `![alt](/img/blog/xxx)` 引入。
+
+### 代码运行输出
+
+代码围栏加 `run`，紧接一个 `output` 围栏（两段之间空一行），`output` 的 meta 写进程状态：`exit=0`（默认）、`exit=1`、`hang`（不退出，需 Ctrl+C）、`empty`（无输出）。docs / roadmap / blog 通用。
+
+````markdown
+```python run
+print('hi')
+```
+
+```output exit=0
+hi
+```
+````
 
 ### 数学公式
 
