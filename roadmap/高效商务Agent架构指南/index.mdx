@@ -4,7 +4,7 @@ title: 高效商务 Agent 架构指南
 description: 让线上买卖更顺畅的 Agent：架构、延迟与成本技巧、评测实践。
 ---
 
-import { CardGrid, Card, LinkCallout } from '@site/src/components/InfoCards';
+import { CardGrid, Card, LinkCallout, SkillList } from '@site/src/components/InfoCards';
 
 # 高效商务 Agent 架构指南
 
@@ -93,10 +93,26 @@ import { CardGrid, Card, LinkCallout } from '@site/src/components/InfoCards';
     事实依据、购物车与结账语义、展示规则，以及商品搜索。
   </Card>
   <Card title="购物技能" sub="长尾">
-    search-discovery · purchase-research · planning-goals · customer-care · memory-personalization
+    <SkillList
+      items={[
+        ['search-discovery', '搜索与发现'],
+        ['purchase-research', '购前调研'],
+        ['planning-goals', '目标规划'],
+        ['customer-care', '售后服务'],
+        ['memory-personalization', '记忆与个性化'],
+      ]}
+    />
   </Card>
   <Card title="商家技能" sub="每个运营领域一个">
-    performance-insights · catalog-listings · inventory-operations · pricing-promotions · marketing-campaigns
+    <SkillList
+      items={[
+        ['performance-insights', '业绩洞察'],
+        ['catalog-listings', '商品信息维护'],
+        ['inventory-operations', '库存与运营'],
+        ['pricing-promotions', '定价与促销'],
+        ['marketing-campaigns', '营销活动'],
+      ]}
+    />
   </Card>
 </CardGrid>
 
