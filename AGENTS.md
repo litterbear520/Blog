@@ -26,7 +26,7 @@ npm run clear                # 清理 Docusaurus 缓存
 ## 项目结构
 
 ```
-├── blog/                          # 博客文章（6 篇，含 category/cover 元数据）
+├── blog/                          # 博客文章（6 篇，一篇一个文件夹 <slug>/index.md，图片同目录）
 ├── roadmap/                       # 路线：开源项目学习日志（第二个 docs 实例，/roadmap 路由）
 ├── docs/                          # 笔记文档（15 个分类目录）
 │   ├── Agent/                     # 智能体
@@ -121,7 +121,7 @@ sidebar_position: 1
 
 ### 博客 frontmatter
 
-文章放在 `blog/` 目录，同时需要在 `src/pages/bloglist.js` 的 `POSTS` 数组中添加元数据：
+一篇文章一个文件夹：`blog/<slug>/index.md`，正文图片放在同一文件夹里用 `![](./xxx.png)` 相对引用；URL 由 frontmatter 的 `slug` 决定。同时需要在 `src/pages/bloglist.js` 的 `POSTS` 数组中添加元数据：
 
 ```javascript
 { title, date: 'YYYY-MM-DD', slug, category: '教程'|'AI'|'比赛', swatch, cover }
