@@ -189,7 +189,7 @@ html[data-theme='dark'] {
    排版细节
    ═══════════════════════════════════════════ */
 
-/* 标题：h1/h2 半粗 + 微收字距；h3 以下加粗 */
+/* 标题：统一半粗，靠字号拉开层级（h4 比正文大一档，不与正文同大） */
 .markdown h1:first-child {
   --ifm-h1-font-size: 2.25rem;
 }
@@ -199,7 +199,11 @@ html[data-theme='dark'] {
 }
 
 .markdown > h3 {
-  --ifm-h3-font-size: 1.25rem;
+  --ifm-h3-font-size: 1.375rem;
+}
+
+.markdown > h4 {
+  --ifm-h4-font-size: 1.125rem;
 }
 
 .markdown h1,
@@ -207,19 +211,6 @@ html[data-theme='dark'] {
   letter-spacing: -0.015em;
 }
 
-.markdown h3,
-.markdown h4,
-.markdown h5,
-.markdown h6 {
-  font-weight: 700;
-}
-
-html[data-theme='dark'] .markdown h3,
-html[data-theme='dark'] .markdown h4,
-html[data-theme='dark'] .markdown h5,
-html[data-theme='dark'] .markdown h6 {
-  font-weight: 660;
-}
 
 /* 正文用次级灰，加粗与标题回到主文字色 */
 .markdown strong {
