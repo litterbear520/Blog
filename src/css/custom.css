@@ -40,7 +40,7 @@
   --ifm-line-height-base: 1.65;
   --ifm-font-weight-semibold: 500;
   --ifm-font-weight-bold: 600;
-  --ifm-heading-font-weight: 600;
+  --ifm-heading-font-weight: 500;
   --ifm-heading-line-height: 1.25;
   --ifm-heading-color: var(--th-text);
   --ifm-global-radius: 0.5rem;
@@ -136,7 +136,7 @@ html[data-theme='dark'] {
 
   /* 深色下字重略降，抵消浅字在深底上的视觉加粗 */
   --ifm-font-weight-base: 360;
-  --ifm-heading-font-weight: 560;
+  --ifm-heading-font-weight: 460;
 
   --ifm-color-primary: #d97757;
   --ifm-color-primary-dark: #c6613f;
@@ -189,7 +189,7 @@ html[data-theme='dark'] {
    排版细节
    ═══════════════════════════════════════════ */
 
-/* 标题：统一半粗，靠字号拉开层级（h4 比正文大一档，不与正文同大） */
+/* 标题：h1/h2 中等字重 + 微收字距；h3 以下半粗 */
 .markdown h1:first-child {
   --ifm-h1-font-size: 2.25rem;
 }
@@ -199,11 +199,7 @@ html[data-theme='dark'] {
 }
 
 .markdown > h3 {
-  --ifm-h3-font-size: 1.375rem;
-}
-
-.markdown > h4 {
-  --ifm-h4-font-size: 1.125rem;
+  --ifm-h3-font-size: 1.25rem;
 }
 
 .markdown h1,
@@ -211,6 +207,12 @@ html[data-theme='dark'] {
   letter-spacing: -0.015em;
 }
 
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  font-weight: 600;
+}
 
 /* 正文用次级灰，加粗与标题回到主文字色 */
 .markdown strong {
