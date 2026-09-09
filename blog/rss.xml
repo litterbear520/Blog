@@ -13,6 +13,7 @@
             <link>https://huangsitao.fun/blog/voice-agent-memory</link>
             <guid>https://huangsitao.fun/blog/voice-agent-memory</guid>
             <pubDate>Wed, 09 Sep 2026 00:00:00 GMT</pubDate>
+            <description><![CDATA[在调研语音代理的记忆模块实现时，我看到了一篇文章，讲的是为什么语音代理的记忆问题比想象中更难。作为记忆模块的开发者，我在开发语音代理的过程中也遇到了文章提到的许多问题，读来感同身受。语音代理和文本代理有很大不同，许多问题尤其棘手，其中响应速度和准确性是我面临的最大挑战。接下来，我会参考这篇文章，结合自己的实践，分享一些思考和体会。]]></description>
         </item>
         <item>
             <title><![CDATA[HTML 的惊人效果]]></title>
