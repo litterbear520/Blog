@@ -8,6 +8,8 @@ import styles from './InfoCards.module.css';
  *   <Card title="..." sub="...">正文</Card>
  * </CardGrid>
  * <LinkCallout label="参考实现" href="..." linkText="...">正文</LinkCallout>
+ * <SkillList items={[['search-discovery', '搜索与发现'], ...]} />
+ *   卡片里的技能清单：中文名为主，英文技能 id 作小号对照
  */
 export function CardGrid({ columns = 3, numbered = false, children }) {
   return (
@@ -27,6 +29,19 @@ export function Card({ title, sub, tone, children }) {
       {sub && <i className={styles.sub}>{sub}</i>}
       <div className={styles.body}>{children}</div>
     </div>
+  );
+}
+
+export function SkillList({ items }) {
+  return (
+    <ul className={styles.skills}>
+      {items.map(([id, name]) => (
+        <li key={id}>
+          <span className={styles.skillName}>{name}</span>
+          <code className={styles.skillId}>{id}</code>
+        </li>
+      ))}
+    </ul>
   );
 }
 
