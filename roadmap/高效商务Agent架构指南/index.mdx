@@ -4,29 +4,11 @@ title: 高效商务 Agent 架构指南
 description: 让线上买卖更顺畅的 Agent：架构、延迟与成本技巧、评测实践。
 ---
 
-import { CardGrid, Card, LinkCallout, SkillList } from '@site/src/components/InfoCards';
+import { CardGrid, Card, SkillList } from '@site/src/components/InfoCards';
 
 # 高效商务 Agent 架构指南
 
 让线上买卖更顺畅的 Agent：架构、延迟与成本技巧、评测实践。
-
-:::note[来源]
-本文译自 Anthropic 官方博客 [A guide to the anatomy of effective commerce agents](https://claude.com/blog/the-anatomy-of-effective-commerce-agents)，作者 Matthew Koen 与 Ali Shazal。
-:::
-
-过去一年里，我们与商务行业的众多团队合作——零售商、电商平台、旅行、娱乐和电信运营商——用 Claude 构建商务 Agent。
-
-这些 Agent 已经在生产环境中运行，企业客户使用后看到了更大的购物车和更高效的卖家运营。它们还共享一套简单的架构：一个运行在 Agent 循环中的 Claude，配上一组技能、工具和一套扎实的评测集。
-
-本文面向正在构建这类（或其他面向消费者的）Agent 的工程师与工程负责人。第一部分讲架构，这是你只需决定一次的事。第二部分讲延迟与成本。第三部分讲生产：记忆、安全、评测，以及如何在整个组织内推进这项工作。
-
-<LinkCallout
-  label="参考实现"
-  href="https://github.com/anthropics/commerce-agents"
-  linkText="anthropics/commerce-agents →"
->
-  我们还提供了一份**蓝图**，帮助你在 Claude 上构建商务 Agent。它包含工程团队让商务 Agent 在几天内跑起来所需的 harness（运行 Agent 的宿主程序）、模式和护栏，并附有面向零售、旅行、电信和票务平台的购物 Agent 与商家 Agent 参考实现。
-</LinkCallout>
 
 ## 01 架构
 
@@ -409,6 +391,6 @@ harness 为每个会话维护一份记录，记下服务端交给模型的每一
 
 商务一直都在奖励那些把购买过程做得尽可能顺畅的人。Agent 让这件事容易了很多。去看看[完整的参考实现](https://github.com/anthropics/commerce-agents)，里面同时包含消费者 Agent 和商家 Agent，以及零售、旅行、电信和娱乐领域可运行的示例。
 
-### 致谢
+---
 
-*作者：Matthew Koen 与 Ali Shazal。特别感谢 Michael Segner、Rodrigo Olivares、Amandeep Khurana、Aiza Usman、John Lopus 以及其他人的贡献。*
+*译自 Anthropic 博客 [The anatomy of effective commerce agents](https://claude.com/blog/the-anatomy-of-effective-commerce-agents)，作者 Matthew Koen、Ali Shazal；配套参考实现 [anthropics/commerce-agents](https://github.com/anthropics/commerce-agents)。*
