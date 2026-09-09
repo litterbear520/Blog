@@ -15,7 +15,7 @@ argument-hint: "[文章 slug]"
 
 1. **读文章，写隐喻。** 读 `blog/` 下对应文章全文，用一句话写出视觉隐喻：文章的核心动作或矛盾，落到一个具体物件上（"窗口里的大光标"、"两堆砖之间的虚线桥"、"放大镜下的 </>"）。隐喻只含一个主体，至多一个配角。
    完成标准：隐喻里每个物件都对应母题库里的一个母题，或能用 `paper` / `brush` / `dashed` 几笔拼出。母题库没有的物件先在配方里用原语拼；同一物件第二次用到时再提为母题加进 `lib/motifs.js`（局部坐标以 (0,0) 为中心，标称尺寸 600–750）。
-2. **选底色。** 读 `src/data/swatches.json`；排除 `src/pages/bloglist.js` 里已出现的 `swatch`，再排除 README 封面清单里 legacy 封面的近似色，优先挑从未用过的；都用过时保证与相邻两篇文章不同色。深色（clay / plum / mineral / olive / fig / sky）与浅色（peach / oat / heather / cactus / coral）在列表里交替出现。
+2. **选底色。** 读 `src/data/swatches.json`；排除 `src/pages/bloglist.js` 里已出现的 `swatch`，优先挑从未用过的；都用过时保证与相邻两篇文章不同色。深色（clay / plum / mineral / olive / fig / sky）与浅色（peach / oat / heather / cactus / coral）在列表里交替出现。
 3. **写配方。** 复制 `tools/covers/recipes/example.js` 为 `tools/covers/recipes/<slug>.js`，填 `swatch`、`seed`、`draw(d, m)`。主体用 `d.at({ x, y, s, rot }, () => m.xxx(d))` 摆在画布中央，高度占 60–80%；配角靠边或叠在主体上；星芒至多两个，放在空角。
 4. **渲染并看图。** 运行 `npm run cover -- <slug> --preview`，然后 Read `tools/covers/.preview/<slug>.png`，逐项核对：
    - 一眼能认出隐喻里的物件

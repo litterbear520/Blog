@@ -172,7 +172,7 @@
 }
 
 /* ═══════════════════════════════════════════
-   Card Visual — abstract decorative top
+   Card Visual — 涂鸦封面（透明 SVG + swatch 纯色底），整图居中不裁切
    ═══════════════════════════════════════════ */
 .cardVisual {
   position: relative;
@@ -185,69 +185,13 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 16px 0;
   transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 .card:hover .coverImg {
   transform: scale(1.05);
-}
-
-/* 涂鸦封面（透明 SVG + swatch 纯色底）：整图居中放入，不裁切 */
-.coverIllo {
-  object-fit: contain;
-  padding: 16px 0;
-}
-
-/* Amber accent — 教程 */
-.amber {
-  background:
-    radial-gradient(ellipse at 72% 22%, rgba(217, 158, 75, 0.55) 0%, transparent 55%),
-    radial-gradient(ellipse at 18% 78%, rgba(199, 130, 55, 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse at 88% 82%, rgba(240, 195, 120, 0.4) 0%, transparent 42%),
-    linear-gradient(155deg, #f0dec5 0%, #e8d2b4 50%, #dfc8a8 100%);
-}
-
-:global([data-theme='dark']) .amber {
-  background:
-    radial-gradient(ellipse at 72% 22%, rgba(180, 120, 50, 0.45) 0%, transparent 55%),
-    radial-gradient(ellipse at 18% 78%, rgba(160, 100, 40, 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 88% 82%, rgba(200, 155, 80, 0.35) 0%, transparent 42%),
-    linear-gradient(155deg, #4a3d28 0%, #3e3420 50%, #352d1c 100%);
-}
-
-/* Sage accent — AI */
-.sage {
-  background:
-    radial-gradient(ellipse at 28% 25%, rgba(130, 170, 140, 0.5) 0%, transparent 55%),
-    radial-gradient(ellipse at 78% 72%, rgba(110, 155, 145, 0.4) 0%, transparent 50%),
-    radial-gradient(ellipse at 48% 88%, rgba(145, 180, 160, 0.35) 0%, transparent 45%),
-    linear-gradient(155deg, #d5e2d3 0%, #c8d8c5 50%, #bed0ba 100%);
-}
-
-:global([data-theme='dark']) .sage {
-  background:
-    radial-gradient(ellipse at 28% 25%, rgba(80, 120, 90, 0.4) 0%, transparent 55%),
-    radial-gradient(ellipse at 78% 72%, rgba(65, 105, 95, 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse at 48% 88%, rgba(90, 130, 105, 0.3) 0%, transparent 45%),
-    linear-gradient(155deg, #2a3528 0%, #243020 50%, #202a1e 100%);
-}
-
-/* Terra accent — 比赛 */
-.terra {
-  background:
-    radial-gradient(ellipse at 62% 28%, rgba(185, 120, 90, 0.5) 0%, transparent 55%),
-    radial-gradient(ellipse at 15% 68%, rgba(170, 105, 80, 0.4) 0%, transparent 50%),
-    radial-gradient(ellipse at 82% 82%, rgba(200, 145, 110, 0.35) 0%, transparent 42%),
-    linear-gradient(155deg, #e2cfc0 0%, #d8c2b0 50%, #cfb8a5 100%);
-}
-
-:global([data-theme='dark']) .terra {
-  background:
-    radial-gradient(ellipse at 62% 28%, rgba(140, 80, 55, 0.45) 0%, transparent 55%),
-    radial-gradient(ellipse at 15% 68%, rgba(125, 70, 48, 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse at 82% 82%, rgba(155, 100, 70, 0.3) 0%, transparent 42%),
-    linear-gradient(155deg, #3e2e22 0%, #342820 50%, #2d221a 100%);
 }
 
 /* ═══════════════════════════════════════════
@@ -277,19 +221,12 @@
   letter-spacing: -0.01em;
 }
 
-.cardDesc {
-  font-size: 14px;
-  color: var(--text-2);
-  line-height: 1.65;
-  margin: 0;
-  flex: 1;
-}
-
 .cardFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
+  margin-top: auto;
+  padding-top: 20px;
 }
 
 .cardTag {
