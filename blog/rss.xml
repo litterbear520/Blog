@@ -4,10 +4,16 @@
         <title>小熊的博客 Blog</title>
         <link>https://huangsitao.fun/blog</link>
         <description>小熊的博客 Blog</description>
-        <lastBuildDate>Wed, 08 Jul 2026 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 09 Sep 2026 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
+        <item>
+            <title><![CDATA[语音代理中的记忆问题比你想的更难]]></title>
+            <link>https://huangsitao.fun/blog/voice-agent-memory</link>
+            <guid>https://huangsitao.fun/blog/voice-agent-memory</guid>
+            <pubDate>Wed, 09 Sep 2026 00:00:00 GMT</pubDate>
+        </item>
         <item>
             <title><![CDATA[HTML 的惊人效果]]></title>
             <link>https://huangsitao.fun/blog/html-effectiveness</link>
