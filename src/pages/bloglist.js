@@ -9,6 +9,16 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '语音代理中的记忆问题比你想的更难',
+    date: '2026-09-09',
+    slug: 'voice-agent-memory',
+    description: '',
+    category: 'AI',
+    accent: 'sage',
+    swatch: 'plum',
+    cover: '/img/blog/cover-voice-agent-memory.svg',
+  },
+  {
     title: 'HTML 的惊人效果',
     date: '2026-07-08',
     slug: 'html-effectiveness',

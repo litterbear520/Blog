@@ -73,3 +73,4 @@ legacy 封面已用的近似色：clay（陶土橘）、sky（板岩蓝）、pea
 | subscribe-claude | 陶土橘（≈clay） | cover-subscribe-claude-doodle.png，头图 hero-subscribe-claude.png | legacy/cover-subscribe-doodle.html、legacy/hero-subscribe-ticket.html |
 | ai-and-depth | 板岩蓝（≈sky） | cover-ai-tools-bridge.png | legacy/cover-bridge.html |
 | tianchi-top2 | 牛皮纸金（≈peach） | cover-tianchi-top2.png | legacy/cover-tianchi.html |
+| voice-agent-memory | plum | cover-voice-agent-memory.svg | recipes/voice-agent-memory.js |
