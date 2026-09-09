@@ -12,9 +12,7 @@ const POSTS = [
     title: '语音代理中的记忆问题比你想的更难',
     date: '2026-09-09',
     slug: 'voice-agent-memory',
-    description: '',
     category: 'AI',
-    accent: 'sage',
     swatch: 'plum',
     cover: '/img/blog/cover-voice-agent-memory.svg',
   },
@@ -22,51 +20,41 @@ const POSTS = [
     title: 'HTML 的惊人效果',
     date: '2026-07-08',
     slug: 'html-effectiveness',
-    description:
-      'HTML 比 Markdown 更具表现力——用它渲染 diff、原型、报告和一次性编辑器。六大核心用例与提示词精华。',
     category: 'AI',
-    accent: 'sage',
-    cover: '/img/blog/cover-html-effectiveness.png',
+    swatch: 'oat',
+    cover: '/img/blog/cover-html-effectiveness.svg',
   },
   {
     title: '探索你的未知领域',
     date: '2026-07-04',
     slug: 'fable-guide',
-    description:
-      '一篇关于 Fable 的实用指南：如何找到你的"未知之未知"。',
     category: 'AI',
-    accent: 'sage',
-    cover: '/img/blog/cover-fable-unknowns.png',
+    swatch: 'mineral',
+    cover: '/img/blog/cover-fable-guide.svg',
   },
   {
     title: '如何自己订阅Claude',
     date: '2026-05-08',
     slug: 'subscribe-claude',
-    description:
-      '使用国内银行卡通过 Google Play 订阅 Claude Pro / ChatGPT Plus，两种方案分别适合不同用户。',
     category: '教程',
-    accent: 'amber',
-    cover: '/img/blog/cover-subscribe-claude-doodle.png',
+    swatch: 'peach',
+    cover: '/img/blog/cover-subscribe-claude.svg',
   },
   {
     title: '善用工具弥补技术深度',
     date: '2026-03-13',
     slug: 'ai-and-depth',
-    description:
-      '探讨在没有技术深度但善于使用AI工具的情况下，能否弥补技术深度鸿沟。',
     category: 'AI',
-    accent: 'sage',
-    cover: '/img/blog/cover-ai-tools-bridge.png',
+    swatch: 'sky',
+    cover: '/img/blog/cover-ai-and-depth.svg',
   },
   {
     title: '阿里天池二手车价格预测Top2分享',
     date: '2025-07-04',
     slug: 'tianchi-top2',
-    description:
-      '从迷茫到第二名，分享比赛中一步步提升分数的方案与心得。',
     category: '比赛',
-    accent: 'terra',
-    cover: '/img/blog/cover-tianchi-top2.png',
+    swatch: 'cactus',
+    cover: '/img/blog/cover-tianchi-top2.svg',
   },
 ];
 
@@ -131,21 +119,16 @@ export default function BlogListPage() {
               style={{ '--delay': `${i * 120}ms` }}
             >
               <div
-                className={clsx(styles.cardVisual, !post.swatch && styles[post.accent])}
-                style={post.swatch ? { background: SWATCHES[post.swatch] } : undefined}
+                className={styles.cardVisual}
+                style={{ background: SWATCHES[post.swatch] }}
               >
-                <CoverImage
-                  src={withBaseUrl(post.cover)}
-                  alt={post.title}
-                  illo={Boolean(post.swatch)}
-                />
+                <CoverImage src={withBaseUrl(post.cover)} alt={post.title} />
               </div>
               <div className={styles.cardContent}>
                 <time className={styles.cardDate}>
                   {formatDate(post.date)}
                 </time>
                 <h2 className={styles.cardTitle}>{post.title}</h2>
-                <p className={styles.cardDesc}>{post.description}</p>
                 <div className={styles.cardFooter}>
                   <span className={styles.cardTag}>{post.category}</span>
                   <span className={styles.cardArrow}>→</span>
@@ -159,14 +142,14 @@ export default function BlogListPage() {
   );
 }
 
-function CoverImage({ src, alt, illo }) {
+function CoverImage({ src, alt }) {
   const [error, setError] = React.useState(false);
 
   if (error) return null;
 
   return (
     <img
-      className={clsx(styles.coverImg, illo && styles.coverIllo)}
+      className={styles.coverImg}
       src={src}
       alt={alt}
       loading="eager"

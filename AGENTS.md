@@ -26,7 +26,7 @@ npm run clear                # 清理 Docusaurus 缓存
 ## 项目结构
 
 ```
-├── blog/                          # 博客文章（5 篇，含 category/cover 元数据）
+├── blog/                          # 博客文章（6 篇，含 category/cover 元数据）
 ├── roadmap/                       # 路线：开源项目学习日志（第二个 docs 实例，/roadmap 路由）
 ├── docs/                          # 笔记文档（15 个分类目录）
 │   ├── Agent/                     # 智能体
@@ -124,10 +124,10 @@ sidebar_position: 1
 文章放在 `blog/` 目录，同时需要在 `src/pages/bloglist.js` 的 `POSTS` 数组中添加元数据：
 
 ```javascript
-{ title, date: 'YYYY-MM-DD', slug, description, category: '教程'|'AI'|'比赛', accent, cover, swatch }
+{ title, date: 'YYYY-MM-DD', slug, category: '教程'|'AI'|'比赛', swatch, cover }
 ```
 
-`swatch`（底色名，见 `src/data/swatches.json`）配透明 SVG 封面用；有它时卡片用纯色底、整图居中，没有它时用 `accent` 渐变底 + PNG 裁切。
+卡片只显示日期、标题、分类，没有一句话介绍。`swatch`（底色名，见 `src/data/swatches.json`）是卡片纯色底，`cover` 是透明 SVG 封面，整图居中不裁切。
 
 ### 路线日志
 

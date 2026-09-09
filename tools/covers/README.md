@@ -26,7 +26,7 @@ npm run cover -- --all --preview    # 重渲所有配方
 | `lib/doodle.js` | 绘图原语：brush / cutout / edges / paper / blob / ring / dot / dashed / sparkle / at |
 | `lib/motifs.js` | 母题库（15 个）；局部坐标以 (0,0) 为中心，标称尺寸 600–750 |
 | `recipes/*.js` | 每篇文章一个配方：`{ swatch, seed, draw(d, m) }` |
-| `legacy/` | v1 浏览器截图流水线：现有 5 张 PNG 封面和 1 张头图的配方，仅供追溯 |
+| `legacy/` | v1 浏览器截图流水线：只剩订阅文章头图 hero-subscribe-claude.png 的配方，仅供追溯 |
 | `.preview/` | 预览 PNG，已 gitignore |
 
 ## 绘图原语（`d`）
@@ -62,15 +62,15 @@ npm run cover -- --all --preview    # 重渲所有配方
 `src/data/swatches.json`，取自 claude.com 品牌色板：
 clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `#827dbd` · mineral `#629987` · heather `#cbcadb` · oat `#e3dacc` · olive `#788c5d` · coral `#ebcece` · fig `#c46686`
 
-legacy 封面已用的近似色：clay（陶土橘）、sky（板岩蓝）、peach（牛皮纸金）、heather（淡紫）、cactus（鼠尾草绿）。新文章优先挑清单里没出现过的。
+新文章优先挑清单里没出现过的，并让列表里相邻两篇深浅交替。
 
 ## 封面清单
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
-| html-effectiveness | 鼠尾草绿（≈cactus） | cover-html-effectiveness.png | legacy/cover-html.html |
-| fable-guide | 淡紫（≈heather） | cover-fable-unknowns.png | legacy/cover-fable.html |
-| subscribe-claude | 陶土橘（≈clay） | cover-subscribe-claude-doodle.png，头图 hero-subscribe-claude.png | legacy/cover-subscribe-doodle.html、legacy/hero-subscribe-ticket.html |
-| ai-and-depth | 板岩蓝（≈sky） | cover-ai-tools-bridge.png | legacy/cover-bridge.html |
-| tianchi-top2 | 牛皮纸金（≈peach） | cover-tianchi-top2.png | legacy/cover-tianchi.html |
 | voice-agent-memory | plum | cover-voice-agent-memory.svg | recipes/voice-agent-memory.js |
+| html-effectiveness | oat | cover-html-effectiveness.svg | recipes/html-effectiveness.js |
+| fable-guide | mineral | cover-fable-guide.svg | recipes/fable-guide.js |
+| subscribe-claude | peach | cover-subscribe-claude.svg，头图 hero-subscribe-claude.png（legacy/hero-subscribe-ticket.html） | recipes/subscribe-claude.js |
+| ai-and-depth | sky | cover-ai-and-depth.svg | recipes/ai-and-depth.js |
+| tianchi-top2 | cactus | cover-tianchi-top2.svg | recipes/tianchi-top2.js |
