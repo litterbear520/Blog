@@ -1,4 +1,202 @@
-<!doctype html><html data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.2"><title data-rh=true></title><link rel=alternate type=application/rss+xml href=/blog/rss.xml title="小熊的博客 RSS Feed"><link rel=alternate type=application/atom+xml href=/blog/atom.xml title="小熊的博客 Atom Feed"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><link rel=stylesheet href=/assets/css/styles.cfcc6007.css /><script src=/assets/js/runtime~main.31a6a85f.js defer></script><script src=/assets/js/main.d2186014.js defer></script></head><body><svg style="display: none;"><defs>
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-roadmap docs-version-current docs-doc-page docs-doc-id-高效商务Agent架构指南/index" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.2"><title data-rh=true>高效商务 Agent 架构指南 | 小熊的博客</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://huangsitao.fun/img/docusaurus-social-card.jpg /><meta data-rh=true name=twitter:image content=https://huangsitao.fun/img/docusaurus-social-card.jpg /><meta data-rh=true property=og:url content=https://huangsitao.fun/roadmap/高效商务Agent架构指南/ /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-roadmap-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-roadmap-current /><meta data-rh=true property=og:title content="高效商务 Agent 架构指南 | 小熊的博客"/><meta data-rh=true name=description content="让线上买卖更顺畅的 Agent：架构、延迟与成本技巧、评测实践。"/><meta data-rh=true property=og:description content="让线上买卖更顺畅的 Agent：架构、延迟与成本技巧、评测实践。"/><link data-rh=true rel=icon href=/img/icon2.png /><link data-rh=true rel=canonical href=https://huangsitao.fun/roadmap/高效商务Agent架构指南/ /><link data-rh=true rel=alternate href=https://huangsitao.fun/roadmap/高效商务Agent架构指南/ hreflang=en /><link data-rh=true rel=alternate href=https://huangsitao.fun/roadmap/高效商务Agent架构指南/ hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://huangsitao.fun/roadmap/高效商务Agent架构指南/","name":"高效商务 Agent 架构指南","position":1}]}</script><link rel=alternate type=application/rss+xml href=/blog/rss.xml title="小熊的博客 RSS Feed"><link rel=alternate type=application/atom+xml href=/blog/atom.xml title="小熊的博客 Atom Feed"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><link rel=stylesheet href=/assets/css/styles.0c2d2ad9.css /><script src=/assets/js/runtime~main.4ec9729c.js defer></script><script src=/assets/js/main.7b3533f9.js defer></script></head><body><svg style="display: none;"><defs>
 <symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
 </defs></svg>
-<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-3a6")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||"dark"),document.documentElement.setAttribute("data-theme-choice",t||"dark")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus></div></body>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-3a6")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||"dark"),document.documentElement.setAttribute("data-theme-choice",t||"dark")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><link rel=preload as=image href=/img/icon.png /><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/icon.png alt="Blog Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/icon.png alt="Blog Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div></a><a class="navbar__item navbar__link" href=/docs/MCP>笔记</a><a class="navbar__item navbar__link" href=/bloglist>博文</a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/roadmap>路线</a><a class="navbar__item navbar__link" href=/skills>Skills</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href=https://github.com/litterbear520/Blog target=_blank rel="noopener noreferrer" class="navbar__item navbar__link header-github-link" aria-label="GitHub 仓库"></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><circle cx=12 cy=12 r=4 /><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg><svg viewBox="0 0 24 24" width=24 height=24 fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><rect width=20 height=14 x=2 y=3 rx=2 /><path d="M8 21h8"/><path d="M12 17v4"/></svg></button></div><div class=navbarSearchContainer_Bca1></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class=sidebar_njMd><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/roadmap/><span class=linkLabel_WmDU>前言</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current=page href=/roadmap/高效商务Agent架构指南/><span class=linkLabel_WmDU>高效商务 Agent 架构指南</span></a></ul></nav></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>高效商务 Agent 架构指南</span></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>高效商务 Agent 架构指南</h1></header>
+<p>让线上买卖更顺畅的 Agent：架构、延迟与成本技巧、评测实践。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=01-架构>01 架构<a href=#01-架构 class=hash-link aria-label="Direct link to 01 架构" title="Direct link to 01 架构" translate=no>​</a></h2>
+<p>一个模型跑在标准的 Agent 循环里，用技能覆盖长尾需求，用工具调用你已有的系统。这个架构决定做一次就够了。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=什么是商务-agent>什么是商务 Agent？<a href=#什么是商务-agent class=hash-link aria-label="Direct link to 什么是商务 Agent？" title="Direct link to 什么是商务 Agent？" translate=no>​</a></h3>
+<p>我们把商务 Agent 定义为：让在线商品目录上的买卖变得更简单的 Agent。</p>
+<p>有些 Agent 面向消费者：它们搜索、比较、找替代品，并组装出订单。这可能是一个零售购物车、一份旅行行程、一次手机套餐变更，或是为一场演出锁定的座位。有些 Agent 面向商家：它们回答销售问题，运行促销和营销活动，管理库存与定价。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/commerce-agent-overview-06de8be4a6695293d1b97f0fd77b72bf.png width=1520 height=994 class=img_ev3q /></span></p>
+<p>核心架构是一个运行在<a href=https://www.anthropic.com/engineering/building-effective-agents target=_blank rel="noopener noreferrer" class="">标准 Agent 循环</a>中的模型：围绕目标推理，探索上下文，通过工具采取行动，通过技能学习流程，提出澄清问题，并观察结果，直到目标达成。</p>
+<p>它前面没有先把对话按意图分流的路由器，后面也没有一组按领域划分的专用 Agent。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=工程化上下文>工程化上下文<a href=#工程化上下文 class=hash-link aria-label="Direct link to 工程化上下文" title="Direct link to 工程化上下文" translate=no>​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=用技能而不是子代理>用技能，而不是子代理<a href=#用技能而不是子代理 class=hash-link aria-label="Direct link to 用技能，而不是子代理" title="Direct link to 用技能，而不是子代理" translate=no>​</a></h4>
+<p>商务 Agent 需要覆盖众多品类和意图下的大量能力，这很容易让人想为每个领域建一个子代理。</p>
+<p>实践中这种做法效果并不好，因为一次商务对话会横跨多个意图和多个轮次，前后紧密关联，需要大量共享的上下文。</p>
+<p>在子代理架构里，购物车（商家侧则是暂存的变更）、用户偏好和对话历史都握在编排器手里。</p>
+<p>每次把任务交给子代理，这些状态都会丢掉一部分，子代理的回复质量往往因此下降，最终拖累整体回复。除此之外，每次交接还可能多花数倍的 token，多出好几秒延迟。</p>
+<p>各个领域之间也很少能切得干净。一个退货流程可能同时要用到订单历史、当前购物车和商品目录，“一个领域一个子代理”的方案就只剩两条路：要么每个子代理都重复接入这些数据，要么任务做到一半再交接给别的子代理。</p>
+<p>而且模型越来越聪明，能处理的上下文、技能和工具也越来越多。今天这些“什么该放在哪”的规则，背后都是当前模型的能力限制，每出一代新模型，这些限制都会放宽。</p>
+<p>更好的办法是用 <a href=https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview target=_blank rel="noopener noreferrer" class="">Agent 技能</a>。它同样能按领域做模块化、控制上下文，却没有交接的代价：技能指令是加载进主 Agent 的，而主 Agent 手里一直有完整的对话历史。</p>
+<p>在我们对多个企业部署的对比中，“单个 Agent + 技能”在质量上始终优于“一个提示词包打天下”和子代理这两种设计，而且每个任务的成本和延迟往往还更低。</p>
+<p>子代理真正有用的场景是：任务范围窄、自成一体，而且放进独立的上下文窗口反而更好。这时编排器可以把子代理当作一个工具来调用。</p>
+<p>一个常见的生产例子是深度研究子代理：子代理搜索并阅读文档、编写并运行代码、遍历数据模型，中途也会走不少弯路。所有这些工作都发生在一个或多个子代理内部，只有一个精简的答案返回给编排器。</p>
+<p>另一个例外是某个领域已经有自己的专用 Agent。比如你的药房或金融服务业务本来就跑着一个专用 Agent，有自己的一套合规要求，那正确的做法可能是交接（hand-off）：由那个 Agent 接管任务，在它自己的循环里直接和用户交互，直到任务完成。</p>
+<p>交接和委托的区别在于对话归谁。交接之后，用户面对的就是领域 Agent；委托则是编排器仍然握着对话，在一个轮次里反复把任务丢给领域 Agent 再收回来，每来回一次质量就折损一次。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=放系统提示词还是放技能按频率决定>放系统提示词还是放技能：按频率决定<a href=#放系统提示词还是放技能按频率决定 class=hash-link aria-label="Direct link to 放系统提示词还是放技能：按频率决定" title="Direct link to 放系统提示词还是放技能：按频率决定" translate=no>​</a></h4>
+<p>决定一组指令放在系统提示词还是技能里，主要看 Agent 需要它的频率。加载一个技能要花掉一个模型轮次，所以 Agent 在大多数轮次都需要的东西，一般都放进系统提示词。</p>
+<p>不过，这也取决于你的流量分布，以及评测显示出来的 Agent 行为。一个不错的起点是：凡是与三分之一以上流量相关的内容——无论是上线前预估的还是生产中观察到的——都放进系统提示词，其余放进技能。</p>
+<p>如果某个技能可以从你已有的信号预测出来，比如用户是从哪个页面进来的，我们建议在第一次模型调用之前就由 harness（包裹模型的运行框架，负责拼装上下文、执行工具、把结果送回模型；下同）注入它，省掉加载技能的那一个额外轮次。</p>
+<p>关键指令，比如安全与法律规则、品牌约束，以及过敏史这类关键用户事实，始终放在系统提示词里。</p>
+<p>对商务 Agent 来说，这意味着商品搜索放在提示词里，因为几乎每个会话都会用到它；技能则负责那些用得少但种类多的长尾功能。</p>
+<p>在我们的<a href=https://github.com/anthropics/commerce-agents target=_blank rel="noopener noreferrer" class="">参考实现</a>中，购物 Agent 的提示词包含有据作答的规则（grounding）、购物车与结账规则以及展示规则，其余由下面这些技能覆盖：search-discovery、purchase-research、planning-goals、customer-care 和 memory-personalization。</p>
+<p>商家 Agent 也是同样的拆法，技能为 performance-insights、catalog-listings、inventory-operations、pricing-promotions 和 marketing-campaigns，每个运营领域一个。</p>
+<div class="grid_iMUt " style=--cards-columns:3><div class="card_qitG accent_E7qx"><b class=title_ILVj>放在提示词里</b><i class=sub_TDuo>购物 Agent</i><div class=body_m8DY><p>有据作答规则、购物车与结账规则、展示规则，以及商品搜索。</div></div><div class="card_qitG "><b class=title_ILVj>购物技能</b><i class=sub_TDuo>长尾</i><div class=body_m8DY><ul class=skills_Dc1Y><li><span class=skillName_mGa6>搜索与发现</span><code class=skillId_ON9w>search-discovery</code><li><span class=skillName_mGa6>购前调研</span><code class=skillId_ON9w>purchase-research</code><li><span class=skillName_mGa6>目标规划</span><code class=skillId_ON9w>planning-goals</code><li><span class=skillName_mGa6>售后服务</span><code class=skillId_ON9w>customer-care</code><li><span class=skillName_mGa6>记忆与个性化</span><code class=skillId_ON9w>memory-personalization</code></ul></div></div><div class="card_qitG "><b class=title_ILVj>商家技能</b><i class=sub_TDuo>每个运营领域一个</i><div class=body_m8DY><ul class=skills_Dc1Y><li><span class=skillName_mGa6>业绩洞察</span><code class=skillId_ON9w>performance-insights</code><li><span class=skillName_mGa6>商品信息维护</span><code class=skillId_ON9w>catalog-listings</code><li><span class=skillName_mGa6>库存与运营</span><code class=skillId_ON9w>inventory-operations</code><li><span class=skillName_mGa6>定价与促销</span><code class=skillId_ON9w>pricing-promotions</code><li><span class=skillName_mGa6>营销活动</span><code class=skillId_ON9w>marketing-campaigns</code></ul></div></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=工程化-agent-工具>工程化 Agent 工具<a href=#工程化-agent-工具 class=hash-link aria-label="Direct link to 工程化 Agent 工具" title="Direct link to 工程化 Agent 工具" translate=no>​</a></h3>
+<p>我们在<a href=https://www.anthropic.com/engineering/writing-tools-for-agents target=_blank rel="noopener noreferrer" class="">为 Agent 编写高效工具</a>一文中讨论了工具设计的一般原则。在商务场景下，最重要的有两点：</p>
+<p><strong>把 Agent 工具建在你的核心系统和逻辑之上。</strong></p>
+<p>一家商务公司已经有搜索与排序、购物车、偏好与用户档案存储、库存系统、促销与营销活动引擎、销售分析等等，每一个都封装着多年调优的逻辑，并且能看到模型永远看不到的信号。</p>
+<p>Agent 的工具应该调用这些系统，而不是重新实现它们。工具边界就是分界线：线的一侧是这些系统的逻辑，另一侧交给模型的判断。</p>
+<p>举例来说，当 Agent 调用 <code>search_products</code> 时，返回的结果应该已经排好序；Agent 的工作是决定哪些结果符合用户的目标、展示多少条、以及如何呈现。</p>
+<p><strong>工具结果就是上下文。</strong></p>
+<p>工具返回的内容会原样进入模型的上下文，所以只返回模型推理要用的字段，其余的丢掉。最常见的冗余，就是每条搜索结果都带着一个图片 URL。</p>
+<p>必要时在工具内部把原始响应整理一遍；如果光看数据看不出下一步该做什么，就在结果里附一句下一步该怎么做。</p>
+<p>出错时尤其要这样做，因为一句指令对模型的帮助远大于一个错误码。例如，不要只返回一个笼统的 403，而是返回“查询库存时请带上商品 ID”。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=ui-组件就是工具>UI 组件就是工具<a href=#ui-组件就是工具 class=hash-link aria-label="Direct link to UI 组件就是工具" title="Direct link to UI 组件就是工具" translate=no>​</a></h4>
+<p>大多数商务 Agent 的回复都是 UI 组件而不是文字——商品轮播、行程、座位图、图表。这意味着 Agent 要输出的是结构化数据（schema），而不是文本。</p>
+<p>有些团队一开始会提示模型输出自定义标签，然后在客户端解析。随着界面变多，这种做法会失效，因为：</p>
+<ul>
+<li class="">模型没怎么见过你自定义的标记，对工具调用却训练得很充分，所以嵌套组件一多，可靠性就会下降。光靠提示词保证不了数据格式正确。</li>
+<li class="">标签定义住在系统提示词里，所以每新增一个组件都会让上下文膨胀，每次编辑都可能让提示词的其他部分出现回归。</li>
+<li class="">历史对话最终以只有你的解析器才能读的格式存下来。以后加载历史时，要么在客户端重新解析原始消息，要么另存一份副本，而这份副本又不是模型 API 原生支持的格式。</li>
+</ul>
+<p>经受住考验的模式是：把每个 UI 组件做成一个工具。模型带着类型化参数调用 <code>present_products</code>、<code>present_itinerary</code> 或 <code>present_plan_comparison</code>；你的服务端校验并补全这次调用，然后发出一个事件；你的客户端负责渲染。</p>
+<p>由于组件就是工具调用，它们本来就以原生格式存在于 messages 数组中，重新加载旧对话时不需要再解析一遍。下面的动图和<a href=https://github.com/anthropics/commerce-agents target=_blank rel="noopener noreferrer" class="">参考仓库</a>里有一个展示工具（presentation tool）接口定义的示例。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/presentation-tool-d37cbb499f19136172fe01164f7d3a83.gif width=920 height=430 class=img_ev3q /></span></p>
+<p>代价是流式输出的粒度变粗。工具调用的每个顶层参数都要先在服务端攒齐才能校验，所以即便开了流式输出，展示工具的各个子组件也是一块一块到达的。这会影响感知延迟。</p>
+<p>要获得 token 级别的流，可以在工具定义上设置 <code>eager_input_streaming: true</code>，它会跳过缓冲，代价是服务端不再保证参数符合 schema。</p>
+<p>在我们的评测中，Claude Sonnet 级别及以上的模型极少出现 schema 违规，但还是要给调用包一层重试，以应对偶尔漏网的情况。</p>
+<p>展示工具还让 Agent 拥有一份“屏幕上有什么”的记录。当顾客说“第一家酒店”或“左边往下数第三个”时，布局就在 messages 数组里，在最后一次展示调用的参数中。</p>
+<p>要做到这一点，参数必须和实际渲染的布局一致，所以参数要按 UI 的结构来组织：有顺序的行和轮播，而不是一个扁平列表再由客户端自己排。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=02-实现快速且经济>02 实现快速且经济<a href=#02-实现快速且经济 class=hash-link aria-label="Direct link to 02 实现快速且经济" title="Direct link to 02 实现快速且经济" translate=no>​</a></h2>
+<p>从端到端延迟和感知延迟两个方向攻克延迟，成本靠缓存来压。这一切都不该以牺牲模型智能为代价。</p>
+<p>延迟在商务场景里很重要，面向消费者的界面对延迟最不宽容。但在 Agent 类界面上，我们反复观察到，真正拉动留存、参与度和购物车金额这些指标的是结果的质量。</p>
+<p>答案是否切题、任务是否真正完成，对这些指标的影响远大于在延迟上多抠几百毫秒。</p>
+<p>所以延迟要从两个方向攻：一是靠扎实的工程把端到端延迟压到最低，二是降低感知延迟，因为用户看着 Agent 在干活时，等待会被感受成进展。</p>
+<p>每个用户都有一个延迟预算，下面这些技巧能让 Agent 保持在预算之内，而不必为此牺牲智能。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=最小化任务完成延迟>最小化任务完成延迟<a href=#最小化任务完成延迟 class=hash-link aria-label="Direct link to 最小化任务完成延迟" title="Direct link to 最小化任务完成延迟" translate=no>​</a></h3>
+<p>任务完成延迟是所有模型轮次的耗时之和，每个轮次的耗时是从发出请求到最后一个 token 到达的时间，再加上工具处理时间。所以有三个杠杆可以拉：更少的轮次、更快的工具、更快的 token 输出。三者有时互相冲突，要最小化的是总和，而不是其中某一项。</p>
+<div class="grid_iMUt numbered_vU7r" style=--cards-columns:3><div class="card_qitG "><b class=title_ILVj>更少的轮次</b><div class=body_m8DY><p>预先加载可能用到的上下文，提升模型智能，并让模型并行调用相互独立的工具。</div></div><div class="card_qitG "><b class=title_ILVj>更快的工具</b><div class=body_m8DY><p>优化工具自身的后端，并在参数生成完毕时就提前派发工具。</div></div><div class="card_qitG "><b class=title_ILVj>更快的 token</b><div class=body_m8DY><p>把候选模型和配置在评测集上逐一跑一遍（sweep），据此选择。</div></div></div>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=更少的轮次>更少的轮次<a href=#更少的轮次 class=hash-link aria-label="Direct link to 更少的轮次" title="Direct link to 更少的轮次" translate=no>​</a></h4>
+<p>查询的复杂度会增加轮次，而这通常不在你的掌控之内。模型智能和相关的上下文能帮助 Agent 用更少的轮次完成任务。我们在这方面的一些关键经验包括：</p>
+<ul>
+<li class=""><strong>预先加载可能用到的上下文。</strong> 如果用户是从商品页打开助手的，或者商家是从营销活动看板打开的，就把那个页面的数据放进会话上下文。对话很可能就是围绕它展开的，而直接从上下文回答不会花掉额外的轮次。</li>
+<li class=""><strong>提升模型智能。</strong> 更聪明的模型规划和发起工具调用更高效，完成一个任务需要的总轮次更少，这往往足以抵消它每个 token 更慢的劣势。如果你的查询偏复杂，或者生产数据显示每个任务平均超过五个轮次左右，那么更聪明的模型往往反而是更快的那个。具体选哪个取决于你的流量，按下文“选择模型”所述跑评测来定。</li>
+<li class=""><strong>让模型并行调用相互独立的工具。</strong> 商务用例经常需要并行执行许多操作：搜索多个商品、查询多份政策文档、或从多个销售数据源拉取记录。并行调用能让多个互不依赖的查询在同一个轮次里完成，不额外消耗轮次。做法是提示模型在一个轮次里发出多个工具调用，你再把所有结果打包成一个数组，放在一条用户消息里返回给模型（参见<a href=https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use target=_blank rel="noopener noreferrer" class="">并行工具调用文档</a>）。</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=更快的工具>更快的工具<a href=#更快的工具 class=hash-link aria-label="Direct link to 更快的工具" title="Direct link to 更快的工具" translate=no>​</a></h4>
+<ul>
+<li class=""><strong>优化工具自身的后端。</strong> 有时一个工具确实需要在内部同时调用多个后端服务（即 fan-out）——比如商家 Agent 的“获取今日概况”查询，会分三次独立调用分别读取销售、库存和营销活动状态。但我们更常看到的是，工具层变成了把后端缺失的逻辑临时拼凑起来的地方：一个库存检查先调商品目录查 SKU，再按门店调库存服务，再调履约服务查截止时间，然后在工具自己的代码里套用替换规则和自提资格，最后才作答。这样的工具塞进了太多领域知识，规则一变就容易出错，而且这些逻辑本来就该放在上游系统里。发现自己在工具里写这种逻辑时，正确的修法是在后端做一个能直接回答这个问题的接口，再让 Agent 工具去调它。</li>
+<li class=""><strong>提前派发工具。</strong> 工具参数和其他 token 一样是从模型里一个个流出来的，所以 harness 不必等整个回复结束：哪个工具调用的参数先生成完，就先执行哪个，模型还在输出其他并行工具或内容块时，前面的工具已经在跑了。我们见过这一招把数秒的空档压缩到几百毫秒，<a href=https://code.claude.com/docs/en/agent-sdk/overview target=_blank rel="noopener noreferrer" class="">Claude Agent SDK</a> 默认就是这么做的。想让收益最大化，就提示模型把最慢的那个调用放在最前面发出。</li>
+</ul>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/eager-dispatch-cc473e3f0cc0f482eebeb796ea6ded93.gif width=920 height=396 class=img_ev3q /></span></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=感知延迟>感知延迟<a href=#感知延迟 class=hash-link aria-label="Direct link to 感知延迟" title="Direct link to 感知延迟" translate=no>​</a></h3>
+<p>感知延迟是从用户发出请求到屏幕上出现任何反应为止、用户实际感受到的等待时间。在面向消费者的用例中它尤其关键，任何交易摩擦都会影响结账率和收入。有两个技巧可以在不碰模型的前提下缩短它：</p>
+<ul>
+<li class=""><strong>组件一边生成一边流式输出。</strong> 一条渲染出来的商务回复通常有 500–700 个输出 token，不做流式输出，用户就要盯着转圈五秒甚至更久。展示工具的每个参数一生成完就发给客户端，让页面一块一块地渲染出来。</li>
+<li class=""><strong>展示工作过程。</strong> 在 Agent 收集上下文时，为每一步渲染一行简短的进度文字（例如“正在查找海边的酒店”）。这行文字可以直接由工具已有的参数生成（比如商品搜索的查询词），也可以给工具额外加一个 user_facing_message 参数，让模型自己来写。</li>
+</ul>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/perceived-latency-5ada4975a94756378870d78d86788e5f.gif width=920 height=484 class=img_ev3q /></span></p>
+<p><em>上面两个面板运行的是同一个 Agent，工具和提示词完全相同，只有 harness 不同。总耗时差不多，但用户看到内容的时间相差很大。</em></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=提示词缓存>提示词缓存<a href=#提示词缓存 class=hash-link aria-label="Direct link to 提示词缓存" title="Direct link to 提示词缓存" translate=no>​</a></h3>
+<p>提示词缓存是最大的降本空间，而商务流量特别适合它。命中缓存的输入 token 只要正常价格的十分之一；写入缓存虽然要多付约 25%，但一段前缀只要被第二次用到就回本了。面向客户、流量很大的应用有一个天然优势：用最便宜的默认 5 分钟缓存有效期，就能拿到很高的命中率。</p>
+<p>我们见过的最好的商务部署运行在 90–99% 的缓存命中率上，这也是你从一开始就该按它来设计的区间。我们的经验还表明，在约 100k token 的上下文规模下，读缓存还能让响应快 1.5 到 2 倍，上下文越长提速越明显，大致成线性。</p>
+<p>缓存按前缀匹配。一个请求从头开始和之前的请求逐字节比对，比到第一个不同的字节为止，前面这段都能从缓存读，后面的都要重新算。所以重要的不只是上下文里有什么，还有它们的先后顺序。把一个请求想成三段，按变化频率从低到高排列：</p>
+<ul>
+<li class=""><strong>全局段</strong>：系统提示词的绝大部分和工具定义，在每个会话中都完全相同。这是最热的一段缓存，流量上去之后基本不会过期。要保证它在不同轮次、不同会话之间逐字节完全一致，并在它末尾放一个缓存断点。</li>
+<li class=""><strong>会话段</strong>：每个用户的上下文和对话历史，跨会话不同，但在一个会话内保持稳定。这一段放在全局段之后。</li>
+<li class=""><strong>易变段</strong>：会话内会变化的任何东西，比如当前时间或当前页面。把它放在请求的最末尾，放法有两种：作为最新一条用户消息里一个带标签的块；或者在支持<a href=https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages target=_blank rel="noopener noreferrer" class="">对话中系统消息</a>的模型上，作为一条 system 角色消息追加在 messages 数组末尾。我们最常见到的错误是把时间戳或当前页面写在系统提示词开头，这样每次请求都会悄无声息地让整个缓存失效。</li>
+</ul>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/cache-segments-06c106e4f88ab08be3311569e7162510.png width=1520 height=920 class=img_ev3q /></span></p>
+<p>这里有两个实现细节要记住。第一，技能应该作为工具结果加载，而不是追加到系统提示词里。这样技能正文会落在对话前缀中，随之一起被缓存。</p>
+<p>第二，缓存断点要随着轮次往后挪：一个请求能放的断点数量有限，所以每来一轮就把最新的断点移到这轮用户消息的末尾。这样每一轮都能从缓存里读到此前累积的全部历史，包括搜索结果这类很长的工具返回。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/cache-breakpoints-964433be658ffee0f458fe098b505c0b.png width=1520 height=728 class=img_ev3q /></span></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=选择模型及其配置>选择模型及其配置<a href=#选择模型及其配置 class=hash-link aria-label="Direct link to 选择模型及其配置" title="Direct link to 选择模型及其配置" translate=no>​</a></h3>
+<p><a href=https://claude.com/blog/claude-model-and-effort-level-in-claude-code target=_blank rel="noopener noreferrer" class="">模型规模和 effort 设置</a>是同一种权衡——用智能换延迟和成本——两者都应该通过测量来选择：</p>
+<ol>
+<li class=""><strong>确定你的指标和底线。</strong> 选定业务真正看重的质量指标（任务完成率、答案相关性、回答是否有据可依），定下评测分数的底线，再定 p50 和 p99 的延迟与成本预算。</li>
+<li class=""><strong>逐一跑评测（sweep）。</strong> 在你会考虑的<em>每一个</em>模型和 effort 级别上跑完整的评测集。我们建议商家 Agent 从 Opus 起步，因为它们的任务以分析为主；面向消费者的 Agent 从 Sonnet 起步，因为延迟在那里权重更大。如果你有生产流量，就按真实的查询分布给结果加权。然后让数字来决定。有时 Opus 5 在促成加购、下单这类任务上的提升值得它相对 Sonnet 的成本差，有时不值得。</li>
+<li class=""><strong>仔细读结果。</strong> 有两件事经常让团队意外。第一，提示词是针对某一个模型调出来的，拿同一份提示词去跑所有候选，其他模型会吃亏。小模型往往需要把当前模型能自己推断的事写明白；大模型则会一字不差地执行那些小模型原本忽略掉的指令。所以在淘汰任何候选之前，先针对它失败的用例把提示词迭代几轮，这一步很便宜。第二，更聪明的配置有时反而延迟更低（最常见于 p90 和 p99），虽然它单个 token 更慢，但它规划工具调用更好，在最复杂的请求上需要的轮次更少。</li>
+</ol>
+<p>成本要按“每完成一个任务”来算，不要按“每次模型调用”算：便宜的模型如果需要更多轮次、或者更常失败，就不便宜。两个候选结果接近、成本又在单任务预算和延迟要求之内时，选更聪明的那个。质量才是推动用户采用和留存的东西，也给接下来半年随模型进步继续往上盖留出了余地。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=03-在生产环境中运行>03 在生产环境中运行<a href=#03-在生产环境中运行 class=hash-link aria-label="Direct link to 03 在生产环境中运行" title="Direct link to 03 在生产环境中运行" translate=no>​</a></h2>
+<p>记忆、安全、评测，以及在整个组织内推进这项工作：这些是让 Agent 通过生产考验并持续留在生产中的东西。</p>
+<p>最后谈谈让 Agent 上得了生产、也留得住的那些东西，下面分别展开：记忆、安全、评测，以及如何在整个组织里推进这项工作。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=跨会话留存的记忆>跨会话留存的记忆<a href=#跨会话留存的记忆 class=hash-link aria-label="Direct link to 跨会话留存的记忆" title="Direct link to 跨会话留存的记忆" translate=no>​</a></h3>
+<p>你与客户之间的关系和互动很重要。记忆让 Agent 能从上次对话停下的地方接着来，而不是从零开始。一位在三月提到过坚果过敏的顾客，不应该在六月再说一遍；一位每周一都查看同样三个营销活动的商家，不应该每次都要报出它们的名字。长期记忆——那些应该跨会话留存的事实——是一个你需要自己构建的系统，它有三个部分：事实如何存储、如何写入、如何读取。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=存储记忆>存储记忆<a href=#存储记忆 class=hash-link aria-label="Direct link to 存储记忆" title="Direct link to 存储记忆" translate=no>​</a></h4>
+<p>记忆应该存在你自己的系统里，而不是靠模型。</p>
+<p>当用户档案很小、且 Agent 是唯一读者时，一份扁平的 markdown 档案就够用了。大多数生产级商务 Agent 都会超出这个阶段，务实的替代方案是你已经在运营的那个数据库。一条事实就是一条小的类型化记录：一个键（如 shoe_size、default_store、preferred_report_cadence）、一个简短的值、一个类别，以及它来自哪个会话。有些键由你预先定义，每个用户都有；其余的由提取器（下文“写入记忆”里那个异步 Agent）自行发现。数据库在数据量涨起来之后依然可以查询，能让你针对某些属性写确定性的代码逻辑而不是全靠模型，还能和你已有的用户数据做关联。</p>
+<p>对面向商家的 Agent，记忆要按人而不是按账号来建键。商家登录账号经常由多个操作员共用，所以每个操作员都需要自己的档案，而读取必须遵守该操作员的权限：门店经理的 Agent 不应该回忆起区域经理说过的事实。</p>
+<p>在商务领域，Agent 记忆保存的是个人数据。值得记住的事实往往正是受监管最严的那些，而不同司法辖区的规则各不相同。把记忆当作一个数据处理的设计问题，而不仅仅是存储问题。实践中这意味着四件事：</p>
+<ul>
+<li class=""><strong>决定你愿意保存哪些类型的记忆。</strong> 在写入路径上强制执行，让每次保存都经过一个校验器，而不是只靠提示词。</li>
+<li class=""><strong>给用户一个查看、更正和删除已存内容的途径。</strong> 把删除接入你的账号注销和数据请求流程。</li>
+<li class=""><strong>设定保留期限。</strong> 几年前的偏好很可能已经过时，保留期限有助于让记忆事实保持新鲜。</li>
+<li class=""><strong>记忆应该做成可按部署单独关闭的开关。</strong> 这样无法承担这些义务的地区可以在关闭记忆的情况下运行。</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=写入记忆>写入记忆<a href=#写入记忆 class=hash-link aria-label="Direct link to 写入记忆" title="Direct link to 写入记忆" translate=no>​</a></h4>
+<p>记忆要异步写入：每个轮次结束时（长会话里可以每隔几轮），由另一个线程或进程里的提取 Agent 读一遍对话，在存储里新增、更新或删除事实。这个提取 Agent 随着会话推进维护它自己的工作上下文。</p>
+<p>这不会给对话增加任何延迟，而且在我们内部的商务记忆评测集上，事实召回率提高了 13%。</p>
+<p>最容易想到的做法是让主 Agent 自己调一个工具来保存事实，但对延迟敏感的商务 Agent 来说这是错的。每次保存都是一次工具调用，发生在用户正在等的那个轮次里；而且除非整个记忆库都在上下文里，否则保存前还得先读一次才能更新或去重，这又是一个轮次。</p>
+<p>它还让主 Agent 每个轮次都多一件事要拿主意，在我们的评测里，这种注意力分散直接表现为该记的事实漏记了。</p>
+<p>把提取器分离出来，还能让你精确地为它写提示词。它只读用户和助手的文本，从不读工具结果，所以一段商品描述或一条评论不可能变成关于用户的事实。它的提示词写明什么算事实——明确说出的尺码、饮食限制、履约偏好、商家常看的数据视图——什么不算，比如任何来自商品条目的内容或一次性的细节。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/memory-writer-d2d67139c97e47fd567590b3a665de04.png width=1520 height=1060 class=img_ev3q /></span></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=读取记忆>读取记忆<a href=#读取记忆 class=hash-link aria-label="Direct link to 读取记忆" title="Direct link to 读取记忆" translate=no>​</a></h4>
+<p>分三层读取记忆。</p>
+<div class="grid_iMUt numbered_vU7r" style=--cards-columns:3><div class="card_qitG "><b class=title_ILVj>始终在上下文中</b><div class=body_m8DY><p>一小组固定的事实每个轮次都进入上下文：几乎每个请求都依赖的那些，比如顾客的默认门店和履约偏好，或操作员的门店和角色。</div></div><div class="card_qitG "><b class=title_ILVj>每轮预取</b><div class=body_m8DY><p>和当前请求相关的事实，每轮用预加载技能时的同一套信号提前取出来：搜鞋子就取尺码和品牌偏好，问营销活动就取这位操作员常看的指标。</div></div><div class="card_qitG "><b class=title_ILVj>放在查询工具之后</b><div class=body_m8DY><p>其余的都放在一个查询工具后面，Agent 需要时再去查。</div></div></div>
+<p>由于记忆是按用户区分的上下文，所有记忆都放在会话段里，也就是全局缓存断点之后。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=安全强制执行放在-harness-里>安全：强制执行放在 harness 里<a href=#安全强制执行放在-harness-里 class=hash-link aria-label="Direct link to 安全：强制执行放在 harness 里" title="Direct link to 安全：强制执行放在 harness 里" translate=no>​</a></h3>
+<p>提示词是安全行为的起点，但在商务场景中它不能是安全的强制执行点。这里的失败是金钱上的，而且往往不可逆，而一条提示词规则，只要遇上一次注入攻击或一次不走运的采样，就可能被绕过。下面每条规则都在代码里强制执行，同时作用于消费者 Agent 和商家 Agent，并且只定义一次，让所有运行时共享。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=模型负责暂存由人或策略来生效>模型负责暂存；由人或策略来生效<a href=#模型负责暂存由人或策略来生效 class=hash-link aria-label="Direct link to 模型负责暂存；由人或策略来生效" title="Direct link to 模型负责暂存；由人或策略来生效" translate=no>​</a></h4>
+<p>没有任何模型工具调用会动钱或改变业务。下单、付款、退款、改价和营销活动上线，最终都落在一个由 harness 而非模型控制的动作上。</p>
+<p>在消费者侧，这是从结构上就保证的：结账工具渲染出带有“下单”按钮的购物车，而 Agent 调用的后端接口根本没有扣款方法。</p>
+<p>在商家侧，每个写工具只会生成一条暂存变更，带一个服务端生成的 ID；真正生效要靠 <code>apply_change</code>，而它只接受已经在真实界面上被人批准过的 ID：操作员门户里点过按钮、CLI 里确认过，或者 Agent 跑在 Managed Agents 上时经过了平台自带的工具审批提示。</p>
+<p>护栏在生效那一刻按当时的限额重新检查一遍，而不是沿用暂存时的限额。不管界面是什么，模式都一样：模型能做的最危险的动作也只是提议，审批走的是你的业务对这类变更本来就在用的制单-审核（maker-checker）流程。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=写入与渲染只接受服务端签发的-id>写入与渲染只接受服务端签发的 ID<a href=#写入与渲染只接受服务端签发的-id class=hash-link aria-label="Direct link to 写入与渲染只接受服务端签发的 ID" title="Direct link to 写入与渲染只接受服务端签发的 ID" translate=no>​</a></h4>
+<p>harness 给每个会话维护一份清单，记下服务端交给过模型的每一个 ID；任何写入或渲染操作，只接受这份清单里的 ID。</p>
+<p>购物车只接受服务端在本会话中返回过的商品 ID，商家工具只接受 Agent 真正读取过的商品条目和营销活动 ID。以任何其他方式到来的 ID——幻觉出来的、用户粘贴的、被埋在评论里的——在后端看到之前就会被拒绝。</p>
+<p>同样的规则也覆盖 UI。展示工具只接收 ID，商品、订单或变更记录的具体内容由服务端自己填进去，所以卡片上渲染的只可能是服务端填充的数据。</p>
+<p>被委托的子代理也一样：商家分析子代理只读数据，绝不能往主 Agent 可写的 ID 清单里添加任何东西。</p>
+<p>对于费用、披露声明和其他受监管的内容，模型只决定要披露哪个商品，具体文字每一个字都由服务端从审批过的文案里取。这些费用字段同时也在商家 Agent 的受保护字段列表里，所以消费者侧和商家侧都改不了、也不能换个说法，评测会逐字节校验最终渲染出来的字符串。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=限购必须经得住反复请求>限购必须经得住反复请求<a href=#限购必须经得住反复请求 class=hash-link aria-label="Direct link to 限购必须经得住反复请求" title="Direct link to 限购必须经得住反复请求" translate=no>​</a></h4>
+<p>大多数商务界面都会限制一个用户能买多少件某商品，原因可能是票务配额、促销价或反欺诈。而 Agent 会重试、换个说法再试、并行发起多个请求，这些都是人点按钮时从来不会有的行为。</p>
+<p>所以限额要按写入完成后该商品行的最终数量来检查，这样第二次说“再加两个”就叠不过上限；同时一个会话内的购物车写入要串行执行，同一轮次里的并行工具调用就没法合起来超限。</p>
+<p>商家侧的变更同样这么查：调价幅度、折扣深度、补货数量、营销活动预算各有上限，另外还有一份任何变更都不许碰的受保护字段列表。这条规则可以推广：每一条限制都检查操作之后的结果状态，而不是检查请求本身，并且按会话串行化写入。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=第三方内容要经过净化>第三方内容要经过净化<a href=#第三方内容要经过净化 class=hash-link aria-label="Direct link to 第三方内容要经过净化" title="Direct link to 第三方内容要经过净化" translate=no>​</a></h4>
+<p>在商务领域，上下文里的大部分内容都不是你写的，而是卖家、评论者、竞争对手写的，所以每一次从后端读到的数据都要当作不可信输入，统一过同一个净化器。</p>
+<p>每一条由第三方撰写的工具结果——商品条目、评论、政策、卖家消息、已存的记忆——在模型看到之前都会被净化，并包在一个带固定标签的围栏里。</p>
+<p>净化器会去掉控制字符和双向文本控制符，删掉任何模仿围栏标记的内容，让伪装成对话轮次或工具调用的文本失效，并限制长度。这些都是为了防止一条恶意商品条目冒充系统指令，或者把上下文塞满。</p>
+<p>提示词负责契约的另一半：告诉模型围栏里的文本只是可以转述的素材，绝不是要执行的指令。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=评测交付一个非确定性的系统>评测：交付一个非确定性的系统<a href=#评测交付一个非确定性的系统 class=hash-link aria-label="Direct link to 评测：交付一个非确定性的系统" title="Direct link to 评测：交付一个非确定性的系统" translate=no>​</a></h3>
+<p>从一次小小的提示词改动到一个新工具，任何东西都可能以难以预测的方式改变 Agent 的行为，而且真正坏掉的往往不是你正在交付的那个改动，而是别的地方。评测就是让你在部署之前发现这一点的手段。我们之前的博客<a href=https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents target=_blank rel="noopener noreferrer" class="">Agent 评测详解</a>覆盖了一般性的实践。本节讲商务 Agent 的具体做法。</p>
+<p><strong>评测快照，而不是对话</strong></p>
+<p>模型的 API 是无状态的，Agent 输出什么完全由系统提示词、工具和 messages 数组决定。这意味着商务对话能走到的任何状态都可以直接构造出来。所以写一个评测用例，就是构造出测试状态，追加一条测试用的用户消息，然后让 Agent 从那里跑起来。</p>
+<p>打分只看结果：最终状态和渲染出来的回复，包括最后一次写操作的参数。大多数情况下不建议给 Agent 走过的路径打分，那样的用例既脆弱，又把路径限制得太死。</p>
+<p>模拟用户评测（第二个模型扮演用户，再由评判模型给整段对话打分）不适合用来做测量。两个非确定性系统互相交互，需要更大的样本量，每次试验更贵，更难评判，出了问题也难以归因。它们适合用来找覆盖缺口，以及对 Agent 整体表现做粗略的体感检查。所以用它们来发现用例，再把每个用例写成快照。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/eval-snapshots-3808272356628e8825f1f993d16973c4.png width=1520 height=1460 class=img_ev3q /></span></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=在严苛条件下评测行为>在严苛条件下评测行为<a href=#在严苛条件下评测行为 class=hash-link aria-label="Direct link to 在严苛条件下评测行为" title="Direct link to 在严苛条件下评测行为" translate=no>​</a></h4>
+<p>大多数团队都没有好好测过预置的会话状态。一个用例应该把那次失败的前置条件也编进去，而不是只有任务本身。有些问题只在特定条件下才出现，比如首轮就调了好几次工具的忙碌会话之后，或者会话早些时候出现过一次前后矛盾之后。这种情况下，从干净状态起步的用例在任何配置下都能通过，测不出任何东西。</p>
+<p>我们观察到大多数评测集都偏重这类干净状态的用例，所以要确保你的用例中有一部分从冗长、混乱或自相矛盾的历史起步。</p>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id=覆盖商务-agent-评测的各种类型>覆盖商务 Agent 评测的各种类型<a href=#覆盖商务-agent-评测的各种类型 class=hash-link aria-label="Direct link to 覆盖商务 Agent 评测的各种类型" title="Direct link to 覆盖商务 Agent 评测的各种类型" translate=no>​</a></h5>
+<p>有效的评测需要同时测试期望的行为和不期望的行为。</p>
+<p>每个正向用例都要配一个反向用例：有“应该拒绝”就配一个“应该照做”，有“应该先问”就配一个“应该直接做”。缺反向用例是我们在评测集里最常见到的缺口。</p>
+<p>要评测以下几类：</p>
+<ul>
+<li class=""><strong>核心请求</strong>，它们构成你流量的大头，这里的失败会影响大多数会话。包括简单查询、多约束请求、商品与套餐问题，以及多意图消息。对于问题类，检查每个价格、库存和属性都能追溯到返回的数据，并且在数据缺失时 Agent 会明说而不是编造。</li>
+<li class=""><strong>依赖上下文的请求</strong>，比如对屏幕上内容的指代、从早前轮次带过来的约束、针对已有购物车的写入。对记忆的评测也归在这一类。检查记忆有没有被提取出来、有没有被取回来、有没有真的改变了答案。</li>
+<li class=""><strong>安全与品牌用例</strong>，这里的失败会损失金钱或信任。包括注入攻击、试图读取其他用户数据，以及受监管用语（逐字节校验）。注入要拆成两类用例：一类是用户自己在消息里写的注入；另一类是数据面的注入，也就是埋在商品名、评论或网页片段里、通过工具结果进来的注入。</li>
+<li class=""><strong>界面评测</strong>，确保渲染了正确的组件、遵守了条目数上限、面向用户的文本里没有内部标识符。也要测试超时和空结果。</li>
+<li class=""><strong>同时属于多个能力的请求。</strong> 一位操作员问“如果我把这个降价 15%，库存够不够覆盖需求？”这既是定价问题，也是库存问题。正确的答案是暂存这次降价并附上库存预测；错误的答案是只做其一、跳过另一个。按能力分别编写的评测抓不到这种情况，因为每个都只给自己那一半打分。要为那些需要两个相邻能力协作的请求写用例，并给答案的两半都打分。</li>
+</ul>
+<h5 class="anchor anchorTargetStickyNavbar_Vzrq" id=与领域专家一起写评测并使用真实事故>与领域专家一起写评测，并使用真实事故<a href=#与领域专家一起写评测并使用真实事故 class=hash-link aria-label="Direct link to 与领域专家一起写评测，并使用真实事故" title="Direct link to 与领域专家一起写评测，并使用真实事故" translate=no>​</a></h5>
+<p>和在第一线看到失败的领域专家（SME）一起设计测试用例，比如产品、法务、商家运营、客服和品类管理团队的人。真实发生过的失败就是最好的评测，每条用户流程 50–100 个用例是不错的起点。</p>
+<p>用例要像前面说的那样足够多样。生产环境的对话记录是挖新用例的好来源，尤其是那些刁钻的。编码 Agent 很擅长批量生成额外用例和对抗性变体。<a href=https://github.com/anthropics/commerce-agents target=_blank rel="noopener noreferrer" class="">参考仓库</a>里带了一个 Claude Code 插件，里面有一个按我们推荐方法写好的评测编写技能。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id=在大型组织中交付>在大型组织中交付<a href=#在大型组织中交付 class=hash-link aria-label="Direct link to 在大型组织中交付" title="Direct link to 在大型组织中交付" translate=no>​</a></h4>
+<p>在一家商务企业里，Agent 不是一个团队做出来的，而是由许多工程团队共同构建。搜索、结账、定价、营销技术、客服和商品目录平台这些团队，各自拥有 Agent 所依赖的系统，各按自己的节奏发版，也都会想往 Agent 里添加或修改工具、技能或提示词规则。</p>
+<p>这和传统服务不一样。服务之间有明确的模块边界，一个服务的改动不会影响另一个；Agent 没有这种隔离：定价团队改的东西和结账的逻辑挤在同一个上下文窗口里，彼此都会影响对方。</p>
+<p>一个看起来很诱人的解法是把系统拆成许多子代理，一个业务单元一个。但正如第一部分所讨论的，这样做会损失质量，我们不建议。我们的建议是保留单一 Agent，用下面这套流程来降低多团队协作的风险：</p>
+<ul>
+<li class=""><strong>谁拥有系统，谁就拥有对应的技能和工具。</strong> 每个技能和工具都有且只有一个负责团队。例如，定价团队负责促销工具和定价技能，客服团队负责订单与退货工具和客服技能。共享的系统提示词也拆开归属：公共部分由一个平台级团队负责，各领域专属章节由对应的领域团队负责。</li>
+<li class=""><strong>改动要连同它的评测用例一起提交，CI 只跑和这个改动相关的一组用例。</strong> 贡献一个技能的团队，也要贡献这个技能的用例，包括反例（不该触发这个技能的请求）和与相邻技能之间的边界用例（容易分不清该归谁处理的请求）。每个 pull request 都跑完整评测集太慢也太贵，长期跑不下去，所以要从完整评测集里挑出一个 CI 用例集。这个 CI 用例集分两层。第一层是固定的核心集，收录流量最高的请求和全部安全用例，每次都跑。第二层按改动碰到了什么来选：改的是技能，就跑它自己的用例加上相邻技能的边界用例；改的是工具，就跑所有调用了这个工具的用例；改的是共享提示词，就得跑完整评测集，因为所有东西都读系统提示词。合并门槛建议看三项指标：多次运行的通过率、缓存命中率、每轮成本，任何一项不达标就不能合并。另外，每晚和每次发布前再跑一遍完整评测集。跨团队的回归，也就是 A 团队的改动弄坏了 B 团队的功能，主要靠这几轮全量运行抓出来。</li>
+<li class=""><strong>Agent 也要像其他系统一样纳入发布日历。</strong> 它是一个整体部署的单元，一个坏改动会同时打到所有用户。所以：提示词和技能的改动先发给一小部分灰度（canary）用户；准备一个不用重新部署就能关掉单个技能的开关；大促等高峰期之前，像冻结其他系统一样冻结 Agent 的变更。</li>
+</ul>
+<p>关于这套安排中人的一面，参见<a href=https://claude.com/blog/building-effective-human-agent-teams target=_blank rel="noopener noreferrer" class="">构建高效的人机协作团队</a>。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=展望未来>展望未来<a href=#展望未来 class=hash-link aria-label="Direct link to 展望未来" title="Direct link to 展望未来" translate=no>​</a></h2>
+<p>本文讲的大部分内容其实和模型无关：工具调的是你已经在跑的系统，技能写的是你已经在执行的流程，评测是把产品需求文档写成了测试，harness 强制执行的是你对任何客户端都会执行的策略。模型会不断进步，新模型发布时，这套架构只需改一次配置、跑一轮评测就能换上去，其他一切照常运转。</p>
+<p>产品界面的路线图也值得想清楚。这套架构会比聊天面板活得更久：同一个 Agent 可以改走语音，也可以在用户开口之前就主动处理一次票价下跌。对已经有评测和工具的团队来说，这些只是展示层的活。再往远看，你店面的一部分流量将来自替用户购物的 Agent。让你自己的 Agent 守规矩的那套来源校验、暂存和审批规则，正是你将来能安全地把工具开放给那些 Agent 的前提。</p>
+<p>商务一直都在奖励那些把购买过程做得尽可能顺畅的人。Agent 让这件事容易了很多。去看看<a href=https://github.com/anthropics/commerce-agents target=_blank rel="noopener noreferrer" class="">完整的参考实现</a>，里面同时包含消费者 Agent 和商家 Agent，以及零售、旅行、电信和娱乐领域可运行的示例。</p>
+<hr/>
+<p><em>参考文章：<a href=https://claude.com/blog/the-anatomy-of-effective-commerce-agents target=_blank rel="noopener noreferrer" class="">The anatomy of effective commerce agents</a></em></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/roadmap/><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>前言</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#01-架构 class="table-of-contents__link toc-highlight">01 架构</a><ul><li><a href=#什么是商务-agent class="table-of-contents__link toc-highlight">什么是商务 Agent？</a><li><a href=#工程化上下文 class="table-of-contents__link toc-highlight">工程化上下文</a><li><a href=#工程化-agent-工具 class="table-of-contents__link toc-highlight">工程化 Agent 工具</a></ul><li><a href=#02-实现快速且经济 class="table-of-contents__link toc-highlight">02 实现快速且经济</a><ul><li><a href=#最小化任务完成延迟 class="table-of-contents__link toc-highlight">最小化任务完成延迟</a><li><a href=#感知延迟 class="table-of-contents__link toc-highlight">感知延迟</a><li><a href=#提示词缓存 class="table-of-contents__link toc-highlight">提示词缓存</a><li><a href=#选择模型及其配置 class="table-of-contents__link toc-highlight">选择模型及其配置</a></ul><li><a href=#03-在生产环境中运行 class="table-of-contents__link toc-highlight">03 在生产环境中运行</a><ul><li><a href=#跨会话留存的记忆 class="table-of-contents__link toc-highlight">跨会话留存的记忆</a><li><a href=#安全强制执行放在-harness-里 class="table-of-contents__link toc-highlight">安全：强制执行放在 harness 里</a><li><a href=#评测交付一个非确定性的系统 class="table-of-contents__link toc-highlight">评测：交付一个非确定性的系统</a></ul><li><a href=#展望未来 class="table-of-contents__link toc-highlight">展望未来</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © huangsitao 2026</div></div></div></footer></div></body>
