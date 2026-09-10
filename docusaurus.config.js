@@ -122,7 +122,7 @@ const config = {
         },
         items: [
           {
-            to: '/docs/Agent',
+            to: '/docs/MCP',
             label: '笔记',
             position: 'left'
           },
