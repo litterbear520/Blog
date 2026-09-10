@@ -291,6 +291,24 @@ html[data-theme='dark'] {
   background: none;
 }
 
+/* 手机端（≤996px）：GitHub 图标与深浅切换固定并排在导航栏右上角。
+   主题默认在小屏隐藏导航栏里的切换按钮，改放到抽屉菜单头部（小熊图标旁），
+   而 GitHub 项又会重复出现在抽屉菜单列表末尾，两者位置不一致；
+   这里恢复导航栏里的切换按钮，并隐藏抽屉里的两处重复入口 */
+@media (max-width: 996px) {
+  .navbar__items--right [class*="colorModeToggle"] {
+    display: block;
+  }
+
+  .navbar-sidebar__brand > div[class*="toggle"] {
+    display: none;
+  }
+
+  .navbar-sidebar .menu__list-item:has(> .header-github-link) {
+    display: none;
+  }
+}
+
 .header-github-link::before {
   content: '';
   width: 24px;
