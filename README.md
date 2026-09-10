@@ -1,63 +1,51 @@
 # 小熊的博客
 
-基于 [Docusaurus 3](https://docusaurus.io/) 构建的个人技术博客，专注于学习、开发和分享。
+[![Deploy](https://github.com/litterbear520/Blog/actions/workflows/update.yaml/badge.svg)](https://github.com/litterbear520/Blog/actions/workflows/update.yaml)
+[![Docusaurus](https://img.shields.io/badge/Docusaurus-3-3ECC5F?logo=docusaurus&logoColor=white)](https://docusaurus.io/)
 
-**在线访问：[huangsitao.fun](https://huangsitao.fun)**
+个人技术笔记与博客，记录 AI 应用开发、Python、工具链和开源项目学习。
 
-| 项 | 值 |
-| ---- | ---- |
-| 框架 | Docusaurus 3.10.1 + React 19 |
-| Node | >= 18 |
-| 部署 | GitHub Actions → `gh-pages` 分支 |
-| 默认主题 | 暗色模式 |
+**在线访问 → [huangsitao.fun](https://huangsitao.fun)**
 
-## 快速开始
+| 栏目 | 地址 | 内容 |
+| ---- | ---- | ---- |
+| 笔记 | [/docs](https://huangsitao.fun/docs/MCP) | 按主题分类的学习笔记：Agent、MCP、LangChain、Python、Docker 等 |
+| 博文 | [/bloglist](https://huangsitao.fun/bloglist) | 长文与教程，支持分类筛选 |
+| 路线 | [/roadmap](https://huangsitao.fun/roadmap) | 开源项目学习日志，一个项目一条线 |
+| Skills | [/skills](https://huangsitao.fun/skills) | 收录的 Claude 技能与安装命令 |
 
-```bash
-npm install        # 安装依赖
-npm start          # 开发服务器（localhost:3003，热更新）
-```
+## 本地开发
 
 ```bash
-npm run build      # 构建静态网站
-npm run serve      # 本地预览构建结果（提交前确认用）
-npm run clear      # 清理 Docusaurus 缓存
+npm install
+npm start          # http://localhost:3003，热更新
+npm run build      # 构建静态站点到 build/
+npm run serve      # 本地预览构建结果
 ```
 
-## 内容结构
+Node >= 18。
+
+## 项目结构
 
 ```
-├── blog/                  # 博文（元数据同步维护在 src/pages/bloglist.js）
-├── roadmap/               # 路线：开源项目学习日志（/roadmap）
-├── docs/                  # 笔记（按目录分类，侧边栏自动生成）
-├── src/
-│   ├── components/        # AgentLoopViz、SkillCard、密码保护等组件
-│   ├── data/skills.js     # SkillHub 技能数据
-│   ├── pages/             # 首页 / 博文列表 / Skills 页
-│   └── theme/             # Cursor 风格代码高亮主题（深浅两套）
-├── plugins/               # copy-markdown-source：生成可复制的 .md 源码
-└── .github/workflows/     # CI：push 构建，main 分支自动部署
+blog/        博文，一篇一个文件夹
+docs/        笔记，目录即分类，侧边栏自动生成
+roadmap/     学习日志，一个项目一个文件夹
+src/         页面、组件、主题覆盖与数据
+plugins/     remark / 构建期插件
+tools/       博客封面生成流水线
 ```
 
-## 特色功能
-
-- **自定义博文列表**（`/bloglist`）：分类筛选 + 卡片布局
-- **路线**（`/roadmap`）：开源项目学习日志，一个项目一个文件夹，目录树即学习线
-- **SkillHub**（`/skills`）：收录常用的 Claude 技能，卡片展开显示安装命令与仓库链接
-- **KaTeX 数学公式**：`remark-math` + `rehype-katex`
-- **Cursor 代码主题**：自定义 Prism 高亮，适配亮暗模式
-- **复制 Markdown 源码**：文档页一键复制清洗后的 `.md`
-- **密码保护**：可选的全站访问口令（赛博朋克风登录页）
-
-## 如何新增内容
+## 写点什么
 
 | 内容 | 做法 |
 | ---- | ---- |
-| 博文 | `blog/` 下新建文章，并在 `src/pages/bloglist.js` 的 `POSTS` 数组补充元数据 |
-| 学习日志 | `roadmap/<项目>/` 下新建 `YYYY-MM-DD-主题.md`，侧边栏自动生成 |
-| 笔记 | `docs/` 下建目录并添加 `index.md`，侧边栏自动生成 |
-| 技能 | 在 `src/data/skills.js` 的 `SKILLS` 数组追加一个对象 |
+| 笔记 | 在 `docs/<分类>/` 下新建 `.md` |
+| 博文 | 新建 `blog/<slug>/index.md`，并在 `src/pages/bloglist.js` 登记元数据 |
+| 学习日志 | 新建 `roadmap/<项目>/YYYY-MM-DD-主题.md` |
+
+代码块可以带「运行」按钮回放预录输出，正文支持 KaTeX 公式、图片放大与术语悬停解释，写法见 [AGENTS.md](./AGENTS.md)。
 
 ## 部署
 
-推送到任意分支会触发 CI 构建；推送到 `main` 自动构建并部署到 GitHub Pages（自定义域名 huangsitao.fun）。
+推送到 `main` 后由 GitHub Actions 构建并发布到 GitHub Pages。
