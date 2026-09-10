@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import PasswordProtect from '../components/PasswordProtect';
 import CopyMarkdownButton from '../components/CopyMarkdownButton';
 
 /**
  * Docusaurus Root 组件
- * 这是 React 树的最顶层组件，适合做全局认证逻辑
+ * React 树的最顶层组件，负责往文档页标题旁注入 CopyMarkdown 按钮
  */
 export default function Root({ children }) {
   useEffect(() => {
@@ -56,5 +55,5 @@ export default function Root({ children }) {
     return () => observer.disconnect();
   }, []);
 
-  return <PasswordProtect>{children}</PasswordProtect>;
+  return <>{children}</>;
 }

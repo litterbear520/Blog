@@ -56,10 +56,8 @@ npm run clear                # 清理 Docusaurus 缓存
 │   │   ├── McpCourse/             # 课程索引页顶部信息卡（CourseHero：难度/课数、来源链接）
 │   │   ├── McpQuiz/               # 单选测验（一次一题、选项每次随机打乱，最后提交，显示是否通过与得分条）
 │   │   ├── McpWalkthrough/        # 代码演练：分步说明 + 迷你代码查看器（文件树/标签/按步高亮定位）
-│   │   ├── PasswordProtect.js     # 密码保护（赛博朋克风星空动画）
-│   │   └── SkillCard/             # SkillHub 技能卡片（展开显示安装命令）
-│   ├── constants/
-│   │   └── passwordConfig.js      # 密码及登录页文案配置
+│   │   ├── SkillCard/             # SkillHub 技能卡片（展开显示安装命令）
+│   │   └── Term/                  # 术语悬停解释：虚线下划线，悬停 / 聚焦弹出 tip
 │   ├── css/
 │   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）、字体、代码块装饰
 │   ├── data/
@@ -72,7 +70,8 @@ npm run clear                # 清理 Docusaurus 缓存
 │   │   ├── bloglist.js            # 自定义博客列表页（分类筛选 + 卡片布局）
 │   │   └── skills.js              # SkillHub 页面（/skills 路由）
 │   └── theme/
-│       ├── Root.js                # 主题根组件（挂载密码保护 + CopyMarkdown 按钮）
+│       ├── Root.js                # 主题根组件（注入 CopyMarkdown 按钮）
+│       ├── MDXComponents/index.js # 注册全局 MDX 组件（Term 术语悬停解释，正文直接用无需 import）
 │       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图
 │       ├── DocCard/Heading/Icon/  # 覆盖为空组件：去掉 DocCardList 卡片标题前的 🗃️/📄️ emoji
 │       ├── Icon/LightMode|DarkMode|SystemColorMode/  # 深浅切换按钮图标换成 Lucide 线条版（sun / moon / monitor），与导航栏 GitHub 图标同规格
@@ -97,7 +96,6 @@ npm run clear                # 清理 Docusaurus 缓存
 
 ## 关键特性
 
-- **密码保护**：`src/constants/passwordConfig.js` 控制开关和密码，`Root.js` 挂载
 - **KaTeX 数学公式**：通过 `remark-math` + `rehype-katex` 支持
 - **Cursor 代码主题**：自定义 Prism 主题，深浅两套
 - **复制 Markdown 源码**：自定义插件 `copy-markdown-source` 构建时生成清洗后 `.md`，按钮由 `Root.js` 注入
@@ -108,6 +106,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录（目前有《Model Context Protocol 简介》和《高级主题》），`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`，题目数据在 `src/data/mcp*Quiz.js`；原站的 `CodeCommand` 组件对应 bash 代码块，`GenericPrompt`（用户提示卡）对应 `:::info[用户提示]`
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
 - **代码块预录输出**：代码围栏加 `run`，紧接一个 `output` 围栏写运行结果，构建时由 `plugins/remark-run-output.js` 合并；页面上代码块右上角出现 ▷ 按钮，点击后底部展开「输出」面板逐行打印（悬停标签提示为预录），再点收起。不是真跑代码，输出要先在本地跑一遍如实录入
+- **术语悬停解释**：正文里写 `<Term tip="解释">LOAD_FAST</Term>`，词下有虚线，鼠标悬停或 Tab 聚焦弹出解释；已注册进 MDX 全局，docs / roadmap / blog 通用，无需 import
 - **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
 
 ## 内容编写规范
