@@ -13,7 +13,7 @@
 | 主题 | 讲了什么 |
 | ---- | ---- |
 | [Agent](https://huangsitao.fun/docs/Agent) | 智能体框架、落地实践、结构化输出、多模态探索 |
-| [MCP](https://huangsitao.fun/docs/MCP) | 两门 Model Context Protocol 课程的完整笔记：简介与高级主题，含代码演练和测验 |
+| [MCP](https://huangsitao.fun/docs/MCP) | Model Context Protocol 从简介到高级主题，含代码演练和测验 |
 | [LangChain](https://huangsitao.fun/docs/LangChain) | Agent 与 RAG 开发，从 Runnable、模板、Memory 到 ReAct、流式输出、middleware |
 | [Claude Code](https://huangsitao.fun/docs/Claude%20Code) | Agent Loop 逐步可视化 |
 | [Prompt](https://huangsitao.fun/docs/Prompt/提示词模板) | 提示词模板与写法 |
@@ -46,9 +46,9 @@
 
 ## 路线
 
-跟着开源项目边读边记的学习日志，一个项目一条线：[/roadmap](https://huangsitao.fun/roadmap)
+按项目组织的深入学习记录，一个项目一条线：[/roadmap](https://huangsitao.fun/roadmap)
 
-- [高效商务 Agent 架构指南](https://huangsitao.fun/roadmap/高效商务Agent架构指南)：Anthropic 商务 Agent 架构指南中译与逐段解读
+- [高效商务 Agent 架构指南](https://huangsitao.fun/roadmap/高效商务Agent架构指南)：商务场景下 Agent 的架构、性能与生产环境实践
 
 ## Skills
 
