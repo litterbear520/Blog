@@ -1,51 +1,70 @@
 # 小熊的博客
 
-[![Deploy](https://github.com/litterbear520/Blog/actions/workflows/update.yaml/badge.svg)](https://github.com/litterbear520/Blog/actions/workflows/update.yaml)
-[![Docusaurus](https://img.shields.io/badge/Docusaurus-3-3ECC5F?logo=docusaurus&logoColor=white)](https://docusaurus.io/)
+我的学习笔记，主要围绕 AI 应用开发：Agent、MCP、LangChain、Python，以及一些项目拆解和踩坑记录。所有内容都在线可读，仓库只是源码。
 
-个人技术笔记与博客，记录 AI 应用开发、Python、工具链和开源项目学习。
+**在线阅读 → [huangsitao.fun](https://huangsitao.fun)**
 
-**在线访问 → [huangsitao.fun](https://huangsitao.fun)**
+## 笔记
 
-| 栏目 | 地址 | 内容 |
-| ---- | ---- | ---- |
-| 笔记 | [/docs](https://huangsitao.fun/docs/MCP) | 按主题分类的学习笔记：Agent、MCP、LangChain、Python、Docker 等 |
-| 博文 | [/bloglist](https://huangsitao.fun/bloglist) | 长文与教程，支持分类筛选 |
-| 路线 | [/roadmap](https://huangsitao.fun/roadmap) | 开源项目学习日志，一个项目一条线 |
-| Skills | [/skills](https://huangsitao.fun/skills) | 收录的 Claude 技能与安装命令 |
+按主题分目录，每个目录是一条线，从概念到代码。
 
-## 本地开发
+### AI 应用开发
+
+| 主题 | 讲了什么 |
+| ---- | ---- |
+| [Agent](https://huangsitao.fun/docs/Agent) | 智能体框架、落地实践、结构化输出、多模态探索 |
+| [MCP](https://huangsitao.fun/docs/MCP) | 两门 Model Context Protocol 课程的完整笔记：简介与高级主题，含代码演练和测验 |
+| [LangChain](https://huangsitao.fun/docs/LangChain) | Agent 与 RAG 开发，从 Runnable、模板、Memory 到 ReAct、流式输出、middleware |
+| [Claude Code](https://huangsitao.fun/docs/Claude%20Code) | Agent Loop 逐步可视化 |
+| [Prompt](https://huangsitao.fun/docs/Prompt/提示词模板) | 提示词模板与写法 |
+| [大模型应用](https://huangsitao.fun/docs/大模型应用) | 微调、量化、参数高效微调 |
+| [深度学习](https://huangsitao.fun/docs/深度学习) | PyTorch、Transformer |
+| [项目](https://huangsitao.fun/docs/项目) | DeerFlow、Hermes Agent、斯坦福 AI 小镇、RAG、深度搜索、小智服务端等项目拆解 |
+
+### 编程与工具
+
+| 主题 | 讲了什么 |
+| ---- | ---- |
+| [Python](https://huangsitao.fun/docs/python/变量作用域) | 基础、asyncio、queue、变量作用域、命名系统、FastAPI |
+| [Git 工作流](https://huangsitao.fun/docs/Git工作流) | 功能分支工作流，Remote / Local / Disk 三区域分步演示 |
+| [Docker](https://huangsitao.fun/docs/Docker) | 安装与常用操作 |
+| [常用命令](https://huangsitao.fun/docs/常用命令) | 速查 |
+| [网络与服务器](https://huangsitao.fun/docs/网络与服务器) | 自建代理节点、服务私有部署 |
+| [AI 编程](https://huangsitao.fun/docs/AI编程/模型选择) | 模型选择 |
+| [AIGC](https://huangsitao.fun/docs/AIGC/Nano-Banana) | Nano Banana |
+
+## 博文
+
+长一点的文章和经验分享，全部在 [博文列表](https://huangsitao.fun/bloglist)：
+
+- [语音代理中的记忆问题比你想的更难](https://huangsitao.fun/blog/voice-agent-memory)
+- [善用工具弥补技术深度](https://huangsitao.fun/blog/ai-and-depth)
+- [探索你的未知领域](https://huangsitao.fun/blog/fable-guide)
+- [HTML 的惊人效果](https://huangsitao.fun/blog/html-effectiveness)
+- [如何自己订阅 Claude](https://huangsitao.fun/blog/subscribe-claude)
+- [阿里天池二手车价格预测 Top2 分享](https://huangsitao.fun/blog/tianchi-top2)
+
+## 路线
+
+跟着开源项目边读边记的学习日志，一个项目一条线：[/roadmap](https://huangsitao.fun/roadmap)
+
+- [高效商务 Agent 架构指南](https://huangsitao.fun/roadmap/高效商务Agent架构指南)：Anthropic 商务 Agent 架构指南中译与逐段解读
+
+## Skills
+
+用过觉得好的 Claude 技能，附安装命令：[/skills](https://huangsitao.fun/skills)
+
+## 阅读时的小功能
+
+- 代码块右上角的 ▷ 可以回放预录的真实运行输出
+- 文档页标题旁可以一键复制整篇 Markdown
+- 带虚线的术语悬停可以看解释，图片点击可以放大
+
+## 本地运行
 
 ```bash
 npm install
-npm start          # http://localhost:3003，热更新
-npm run build      # 构建静态站点到 build/
-npm run serve      # 本地预览构建结果
+npm start    # http://localhost:3003
 ```
 
-Node >= 18。
-
-## 项目结构
-
-```
-blog/        博文，一篇一个文件夹
-docs/        笔记，目录即分类，侧边栏自动生成
-roadmap/     学习日志，一个项目一个文件夹
-src/         页面、组件、主题覆盖与数据
-plugins/     remark / 构建期插件
-tools/       博客封面生成流水线
-```
-
-## 写点什么
-
-| 内容 | 做法 |
-| ---- | ---- |
-| 笔记 | 在 `docs/<分类>/` 下新建 `.md` |
-| 博文 | 新建 `blog/<slug>/index.md`，并在 `src/pages/bloglist.js` 登记元数据 |
-| 学习日志 | 新建 `roadmap/<项目>/YYYY-MM-DD-主题.md` |
-
-代码块可以带「运行」按钮回放预录输出，正文支持 KaTeX 公式、图片放大与术语悬停解释，写法见 [AGENTS.md](./AGENTS.md)。
-
-## 部署
-
-推送到 `main` 后由 GitHub Actions 构建并发布到 GitHub Pages。
+站点基于 Docusaurus，写作约定和目录说明见 [AGENTS.md](./AGENTS.md)。
