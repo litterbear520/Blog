@@ -214,14 +214,24 @@ html[data-theme='dark'] {
   font-weight: 600;
 }
 
-/* 标题内显式写了 ** 的部分再加一档到 700：h3 以下基础字重已是 600，
-   与 strong 的 600 相同，不加这条 ** 在小标题上看不出变化 */
-.markdown h2 strong,
-.markdown h3 strong,
-.markdown h4 strong,
-.markdown h5 strong,
-.markdown h6 strong {
-  font-weight: 700;
+/* 商务 Agent 架构指南：小标题层级靠字号和留白拉开，不靠加黑。
+   Infima 默认 h4 与正文同字号、h5 比正文还小，五级标题的长文里层级会糊掉；
+   只对这一篇生效（主题给每篇文档的 <html> 加了 docs-doc-id-<id> 类） */
+html.docs-doc-id-高效商务Agent架构指南\/index .markdown {
+  --ifm-h2-font-size: 1.625rem;
+  --ifm-h3-font-size: 1.375rem;
+  --ifm-h4-font-size: 1.125rem;
+  --ifm-h5-font-size: 1.0625rem;
+  --ifm-h3-vertical-rhythm-top: 2;
+  --ifm-h4-vertical-rhythm-top: 1.75;
+  --ifm-h5-vertical-rhythm-top: 1.75;
+}
+
+html.docs-doc-id-高效商务Agent架构指南\/index .markdown h2,
+html.docs-doc-id-高效商务Agent架构指南\/index .markdown h3,
+html.docs-doc-id-高效商务Agent架构指南\/index .markdown h4,
+html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
+  font-weight: 600;
 }
 
 /* 正文用次级灰，加粗与标题回到主文字色 */
