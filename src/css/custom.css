@@ -214,6 +214,16 @@ html[data-theme='dark'] {
   font-weight: 600;
 }
 
+/* 标题内显式写了 ** 的部分再加一档到 700：h3 以下基础字重已是 600，
+   与 strong 的 600 相同，不加这条 ** 在小标题上看不出变化 */
+.markdown h2 strong,
+.markdown h3 strong,
+.markdown h4 strong,
+.markdown h5 strong,
+.markdown h6 strong {
+  font-weight: 700;
+}
+
 /* 正文用次级灰，加粗与标题回到主文字色 */
 .markdown strong {
   color: var(--th-text);
