@@ -57,6 +57,7 @@ const config = {
         path: './roadmap',
         routeBasePath: 'roadmap',
         sidebarPath: './sidebarsRoadmap.js',
+        admonitions: { keywords: ['important'], extendDefaults: true }, // 补上 GitHub alerts 的 IMPORTANT 类型，组件见 src/theme/Admonition/Types.js
         remarkPlugins: [remarkMath, remarkRunOutput],
         rehypePlugins: [rehypeKatex],
       },
@@ -70,11 +71,13 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
+          admonitions: { keywords: ['important'], extendDefaults: true }, // 补上 GitHub alerts 的 IMPORTANT 类型，组件见 src/theme/Admonition/Types.js
           remarkPlugins: [remarkMath, remarkRunOutput],
           rehypePlugins: [rehypeKatex],
         },
         blog: {
           showReadingTime: true,
+          admonitions: { keywords: ['important'], extendDefaults: true }, // 补上 GitHub alerts 的 IMPORTANT 类型，组件见 src/theme/Admonition/Types.js
           remarkPlugins: [remarkRunOutput],
           routeBasePath: '/blog',
           // blogSidebarTitle: false, // 禁用博客侧边栏标题

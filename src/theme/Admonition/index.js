@@ -8,6 +8,7 @@ const DEFAULT_TITLES = {
   note: '备注',
   tip: '提示',
   info: '信息',
+  important: '重要',
   warning: '注意',
   caution: '注意',
   danger: '危险',
