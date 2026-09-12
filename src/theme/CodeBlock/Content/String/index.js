@@ -40,6 +40,7 @@ export default function CodeBlockString(props) {
     <RunOutputProvider
       output={props['data-output']}
       status={props['data-output-status']}
+      highlight={props['data-output-highlight']}
       blockId={parseBlockId(props.metastring)}>
       <CodeBlockContextProvider metadata={metadata} wordWrap={wordWrap}>
         <CodeBlockLayout />
