@@ -108,7 +108,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
 - **代码块预录输出**：代码围栏加 `run`，紧接一个 `output` 围栏写运行结果，构建时由 `plugins/remark-run-output.js` 合并；页面上代码块右上角出现 ▷ 按钮，点击后底部展开「输出」面板逐行打印（悬停标签提示为预录），再点收起。不是真跑代码，输出要先在本地跑一遍如实录入
 - **术语悬停解释**：正文里写 `<Term tip="解释">LOAD_FAST</Term>`，词下有虚线，鼠标悬停或 Tab 聚焦弹出解释；已注册进 MDX 全局，docs / roadmap / blog 通用，无需 import
-- **提示块样式**：`:::note / tip / info / warning / danger` 不用 Infima 默认的彩色底 + 粗左边，统一为与代码块同规格的 surface 底 + 细边框 + 8px 圆角卡片，不画左侧竖线，类型只体现在 Lucide 线条图标的颜色上（info 陶土、tip 绿、warning 琥珀、danger 红、note 中性灰，令牌 `--th-admonition-*`）；标题不大写、不缩小，中文长句标题可换行；没写 `[标题]` 时显示中文默认标签（信息 / 提示 / 注意 / 危险 / 备注），见 `src/theme/Admonition/`
+- **提示块样式**：`:::note / tip / info / warning / danger` 不用 Infima 默认的彩色底 + 粗左边，统一为与代码块同规格的 surface 底 + 细边框 + 8px 圆角卡片，不画左侧竖线，类型只体现在标题前的图标上：Lucide 线条图标放在同色淡底的圆角小片里（info ⓘ / tip 灯泡 / warning 三角 / danger 八角 / note 笔记本）（info 陶土、tip 绿、warning 琥珀、danger 红、note 中性灰，令牌 `--th-admonition-*`）；标题不大写、不缩小，中文长句标题可换行；没写 `[标题]` 时显示中文默认标签（信息 / 提示 / 注意 / 危险 / 备注），见 `src/theme/Admonition/`；标题写“提示”就用 `:::tip`、写“注意”就用 `:::warning`，别用 `:::info[提示]`，否则图标和标题对不上
 - **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
 
 ## 内容编写规范
