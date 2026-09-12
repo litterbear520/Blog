@@ -1,0 +1,7 @@
+import React from 'react';
+import {Info} from 'lucide-react';
+
+// 覆盖 Docusaurus 自带的实心图标，改用 Lucide 线条版；尺寸与描边由 custom.css 的提示块样式统一控制
+export default function AdmonitionIconInfo(props) {
+  return <Info size={18} strokeWidth={2} aria-hidden="true" {...props} />;
+}

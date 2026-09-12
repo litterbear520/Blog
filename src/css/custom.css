@@ -108,6 +108,12 @@
   /* 代码块高亮行：Cursor Light 的 diffEditor.insertedLineBackground / editorGutter.addedBackground */
   --docusaurus-highlighted-code-line-bg: #1F8A651F;
   --th-code-added-bar: #1F8A65;
+
+  /* 提示块类型色：只用于左侧色条和图标（info 沿用强调色，tip 沿用代码高亮的绿） */
+  --th-admonition-info: var(--th-accent);
+  --th-admonition-tip: var(--th-code-added-bar);
+  --th-admonition-warning: #b7791f;
+  --th-admonition-danger: #c0392b;
 }
 
 /* ═══════════════════════════════════════════
@@ -181,6 +187,9 @@ html[data-theme='dark'] {
   /* 代码块高亮行：Cursor Dark 的 diffEditor.insertedLineBackground / editorGutter.addedBackground */
   --docusaurus-highlighted-code-line-bg: #3FA26633;
   --th-code-added-bar: #3FA266;
+
+  --th-admonition-warning: #d9a441;
+  --th-admonition-danger: #e0705f;
 }
 
 /* ═══════════════════════════════════════════
@@ -269,6 +278,88 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
    变量由 src/theme/MDXComponents/Img 的外层容器消费，见那里的说明 */
 .theme-doc-markdown {
   --md-img-max-width: min(100%, 768px);
+}
+
+/* ═══════════════════════════════════════════
+   提示块（:::note / tip / info / warning / danger）
+   去掉 Infima 默认的彩色底、粗左边和阴影，改成与代码块同规格的卡片：
+   surface 底 + 细边框 + 8px 圆角，类型只体现在左侧 3px 色条和线条图标上。
+   图标在 src/theme/Admonition/Icon/ 换成 Lucide 线条版，
+   无自定义标题时的中文默认标签见 src/theme/Admonition/index.js
+   ═══════════════════════════════════════════ */
+.theme-admonition.alert {
+  --ifm-alert-background-color: var(--th-surface-1);
+  --ifm-alert-background-color-highlight: var(--th-surface-2);
+  --ifm-alert-foreground-color: var(--th-text-2);
+  --ifm-alert-border-color: var(--th-line);
+  --ifm-alert-border-width: 1px;
+  --ifm-alert-border-left-width: 1px;
+  --ifm-alert-border-radius: 8px;
+  --ifm-alert-shadow: none;
+  --ifm-alert-padding-vertical: 0.9rem;
+  --ifm-alert-padding-horizontal: 1.15rem;
+  --ifm-link-color: var(--th-accent);
+  --ifm-link-hover-color: var(--th-accent);
+  --ifm-code-background: var(--th-surface-2);
+  --th-admonition-color: var(--th-text-3); /* note 等未指定类型：中性灰 */
+  margin-bottom: 1.25rem;
+  color: var(--th-text-2);
+  /* 左侧 3px 类型色条，用内阴影画以便跟随圆角 */
+  box-shadow: inset 3px 0 0 var(--th-admonition-color);
+}
+
+/* 类型色：选择器要和上面 .theme-admonition.alert 同优先级，否则盖不过默认的中性灰 */
+.theme-admonition.theme-admonition-info {
+  --th-admonition-color: var(--th-admonition-info);
+}
+
+.theme-admonition.theme-admonition-tip {
+  --th-admonition-color: var(--th-admonition-tip);
+}
+
+.theme-admonition.theme-admonition-warning,
+.theme-admonition.theme-admonition-caution {
+  --th-admonition-color: var(--th-admonition-warning);
+}
+
+.theme-admonition.theme-admonition-danger {
+  --th-admonition-color: var(--th-admonition-danger);
+}
+
+/* 标题：不大写、不缩小，主文字色；图标与首行对齐，中文长句标题可换行 */
+.theme-admonition [class*='admonitionHeading'] {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  margin-bottom: 0.4rem;
+  font: 600 0.92rem / 1.55 var(--ifm-font-family-base);
+  color: var(--th-text);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+html[data-theme='dark'] .theme-admonition [class*='admonitionHeading'] {
+  font-weight: 500;
+}
+
+.theme-admonition [class*='admonitionHeading']:last-child {
+  margin-bottom: 0;
+}
+
+.theme-admonition [class*='admonitionIcon'] {
+  display: inline-flex;
+  flex: none;
+  margin: 0.2em 0 0;
+  color: var(--th-admonition-color);
+}
+
+.theme-admonition [class*='admonitionIcon'] svg {
+  display: block;
+  width: 1.15em;
+  height: 1.15em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
 }
 
 /* ═══════════════════════════════════════════
