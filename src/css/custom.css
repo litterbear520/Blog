@@ -109,10 +109,11 @@
   --docusaurus-highlighted-code-line-bg: #1F8A651F;
   --th-code-added-bar: #1F8A65;
 
-  /* 提示块类型色：只用于标题图标（info 沿用强调色，tip 沿用代码高亮的绿） */
-  --th-admonition-info: var(--th-accent);
+  /* 提示块类型色：按通用语义配（info 蓝 / tip 绿 / warning 黄 / danger 红），
+     同一个色既做图标色，也按比例调淡当框底和框边 */
+  --th-admonition-info: #2b6fd6;
   --th-admonition-tip: var(--th-code-added-bar);
-  --th-admonition-warning: #b7791f;
+  --th-admonition-warning: #c28a12;
   --th-admonition-danger: #c0392b;
 }
 
@@ -188,7 +189,8 @@ html[data-theme='dark'] {
   --docusaurus-highlighted-code-line-bg: #3FA26633;
   --th-code-added-bar: #3FA266;
 
-  --th-admonition-warning: #d9a441;
+  --th-admonition-info: #6aa6f2;
+  --th-admonition-warning: #e2b23c;
   --th-admonition-danger: #e0705f;
 }
 
@@ -282,17 +284,19 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
 
 /* ═══════════════════════════════════════════
    提示块（:::note / tip / info / warning / danger）
-   去掉 Infima 默认的彩色底、粗左边和阴影，改成与代码块同规格的卡片：
-   surface 底 + 细边框 + 8px 圆角，不画左侧竖线，类型只体现在标题前的图标上：
-   Lucide 线条图标放在同色 14% 淡底的圆角小片里（info ⓘ / tip 灯泡 / warning 三角 / danger 八角 / note 笔记本）。
+   去掉 Infima 默认的粗左边和阴影，改成 8px 圆角卡片，不画左侧竖线：
+   框底和框边是类型色调淡（底 6% / 边 22%，深色下略提高），一眼能看出是提示框；
+   标题前的 Lucide 线条图标放在同色 14% 淡底的圆角小片里
+   （info ⓘ / tip 灯泡 / warning 三角 / danger 八角 / note 笔记本）。
    图标在 src/theme/Admonition/Icon/ 换成 Lucide 线条版，
    无自定义标题时的中文默认标签见 src/theme/Admonition/index.js
    ═══════════════════════════════════════════ */
 .theme-admonition.alert {
-  --ifm-alert-background-color: var(--th-surface-1);
+  --th-admonition-color: var(--th-text-3); /* note 等未指定类型：中性灰 */
+  --ifm-alert-background-color: color-mix(in srgb, var(--th-admonition-color) 6%, var(--th-page));
   --ifm-alert-background-color-highlight: var(--th-surface-2);
   --ifm-alert-foreground-color: var(--th-text-2);
-  --ifm-alert-border-color: var(--th-line);
+  --ifm-alert-border-color: color-mix(in srgb, var(--th-admonition-color) 22%, transparent);
   --ifm-alert-border-width: 1px;
   --ifm-alert-border-left-width: 1px;
   --ifm-alert-border-radius: 8px;
@@ -302,9 +306,13 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
   --ifm-link-color: var(--th-accent);
   --ifm-link-hover-color: var(--th-accent);
   --ifm-code-background: var(--th-surface-2);
-  --th-admonition-color: var(--th-text-3); /* note 等未指定类型：中性灰 */
   margin-bottom: 1.25rem;
   color: var(--th-text-2);
+}
+
+html[data-theme='dark'] .theme-admonition.alert {
+  --ifm-alert-background-color: color-mix(in srgb, var(--th-admonition-color) 10%, var(--th-page));
+  --ifm-alert-border-color: color-mix(in srgb, var(--th-admonition-color) 28%, transparent);
 }
 
 /* 类型色：选择器要和上面 .theme-admonition.alert 同优先级，否则盖不过默认的中性灰 */
