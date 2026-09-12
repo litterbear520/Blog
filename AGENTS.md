@@ -74,6 +74,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │       ├── MDXComponents/index.js # 注册全局 MDX 组件（Term 术语悬停解释，正文直接用无需 import）
 │       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图
 │       ├── DocCard/Heading/Icon/  # 覆盖为空组件：去掉 DocCardList 卡片标题前的 🗃️/📄️ emoji
+│       ├── Admonition/            # 提示块：index.js 包装层给无标题的 :::info 补中文默认标签；Icon/ 五个图标换成 Lucide 线条版，配色与卡片样式在 custom.css「提示块」一节
 │       ├── Icon/LightMode|DarkMode|SystemColorMode/  # 深浅切换按钮图标换成 Lucide 线条版（sun / moon / monitor），与导航栏 GitHub 图标同规格
 │       ├── CodeBlock/             # 代码块「运行」按钮 + 预录输出面板：Buttons/RunButton、Layout（挂面板）、Content/String（读 data-output）、RunOutput/（context + Panel 逐行打印）
 │       ├── prism-cursor-theme.js  # Cursor 暗色代码高亮主题
@@ -107,6 +108,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
 - **代码块预录输出**：代码围栏加 `run`，紧接一个 `output` 围栏写运行结果，构建时由 `plugins/remark-run-output.js` 合并；页面上代码块右上角出现 ▷ 按钮，点击后底部展开「输出」面板逐行打印（悬停标签提示为预录），再点收起。不是真跑代码，输出要先在本地跑一遍如实录入
 - **术语悬停解释**：正文里写 `<Term tip="解释">LOAD_FAST</Term>`，词下有虚线，鼠标悬停或 Tab 聚焦弹出解释；已注册进 MDX 全局，docs / roadmap / blog 通用，无需 import
+- **提示块样式**：`:::note / tip / info / warning / danger` 不用 Infima 默认的彩色底 + 粗左边，统一为与代码块同规格的 surface 底 + 细边框 + 8px 圆角卡片，类型只体现在左侧 3px 色条和 Lucide 线条图标上（info 陶土、tip 绿、warning 琥珀、danger 红、note 中性灰，令牌 `--th-admonition-*`）；标题不大写、不缩小，中文长句标题可换行；没写 `[标题]` 时显示中文默认标签（信息 / 提示 / 注意 / 危险 / 备注），见 `src/theme/Admonition/`
 - **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
 
 ## 内容编写规范
