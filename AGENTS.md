@@ -74,7 +74,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │       ├── MDXComponents/index.js # 注册全局 MDX 组件（Term 术语悬停解释，正文直接用无需 import）
 │       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图
 │       ├── DocCard/Heading/Icon/  # 覆盖为空组件：去掉 DocCardList 卡片标题前的 🗃️/📄️ emoji
-│       ├── Admonition/            # 提示块：index.js 包装层给无标题的 :::info 补中文默认标签；Icon/ 五个图标换成 Lucide 线条版，配色与卡片样式在 custom.css「提示块」一节
+│       ├── Admonition/            # 提示块：index.js 包装层补中文默认标签；Icon/ 是 GitHub alerts 同款 Octicons；Types.js 注册自定义的 important 类型；配色与卡片样式在 custom.css「提示块」一节
 │       ├── Icon/LightMode|DarkMode|SystemColorMode/  # 深浅切换按钮图标换成 Lucide 线条版（sun / moon / monitor），与导航栏 GitHub 图标同规格
 │       ├── CodeBlock/             # 代码块「运行」按钮 + 预录输出面板：Buttons/RunButton、Layout（挂面板）、Content/String（读 data-output）、RunOutput/（context + Panel 逐行打印）
 │       ├── prism-cursor-theme.js  # Cursor 暗色代码高亮主题
@@ -108,7 +108,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
 - **代码块预录输出**：代码围栏加 `run`，紧接一个 `output` 围栏写运行结果，构建时由 `plugins/remark-run-output.js` 合并；页面上代码块右上角出现 ▷ 按钮，点击后底部展开「输出」面板逐行打印（悬停标签提示为预录），再点收起。不是真跑代码，输出要先在本地跑一遍如实录入
 - **术语悬停解释**：正文里写 `<Term tip="解释">LOAD_FAST</Term>`，词下有虚线，鼠标悬停或 Tab 聚焦弹出解释；已注册进 MDX 全局，docs / roadmap / blog 通用，无需 import
-- **提示块样式**：`:::note / tip / info / warning / danger` 不用 Infima 默认的彩色底 + 粗左边，统一为 8px 圆角卡片，不画左侧竖线；类型色按通用语义（info 蓝、tip 绿、warning 黄、danger 红、note 中性灰，令牌 `--th-admonition-*`），同一个色调淡后做框底和框边，标题前是同色 Lucide 线条图标，直接放在框底上不另垫底（info ⓘ / tip 灯泡 / warning 三角 / danger 八角 / note 笔记本）；标题不大写、不缩小，中文长句标题可换行；没写 `[标题]` 时显示中文默认标签（信息 / 提示 / 注意 / 危险 / 备注），见 `src/theme/Admonition/`；标题写“提示”就用 `:::tip`、写“注意”就用 `:::warning`，别用 `:::info[提示]`，否则图标和标题对不上
+- **提示块样式**：`:::note / info / tip / important / warning / danger` 照 GitHub alerts 的图标（Octicons）和配色（note/info 蓝、tip 绿、important 紫、warning 黄、danger 红，令牌 `--th-admonition-*`），但不画左侧竖线，改成 8px 圆角卡片，靠类型色调淡的框底和框边区分；标题与图标同色、不大写、不缩小，中文长句标题可换行，图标直接放在框底上不另垫底；没写 `[标题]` 时显示中文默认标签（备注 / 信息 / 提示 / 重要 / 注意 / 危险）。`important` 是自定义类型：关键字在 `docusaurus.config.js` 三个内容插件的 `admonitions.keywords` 注册，组件在 `src/theme/Admonition/Types.js`。标题写“提示”就用 `:::tip`、写“注意”就用 `:::warning`，别用 `:::info[提示]`
 - **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
 
 ## 内容编写规范
