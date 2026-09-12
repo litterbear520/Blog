@@ -360,7 +360,7 @@ compliance = response.output_parsed
 
 虽然结构化输出支持 JSON Schema 的大部分功能，但由于性能或技术原因，某些功能不可用
 
-:::info[提示]
+:::tip[提示]
 为了最大化模型生成的质量，建议：
 
 - 清晰直观地命名键
