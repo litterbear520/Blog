@@ -283,7 +283,8 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
 /* ═══════════════════════════════════════════
    提示块（:::note / tip / info / warning / danger）
    去掉 Infima 默认的彩色底、粗左边和阴影，改成与代码块同规格的卡片：
-   surface 底 + 细边框 + 8px 圆角，不画左侧竖线，类型只体现在线条图标的颜色上。
+   surface 底 + 细边框 + 8px 圆角，不画左侧竖线，类型只体现在标题前的图标上：
+   Lucide 线条图标放在同色 14% 淡底的圆角小片里（info ⓘ / tip 灯泡 / warning 三角 / danger 八角 / note 笔记本）。
    图标在 src/theme/Admonition/Icon/ 换成 Lucide 线条版，
    无自定义标题时的中文默认标签见 src/theme/Admonition/index.js
    ═══════════════════════════════════════════ */
@@ -344,17 +345,28 @@ html[data-theme='dark'] .theme-admonition [class*='admonitionHeading'] {
   margin-bottom: 0;
 }
 
+/* 图标放在淡色圆角小片里：片高 = 标题行高（1.55em），正好与首行对齐 */
 .theme-admonition [class*='admonitionIcon'] {
   display: inline-flex;
   flex: none;
-  margin: 0.2em 0 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.55em;
+  height: 1.55em;
+  margin: 0;
+  border-radius: 6px;
   color: var(--th-admonition-color);
+  background: color-mix(in srgb, var(--th-admonition-color) 14%, transparent);
+}
+
+html[data-theme='dark'] .theme-admonition [class*='admonitionIcon'] {
+  background: color-mix(in srgb, var(--th-admonition-color) 18%, transparent);
 }
 
 .theme-admonition [class*='admonitionIcon'] svg {
   display: block;
-  width: 1.15em;
-  height: 1.15em;
+  width: 1em;
+  height: 1em;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
