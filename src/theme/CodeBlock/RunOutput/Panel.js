@@ -80,7 +80,12 @@ export default function RunOutputPanel() {
       </div>
       <pre className="run-output__body" aria-live="polite">
         {lines.slice(0, shown).map((line, i) => (
-          <div className="run-output__line" key={i}>
+          <div
+            className={clsx(
+              'run-output__line',
+              run.highlight.has(i + 1) && 'run-output__line--highlight',
+            )}
+            key={i}>
             {line === '' ? ' ' : line}
           </div>
         ))}
