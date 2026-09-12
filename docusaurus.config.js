@@ -96,11 +96,12 @@ const config = {
   ],
 
   stylesheets: [
+    // 保留原字体文件及字符分片，从本站加载以避免外部样式请求阻塞首屏。
+    '/fonts/google-fonts.css',
     {
-      href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
+      href: '/katex/katex.min.css',
       integrity:
         'sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV',
-      crossorigin: 'anonymous',
     },
   ],
 

@@ -1,6 +1,6 @@
 /**
  * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally. 
+ * and scoped locally.
  */
 
 .heroBanner {
@@ -9,14 +9,19 @@
   position: relative;
   overflow: hidden;
   background-color: #2a2a2a;
-  background-image: url('/img/city.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   height: 100vh; /* Make sure the hero banner takes full viewport height */
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.wallpaper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .rainCanvas {
@@ -73,4 +78,4 @@
 
 /* .blogSection li a:hover { */
 /*   text-decoration: underline; */
-/* } */ 
+/* } */
