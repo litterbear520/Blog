@@ -109,7 +109,7 @@
   --docusaurus-highlighted-code-line-bg: #1F8A651F;
   --th-code-added-bar: #1F8A65;
 
-  /* 提示块类型色：只用于左侧色条和图标（info 沿用强调色，tip 沿用代码高亮的绿） */
+  /* 提示块类型色：只用于标题图标（info 沿用强调色，tip 沿用代码高亮的绿） */
   --th-admonition-info: var(--th-accent);
   --th-admonition-tip: var(--th-code-added-bar);
   --th-admonition-warning: #b7791f;
@@ -283,7 +283,7 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
 /* ═══════════════════════════════════════════
    提示块（:::note / tip / info / warning / danger）
    去掉 Infima 默认的彩色底、粗左边和阴影，改成与代码块同规格的卡片：
-   surface 底 + 细边框 + 8px 圆角，类型只体现在左侧 3px 色条和线条图标上。
+   surface 底 + 细边框 + 8px 圆角，不画左侧竖线，类型只体现在线条图标的颜色上。
    图标在 src/theme/Admonition/Icon/ 换成 Lucide 线条版，
    无自定义标题时的中文默认标签见 src/theme/Admonition/index.js
    ═══════════════════════════════════════════ */
@@ -304,8 +304,6 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
   --th-admonition-color: var(--th-text-3); /* note 等未指定类型：中性灰 */
   margin-bottom: 1.25rem;
   color: var(--th-text-2);
-  /* 左侧 3px 类型色条，用内阴影画以便跟随圆角 */
-  box-shadow: inset 3px 0 0 var(--th-admonition-color);
 }
 
 /* 类型色：选择器要和上面 .theme-admonition.alert 同优先级，否则盖不过默认的中性灰 */
