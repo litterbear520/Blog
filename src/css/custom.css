@@ -2,13 +2,11 @@
  * 全局样式。
  *
  * 主题：暖灰米白 / 深暖灰两套底色，衬线标题 + 无衬线正文，低对比细分割线，陶土色强调。
- * 字体均来自 Google Fonts：
+ * 字体均来自 Google Fonts，原文件自托管于 static/fonts/：
  *   标题  Source Serif 4 + Noto Serif SC（后者的拉丁字形本就源自 Source Serif）
  *   正文  Inter + Noto Sans SC
  *   代码  Cursor 默认等宽栈（Menlo / Consolas / Droid Sans Mono，跟随系统，不走网络字体），高亮配色见 src/theme/prism-cursor-*.js
  */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Noto+Sans+SC:wght@300..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Noto+Serif+SC:wght@400..700&display=swap');
 
 /* ═══════════════════════════════════════════
    主题令牌（浅色）

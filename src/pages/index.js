@@ -1,39 +1,28 @@
 import Layout from '@theme/Layout';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import clsx from 'clsx';
+import wallpaper from '@site/static/img/city.webp';
+import portraitWallpaper from '@site/static/img/city-portrait.webp';
 import styles from './index.module.css';
 
 function HomepageHeader() {
-  const startDate = new Date('2025-05-15T00:00:00'); // 设置开始日期为2025年5月15日
-  const [timePassed, setTimePassed] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    const calculateTimePassed = () => {
-      const now = new Date();
-      const diff = now.getTime() - startDate.getTime();
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      setTimePassed({ days, hours, minutes, seconds });
-    };
-
-    const intervalId = setInterval(calculateTimePassed, 1000);
-    calculateTimePassed(); // Initial call to set time immediately
-
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     // 运行时状态
     let drops = [];
     let animationId = 0;
     let lastTs = 0;
-    let isPaused = false;
+    let lastFrameTs = 0;
+    let isInViewport = true;
+    const FRAME_INTERVAL = 1000 / 30;
 
     // 画布尺寸与 DPR（限制以降低开销）
     let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -55,9 +44,9 @@ function HomepageHeader() {
       }
       reset(randomY = false) {
         this.x = Math.random() * widthCss;
-        this.y = randomY ? Math.random() * heightCss : -this.length;
         // 长度和速度正相关以提升观感
         this.length = rand(8, 22);
+        this.y = randomY ? Math.random() * heightCss : -this.length;
         this.speed = this.length * rand(18, 32); // px/s，和长度相关
       }
       update(dt) {
@@ -70,8 +59,9 @@ function HomepageHeader() {
     }
 
     function computeDesiredCount() {
-      const desired = Math.round(widthCss * heightCss * DENSITY_PER_PIXEL);
-      return Math.max(MIN_DROPS, Math.min(MAX_DROPS, desired));
+      const isMobile = widthCss <= 600;
+      const desired = Math.round(widthCss * heightCss * DENSITY_PER_PIXEL * (isMobile ? 0.6 : 1));
+      return Math.max(isMobile ? 30 : MIN_DROPS, Math.min(isMobile ? 120 : MAX_DROPS, desired));
     }
 
     function ensureDrops() {
@@ -85,9 +75,13 @@ function HomepageHeader() {
 
     function applyCanvasSize() {
       // 使用 CSS 尺寸作为逻辑坐标系，内部像素用 DPR 放大
-      widthCss = canvas.clientWidth || window.innerWidth;
-      heightCss = canvas.clientHeight || window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const nextWidth = canvas.clientWidth || window.innerWidth;
+      const nextHeight = canvas.clientHeight || window.innerHeight;
+      const nextDpr = Math.min(window.devicePixelRatio || 1, nextWidth <= 600 ? 1 : 1.5);
+      if (nextWidth === widthCss && nextHeight === heightCss && nextDpr === dpr) return;
+      widthCss = nextWidth;
+      heightCss = nextHeight;
+      dpr = nextDpr;
 
       canvas.width = Math.max(1, Math.floor(widthCss * dpr));
       canvas.height = Math.max(1, Math.floor(heightCss * dpr));
@@ -104,20 +98,30 @@ function HomepageHeader() {
       applyCanvasSize();
     }
 
-    function onVisibilityChange() {
-      isPaused = document.hidden;
-      if (!isPaused) {
-        // 恢复时重置计时，避免大 dt 跳变
-        lastTs = 0;
-        animationId = requestAnimationFrame(animate);
+    function shouldAnimate() {
+      return !document.hidden && !reducedMotion.matches && isInViewport;
+    }
+
+    function syncAnimation() {
+      cancelAnimationFrame(animationId);
+      animationId = 0;
+      lastTs = 0;
+      lastFrameTs = 0;
+      if (reducedMotion.matches) {
+        ctx.clearRect(0, 0, widthCss, heightCss);
       }
+      if (shouldAnimate()) animationId = requestAnimationFrame(animate);
     }
 
     function animate(ts) {
-      if (isPaused) return;
-      const t = typeof ts === 'number' ? ts : performance.now();
-      const dtMs = lastTs ? Math.min(48, t - lastTs) : 16; // 钳制最大步长
-      lastTs = t;
+      if (!shouldAnimate()) return;
+      animationId = requestAnimationFrame(animate);
+      const elapsed = ts - lastFrameTs;
+      if (lastFrameTs && elapsed < FRAME_INTERVAL) return;
+      // 保留不足一帧的余量，避免在高刷新率屏幕上出现帧率漂移。
+      lastFrameTs = ts - (elapsed % FRAME_INTERVAL);
+      const dtMs = lastTs ? Math.min(100, ts - lastTs) : FRAME_INTERVAL;
+      lastTs = ts;
       const dt = dtMs / 1000; // 转换为秒
 
       // 更新
@@ -133,31 +137,50 @@ function HomepageHeader() {
       }
       ctx.stroke();
 
-      animationId = requestAnimationFrame(animate);
     }
 
     window.addEventListener('resize', onResize);
-    document.addEventListener('visibilitychange', onVisibilityChange);
+    document.addEventListener('visibilitychange', syncAnimation);
+    reducedMotion.addEventListener('change', syncAnimation);
+    const observer = new IntersectionObserver(([entry]) => {
+      isInViewport = entry.isIntersecting;
+      syncAnimation();
+    });
+    observer.observe(canvas);
 
     applyCanvasSize();
     // 初始时让雨滴分布均匀
     for (let i = 0; i < drops.length; i += 1) drops[i].reset(true);
-    animationId = requestAnimationFrame(animate);
+    syncAnimation();
 
     return () => {
-      clearInterval(intervalId);
       window.removeEventListener('resize', onResize);
-      document.removeEventListener('visibilitychange', onVisibilityChange);
+      document.removeEventListener('visibilitychange', syncAnimation);
+      reducedMotion.removeEventListener('change', syncAnimation);
+      observer.disconnect();
       if (animationId) cancelAnimationFrame(animationId);
     };
-  }, [startDate]);
+  }, []);
 
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        {/** 保留容器，已移除文本 **/}
-        <canvas ref={canvasRef} className={styles.rainCanvas}></canvas>
-      </div>
+      <picture>
+        <source
+          media="(max-width: 600px) and (max-aspect-ratio: 2/3)"
+          srcSet={portraitWallpaper}
+          type="image/webp"
+        />
+        <img
+          className={styles.wallpaper}
+          src={wallpaper}
+          width="2560"
+          height="1440"
+          alt=""
+          fetchPriority="high"
+          loading="eager"
+        />
+      </picture>
+      <canvas ref={canvasRef} className={styles.rainCanvas} aria-hidden="true" />
     </header>
   );
 }
