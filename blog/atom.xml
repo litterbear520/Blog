@@ -14,7 +14,7 @@
         <updated>2026-09-09T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[在调研语音代理的记忆模块实现时，我看到了一篇文章，讲的是为什么语音代理的记忆问题比想象中更难。作为记忆模块的开发者，我在开发语音代理的过程中也遇到了文章提到的许多问题，读来感同身受。语音代理和文本代理有很大不同，许多问题尤其棘手，其中响应速度和准确性是我面临的最大挑战。接下来，我会参考这篇文章，结合自己的实践，分享一些思考和体会。]]></summary>
         <content type="html"><![CDATA[<p>在调研语音代理的记忆模块实现时，我看到了一篇文章，讲的是为什么语音代理的记忆问题比想象中更难。作为记忆模块的开发者，我在开发语音代理的过程中也遇到了文章提到的许多问题，读来感同身受。语音代理和文本代理有很大不同，许多问题尤其棘手，其中响应速度和准确性是我面临的最大挑战。接下来，我会参考这篇文章，结合自己的实践，分享一些思考和体会。</p>
-<p>参考原文：<a href="https://manthanguptaa.in/posts/voice_agent_memory/" target="_blank" rel="noopener noreferrer" class="">Memory in Voice Agents Is a Harder Problem Than You Think</a></p>
+<!-- -->
 <p>第一次尝试为语音代理接入记忆层时，系统从第一轮开始就慢了数百毫秒，之后每一轮都是如此。仅仅一轮交互，对话就从自然流畅变成了让人忍不住问“还在吗？”的状态。原因是我原封不动地移植了文本代理的记忆架构：先对托管存储中的记忆做同步向量检索，再做一次简单的重排序，最后才交给 LLM。在文本聊天界面中，这点延迟几乎不会被注意到。但在语音场景中，每一轮都让人感觉代理开口前要先缓冲一下。</p>
 <p>语音记忆并不是给文本记忆收紧一点延迟预算就能实现的。它对延迟的要求严苛到必须重新安排整个读写流程。大部分记忆操作都不能放在响应的关键路径上，而要提前加载、提前计算，或在响应之后写入。</p>
 <p>我花了不少时间研究不同项目的记忆机制，包括 ChatGPT 和 Claude 的记忆如何运作，以及 Mem0、Hindsight、OpenClaw（小龙虾）等开源项目的记忆实现。但这些经验仍不足以让我充分应对语音场景给架构设计带来的挑战。这篇文章讨论的，就是这些约束、由此带来的权衡、生产环境中常见的四类架构，以及那些走过弯路才会明白的经验。</p>
@@ -113,7 +113,9 @@
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="最后的思考">最后的思考<a href="https://huangsitao.fun/blog/voice-agent-memory#%E6%9C%80%E5%90%8E%E7%9A%84%E6%80%9D%E8%80%83" class="hash-link" aria-label="Direct link to 最后的思考" title="Direct link to 最后的思考" translate="no">​</a></h2>
 <p>语音代理的记忆问题，在很大程度上仍未解决：要跨越多次对话，实现真正接近人类的回忆能力，依然很难。但基础设施层面已经有了清晰且可落地的做法，包括高速缓存、异步提取、结构化档案、对话结束后的摘要、知识图谱和休眠期整合。Pipecat、LiveKit Agents 等成熟框架，以及 Mem0、Zep、Letta、Hindsight、Supermemory、Cognee 等丰富的记忆服务，让你无需从头编写整个记忆读写流程。</p>
 <p>真正考验功力的是语义层面的工作：决定记住什么、什么时候提起，以及怎样自然地表达，避免让代理听起来像是在照着档案念。这需要精心设计提示词，并严格筛选要持久化的内容，而不是一味扩大向量数据库。</p>
-<p>如果只记住一句话，那就是：<strong>在语音代理中，记忆的速度取决于你提前准备好了什么，而不是你当下能检索到什么。</strong></p>]]></content>
+<p>如果只记住一句话，那就是：<strong>在语音代理中，记忆的速度取决于你提前准备好了什么，而不是你当下能检索到什么。</strong></p>
+<hr>
+<p><em>参考文章：<a href="https://manthanguptaa.in/posts/voice_agent_memory/" target="_blank" rel="noopener noreferrer" class="">Memory in Voice Agents Is a Harder Problem Than You Think</a></em></p>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[HTML 的惊人效果]]></title>
