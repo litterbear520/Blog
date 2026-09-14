@@ -6,10 +6,8 @@ description: Anthropic 关于构建 LLM 智能体的实践总结：什么是智�
 
 # 构建高效的智能体
 
-:::note[转载说明]
-本文译自 Anthropic 工程博客 [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)，原文发布于 2024 年 12 月 19 日。
-
-原文注记：本文所描述的工具生态自 2024 年 12 月以来已发生很大变化。Anthropic 当前的做法请参阅 [Claude Managed Agents 的构建历程](https://www.anthropic.com/engineering/managed-agents)与 [Managed Agents 文档](https://platform.claude.com/docs/en/managed-agents/overview)。
+:::note
+本文所描述的工具生态自 2024 年 12 月以来已发生很大变化。Anthropic 当前的做法请参阅 [Claude Managed Agents 的构建历程](https://www.anthropic.com/engineering/managed-agents)与 [Managed Agents 文档](https://platform.claude.com/docs/en/managed-agents/overview)。
 :::
 
 过去一年，Anthropic 与各行各业数十个正在构建大语言模型（LLM）智能体的团队合作。一个反复出现的规律是：最成功的实现并没有依赖复杂的框架或专门的库，而是用简单、可组合的模式搭建起来的。
@@ -231,3 +229,7 @@ Anthropic 对选择工具格式的建议如下：
 - 给工具做[防错设计](https://en.wikipedia.org/wiki/Poka-yoke)（poka-yoke）。调整参数，让犯错变得更难。
 
 在为 [SWE-bench](https://www.anthropic.com/research/swe-bench-sonnet) 构建智能体时，Anthropic 花在优化工具上的时间实际上比花在整体提示词上的还多。例如，Anthropic 发现当智能体离开根目录之后，模型在使用相对文件路径的工具时会出错。为了解决这个问题，Anthropic 把工具改成始终要求绝对路径，结果模型使用起来再也没出过错。
+
+---
+
+*参考文章：[Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)*
