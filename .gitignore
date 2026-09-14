@@ -31,3 +31,5 @@ docs/多模态探索/image/index/1755149583346.png
 /plans
 # 封面预览图（npm run cover -- --preview 的产物）
 /tools/covers/.preview
+# Playwright MCP 浏览器测试产物（截图、控制台日志）
+/.playwright-mcp
