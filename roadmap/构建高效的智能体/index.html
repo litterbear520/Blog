@@ -1,0 +1,163 @@
+<!doctype html><html lang=en dir=ltr class="docs-wrapper plugin-docs plugin-id-roadmap docs-version-current docs-doc-page docs-doc-id-构建高效的智能体/index" data-has-hydrated=false><head><meta charset=UTF-8><meta name=generator content="Docusaurus v3.10.2"><title data-rh=true>构建高效的智能体 | 小熊的博客</title><meta data-rh=true name=viewport content="width=device-width, initial-scale=1.0"/><meta data-rh=true name=twitter:card content=summary_large_image /><meta data-rh=true property=og:image content=https://huangsitao.fun/img/docusaurus-social-card.jpg /><meta data-rh=true name=twitter:image content=https://huangsitao.fun/img/docusaurus-social-card.jpg /><meta data-rh=true property=og:url content=https://huangsitao.fun/roadmap/构建高效的智能体/ /><meta data-rh=true property=og:locale content=en /><meta data-rh=true name=docusaurus_locale content=en /><meta data-rh=true name=docsearch:language content=en /><meta data-rh=true name=docusaurus_version content=current /><meta data-rh=true name=docusaurus_tag content=docs-roadmap-current /><meta data-rh=true name=docsearch:version content=current /><meta data-rh=true name=docsearch:docusaurus_tag content=docs-roadmap-current /><meta data-rh=true property=og:title content="构建高效的智能体 | 小熊的博客"/><meta data-rh=true name=description content="Anthropic 关于构建 LLM 智能体的实践总结：什么是智能体、何时该用、五种工作流模式，以及为工具做提示词工程。"/><meta data-rh=true property=og:description content="Anthropic 关于构建 LLM 智能体的实践总结：什么是智能体、何时该用、五种工作流模式，以及为工具做提示词工程。"/><link data-rh=true rel=icon href=/img/icon2.png /><link data-rh=true rel=canonical href=https://huangsitao.fun/roadmap/构建高效的智能体/ /><link data-rh=true rel=alternate href=https://huangsitao.fun/roadmap/构建高效的智能体/ hreflang=en /><link data-rh=true rel=alternate href=https://huangsitao.fun/roadmap/构建高效的智能体/ hreflang=x-default /><script data-rh=true type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://huangsitao.fun/roadmap/构建高效的智能体/","name":"构建高效的智能体","position":1}]}</script><link rel=alternate type=application/rss+xml href=/blog/rss.xml title="小熊的博客 RSS Feed"><link rel=alternate type=application/atom+xml href=/blog/atom.xml title="小熊的博客 Atom Feed"><link rel=stylesheet href=/fonts/google-fonts.css><link rel=stylesheet href=/katex/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV><link rel=stylesheet href=/assets/css/styles.8c0d99d9.css /><script src=/assets/js/runtime~main.8c57392d.js defer></script><script src=/assets/js/main.18aae4e4.js defer></script></head><body><svg style="display: none;"><defs>
+<symbol id=theme-svg-external-link viewBox="0 0 24 24"><path fill=currentColor d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme-3a6")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||"dark"),document.documentElement.setAttribute("data-theme-choice",t||"dark")}(),function(){try{for(var[t,e]of new URLSearchParams(window.location.search).entries())if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id=__docusaurus><link rel=preload as=image href=/img/icon.png /><div role=region aria-label="Skip to main content"><a class=skipToContent_fXgn href=#__docusaurus_skipToContent_fallback>Skip to main content</a></div><nav aria-label=Main class="theme-layout-navbar navbar navbar--fixed-top"><div class=navbar__inner><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded=false class="navbar__toggle clean-btn" type=button><svg width=30 height=30 viewBox="0 0 30 30" aria-hidden=true><path stroke=currentColor stroke-linecap=round stroke-miterlimit=10 stroke-width=2 d="M4 7h22M4 15h22M4 23h22"/></svg></button><a class=navbar__brand href=/><div class=navbar__logo><img src=/img/icon.png alt="Blog Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"/><img src=/img/icon.png alt="Blog Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"/></div></a><a class="navbar__item navbar__link" href=/docs/MCP>笔记</a><a class="navbar__item navbar__link" href=/bloglist>博文</a><a aria-current=page class="navbar__item navbar__link navbar__link--active" href=/roadmap>路线</a><a class="navbar__item navbar__link" href=/skills>Skills</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href=https://github.com/litterbear520/Blog target=_blank rel="noopener noreferrer" class="navbar__item navbar__link header-github-link" aria-label="GitHub 仓库"></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type=button disabled title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width=24 height=24 fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round aria-hidden=true class="toggleIcon_g3eP lightToggleIcon_pyhR"><circle cx=12 cy=12 r=4 /><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg><svg viewBox="0 0 24 24" width=24 height=24 fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round aria-hidden=true class="toggleIcon_g3eP darkToggleIcon_wfgR"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg><svg viewBox="0 0 24 24" width=24 height=24 fill=none stroke=currentColor stroke-width=2 stroke-linecap=round stroke-linejoin=round aria-hidden=true class="toggleIcon_g3eP systemToggleIcon_QzmC"><rect width=20 height=14 x=2 y=3 rx=2 /><path d="M8 21h8"/><path d="M12 17v4"/></svg></button></div><div class=navbarSearchContainer_Bca1></div></div></div><div role=presentation class=navbar-sidebar__backdrop></div></nav><div id=__docusaurus_skipToContent_fallback class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class=docsWrapper_hBAB><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type=button></button><div class=docRoot_UBD9><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class=sidebarViewport_aRkj><div class=sidebar_njMd><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/roadmap/><span class=linkLabel_WmDU>前言</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class=menu__link href=/roadmap/高效商务Agent架构指南/><span class=linkLabel_WmDU>高效商务 Agent 架构指南</span></a><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current=page href=/roadmap/构建高效的智能体/><span class=linkLabel_WmDU>构建高效的智能体</span></a></ul></nav></div></div></aside><main class=docMainContainer_TBSr><div class="container padding-top--md padding-bottom--lg"><div class=row><div class="col docItemCol_VOVn"><div class=docItemContainer_Djhp><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label=Breadcrumbs><ul class=breadcrumbs><li class=breadcrumbs__item><a aria-label="Home page" class=breadcrumbs__link href=/><svg viewBox="0 0 24 24" class=breadcrumbHomeIcon_YNFT><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill=currentColor /></svg></a><li class="breadcrumbs__item breadcrumbs__item--active"><span class=breadcrumbs__link>构建高效的智能体</span></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type=button class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>构建高效的智能体</h1></header>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class=admonitionHeading_Gvgb><span class=admonitionIcon_Rf37><svg viewBox="0 0 16 16" width=16 height=16 fill=currentColor aria-hidden=true><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg></span>转载说明</div><div class=admonitionContent_BuS1><p>本文译自 Anthropic 工程博客 <a href=https://www.anthropic.com/engineering/building-effective-agents target=_blank rel="noopener noreferrer" class="">Building Effective Agents</a>，原文发布于 2024 年 12 月 19 日。<p>原文注记：本文所描述的工具生态自 2024 年 12 月以来已发生很大变化。Anthropic 当前的做法请参阅 <a href=https://www.anthropic.com/engineering/managed-agents target=_blank rel="noopener noreferrer" class="">Claude Managed Agents 的构建历程</a>与 <a href=https://platform.claude.com/docs/en/managed-agents/overview target=_blank rel="noopener noreferrer" class="">Managed Agents 文档</a>。</div></div>
+<p>过去一年，Anthropic 与各行各业数十个正在构建大语言模型（LLM）智能体的团队合作。一个反复出现的规律是：最成功的实现并没有依赖复杂的框架或专门的库，而是用简单、可组合的模式搭建起来的。</p>
+<p>本文分享 Anthropic 在服务客户与自行构建智能体的过程中积累的经验，并为开发者构建高效智能体给出实用建议。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=什么是智能体>什么是智能体？<a href=#什么是智能体 class=hash-link aria-label="Direct link to 什么是智能体？" title="Direct link to 什么是智能体？" translate=no>​</a></h2>
+<p>“智能体”（Agent）有好几种定义。有些客户把智能体定义为完全自主的系统：它们能长时间独立运行，借助各种工具完成复杂任务。另一些人则用这个词指代更规范化的实现，即按预先定义好的工作流执行。在 Anthropic，这些变体被统称为<strong>智能体系统</strong>（agentic systems），但在架构上会对<strong>工作流</strong>（workflow）和<strong>智能体</strong>（agent）做一个重要区分：</p>
+<ul>
+<li class=""><strong>工作流</strong>：由预先写好的代码路径来编排 LLM 和工具的系统。</li>
+<li class=""><strong>智能体</strong>：由 LLM 动态决定自己的执行过程和工具用法、自主掌控完成任务方式的系统。</li>
+</ul>
+<p>下面会详细探讨这两类智能体系统。附录 1（“智能体的实践”）介绍了客户在两个领域里从这类系统中获得的显著价值。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=何时该用以及何时不该用智能体>何时该用（以及何时不该用）智能体<a href=#何时该用以及何时不该用智能体 class=hash-link aria-label="Direct link to 何时该用（以及何时不该用）智能体" title="Direct link to 何时该用（以及何时不该用）智能体" translate=no>​</a></h2>
+<p>用 LLM 构建应用时，Anthropic 建议先找最简单的解决方案，只在必要时才增加复杂度。这可能意味着根本不需要构建智能体系统。智能体系统通常是用更高的延迟和成本换取更好的任务表现，你需要想清楚这笔交换在什么情况下划算。</p>
+<p>当确实需要更高的复杂度时：对于定义清晰的任务，工作流能提供可预测性和一致性；而当需要在规模化场景下保持灵活、让模型来做决策时，智能体是更好的选择。不过对很多应用来说，把单次 LLM 调用配合检索和上下文示例优化好，通常就已经足够。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=何时以及如何使用框架>何时以及如何使用框架<a href=#何时以及如何使用框架 class=hash-link aria-label="Direct link to 何时以及如何使用框架" title="Direct link to 何时以及如何使用框架" translate=no>​</a></h2>
+<p>有许多框架能让智能体系统更容易实现，包括：</p>
+<ul>
+<li class=""><a href=https://platform.claude.com/docs/en/agent-sdk/overview target=_blank rel="noopener noreferrer" class="">Claude Agent SDK</a>；</li>
+<li class="">AWS 的 <a href=https://strandsagents.com/latest/ target=_blank rel="noopener noreferrer" class="">Strands Agents SDK</a>；</li>
+<li class=""><a href=https://rivet.ironcladapp.com/ target=_blank rel="noopener noreferrer" class="">Rivet</a>，一个拖拽式的图形化 LLM 工作流构建器；</li>
+<li class=""><a href=https://www.vellum.ai/ target=_blank rel="noopener noreferrer" class="">Vellum</a>，另一个用于构建和测试复杂工作流的图形化工具。</li>
+</ul>
+<p>这些框架简化了调用 LLM、定义和解析工具、串联多次调用等标准的底层工作，让上手变得容易。但它们往往会额外引入抽象层，把底层的提示词和响应遮住，加大调试难度；还容易诱使你在一个简单方案本已足够的时候堆砌复杂度。</p>
+<p>Anthropic 建议开发者先直接使用 LLM API：许多模式用几行代码就能实现。如果你确实要用框架，请确保理解其底层代码。对框架内部机制的错误假设，是客户出错的常见原因。</p>
+<p>一些示例实现可参考 Anthropic 的 <a href=https://platform.claude.com/cookbook/patterns-agents-basic-workflows target=_blank rel="noopener noreferrer" class="">cookbook</a>。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=基础构件工作流与智能体>基础构件、工作流与智能体<a href=#基础构件工作流与智能体 class=hash-link aria-label="Direct link to 基础构件、工作流与智能体" title="Direct link to 基础构件、工作流与智能体" translate=no>​</a></h2>
+<p>本节探讨 Anthropic 在生产环境中见到的智能体系统常见模式。先从基础构件——增强型 LLM——讲起，再逐步增加复杂度，从简单的组合式工作流一直讲到自主智能体。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=基础构件增强型-llm>基础构件：增强型 LLM<a href=#基础构件增强型-llm class=hash-link aria-label="Direct link to 基础构件：增强型 LLM" title="Direct link to 基础构件：增强型 LLM" translate=no>​</a></h3>
+<p>智能体系统的基本构件，是一个经过检索、工具、记忆等能力增强的 LLM。Anthropic 当前的模型已经能主动运用这些能力：自己生成搜索查询、挑选合适的工具、决定要保留哪些信息。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/augmented-llm-f48417afda2bb6520ddc9497ffd595ae.png width=2401 height=1000 class=img_ev3q /></span></p>
+<p><em>增强型 LLM</em></p>
+<p>Anthropic 建议在实现时重点关注两件事：一是把这些能力针对你的具体用例做定制；二是确保它们为 LLM 提供简单、文档完善的接口。实现这些增强的方式很多，其中之一是使用 Anthropic 近期发布的 <a href=https://www.anthropic.com/news/model-context-protocol target=_blank rel="noopener noreferrer" class="">Model Context Protocol</a>，开发者只需一个简单的<a href=https://modelcontextprotocol.io/tutorials/building-a-client#building-mcp-clients target=_blank rel="noopener noreferrer" class="">客户端实现</a>，就能接入不断壮大的第三方工具生态。</p>
+<p>本文后续内容都假设每次 LLM 调用都具备这些增强能力。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=工作流提示词链>工作流：提示词链<a href=#工作流提示词链 class=hash-link aria-label="Direct link to 工作流：提示词链" title="Direct link to 工作流：提示词链" translate=no>​</a></h3>
+<p>提示词链（prompt chaining）把一个任务分解成一系列步骤，每次 LLM 调用处理上一步的输出。你可以在任意中间步骤加入程序化检查（见下图中的“gate”），确保整个流程仍在正轨上。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/prompt-chaining-80eab3c7963bca55c75057a9cc70f11f.png width=2401 height=1000 class=img_ev3q /></span></p>
+<p><em>提示词链工作流</em></p>
+<p><strong>适用场景：</strong> 任务能够轻松、干净地拆成固定子任务时，这个工作流最为理想。它的主要目标是用延迟换取更高的准确率：让每一次 LLM 调用都变成一个更简单的任务。</p>
+<p><strong>提示词链的典型用例：</strong></p>
+<ul>
+<li class="">先生成营销文案，再把它翻译成另一种语言。</li>
+<li class="">先写一份文档大纲，检查大纲是否满足特定标准，再依据大纲撰写文档。</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=工作流路由>工作流：路由<a href=#工作流路由 class=hash-link aria-label="Direct link to 工作流：路由" title="Direct link to 工作流：路由" translate=no>​</a></h3>
+<p>路由（routing）先对输入进行分类，再把它导向专门的后续任务。这种工作流可以实现关注点分离，构建更专门化的提示词。如果没有它，针对某一类输入的优化可能会损害其他输入上的表现。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/routing-5d4f40cf196103693e76514df0f0d7e8.png width=2401 height=1000 class=img_ev3q /></span></p>
+<p><em>路由工作流</em></p>
+<p><strong>适用场景：</strong> 路由适合这样的复杂任务：存在若干界限分明、分开处理效果更好的类别，并且分类本身可以被准确完成——无论是由 LLM 来分类，还是用更传统的分类模型或算法。</p>
+<p><strong>路由的典型用例：</strong></p>
+<ul>
+<li class="">把不同类型的客服请求（一般咨询、退款申请、技术支持）导向不同的下游流程、提示词和工具。</li>
+<li class="">把简单、常见的问题路由给 Claude Haiku 4.5 这类更小、更省成本的模型，把困难、少见的问题路由给 Claude Sonnet 4.5 这类能力更强的模型，以兼顾效果与成本。</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=工作流并行化>工作流：并行化<a href=#工作流并行化 class=hash-link aria-label="Direct link to 工作流：并行化" title="Direct link to 工作流：并行化" translate=no>​</a></h3>
+<p>有时 LLM 可以同时处理同一个任务的不同部分，再用程序把各自的输出聚合起来。这种工作流即并行化（parallelization），有两种主要形式：</p>
+<ul>
+<li class=""><strong>分段</strong>（sectioning）：把任务拆成彼此独立、可以并行运行的子任务。</li>
+<li class=""><strong>投票</strong>（voting）：把同一个任务运行多次，得到多样化的输出。</li>
+</ul>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/parallelization-e27969f31c333240090ae6ceb2415df8.png width=2401 height=1000 class=img_ev3q /></span></p>
+<p><em>并行化工作流</em></p>
+<p><strong>适用场景：</strong> 当拆出来的子任务可以并行执行以提高速度，或者需要多个视角、多次尝试来提高结果置信度时，并行化很有效。对于需要兼顾多个方面的复杂任务，让每个方面由单独的 LLM 调用来处理，通常能表现得更好，因为每次调用都能把注意力集中在一个具体方面。</p>
+<p><strong>并行化的典型用例：</strong></p>
+<ul>
+<li class=""><strong>分段</strong>：<!-- -->
+<ul>
+<li class="">实现护栏：一个模型实例处理用户请求，另一个实例筛查其中是否有不当内容或请求。这通常比让同一次 LLM 调用既负责护栏又负责核心回复效果更好。</li>
+<li class="">自动化评测 LLM 表现：每次 LLM 调用评估模型在给定提示词下表现的不同方面。</li>
+</ul>
+</li>
+<li class=""><strong>投票</strong>：<!-- -->
+<ul>
+<li class="">审查一段代码是否存在漏洞：用几个不同的提示词分别审查代码，发现问题就标记出来。</li>
+<li class="">判断一段内容是否不当：多个提示词分别评估不同方面，或设置不同的投票阈值，以平衡误报与漏报。</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=工作流编排器工作者>工作流：编排器—工作者<a href=#工作流编排器工作者 class=hash-link aria-label="Direct link to 工作流：编排器—工作者" title="Direct link to 工作流：编排器—工作者" translate=no>​</a></h3>
+<p>在编排器—工作者（orchestrator-workers）工作流中，一个中心 LLM 动态地分解任务，把子任务委派给工作者 LLM，再把它们的结果综合起来。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/orchestrator-workers-1e5328e40285b680e9f015d68a54b322.png width=2401 height=1000 class=img_ev3q /></span></p>
+<p><em>编排器—工作者工作流</em></p>
+<p><strong>适用场景：</strong> 这个工作流非常适合无法预先知道需要哪些子任务的复杂任务（以编程为例，需要修改的文件数量以及每个文件的改法，很可能都取决于具体任务）。它在拓扑上与并行化相似，但关键区别在于灵活性：子任务不是预先定义好的，而是由编排器根据具体输入来决定。</p>
+<p><strong>编排器—工作者的典型用例：</strong></p>
+<ul>
+<li class="">每次都要对多个文件做复杂修改的编程产品。</li>
+<li class="">需要从多个来源收集并分析信息、找出可能相关内容的搜索任务。</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=工作流评估器优化器>工作流：评估器—优化器<a href=#工作流评估器优化器 class=hash-link aria-label="Direct link to 工作流：评估器—优化器" title="Direct link to 工作流：评估器—优化器" translate=no>​</a></h3>
+<p>在评估器—优化器（evaluator-optimizer）工作流中，一次 LLM 调用负责生成回复，另一次调用负责评估并给出反馈，两者循环往复。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/evaluator-optimizer-d27d12fe915f85af2708f9f59abf937e.png width=2401 height=1000 class=img_ev3q /></span></p>
+<p><em>评估器—优化器工作流</em></p>
+<p><strong>适用场景：</strong> 当有明确的评估标准，并且迭代打磨能带来可衡量的价值时，这个工作流尤其有效。判断是否合适有两个标志：其一，当人类把反馈明确表达出来后，LLM 的回复能得到明显改进；其二，LLM 自己也能给出这样的反馈。这类似于人类写作者打磨一篇文档时的反复修改过程。</p>
+<p><strong>评估器—优化器的典型用例：</strong></p>
+<ul>
+<li class="">文学翻译：译者 LLM 一开始可能抓不住某些微妙之处，而评估者 LLM 能给出有用的批评意见。</li>
+<li class="">需要多轮搜索和分析才能收集到全面信息的复杂搜索任务，由评估器决定是否还需要继续搜索。</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=智能体>智能体<a href=#智能体 class=hash-link aria-label="Direct link to 智能体" title="Direct link to 智能体" translate=no>​</a></h3>
+<p>随着 LLM 在理解复杂输入、推理与规划、可靠地使用工具、从错误中恢复等关键能力上日趋成熟，智能体正在生产环境中崭露头角。智能体的工作始于人类用户的一条指令，或与用户的一段交互式讨论。任务明确之后，智能体便自主规划并执行，过程中可能回头向人类索取更多信息或请求判断。执行期间，智能体在每一步都要从环境中获得“基准事实”（ground truth，例如工具调用结果或代码执行结果）来评估自己的进展，这一点至关重要。智能体可以在检查点或遇到阻碍时暂停，等待人类反馈。任务通常在完成时终止，但为了保持可控，加入停止条件（比如最大迭代次数）也很常见。</p>
+<p>智能体能处理复杂的任务，但它们的实现往往很简单：通常就是一个 LLM 在循环中根据环境反馈使用工具。因此，清晰、周到地设计工具集及其文档至关重要。附录 2（“为你的工具做提示词工程”）会展开讲工具开发的最佳实践。</p>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/autonomous-agent-0e621a0c57e5e314062480529873b17d.png width=2401 height=1000 class=img_ev3q /></span></p>
+<p><em>自主智能体</em></p>
+<p><strong>智能体的适用场景：</strong> 智能体适用于开放式问题：难以甚至无法预知需要多少步骤，也没法硬编码一条固定路径。LLM 可能会运行许多轮，你必须对它的决策有一定程度的信任。智能体的自主性使其非常适合在可信环境中规模化地处理任务。</p>
+<p>智能体的自主特性也意味着更高的成本，以及错误层层累积的可能。Anthropic 建议在沙盒环境中进行充分测试，并配以恰当的护栏。</p>
+<p><strong>智能体的典型用例：</strong></p>
+<p>以下示例来自 Anthropic 自己的实现：</p>
+<ul>
+<li class="">一个用于解决 <a href=https://www.anthropic.com/research/swe-bench-sonnet target=_blank rel="noopener noreferrer" class="">SWE-bench 任务</a>的编程智能体，这类任务需要根据任务描述修改多个文件；</li>
+<li class="">Anthropic 的 <a href=https://github.com/anthropics/anthropic-quickstarts/tree/main/computer-use-demo target=_blank rel="noopener noreferrer" class="">“computer use”参考实现</a>，让 Claude 操作计算机来完成任务。</li>
+</ul>
+<p><span class=wrap_IvEC><img decoding=async loading=lazy src=/assets/images/coding-agent-flow-61affc4d24c818c873e2473ad24d2890.png width=2400 height=1666 class=img_ev3q /></span></p>
+<p><em>编程智能体的高层流程</em></p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=组合与定制这些模式>组合与定制这些模式<a href=#组合与定制这些模式 class=hash-link aria-label="Direct link to 组合与定制这些模式" title="Direct link to 组合与定制这些模式" translate=no>​</a></h2>
+<p>这些构件并不是硬性规定，而是开发者可以根据不同用例来塑造和组合的常见模式。和任何 LLM 功能一样，成功的关键在于衡量表现并不断迭代实现。再强调一次：<em>只有</em>在复杂度能被证明确实改善了结果时，才考虑增加它。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=总结>总结<a href=#总结 class=hash-link aria-label="Direct link to 总结" title="Direct link to 总结" translate=no>​</a></h2>
+<p>在 LLM 领域取得成功，靠的不是构建最精巧的系统，而是构建<em>适合</em>你需求的系统。从简单的提示词开始，通过全面的评测来优化，只有当更简单的方案力有不逮时，才引入多步骤的智能体系统。</p>
+<p>在实现智能体时，Anthropic 会尽量遵循三条核心原则：</p>
+<ol>
+<li class="">保持智能体设计的<strong>简单</strong>。</li>
+<li class="">通过明确展示智能体的规划步骤，把<strong>透明</strong>放在优先位置。</li>
+<li class="">通过完善的工具<strong>文档与测试</strong>，精心打造你的智能体—计算机接口（ACI）。</li>
+</ol>
+<p>框架能帮你快速起步，但在走向生产时，不要犹豫于减少抽象层、用基础组件来构建。遵循这些原则，你构建出的智能体不仅强大，还将可靠、可维护，并赢得用户的信任。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=附录-1智能体的实践>附录 1：智能体的实践<a href=#附录-1智能体的实践 class=hash-link aria-label="Direct link to 附录 1：智能体的实践" title="Direct link to 附录 1：智能体的实践" translate=no>​</a></h2>
+<p>Anthropic 在与客户合作中发现了两个特别有前景的 AI 智能体应用，它们展示了上文所述模式的实际价值。这两个应用都说明：在既需要对话又需要行动、有明确的成功标准、能形成反馈闭环、并且融入了有意义的人工监督的任务上，智能体的价值最大。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=a-客户支持>A. 客户支持<a href=#a-客户支持 class=hash-link aria-label="Direct link to A. 客户支持" title="Direct link to A. 客户支持" translate=no>​</a></h3>
+<p>客户支持把人们熟悉的聊天机器人界面与工具集成带来的增强能力结合在一起。它天然适合更开放式的智能体，因为：</p>
+<ul>
+<li class="">客服交互天然遵循对话流程，同时又需要访问外部信息、执行外部操作；</li>
+<li class="">可以集成工具来拉取客户数据、订单历史和知识库文章；</li>
+<li class="">退款、更新工单等操作可以通过程序完成；</li>
+<li class="">成功与否可以通过用户定义的问题解决标准来清晰衡量。</li>
+</ul>
+<p>已有多家公司通过基于用量的定价模式验证了这条路的可行性：只对成功解决的问题收费，这体现了它们对自家智能体效果的信心。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id=b-编程智能体>B. 编程智能体<a href=#b-编程智能体 class=hash-link aria-label="Direct link to B. 编程智能体" title="Direct link to B. 编程智能体" translate=no>​</a></h3>
+<p>软件开发领域已展现出 LLM 功能的巨大潜力，能力从代码补全一路演进到自主解决问题。智能体在这里尤其有效，因为：</p>
+<ul>
+<li class="">代码方案可以通过自动化测试来验证；</li>
+<li class="">智能体可以把测试结果当作反馈，迭代改进方案；</li>
+<li class="">问题空间定义清晰、结构良好；</li>
+<li class="">输出质量可以客观衡量。</li>
+</ul>
+<p>在 Anthropic 自己的实现中，智能体现在仅凭 pull request 的描述，就能解决 <a href=https://www.anthropic.com/research/swe-bench-sonnet target=_blank rel="noopener noreferrer" class="">SWE-bench Verified</a> 基准测试里真实的 GitHub issue。不过，自动化测试虽然有助于验证功能，人工审查对于确保方案符合更广泛的系统要求仍然至关重要。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id=附录-2为你的工具做提示词工程>附录 2：为你的工具做提示词工程<a href=#附录-2为你的工具做提示词工程 class=hash-link aria-label="Direct link to 附录 2：为你的工具做提示词工程" title="Direct link to 附录 2：为你的工具做提示词工程" translate=no>​</a></h2>
+<p>无论你构建的是哪种智能体系统，工具都很可能是智能体的重要组成部分。<a href=https://www.anthropic.com/news/tool-use-ga target=_blank rel="noopener noreferrer" class="">工具</a>让 Claude 能与外部服务和 API 交互，方式是在 Anthropic 的 API 中指定工具的确切结构和定义。当 Claude 打算调用某个工具时，它的 API 响应里会包含一个 <a href=https://docs.anthropic.com/en/docs/build-with-claude/tool-use#example-api-response-with-a-tool-use-content-block target=_blank rel="noopener noreferrer" class="">tool use 块</a>。工具的定义和规范，值得投入与整体提示词同等的提示词工程精力。这个简短的附录介绍如何为你的工具做提示词工程。</p>
+<p>同一个操作往往有好几种指定方式。比如，修改文件既可以写一个 diff，也可以重写整个文件；结构化输出既可以把代码放在 markdown 里返回，也可以放在 JSON 里返回。在软件工程里，这类差异只是形式上的，可以无损地互相转换。但对 LLM 来说，有些格式比另一些难写得多：写 diff 需要在写出新代码之前，就先在块头（chunk header）里算好有多少行会变化；把代码写在 JSON 里（相比 markdown）则要对换行和引号做额外的转义。</p>
+<p>Anthropic 对选择工具格式的建议如下：</p>
+<ul>
+<li class="">给模型足够的 token 去“思考”，别让它把自己写进死胡同。</li>
+<li class="">让格式尽量贴近模型在互联网文本中自然见过的样子。</li>
+<li class="">确保没有格式上的“额外负担”，比如必须精确数清几千行代码，或者要对写出的所有代码做字符串转义。</li>
+</ul>
+<p>一条经验法则是：想想人们在人机交互（HCI）上投入了多少心思，然后准备在打造优秀的<em>智能体</em>—计算机接口（ACI）上投入同样多的心思。以下是一些具体思路：</p>
+<ul>
+<li class="">站在模型的角度想。根据描述和参数，这个工具的用法是一目了然，还是需要仔细琢磨？如果你都需要琢磨，那模型多半也一样。一个好的工具定义通常包含用法示例、边界情况、输入格式要求，以及与其他工具之间清晰的界限。</li>
+<li class="">怎样修改参数名或描述能让事情更显而易见？把它当成给团队里的初级开发者写一份出色的 docstring。当有很多相似工具时，这一点尤其重要。</li>
+<li class="">测试模型如何使用你的工具：在 Anthropic 的 <a href=https://console.anthropic.com/workbench target=_blank rel="noopener noreferrer" class="">workbench</a> 里跑大量示例输入，看看模型会犯什么错，然后迭代。</li>
+<li class="">给工具做<a href=https://en.wikipedia.org/wiki/Poka-yoke target=_blank rel="noopener noreferrer" class="">防错设计</a>（poka-yoke）。调整参数，让犯错变得更难。</li>
+</ul>
+<p>在为 <a href=https://www.anthropic.com/research/swe-bench-sonnet target=_blank rel="noopener noreferrer" class="">SWE-bench</a> 构建智能体时，Anthropic 花在优化工具上的时间实际上比花在整体提示词上的还多。例如，Anthropic 发现当智能体离开根目录之后，模型在使用相对文件路径的工具时会出错。为了解决这个问题，Anthropic 把工具改成始终要求绝对路径，结果模型使用起来再也没出过错。</div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href=/roadmap/高效商务Agent架构指南/><div class=pagination-nav__sublabel>Previous</div><div class=pagination-nav__label>高效商务 Agent 架构指南</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href=#什么是智能体 class="table-of-contents__link toc-highlight">什么是智能体？</a><li><a href=#何时该用以及何时不该用智能体 class="table-of-contents__link toc-highlight">何时该用（以及何时不该用）智能体</a><li><a href=#何时以及如何使用框架 class="table-of-contents__link toc-highlight">何时以及如何使用框架</a><li><a href=#基础构件工作流与智能体 class="table-of-contents__link toc-highlight">基础构件、工作流与智能体</a><ul><li><a href=#基础构件增强型-llm class="table-of-contents__link toc-highlight">基础构件：增强型 LLM</a><li><a href=#工作流提示词链 class="table-of-contents__link toc-highlight">工作流：提示词链</a><li><a href=#工作流路由 class="table-of-contents__link toc-highlight">工作流：路由</a><li><a href=#工作流并行化 class="table-of-contents__link toc-highlight">工作流：并行化</a><li><a href=#工作流编排器工作者 class="table-of-contents__link toc-highlight">工作流：编排器—工作者</a><li><a href=#工作流评估器优化器 class="table-of-contents__link toc-highlight">工作流：评估器—优化器</a><li><a href=#智能体 class="table-of-contents__link toc-highlight">智能体</a></ul><li><a href=#组合与定制这些模式 class="table-of-contents__link toc-highlight">组合与定制这些模式</a><li><a href=#总结 class="table-of-contents__link toc-highlight">总结</a><li><a href=#附录-1智能体的实践 class="table-of-contents__link toc-highlight">附录 1：智能体的实践</a><ul><li><a href=#a-客户支持 class="table-of-contents__link toc-highlight">A. 客户支持</a><li><a href=#b-编程智能体 class="table-of-contents__link toc-highlight">B. 编程智能体</a></ul><li><a href=#附录-2为你的工具做提示词工程 class="table-of-contents__link toc-highlight">附录 2：为你的工具做提示词工程</a></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class=footer__copyright>Copyright © huangsitao 2026</div></div></div></footer></div></body>
