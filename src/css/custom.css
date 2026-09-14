@@ -226,6 +226,20 @@ html[data-theme='dark'] {
   font-weight: 600;
 }
 
+/* 列表：Infima 默认左缩进 2rem、条目间距 0.25rem，看起来又缩又挤。
+   改成项目符号贴近正文左缘、条目之间留出接近半行的空隙；嵌套列表与父条目同样留空 */
+.markdown {
+  --ifm-list-left-padding: 1.25rem;
+  --ifm-list-item-margin: 0.75rem;
+}
+
+.markdown ul ul,
+.markdown ul ol,
+.markdown ol ul,
+.markdown ol ol {
+  margin-top: var(--ifm-list-item-margin);
+}
+
 /* 商务 Agent 架构指南：小标题层级靠字号和留白拉开，不靠加黑。
    Infima 默认 h4 与正文同字号、h5 比正文还小，五级标题的长文里层级会糊掉；
    只对这一篇生效（主题给每篇文档的 <html> 加了 docs-doc-id-<id> 类） */
