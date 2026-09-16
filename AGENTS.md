@@ -29,7 +29,8 @@ npm run clear                # 清理 Docusaurus 缓存
 ├── blog/                          # 博客文章（6 篇，一篇一个文件夹 <slug>/index.md，图片同目录）
 ├── roadmap/                       # 路线：开源项目学习日志（第二个 docs 实例，/roadmap 路由）
 │   ├── 高效商务Agent架构指南/     # Anthropic 商务 Agent 架构指南中译（index.mdx + 原文配图同目录）
-│   └── 构建高效的智能体/          # Anthropic《Building Effective Agents》中译（index.md + 8 张原图同目录），商务指南里的“标准 Agent 循环”链到这里
+│   ├── 构建高效的智能体/          # Anthropic《Building Effective Agents》中译（index.md + 8 张原图同目录），商务指南里的“标准 Agent 循环”链到这里
+│   └── 为Agent编写高效工具/      # Anthropic《Writing effective tools for agents》中译（index.md + 8 张原图同目录），商务指南“工程化 Agent 工具”一节链到这里
 ├── docs/                          # 笔记文档（15 个分类目录）
 │   ├── Agent/                     # 智能体
 │   ├── AIGC/                      # AI 生成内容
