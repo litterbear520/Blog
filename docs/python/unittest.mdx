@@ -54,29 +54,17 @@ import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
 
 <CodeWalkthrough variant="unittest" step={2} />
 
+<CodeWalkthrough variant="unittest" step={3} />
+
 ## assertRaises
 
 那这里我们要单独拿出来说一下，是这个 [assertRaises](https://docs.python.org/zh-cn/3/library/unittest.html#unittest.TestCase.assertRaises)。这里比如说，我们把这个 vector `__init__` 函数改一下。我们首先要确认这个 x、y，必须要是数才可以。否则的话，我们 raise 一个 ValueError。
 
 这个时候，我们想测试我们这个 `__init__` 函数是不是成功地 raise 了这个 error。那我们的写法呢，就是 with self.assertRaises，然后把这个 exception 放进去，在这个 with 里面去做 raise 这个 exception 的事。我们可以看到右边，我们运行一下这个 unittest，它就 pass 了，因为我们传进去这两个值不是正常的 value。相反的，如果我们传进去的值是合法值的话，那么这个测试就会 fail。它就会写 ValueError not raised。
 
-<CodeWalkthrough variant="unittest" step={3} />
+<CodeWalkthrough variant="unittest" step={4} />
 
-```text
-F
-======================================================================
-FAIL: test_init (tests.test_vector.TestVector.test_init)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/user/unittest_example/tests/test_vector.py", line 11, in test_init
-    with self.assertRaises(ValueError):
-AssertionError: ValueError not raised
-
-----------------------------------------------------------------------
-Ran 1 test in 0.001s
-
-FAILED (failures=1)
-```
+<CodeWalkthrough variant="unittest" step={5} />
 
 ## setUp 与 tearDown
 
@@ -84,15 +72,15 @@ FAILED (failures=1)
 
 我们举个最简单的例子。假设我们在运行每一个测试之前、之后，都要打印这个“测试开始了”，“测试结束了”。那我们可以在这个 test class 之内，通过定义 [setUp](https://docs.python.org/zh-cn/3/library/unittest.html#unittest.TestCase.setUp) 函数和 [tearDown](https://docs.python.org/zh-cn/3/library/unittest.html#unittest.TestCase.tearDown) 函数来完成。我们看，在 setUp 函数里面，我们打印了一个 start，然后在 tearDown 函数里面，我们打印了一个 end。于是我们在运行 unittest 的时候，输出里面就会有一个 start 跟一个 end。那如果我们又增加了一个 test method，就可以看到 start 跟 end 被打印了两次。
 
-<CodeWalkthrough variant="unittest" step={4} />
+<CodeWalkthrough variant="unittest" step={6} />
 
-<CodeWalkthrough variant="unittest" step={5} />
+<CodeWalkthrough variant="unittest" step={7} />
 
 ## setUpClass 与 tearDownClass
 
 那如果我们想每一个 test class 运行之前和结束之后做一些事儿的话，我们用到的函数就是 [setUpClass](https://docs.python.org/zh-cn/3/library/unittest.html#unittest.TestCase.setUpClass) 跟 [tearDownClass](https://docs.python.org/zh-cn/3/library/unittest.html#unittest.TestCase.tearDownClass)。注意，这两个东西必须要用 classmethod 这个装饰器装饰一下。
 
-<CodeWalkthrough variant="unittest" step={6} />
+<CodeWalkthrough variant="unittest" step={8} />
 
 ## skipIf
 
@@ -102,7 +90,7 @@ FAILED (failures=1)
 
 那还有一个比较常见的条件呢，就是 [version_info](https://docs.python.org/zh-cn/3/library/sys.html#sys.version_info)，就是这个 Python 的版本。比如这里我写的 sys.version_info 小于 3.7，就是说它只支持 3.7 及以上的版本。
 
-<CodeWalkthrough variant="unittest" step={7} />
+<CodeWalkthrough variant="unittest" step={9} />
 
 ## 运行指定的测试
 
@@ -112,7 +100,7 @@ FAILED (failures=1)
 
 那如果我们把条件放宽一些，我们运行 test 这个文件夹里面的 test_vector 这个 file，它就会运行两个 test 了。
 
-<CodeWalkthrough variant="unittest" step={8} />
+<CodeWalkthrough variant="unittest" step={10} />
 
 我们今天讲的是 unittest 的一些最最基础的功能，但是就是这些最基础的功能，已经涵盖了至少 90% 到 95% 的使用情况了。也就是说，对于你自己的项目，这一套流程已经基本足够用了。
 
