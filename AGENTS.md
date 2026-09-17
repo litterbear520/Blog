@@ -108,7 +108,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **SkillHub**：`/skills` 路由，技能卡片墙；数据在 `src/data/skills.js`，描述须工具中立、取材自技能仓库 README
 - **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成），记开源项目学习日志；一个项目一个文件夹，侧边栏层级树即学习线
 - **交互式可视化**：`AgentLoopViz` 组件（7 步动画流程图）、`GitWorkflowViz` 组件（Git 工作流 15 步状态演示，在 `docs/Git工作流/index.mdx` 里通过 `BrowserOnly` 挂载）
-- **代码演进演练**：`CodeWalkthrough` 组件，用于“一步步改代码”的笔记（如 `docs/python/unittest.mdx`）。数据在 `src/data/codeWalkthroughs/<variant>.js`，每一步只写本步改动的文件（`null` 表示删除）、说明段落和可运行命令；组件切到某步时自动打开改动的文件，相对上一步新增行绿底、删除行红底幽灵行，右上角可切「只看当前」；终端里的输出必须是本地实跑录下来的。文章里每一节写 `<CodeWalkthrough variant="unittest" step={3} />` 让演练停在对应步骤，读者也能前后翻
+- **代码演进演练**：`CodeWalkthrough` 组件，用于“一步步改代码”的笔记（如 `docs/python/unittest.mdx`）。数据在 `src/data/codeWalkthroughs/<variant>.js`，每一步只写本步改动的文件（`null` 表示删除）、说明段落和可运行命令；组件切到某步时自动打开改动的文件，相对上一步新增行绿底、删除行红底幽灵行，右上角可切「只看当前」；终端里的输出必须是本地实跑录下来的。文章里每一节写 `<CodeWalkthrough variant="unittest" step={3} />` 让演练停在对应步骤；上一步/下一步默认不显示，只给最后一个实例加 `nav` 让读者回翻。终端面板不写字，只有左上角一个终端图标
 - **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录（目前有《Model Context Protocol 简介》和《高级主题》），`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`，题目数据在 `src/data/mcp*Quiz.js`；原站的 `CodeCommand` 组件对应 bash 代码块，`GenericPrompt`（用户提示卡）对应 `:::info[用户提示]`
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
 - **代码块预录输出**：代码围栏加 `run`，紧接一个 `output` 围栏写运行结果，构建时由 `plugins/remark-run-output.js` 合并；页面上代码块右上角出现 ▷ 按钮，点击后底部展开「输出」面板逐行打印（悬停标签提示为预录），再点收起。不是真跑代码，输出要先在本地跑一遍如实录入
