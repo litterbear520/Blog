@@ -64,7 +64,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │   ├── css/
 │   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）、字体、代码块装饰
 │   ├── data/
-│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 8 步快照与实录输出
+│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出
 │   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
 │   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）
 │   │   ├── mcpWalkthroughs/       # 三个演练的示例项目文件 + 步骤文案（sampling / notifications / roots）
