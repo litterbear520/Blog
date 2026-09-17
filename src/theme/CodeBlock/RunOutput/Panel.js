@@ -1,61 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import {useRunOutput} from '@site/src/theme/CodeBlock/RunOutput/context';
-
-const START_DELAY = 350; // 点击后先「运行中」一小会
-const LINE_DELAY = 80; // 逐行打印间隔
+import useTypewriter from '@site/src/theme/CodeBlock/RunOutput/useTypewriter';
 
 function statusText(status) {
   if (status === 'hang') return '进程未退出，需要 Ctrl + C 终止';
   if (status === 'empty') return '没有任何输出，进程退出';
   const code = status.startsWith('exit:') ? status.slice(5) : '0';
   return `进程退出，退出码 ${code}`;
-}
-
-function prefersReducedMotion() {
-  return (
-    typeof window !== 'undefined' &&
-    window.matchMedia &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  );
-}
-
-// 逐行显示：返回已显示的行数和是否打印完毕
-function useTypewriter(lines, active) {
-  const total = lines.length;
-  const [shown, setShown] = useState(0);
-  const [started, setStarted] = useState(false);
-
-  useEffect(() => {
-    if (!active) {
-      setShown(0);
-      setStarted(false);
-      return undefined;
-    }
-    if (prefersReducedMotion()) {
-      setStarted(true);
-      setShown(total);
-      return undefined;
-    }
-    let timer = window.setTimeout(() => {
-      setStarted(true);
-      timer = window.setInterval(() => {
-        setShown((n) => {
-          if (n + 1 >= total) {
-            window.clearInterval(timer);
-            return total;
-          }
-          return n + 1;
-        });
-      }, LINE_DELAY);
-    }, START_DELAY);
-    return () => {
-      window.clearTimeout(timer);
-      window.clearInterval(timer);
-    };
-  }, [active, total]);
-
-  return {shown, started, done: started && shown >= total};
 }
 
 export default function RunOutputPanel() {
