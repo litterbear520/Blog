@@ -70,7 +70,7 @@ class TestVector(unittest.TestCase):
         exit: 0,
         output: `.
 ----------------------------------------------------------------------
-Ran 1 test in 0.001s
+Ran 1 test in 0.000s
 
 OK
 `,
@@ -245,7 +245,7 @@ Traceback (most recent call last):
 AssertionError: ValueError not raised
 
 ----------------------------------------------------------------------
-Ran 1 test in 0.003s
+Ran 1 test in 0.001s
 
 FAILED (failures=1)
 `,
@@ -335,7 +335,7 @@ end
 end
 .
 ----------------------------------------------------------------------
-Ran 2 tests in 0.001s
+Ran 2 tests in 0.000s
 
 OK
 `,
@@ -345,7 +345,7 @@ OK
   {
     title: "setUpClass 与 tearDownClass",
     body: [
-      "整个测试类运行前后只调用一次，必须用 `@classmethod` 装饰，参数是 `cls`。",
+      "把 `setUp` / `tearDown` 换成 `setUpClass` / `tearDownClass`，打印的还是 start / end。它们在整个测试类运行前后只调用一次，所以两个测试只有一对 start / end。必须用 `@classmethod` 装饰，参数是 `cls`。",
     ],
     files: {
       "tests/test_vector.py": `import unittest
@@ -355,16 +355,10 @@ from vector import Vector
 class TestVector(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        print("class start")
+        print("start")
 
     @classmethod
     def tearDownClass(cls):
-        print("class end")
-
-    def setUp(self):
-        print("start")
-
-    def tearDown(self):
         print("end")
 
     def test_init(self):
@@ -386,12 +380,8 @@ class TestVector(unittest.TestCase):
       {
         cmd: "python -m unittest",
         exit: 0,
-        output: `class start
-start
-end
-.start
-end
-.class end
+        output: `start
+..end
 
 ----------------------------------------------------------------------
 Ran 2 tests in 0.001s
@@ -404,7 +394,7 @@ OK
   {
     title: "用 skipIf 跳过测试",
     body: [
-      "第一个参数为真时跳过，第二个参数是跳过原因。这两个条件在 Linux 加 Python 3.12 上都不成立，所以两个测试照常运行；换到 Windows 上 `test_add` 会显示成 s（skipped）。",
+      "先把 `setUp` / `tearDown` 换回来，再给 `test_add` 加两个 `skipIf`。第一个参数为真时跳过，第二个参数是跳过原因。这两个条件在 Linux 加 Python 3.12 上都不成立，所以两个测试照常运行；换到 Windows 上 `test_add` 会显示成 s（skipped）。",
     ],
     files: {
       "tests/test_vector.py": `import sys
@@ -413,14 +403,6 @@ from vector import Vector
 
 
 class TestVector(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        print("class start")
-
-    @classmethod
-    def tearDownClass(cls):
-        print("class end")
-
     def setUp(self):
         print("start")
 
@@ -448,13 +430,11 @@ class TestVector(unittest.TestCase):
       {
         cmd: "python -m unittest",
         exit: 0,
-        output: `class start
-start
+        output: `start
 end
 .start
 end
-.class end
-
+.
 ----------------------------------------------------------------------
 Ran 2 tests in 0.000s
 
@@ -475,11 +455,9 @@ OK
       {
         cmd: "python -m unittest tests.test_vector.TestVector.test_add",
         exit: 0,
-        output: `class start
-start
+        output: `start
 end
-.class end
-
+.
 ----------------------------------------------------------------------
 Ran 1 test in 0.000s
 
@@ -489,15 +467,13 @@ OK
       {
         cmd: "python -m unittest tests.test_vector",
         exit: 0,
-        output: `class start
-start
+        output: `start
 end
 .start
 end
-.class end
-
+.
 ----------------------------------------------------------------------
-Ran 2 tests in 0.001s
+Ran 2 tests in 0.000s
 
 OK
 `,
