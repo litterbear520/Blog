@@ -54,7 +54,7 @@
 
 <CodeWalkthrough variant="unittest" step={3} />
 
-## assertRaises
+## 用 assertRaises 测异常
 
 那这里我们要单独拿出来说一下，是这个 [assertRaises](https://docs.python.org/zh-cn/3/library/unittest.html#unittest.TestCase.assertRaises)。这里比如说，我们把这个 vector `__init__` 函数改一下。我们首先要确认这个 x、y，必须要是数才可以。否则的话，我们 raise 一个 ValueError。
 
@@ -80,7 +80,7 @@
 
 <CodeWalkthrough variant="unittest" step={8} />
 
-## skipIf
+## 用 skipIf 跳过测试
 
 那还有一个很常见的需求，就是我希望我的测试在某些情况下不运行。这时候我们就要用到一个 decorator，是 [unittest.skipIf](https://docs.python.org/zh-cn/3/library/unittest.html#unittest.skipIf)。我们看，这里这个 decorator take 了两个 argument。第一个是一个 boolean，在这个 boolean evaluate 成 True 的时候，这个测试就不运行。那第二个呢，是一个 message。
 
@@ -99,6 +99,8 @@
 那如果我们把条件放宽一些，我们运行 test 这个文件夹里面的 test_vector 这个 file，它就会运行两个 test 了。
 
 <CodeWalkthrough variant="unittest" step={10} nav />
+
+## 我们已经完成的工作
 
 我们今天讲的是 unittest 的一些最最基础的功能，但是就是这些最基础的功能，已经涵盖了至少 90% 到 95% 的使用情况了。也就是说，对于你自己的项目，这一套流程已经基本足够用了。
 
