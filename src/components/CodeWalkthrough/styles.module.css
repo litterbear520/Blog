@@ -1,0 +1,500 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+}
+
+/* ── 按钮 ── */
+.btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+/* 中性色主按钮：浅色主题黑底白字，深色主题白底黑字 */
+.btnPrimary {
+  background: var(--ifm-color-emphasis-900);
+  color: var(--ifm-color-emphasis-0);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: var(--ifm-color-emphasis-800);
+}
+
+.btnPrimary:disabled {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-600);
+  cursor: not-allowed;
+}
+
+/* ── 步骤面板 ── */
+.stepsPanel {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-background-surface-color);
+  padding: 0.75rem;
+}
+
+.stepHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.stepTitle {
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+}
+
+.stepCounter {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ifm-color-content-secondary);
+}
+
+.stepBody {
+  margin-top: 0.4rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--ifm-color-content-secondary);
+}
+
+.stepBody p {
+  margin: 0 0 0.4rem;
+}
+
+.stepBody p:last-child {
+  margin-bottom: 0;
+}
+
+.inlineCode {
+  font-size: 0.8em;
+  padding: 0.05em 0.3em;
+  border-radius: 4px;
+  border: none;
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-font-color-base);
+}
+
+.navButtons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.navButtons .btn {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* ── 代码查看器 ── */
+.editor {
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
+}
+
+.fileTree {
+  display: none;
+  width: 10rem;
+  flex-shrink: 0;
+  flex-direction: column;
+  border-right: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
+}
+
+@media (min-width: 640px) {
+  .fileTree {
+    display: flex;
+  }
+}
+
+.fileTreeHeading {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ifm-color-content-secondary);
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-color-emphasis-100);
+}
+
+.treeScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.25rem 0;
+}
+
+.treeItem {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.25rem;
+  border: 0;
+  background: transparent;
+  padding: 0.15rem 0.5rem 0.15rem 0;
+  text-align: left;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.treeItem:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+.treeItemActive {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-font-color-base);
+}
+
+.treeName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 本步改动过的文件：名字后一个小圆点（已修改用强调色，新文件用绿色） */
+.treeDot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-left: 0.15rem;
+  border-radius: 50%;
+  background: var(--th-accent);
+}
+
+.treeDotNew {
+  background: var(--th-code-added-bar);
+}
+
+.editorMain {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.tabs {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-color-emphasis-100);
+}
+
+.tab {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  border-right: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.tabBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 0;
+  background: transparent;
+  padding: 0.4rem 0.25rem 0.4rem 0.75rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+}
+
+.tabBtn:hover {
+  color: var(--ifm-font-color-base);
+}
+
+.tabActive .tabBtn {
+  color: var(--ifm-font-color-base);
+}
+
+.badge {
+  padding: 0 0.35em;
+  border-radius: 999px;
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.65rem;
+  line-height: 1.5;
+  color: var(--th-accent);
+  background: color-mix(in srgb, var(--th-accent) 14%, transparent);
+}
+
+.badgeNew {
+  color: var(--th-code-added-bar);
+  background: var(--docusaurus-highlighted-code-line-bg);
+}
+
+.tabClose {
+  border: 0;
+  background: transparent;
+  margin-right: 0.25rem;
+  padding: 0 0.3rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.tab:hover .tabClose,
+.tabClose:focus-visible {
+  opacity: 1;
+}
+
+.tabClose:hover {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-font-color-base);
+}
+
+/* 「显示改动 / 只看当前」开关靠右 */
+.diffToggle {
+  margin-left: auto;
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  padding: 0 0.75rem;
+  font-family: inherit;
+  font-size: 0.7rem;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+}
+
+.diffToggle:hover {
+  color: var(--ifm-font-color-base);
+}
+
+.codeScroll {
+  position: relative;
+  min-height: 8rem;
+  max-height: 22rem;
+  overflow: auto;
+}
+
+.pre {
+  margin: 0;
+  padding: 0.5rem 0;
+  min-width: fit-content;
+  background: transparent;
+  border-radius: 0;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.line {
+  display: flex;
+}
+
+/* diff 行：只靠淡底和左侧 +/− 符号区分，不画竖线 */
+.lineAdd {
+  background: var(--docusaurus-highlighted-code-line-bg);
+}
+
+.lineDel {
+  background: var(--th-code-removed-bg);
+  opacity: 0.75;
+}
+
+.lineNo {
+  width: 2.5rem;
+  flex-shrink: 0;
+  padding-right: 0.5rem;
+  text-align: right;
+  user-select: none;
+  opacity: 0.45;
+}
+
+.lineSign {
+  width: 1rem;
+  flex-shrink: 0;
+  text-align: center;
+  user-select: none;
+  font-weight: 600;
+}
+
+.lineAdd .lineSign {
+  color: var(--th-code-added-bar);
+}
+
+.lineDel .lineSign {
+  color: var(--th-code-removed-bar);
+}
+
+.lineContent {
+  white-space: pre;
+  padding-right: 1rem;
+}
+
+.empty {
+  display: flex;
+  min-height: 8rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.empty p {
+  margin: 0;
+}
+
+.emptySub {
+  font-size: 0.75rem;
+}
+
+/* ── 终端 ── */
+.terminal {
+  border-radius: 12px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  overflow: hidden;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.termHead {
+  display: flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-color-emphasis-100);
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ifm-color-content-secondary);
+}
+
+.termLabel {
+  cursor: help;
+  border-bottom: 1px dotted currentColor;
+}
+
+.termRun + .termRun {
+  border-top: 1px dashed var(--th-line);
+}
+
+.termPrompt {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.75rem;
+}
+
+.termDollar {
+  color: var(--th-text-3);
+  user-select: none;
+}
+
+.termCmd {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.termBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.termBtn:hover,
+.termBtnOpen {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-font-color-base);
+}
+
+.termIcon {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.termOutput {
+  padding: 0 0.75rem 0.6rem;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.termRunning {
+  color: var(--th-text-3);
+}
+
+.termRunning::after {
+  content: '';
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-left: 0.4em;
+  border-radius: 50%;
+  background: var(--th-accent);
+  animation: cw-blink 0.8s steps(2) infinite;
+}
+
+.termLine {
+  min-height: 1.6em;
+}
+
+.termFoot {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed var(--th-line);
+  font-family: var(--ifm-font-family-base);
+  font-size: 12px;
+  color: var(--th-text-3);
+}
+
+.termFootFail {
+  color: var(--th-code-removed-bar);
+}
+
+@keyframes cw-blink {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .termRunning::after {
+    animation: none;
+  }
+}
