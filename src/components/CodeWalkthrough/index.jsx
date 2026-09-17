@@ -12,7 +12,8 @@ import styles from './styles.module.css';
  * 上方是步骤说明与上一步/下一步，中间是迷你代码查看器（文件树 + 标签 + 代码），切到某一步时
  * 自动打开本步改动的文件，并把相对上一步的改动按行上色（新增绿、删除红，删除行以幽灵行插回原位）；
  * 下方是终端，列出本步可运行的命令，点击后逐行打印预先录好的输出。
- * 数据见 src/data/codeWalkthroughs/，用法：<CodeWalkthrough variant="unittest" step={3} />，step 是初始停在的步骤（1 起数）。
+ * 数据见 src/data/codeWalkthroughs/，用法：<CodeWalkthrough variant="unittest" step={3} />，step 是初始停在的步骤（1 起数）；
+ * 默认不显示上一步/下一步，加 nav 才显示（一篇文章里通常只给最后一个实例开）。
  */
 
 const LANG_BY_EXT = { py: 'python', md: 'markdown', json: 'json', toml: 'toml', txt: 'text' };
@@ -87,6 +88,17 @@ function IconPlay(props) {
   );
 }
 
+// Lucide square-terminal：圆角方框里一个 >_，作终端面板的标识
+function IconTerminal(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="m7 11 2-2-2-2" />
+      <path d="M11 13h4" />
+    </svg>
+  );
+}
+
 function IconStop(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -117,12 +129,12 @@ function TerminalOutput({ run }) {
   );
 }
 
-export default function CodeWalkthrough({ variant, step = 1 }) {
+export default function CodeWalkthrough({ variant, step = 1, nav = false }) {
   const data = WALKTHROUGHS[variant];
   if (!data) {
     throw new Error(`CodeWalkthrough: unknown variant "${variant}"`);
   }
-  return <Walkthrough key={variant} data={data} initialStep={step} />;
+  return <Walkthrough key={variant} data={data} initialStep={step} nav={nav} />;
 }
 
 // 本步默认打开的文件：指定的 file 优先，其次是本步改动（且仍存在）的文件
@@ -132,7 +144,7 @@ function tabsForStep(step, snapshot) {
   return tabs.filter((p) => p in snapshot);
 }
 
-function Walkthrough({ data, initialStep }) {
+function Walkthrough({ data, initialStep, nav }) {
   const { steps } = data;
   const prismTheme = usePrismTheme();
   const snapshots = useMemo(() => buildSnapshots(steps), [steps]);
@@ -275,6 +287,7 @@ function Walkthrough({ data, initialStep }) {
             </p>
           ))}
         </div>
+        {nav && (
         <div className={styles.navButtons}>
           <button
             type="button"
@@ -293,6 +306,7 @@ function Walkthrough({ data, initialStep }) {
             {UI['btn.next']}
           </button>
         </div>
+        )}
       </div>
 
       <div className={styles.editor}>
@@ -393,10 +407,8 @@ function Walkthrough({ data, initialStep }) {
 
       {runs.length > 0 && (
         <div className={styles.terminal} style={{ backgroundColor: editorBg, color: prismTheme.plain.color }}>
-          <div className={styles.termHead}>
-            <span className={styles.termLabel} title={UI['terminal.hint']}>
-              {UI['terminal.heading']}
-            </span>
+          <div className={styles.termHead} title={UI['terminal.hint']}>
+            <IconTerminal className={styles.termHeadIcon} aria-label={UI['terminal.heading']} role="img" />
           </div>
           {runs.map((run, k) => {
             const open = runIndex === k;
