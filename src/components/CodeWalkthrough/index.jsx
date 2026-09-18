@@ -14,6 +14,7 @@ import styles from './styles.module.css';
  * 下方是终端，列出本步可运行的命令，点击后逐行打印预先录好的输出。
  * 数据见 src/data/codeWalkthroughs/，用法：<CodeWalkthrough variant="unittest" step={3} />，step 是初始停在的步骤（1 起数）；
  * 默认不显示上一步/下一步，加 nav 才显示（一篇文章里通常只给最后一个实例开）。
+ * 步骤可以不改文件、只写 file + lines（行区间），代码区把这些行标成聚焦行并滚过去，用来在同一份代码里逐段讲。
  */
 
 const LANG_BY_EXT = { py: 'python', md: 'markdown', json: 'json', toml: 'toml', txt: 'text' };
@@ -212,16 +213,20 @@ function Walkthrough({ data, initialStep, nav }) {
     return plainRows(snapshot[activeFile]);
   }, [activeFile, snapshot, previous, showDiff, activeStatus]);
 
-  // 切换步骤或文件后，把第一处改动滚到代码区中央；没有改动就回到顶部
+  // 本步的聚焦行（只对 step.file 生效）：newNo 落在任一 [起, 止] 区间内
+  const focusRanges = activeFile === (step.file ?? activeFile) ? step.lines || [] : [];
+  const inFocus = (no) => no != null && focusRanges.some(([a, b]) => no >= a && no <= (b ?? a));
+
+  // 切换步骤或文件后，把第一处改动（其次是第一处聚焦行）滚到代码区中央；都没有就回到顶部
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
-    const firstChange = container.querySelector('[data-change]');
-    if (!firstChange) {
+    const target = container.querySelector('[data-change]') || container.querySelector('[data-focus]');
+    if (!target) {
       container.scrollTo({ top: 0 });
       return;
     }
-    const top = firstChange.offsetTop - container.clientHeight / 2 + firstChange.offsetHeight / 2;
+    const top = target.offsetTop - container.clientHeight / 2 + target.offsetHeight / 2;
     container.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
   }, [current, activeFile, showDiff]);
 
@@ -364,16 +369,19 @@ function Walkthrough({ data, initialStep, nav }) {
                       const row = rows[i] || { type: 'same', newNo: i + 1 };
                       const lineProps = getLineProps({ line });
                       const changed = row.type !== 'same';
+                      const focused = !changed && inFocus(row.newNo);
                       return (
                         <div
                           key={i}
                           {...lineProps}
                           data-change={changed ? row.type : undefined}
+                          data-focus={focused ? '' : undefined}
                           className={clsx(
                             lineProps.className,
                             styles.line,
                             row.type === 'add' && styles.lineAdd,
                             row.type === 'del' && styles.lineDel,
+                            focused && styles.lineFocus,
                           )}
                         >
                           <span aria-hidden="true" className={styles.lineNo}>

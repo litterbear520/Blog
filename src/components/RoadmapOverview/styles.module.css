@@ -1,0 +1,65 @@
+.figure {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  max-width: 768px;
+  min-width: 560px;
+}
+
+.edge {
+  fill: none;
+  stroke: var(--th-text-3);
+  stroke-width: 1;
+}
+
+.arrowHead {
+  fill: var(--th-text-3);
+}
+
+/* 先铺一层不透明底，再画带描边的框：连线不会从透明填充里透出来 */
+.mask {
+  fill: var(--th-page);
+}
+
+.box {
+  fill: var(--th-surface-1);
+  stroke: var(--th-line-strong);
+  stroke-width: 1;
+}
+
+.boxFocal {
+  fill: var(--th-accent-tint);
+  stroke: var(--th-accent);
+  stroke-width: 1;
+}
+
+.eyebrow {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  fill: var(--th-text-3);
+}
+
+.eyebrowFocal {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  fill: var(--th-accent);
+}
+
+.name {
+  font-family: var(--ifm-font-family-base);
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--th-text);
+}
+
+.sub {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 9px;
+  fill: var(--th-text-2);
+}

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: 前言
+slug: /
 ---
 
 # 前言

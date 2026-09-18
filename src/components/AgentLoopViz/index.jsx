@@ -1,186 +1,76 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useColorMode } from "@docusaurus/theme-common";
-import { Play, Pause, SkipBack, SkipForward, RotateCcw } from "lucide-react";
-import styles from "./styles.module.css";
+import React, { useState, useEffect, useRef } from 'react';
+import clsx from 'clsx';
+import { Play, Pause, SkipBack, SkipForward, RotateCcw } from 'lucide-react';
+import RUNS from '@site/src/data/agentRuns';
+import styles from './styles.module.css';
 
-const NODES = [
-  { id: "start", label: "Start", x: 160, y: 30, w: 120, h: 40, type: "rect" },
-  { id: "api_call", label: "API Call", x: 160, y: 110, w: 120, h: 40, type: "rect" },
-  { id: "check", label: "stop_reason?", x: 160, y: 200, w: 140, h: 50, type: "diamond" },
-  { id: "execute", label: "Execute Tool", x: 160, y: 300, w: 120, h: 40, type: "rect" },
-  { id: "append", label: "Append Result", x: 160, y: 380, w: 120, h: 40, type: "rect" },
-  { id: "end", label: "Break / Done", x: 380, y: 200, w: 120, h: 40, type: "rect" },
-];
+/**
+ * Agent 循环的分镜动画：左边是流程图（节点 + 连线），右边是 messages[] 随帧增长，下方是本帧说明与播放控件。
+ * 静止在第 0 帧时就是这一步的架构图，按播放就是一次运行示例。
+ * 数据驱动：<AgentLoopViz variant="commerceLoop" />，分镜在 src/data/agentRuns/，不传 variant 用笔记里的 claudeCode。
+ * 配色全部引用 custom.css 的 --th-* 令牌，深浅模式自动跟随。
+ */
 
-const EDGES = [
-  { from: "start", to: "api_call" },
-  { from: "api_call", to: "check" },
-  { from: "check", to: "execute", label: "tool_use" },
-  { from: "execute", to: "append" },
-  { from: "append", to: "api_call" },
-  { from: "check", to: "end", label: "end_turn" },
-];
+const VIEW_W = 500;
+const VIEW_H = 440;
 
-const ACTIVE_NODES_PER_STEP = [
-  [],
-  ["start"],
-  ["api_call"],
-  ["check", "execute"],
-  ["execute", "append"],
-  ["api_call", "check", "execute", "append"],
-  ["check", "end"],
-];
-
-const ACTIVE_EDGES_PER_STEP = [
-  [],
-  [],
-  ["start->api_call"],
-  ["api_call->check", "check->execute"],
-  ["execute->append"],
-  ["append->api_call", "api_call->check", "check->execute", "execute->append"],
-  ["api_call->check", "check->end"],
-];
-
-const MESSAGES_PER_STEP = [
-  [],
-  [{ role: "user", detail: "Fix the login bug", color: "#c6613f" }],
-  [],
-  [{ role: "assistant", detail: "tool_use: read_file", color: "#52525b" }],
-  [{ role: "tool_result", detail: "auth.ts contents...", color: "#10b981" }],
-  [
-    { role: "assistant", detail: "tool_use: edit_file", color: "#52525b" },
-    { role: "tool_result", detail: "file updated", color: "#10b981" },
-  ],
-  [{ role: "assistant", detail: "end_turn: Done!", color: "#8b5cf6" }],
-];
-
-const STEP_INFO = [
-  { title: "The While Loop", desc: "每个 Agent 都是一个 while 循环，持续调用模型直到它说「停止」。" },
-  { title: "用户输入", desc: "循环从用户发送消息开始。" },
-  { title: "调用模型", desc: "将所有消息发给 LLM，它看到全部上下文后决定下一步。" },
-  { title: "stop_reason: tool_use", desc: "模型想使用工具，循环继续。" },
-  { title: "执行并追加", desc: "运行工具，将结果追加到 messages[]，再次喂给模型。" },
-  { title: "再次循环", desc: "同样的代码路径，第二次迭代。模型决定编辑文件。" },
-  { title: "stop_reason: end_turn", desc: "模型完成任务，循环退出。这就是整个 Agent。" },
-];
-
-function getPalette(isDark) {
-  if (isDark) {
-    return {
-      nodeFill: "#27272a",
-      nodeStroke: "#3f3f46",
-      nodeText: "#d4d4d8",
-      activeNodeFill: "#c6613f",
-      activeNodeStroke: "#d97757",
-      activeNodeText: "#ffffff",
-      endNodeFill: "#7c3aed",
-      endNodeStroke: "#a855f7",
-      edgeStroke: "#52525b",
-      activeEdgeStroke: "#d97757",
-      arrowFill: "#71717a",
-      labelFill: "#a1a1aa",
-      iterFill: "#d97757",
-      svgBg: "#0a0a0b",
-      svgBorder: "#1e1e22",
-      containerBg: "#09090b",
-      containerBorder: "#27272a",
-      panelLabel: "#52525b",
-      msgListBg: "#0a0a0b",
-      msgListBorder: "#1e1e22",
-      emptyColor: "#3f3f46",
-      msgCountBorder: "#27272a",
-      msgCountColor: "#52525b",
-      annotationBg: "rgba(198,97,63,0.14)",
-      annotationBorder: "#6b3520",
-      annotationTitle: "#d97757",
-      annotationDesc: "#e8a08a",
-      btnBorder: "#27272a",
-      btnColor: "#71717a",
-      btnHoverBg: "#18181b",
-      btnHoverColor: "#e4e4e7",
-      dotInactive: "#3f3f46",
-      dotPast: "#b5532f",
-      stepCountColor: "#52525b",
-    };
-  }
-  return {
-    nodeFill: "#e2e8f0",
-    nodeStroke: "#cbd5e1",
-    nodeText: "#475569",
-    activeNodeFill: "#c6613f",
-    activeNodeStroke: "#a84b29",
-    activeNodeText: "#ffffff",
-    endNodeFill: "#7c3aed",
-    endNodeStroke: "#a855f7",
-    edgeStroke: "#cbd5e1",
-    activeEdgeStroke: "#c6613f",
-    arrowFill: "#94a3b8",
-    labelFill: "#94a3b8",
-    iterFill: "#a84b29",
-    svgBg: "#f8fafc",
-    svgBorder: "#e2e8f0",
-    containerBg: "#ffffff",
-    containerBorder: "#e2e8f0",
-    panelLabel: "#94a3b8",
-    msgListBg: "#f8fafc",
-    msgListBorder: "#e2e8f0",
-    emptyColor: "#cbd5e1",
-    msgCountBorder: "#e2e8f0",
-    msgCountColor: "#94a3b8",
-    annotationBg: "rgba(198,97,63,0.12)",
-    annotationBorder: "#e9b9a6",
-    annotationTitle: "#a84b29",
-    annotationDesc: "#b5532f",
-    btnBorder: "#e2e8f0",
-    btnColor: "#94a3b8",
-    btnHoverBg: "#f1f5f9",
-    btnHoverColor: "#334155",
-    dotInactive: "#e2e8f0",
-    dotPast: "#e9b9a6",
-    stepCountColor: "#94a3b8",
-  };
+// 节点某一边的中点（菱形取顶点）
+function anchor(node, side) {
+  const hw = node.w / 2;
+  const hh = node.h / 2;
+  if (side === 'top') return [node.x, node.y - hh];
+  if (side === 'bottom') return [node.x, node.y + hh];
+  if (side === 'left') return [node.x - hw, node.y];
+  return [node.x + hw, node.y];
 }
 
-function getNode(id) {
-  return NODES.find((n) => n.id === id);
+function defaultSides(from, to) {
+  if (to.y - to.h / 2 >= from.y + from.h / 2) return ['bottom', 'top'];
+  if (from.y - from.h / 2 >= to.y + to.h / 2) return ['top', 'bottom'];
+  return to.x > from.x ? ['right', 'left'] : ['left', 'right'];
 }
 
-function edgePath(fromId, toId) {
-  const from = getNode(fromId);
-  const to = getNode(toId);
-  if (fromId === "append" && toId === "api_call") {
-    const startX = from.x - from.w / 2;
-    const startY = from.y;
-    const endX = to.x - to.w / 2;
-    const endY = to.y;
-    return `M ${startX} ${startY} L ${startX - 50} ${startY} L ${endX - 50} ${endY} L ${endX} ${endY}`;
+function edgeGeometry(edge, nodeById) {
+  const from = nodeById[edge.from];
+  const to = nodeById[edge.to];
+  const [fs, ts] = defaultSides(from, to);
+  const start = anchor(from, edge.fromSide || fs);
+  const end = anchor(to, edge.toSide || ts);
+  const points = [start, ...(edge.via || []), end];
+  const d = points.map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x} ${y}`).join(' ');
+  let labelAt = edge.labelAt;
+  if (!labelAt && edge.label) {
+    // 没指定位置：竖线放右侧，横线放上方
+    const [x1, y1] = points[0];
+    const [x2, y2] = points[points.length - 1];
+    labelAt = Math.abs(x1 - x2) < 1 ? [x1 + 44, (y1 + y2) / 2 + 4] : [(x1 + x2) / 2, Math.min(y1, y2) - 10];
   }
-  if (fromId === "check" && toId === "end") {
-    const startX = from.x + from.w / 2;
-    const startY = from.y;
-    const endX = to.x - to.w / 2;
-    const endY = to.y;
-    return `M ${startX} ${startY} L ${endX} ${endY}`;
-  }
-  return `M ${from.x} ${from.y + from.h / 2} L ${to.x} ${to.y - to.h / 2}`;
+  return { d, labelAt };
 }
 
-export default function AgentLoopViz() {
-  const { colorMode } = useColorMode();
-  const isDark = colorMode === "dark";
-  const p = getPalette(isDark);
+export default function AgentLoopViz({ variant = 'claudeCode' }) {
+  const run = RUNS[variant];
+  if (!run) {
+    throw new Error(`AgentLoopViz: unknown variant "${variant}"`);
+  }
+  return <Viz key={variant} run={run} />;
+}
 
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const totalSteps = 7;
+function Viz({ run }) {
+  const { nodes, edges, frames } = run;
+  const nodeById = Object.fromEntries(nodes.map((n) => [n.id, n]));
+  const total = frames.length;
+
+  const [current, setCurrent] = useState(0);
+  const [playing, setPlaying] = useState(false);
   const timerRef = useRef(null);
 
   useEffect(() => {
-    if (isPlaying) {
+    if (playing) {
       timerRef.current = setInterval(() => {
-        setCurrentStep((s) => {
-          if (s >= totalSteps - 1) {
-            setIsPlaying(false);
+        setCurrent((s) => {
+          if (s >= total - 1) {
+            setPlaying(false);
             return s;
           }
           return s + 1;
@@ -188,64 +78,48 @@ export default function AgentLoopViz() {
       }, 2500);
     }
     return () => clearInterval(timerRef.current);
-  }, [isPlaying]);
+  }, [playing, total]);
 
-  const activeNodes = ACTIVE_NODES_PER_STEP[currentStep];
-  const activeEdges = ACTIVE_EDGES_PER_STEP[currentStep];
-  const stepInfo = STEP_INFO[currentStep];
+  const frame = frames[current];
+  const activeNodes = frame.nodes || [];
+  const activeEdges = frame.edges || [];
+  const messages = frames.slice(0, current + 1).flatMap((f) => f.messages || []);
 
-  const visibleMessages = [];
-  for (let s = 0; s <= currentStep; s++) {
-    for (const msg of MESSAGES_PER_STEP[s]) {
-      if (msg) visibleMessages.push(msg);
-    }
-  }
+  const controls = [
+    { icon: <RotateCcw size={16} />, title: '重置', onClick: () => { setCurrent(0); setPlaying(false); }, disabled: false },
+    { icon: <SkipBack size={16} />, title: '上一帧', onClick: () => setCurrent((s) => Math.max(0, s - 1)), disabled: current === 0 },
+    { icon: playing ? <Pause size={16} /> : <Play size={16} />, title: playing ? '暂停' : '播放', onClick: () => setPlaying((p) => !p), disabled: false },
+    { icon: <SkipForward size={16} />, title: '下一帧', onClick: () => setCurrent((s) => Math.min(total - 1, s + 1)), disabled: current === total - 1 },
+  ];
 
   return (
-    <div className={styles.container} style={{ background: p.containerBg, borderColor: p.containerBorder }}>
+    <div className={styles.container}>
       <div className={styles.panels}>
-        {/* Left: SVG flowchart */}
         <div className={styles.leftPanel}>
-          <div className={styles.panelLabel} style={{ color: p.panelLabel }}>
-            while (stop_reason === "tool_use")
-          </div>
-          <svg
-            viewBox="0 0 500 440"
-            className={styles.svg}
-            style={{ background: p.svgBg, borderColor: p.svgBorder }}
-          >
+          <div className={styles.panelLabel}>{run.loopLabel}</div>
+          <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className={styles.svg} role="img" aria-label={frame.title}>
             <defs>
               <marker id="alv-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                <polygon points="0 0, 8 3, 0 6" fill={p.arrowFill} />
+                <polygon points="0 0, 8 3, 0 6" className={styles.arrowHead} />
               </marker>
               <marker id="alv-arrow-active" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                <polygon points="0 0, 8 3, 0 6" fill={p.activeEdgeStroke} />
+                <polygon points="0 0, 8 3, 0 6" className={styles.arrowHeadActive} />
               </marker>
             </defs>
 
-            {EDGES.map((edge) => {
+            {edges.map((edge) => {
               const key = `${edge.from}->${edge.to}`;
-              const isActive = activeEdges.includes(key);
-              const fromNode = getNode(edge.from);
-              const toNode = getNode(edge.to);
+              const active = activeEdges.includes(key);
+              const { d, labelAt } = edgeGeometry(edge, nodeById);
               return (
                 <g key={key}>
                   <path
-                    d={edgePath(edge.from, edge.to)}
-                    fill="none"
-                    stroke={isActive ? p.activeEdgeStroke : p.edgeStroke}
-                    strokeWidth={isActive ? 2.5 : 1.5}
-                    markerEnd={isActive ? "url(#alv-arrow-active)" : "url(#alv-arrow)"}
-                    style={{ transition: "stroke 0.4s, stroke-width 0.4s" }}
+                    d={d}
+                    className={clsx(styles.edge, active && styles.edgeActive)}
+                    markerEnd={active ? 'url(#alv-arrow-active)' : 'url(#alv-arrow)'}
                   />
                   {edge.label && (
-                    <text
-                      x={edge.from === "check" && edge.to === "end" ? (fromNode.x + toNode.x) / 2 : fromNode.x + 75}
-                      y={edge.from === "check" && edge.to === "end" ? fromNode.y - 10 : (fromNode.y + toNode.y) / 2}
-                      textAnchor="middle"
-                      fontSize={10}
-                      fill={p.labelFill}
-                    >
+                    <text x={labelAt[0]} y={labelAt[1]} textAnchor="middle" className={styles.edgeLabel}>
                       {edge.label}
                     </text>
                   )}
@@ -253,117 +127,87 @@ export default function AgentLoopViz() {
               );
             })}
 
-            {NODES.map((node) => {
-              const isActive = activeNodes.includes(node.id);
-              const isEnd = node.id === "end";
-              const fillColor = isActive ? (isEnd ? p.endNodeFill : p.activeNodeFill) : p.nodeFill;
-              const strokeColor = isActive ? (isEnd ? p.endNodeStroke : p.activeNodeStroke) : p.nodeStroke;
-              const textColor = isActive ? p.activeNodeText : p.nodeText;
-
-              if (node.type === "diamond") {
-                const { x: cx, y: cy, w, h } = node;
-                const hw = w / 2, hh = h / 2;
+            {nodes.map((node) => {
+              const active = activeNodes.includes(node.id);
+              const cls = clsx(styles.node, active && (node.tone === 'end' ? styles.nodeEnd : styles.nodeActive));
+              const textCls = clsx(styles.nodeText, active && styles.nodeTextActive);
+              if (node.shape === 'diamond') {
+                const hw = node.w / 2;
+                const hh = node.h / 2;
                 return (
                   <g key={node.id}>
                     <polygon
-                      points={`${cx},${cy - hh} ${cx + hw},${cy} ${cx},${cy + hh} ${cx - hw},${cy}`}
-                      fill={fillColor} stroke={strokeColor} strokeWidth={1.5}
-                      style={{ transition: "fill 0.4s, stroke 0.4s" }}
+                      points={`${node.x},${node.y - hh} ${node.x + hw},${node.y} ${node.x},${node.y + hh} ${node.x - hw},${node.y}`}
+                      className={cls}
                     />
-                    <text x={cx} y={cy + 4} textAnchor="middle" fontSize={11} fontWeight={600} fontFamily="monospace"
-                      fill={textColor} style={{ transition: "fill 0.4s" }}>
+                    <text x={node.x} y={node.y + 4} textAnchor="middle" fontSize={11} className={textCls}>
                       {node.label}
                     </text>
                   </g>
                 );
               }
-
               return (
                 <g key={node.id}>
-                  <rect
-                    x={node.x - node.w / 2} y={node.y - node.h / 2}
-                    width={node.w} height={node.h} rx={8}
-                    fill={fillColor} stroke={strokeColor} strokeWidth={1.5}
-                    style={{ transition: "fill 0.4s, stroke 0.4s" }}
-                  />
-                  <text x={node.x} y={node.y + 4} textAnchor="middle" fontSize={12} fontWeight={600}
-                    fontFamily="monospace" fill={textColor} style={{ transition: "fill 0.4s" }}>
+                  <rect x={node.x - node.w / 2} y={node.y - node.h / 2} width={node.w} height={node.h} rx={8} className={cls} />
+                  <text x={node.x} y={node.y + 4} textAnchor="middle" fontSize={12} className={textCls}>
                     {node.label}
                   </text>
                 </g>
               );
             })}
 
-            {currentStep >= 5 && (
-              <text x={60} y={130} textAnchor="middle" fontSize={10} fontFamily="monospace" fill={p.iterFill}>
-                iter #2
+            {frame.tag && (
+              <text x={frame.tag.x} y={frame.tag.y} textAnchor="middle" className={styles.tag}>
+                {frame.tag.text}
               </text>
             )}
           </svg>
         </div>
 
-        {/* Right: messages[] */}
         <div className={styles.rightPanel}>
-          <div className={styles.panelLabel} style={{ color: p.panelLabel }}>messages[]</div>
-          <div className={styles.messageList} style={{ background: p.msgListBg, borderColor: p.msgListBorder }}>
-            {visibleMessages.length === 0 && (
-              <div className={styles.emptyMsg} style={{ color: p.emptyColor }}>[ empty ]</div>
-            )}
-            {visibleMessages.map((msg, i) => (
-              <div key={i} className={styles.messageItem} style={{ backgroundColor: msg.color }}>
+          <div className={styles.panelLabel}>messages[]</div>
+          <div className={styles.messageList}>
+            {messages.length === 0 && <div className={styles.emptyMsg}>[ empty ]</div>}
+            {messages.map((msg, i) => (
+              <div key={i} className={clsx(styles.messageItem, styles[`tone_${msg.tone || 'assistant'}`])}>
                 <div className={styles.messageRole}>{msg.role}</div>
                 <div className={styles.messageDetail}>{msg.detail}</div>
               </div>
             ))}
-            {visibleMessages.length > 0 && (
-              <div className={styles.messageCount}
-                style={{ borderTopColor: p.msgCountBorder, color: p.msgCountColor }}>
-                length: {visibleMessages.length}
-              </div>
-            )}
+            {messages.length > 0 && <div className={styles.messageCount}>length: {messages.length}</div>}
           </div>
         </div>
       </div>
 
-      {/* Step annotation */}
-      <div className={styles.annotation}
-        style={{ background: p.annotationBg, borderColor: p.annotationBorder }}>
-        <div className={styles.annotationTitle} style={{ color: p.annotationTitle }}>{stepInfo.title}</div>
-        <div className={styles.annotationDesc} style={{ color: p.annotationDesc }}>{stepInfo.desc}</div>
+      <div className={styles.annotation}>
+        <div className={styles.annotationTitle}>{frame.title}</div>
+        <div className={styles.annotationDesc}>{frame.desc}</div>
       </div>
 
-      {/* Controls */}
       <div className={styles.controls}>
         <div className={styles.buttons}>
-          {[
-            { icon: <RotateCcw size={16} />, title: "Reset", onClick: () => { setCurrentStep(0); setIsPlaying(false); }, disabled: false },
-            { icon: <SkipBack size={16} />, title: "Prev", onClick: () => setCurrentStep((s) => Math.max(0, s - 1)), disabled: currentStep === 0 },
-            { icon: isPlaying ? <Pause size={16} /> : <Play size={16} />, title: isPlaying ? "Pause" : "Play", onClick: () => setIsPlaying((p) => !p), disabled: false },
-            { icon: <SkipForward size={16} />, title: "Next", onClick: () => setCurrentStep((s) => Math.min(totalSteps - 1, s + 1)), disabled: currentStep === totalSteps - 1 },
-          ].map((btn) => (
+          {controls.map((btn) => (
             <button
               key={btn.title}
+              type="button"
               onClick={btn.onClick}
               disabled={btn.disabled}
               title={btn.title}
+              aria-label={btn.title}
               className={styles.btn}
-              style={{ color: p.btnColor, "--btn-hover-bg": p.btnHoverBg, "--btn-hover-color": p.btnHoverColor }}
             >
               {btn.icon}
             </button>
           ))}
         </div>
-
         <div className={styles.stepIndicator}>
           <div className={styles.dots}>
-            {Array.from({ length: totalSteps }, (_, i) => (
-              <div key={i} className={styles.dot} style={{
-                backgroundColor: i === currentStep ? "#c6613f" : i < currentStep ? p.dotPast : p.dotInactive,
-              }} />
+            {frames.map((_, i) => (
+              <div key={i} className={clsx(styles.dot, i === current && styles.dotCurrent, i < current && styles.dotPast)} />
             ))}
           </div>
-          <span className={styles.stepCount} style={{ color: p.stepCountColor }}>
-            {currentStep + 1}/{totalSteps}
+          <span className={styles.stepCount}>
+            {current + 1}/{total}
           </span>
         </div>
       </div>
