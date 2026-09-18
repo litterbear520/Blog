@@ -1,0 +1,33 @@
+---
+sidebar_position: 2
+title: Commerce Agents
+description: 从一个文件开始，一步步长成 Anthropic 的电商 Agent 参考实现。
+---
+
+import DocCardList from '@theme/DocCardList';
+import RoadmapOverview from '@site/src/components/RoadmapOverview';
+
+# Commerce Agents
+
+从一个文件开始，遇到问题就解决问题，代码长了就拆。这条线不是作者的真实开发历程，是从 [anthropics/commerce-agents](https://github.com/anthropics/commerce-agents) 的最终仓库反向拆出来的学习路线：每一页都在上一页的代码上加东西，改动的部分在演练里按行标出来。
+
+<RoadmapOverview />
+
+每一页固定五段：**起点**（上一步留下的问题）、**方案**（一个动画，静止时是这一步的结构图，播放就是一次运行示例）、**演练**（代码逐步演进，绿底是相对上一步新增的行）、**设计决策**（为什么这么做，对应下面的规则）、**踩坑**（可选）。
+
+## 六条规则
+
+仓库 `CLAUDE.md` 里的设计规则，路线上每次遇到都会引用回来。
+
+| # | 规则 | 一句话 | 第一次遇到 |
+| ---- | ---- | ---- | ---- |
+| 1 | 一个模型拥有对话 | 没有路由器，一个模型从头聊到尾 | [01 循环与第一个工具](./stage-a/01-循环与第一个工具.mdx) |
+| 2 | 静态提示词字节不变 | 变化的数据放在缓存断点之后 | Step 10 |
+| 3 | UI 是展示型工具调用 | 模型调 `present_products`，服务端校验补全 | Step 11 |
+| 4 | 第三方内容是围栏数据 | 围栏标签包起来，写操作校验来源 | Step 03–04 |
+| 5 | 核心是领域中立的 | 行业差异通过扩展点加入 | Step 28 |
+| 6 | 每个机制只定义一次 | 三条运行路径共享同一份工具和门控 | Step 27 |
+
+## 步骤
+
+<DocCardList />

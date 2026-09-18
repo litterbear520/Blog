@@ -318,6 +318,11 @@
   opacity: 0.75;
 }
 
+/* 聚焦行：本步没改代码、只是把视线带到某一段，用强调色淡底 */
+.lineFocus {
+  background: var(--th-accent-tint);
+}
+
 .lineNo {
   width: 2.5rem;
   flex-shrink: 0;

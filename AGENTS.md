@@ -21,16 +21,19 @@ npm run build                # 构建静态网站
 npm run serve                # 本地预览构建结果
 npm run build && npm run serve  # 构建后预览（模拟生产环境，提交前确认用这个）
 npm run clear                # 清理 Docusaurus 缓存
+npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照，生成 src/data/codeWalkthroughs/commerce.files.js
 ```
 
 ## 项目结构
 
 ```
 ├── blog/                          # 博客文章（6 篇，一篇一个文件夹 <slug>/index.md，图片同目录）
-├── roadmap/                       # 路线：开源项目学习日志（第二个 docs 实例，/roadmap 路由）
-│   ├── 高效商务Agent架构指南/     # Anthropic 商务 Agent 架构指南中译（index.mdx + 原文配图同目录）
-│   ├── 构建高效的智能体/          # Anthropic《Building Effective Agents》中译（index.md + 8 张原图同目录），商务指南里的“标准 Agent 循环”链到这里
-│   └── 为Agent编写高效工具/      # Anthropic《Writing effective tools for agents》中译（index.md + 8 张原图同目录），商务指南“工程化 Agent 工具”一节链到这里
+├── roadmap/                       # 路线：一个开源项目一条学习线，按步不按天（第二个 docs 实例，/roadmap 路由）
+│   ├── 前言/                      # index.md 是 /roadmap 首页（slug: /），三篇前置阅读放在这个目录下
+│   │   ├── 高效商务Agent架构指南/ # Anthropic 商务 Agent 架构指南中译（index.mdx + 原文配图同目录）
+│   │   ├── 构建高效的智能体/      # Anthropic《Building Effective Agents》中译（index.md + 8 张原图同目录），商务指南里的“标准 Agent 循环”链到这里
+│   │   └── 为Agent编写高效工具/  # Anthropic《Writing effective tools for agents》中译（index.md + 8 张原图同目录），商务指南“工程化 Agent 工具”一节链到这里
+│   └── commerce-agents/           # anthropics/commerce-agents 学习线：index.mdx（路线总览图 + 六条规则 + DocCardList），stage-a/ 等一个 Stage 一个目录（_category_.json 定标签），一步一页 NN-主题.mdx
 ├── docs/                          # 笔记文档（15 个分类目录）
 │   ├── Agent/                     # 智能体
 │   ├── AIGC/                      # AI 生成内容
@@ -49,7 +52,7 @@ npm run clear                # 清理 Docusaurus 缓存
 │   └── 项目/                      # 项目记录
 ├── src/
 │   ├── components/
-│   │   ├── AgentLoopViz/          # Agent Loop 交互式可视化组件
+│   │   ├── AgentLoopViz/          # Agent 循环分镜动画（数据驱动）：左流程图 + 右 messages[] + 本帧说明，<AgentLoopViz variant="..." />，分镜数据在 src/data/agentRuns/，配色走 --th-* 令牌
 │   │   ├── CodeWalkthrough/       # 代码演进演练：示例项目按步骤快照演进，文件树 / 标签 / 代码区按行标出相对上一步的增删（diff.js 行级 LCS），下方终端点击逐行打印预录输出
 │   │   ├── CopyMarkdownButton/    # 文档页"复制 Markdown"按钮
 │   │   ├── CsvTable.jsx           # CSV 表格渲染组件
@@ -59,12 +62,14 @@ npm run clear                # 清理 Docusaurus 缓存
 │   │   ├── McpCourse/             # 课程索引页顶部信息卡（CourseHero：难度/课数、来源链接）
 │   │   ├── McpQuiz/               # 单选测验（一次一题、选项每次随机打乱，最后提交，显示是否通过与得分条）
 │   │   ├── McpWalkthrough/        # 代码演练：分步说明 + 迷你代码查看器（文件树/标签/按步高亮定位）
+│   │   ├── RoadmapOverview/       # commerce-agents 路线总览：八个 Stage 两行排的 SVG，当前 Stage 用强调色，STAGES / CURRENT 直接改
 │   │   ├── SkillCard/             # SkillHub 技能卡片（展开显示安装命令）
 │   │   └── Term/                  # 术语悬停解释：虚线下划线，悬停 / 聚焦弹出 tip
 │   ├── css/
 │   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）、字体、代码块装饰
 │   ├── data/
-│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出
+│   │   ├── agentRuns/             # AgentLoopViz 分镜：index.js 注册表；claudeCode.js 是《The Agent Loop》笔记的默认分镜，commerceLoop.js 是路线第 01 页
+│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出；commerce.js 是路线的步骤文案，commerce.files.js 是 roadmap-sync 生成的代码快照（不要手改）
 │   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
 │   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）
 │   │   ├── mcpWalkthroughs/       # 三个演练的示例项目文件 + 步骤文案（sampling / notifications / roots）
@@ -88,7 +93,8 @@ npm run clear                # 清理 Docusaurus 缓存
 │   └── remark-run-output.js       # remark 插件：把 ```lang run 与紧随的 ```output 围栏合并成带预录输出的代码块
 ├── plans/ + specs/                # 功能规划与设计文档（SkillHub 等）
 ├── tools/
-│   └── covers/                    # 博客封面生成：配方 → 涂鸦 SVG（Node 渲染，无需浏览器），详见其 README
+│   ├── covers/                    # 博客封面生成：配方 → 涂鸦 SVG（Node 渲染，无需浏览器），详见其 README
+│   └── roadmap-sync/              # 路线代码同步：sync.mjs + <配方>.config.mjs（dev 仓库里每步的文件 → 演练里展示的路径），生成物提交进仓库
 ├── .claude/skills/
 │   └── blog-cover/                # /blog-cover <slug>：读文章 → 视觉隐喻 → 配方 → 渲染 → 登记
 ├── static/
@@ -106,9 +112,9 @@ npm run clear                # 清理 Docusaurus 缓存
 - **复制 Markdown 源码**：自定义插件 `copy-markdown-source` 构建时生成清洗后 `.md`，按钮由 `Root.js` 注入
 - **自定义博客列表**：`/bloglist` 路由，支持分类筛选，不使用 Docusaurus 默认博客列表
 - **SkillHub**：`/skills` 路由，技能卡片墙；数据在 `src/data/skills.js`，描述须工具中立、取材自技能仓库 README
-- **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成），记开源项目学习日志；一个项目一个文件夹，侧边栏层级树即学习线
-- **交互式可视化**：`AgentLoopViz` 组件（7 步动画流程图）、`GitWorkflowViz` 组件（Git 工作流 15 步状态演示，在 `docs/Git工作流/index.mdx` 里通过 `BrowserOnly` 挂载）
-- **代码演进演练**：`CodeWalkthrough` 组件，用于“一步步改代码”的笔记（如 `docs/python/unittest.mdx`）。数据在 `src/data/codeWalkthroughs/<variant>.js`，每一步只写本步改动的文件（`null` 表示删除）、说明段落和可运行命令；组件切到某步时自动打开改动的文件，相对上一步新增行绿底、删除行红底幽灵行，右上角可切「只看当前」；终端里的输出必须是本地实跑录下来的。文章里每一节写 `<CodeWalkthrough variant="unittest" step={3} />` 让演练停在对应步骤；上一步/下一步默认不显示，只给最后一个实例加 `nav` 让读者回翻。终端面板不写字，只有左上角一个终端图标
+- **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成）。一个开源项目一个文件夹，按步不按天，一步一页；`前言/` 放前言和前置阅读。代码不手抄，从同级 dev 仓库用 `npm run roadmap-sync` 抽成快照，演练里相邻步骤按行 diff
+- **交互式可视化**：`AgentLoopViz` 组件（Agent 循环分镜动画，数据驱动：节点图、连线、逐帧高亮与消息都在 `src/data/agentRuns/<variant>.js`，静止在第 0 帧就是结构图，播放就是一次运行示例；对话内容示意即可，但工具名、字段、stop_reason 必须和代码一致）、`GitWorkflowViz` 组件（Git 工作流 15 步状态演示，在 `docs/Git工作流/index.mdx` 里通过 `BrowserOnly` 挂载）
+- **代码演进演练**：`CodeWalkthrough` 组件，用于“一步步改代码”的笔记（如 `docs/python/unittest.mdx`）。数据在 `src/data/codeWalkthroughs/<variant>.js`，每一步只写本步改动的文件（`null` 表示删除）、说明段落和可运行命令；不改文件、只写 `file` + `lines: [[起, 止]]` 的步骤会把这些行标成聚焦行（强调色淡底）并滚过去，用来在同一份代码里逐段讲；组件切到某步时自动打开改动的文件，相对上一步新增行绿底、删除行红底幽灵行，右上角可切「只看当前」；终端里的输出必须是本地实跑录下来的。文章里每一节写 `<CodeWalkthrough variant="unittest" step={3} />` 让演练停在对应步骤；上一步/下一步默认不显示，只给最后一个实例加 `nav` 让读者回翻。终端面板不写字，只有左上角一个终端图标
 - **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录（目前有《Model Context Protocol 简介》和《高级主题》），`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`，题目数据在 `src/data/mcp*Quiz.js`；原站的 `CodeCommand` 组件对应 bash 代码块，`GenericPrompt`（用户提示卡）对应 `:::info[用户提示]`
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
 - **代码块预录输出**：代码围栏加 `run`，紧接一个 `output` 围栏写运行结果，构建时由 `plugins/remark-run-output.js` 合并；页面上代码块右上角出现 ▷ 按钮，点击后底部展开「输出」面板逐行打印（悬停标签提示为预录），再点收起。不是真跑代码，输出要先在本地跑一遍如实录入
@@ -137,9 +143,13 @@ sidebar_position: 1
 
 卡片只显示日期、标题、分类，没有一句话介绍。`swatch`（底色名，见 `src/data/swatches.json`）是卡片纯色底，`cover` 是透明 SVG 封面，整图居中不裁切。
 
-### 路线日志
+### 路线页面
 
-docs 形态（非 blog）：每个项目在 `roadmap/` 下建一个文件夹，每天一篇 `YYYY-MM-DD-主题.md`，文件名日期前缀保证侧边栏按时间排序；frontmatter 只需 `title`（建议含 Day N 和日期）。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
+docs 形态（非 blog），写给自己看的学习线，读者能跟着看最好。每个项目在 `roadmap/<项目>/` 下：`index.mdx` 是项目首页（`RoadmapOverview` 总览图 + 六条规则表 + `DocCardList`），一个 Stage 一个目录（`stage-a/` + `_category_.json` 定标签和顺序），一步一页 `NN-主题.mdx`，编号全局连续。frontmatter 写 `sidebar_position`、`title`（`NN · 主题`）、`sidebar_label`（`NN 主题`）、`description`（一句话，DocCardList 卡片上显示）。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
+
+每页固定五段：**起点**（上一步留下的问题）→ **方案**（`<AgentLoopViz variant="..." />`，静止是结构图、播放是运行示例，下面可配一张信号/动作表）→ **演练**（`<CodeWalkthrough variant="commerce" step={n} nav />`，说明写在步骤数据里）→ **设计决策**（引用六条规则的编号）→ **踩坑**（可选）。没有 `run` 输出面板、没有“试一下”、没有对照源码。`BUILD_ROADMAP.md` 里的 checklist 和当时给自己看的话不搬，几个路线 Step 可以合成一页。结尾不加收尾标题，直接一段话带到下一页。
+
+代码从同级 `../commerce-agents-dev` 抽：在 `tools/roadmap-sync/commerce.config.mjs` 里登记每步的文件与展示路径，跑 `npm run roadmap-sync`，生成的 `commerce.files.js` 一起提交。Stage A 每步在 dev 里是独立文件，演练里统一显示成 `agent.py`，相邻步骤才能按行 diff。
 
 ### 博客封面与头图
 

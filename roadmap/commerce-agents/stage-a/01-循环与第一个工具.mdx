@@ -1,0 +1,48 @@
+---
+sidebar_position: 1
+title: 01 · 循环与第一个工具
+sidebar_label: 01 循环与第一个工具
+description: 最小的购物 agent 是一个循环：调模型、跑工具、把结果喂回去。
+---
+
+import AgentLoopViz from '@site/src/components/AgentLoopViz';
+import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
+
+# 01 · 循环与第一个工具
+
+最小的购物 agent 是一个循环：调模型、跑工具、把结果喂回去。对应路线图的 Step 00 和 Step 01。
+
+## 起点
+
+一个空目录、一个 venv、`pip install anthropic python-dotenv`。第一版脚本只做一件事：把一句话发给模型，把回复打印出来。模型能聊天，但它不知道店里有什么，问“有没有耳机”它只会编一个。
+
+要让它知道，就得给它一个能查商品目录的工具，再加一个循环：模型说要用工具，就先执行，把结果送回去，再让它接着说。
+
+## 方案
+
+<AgentLoopViz variant="commerceLoop" />
+
+循环由 `stop_reason` 这一个信号控制：
+
+| stop_reason | 含义 | 循环做什么 |
+| ---- | ---- | ---- |
+| `tool_use` | 模型想调工具 | 执行每个 tool_use 块，把 tool_result 追加进 messages，再调一次模型 |
+| `end_turn` | 模型说完了 | 打印文本，回外层循环等下一句 |
+
+messages 从头到尾只有一份，两层循环都往里追加。模型每次看到的都是完整对话，包括它自己发出的 tool_use 和拿回来的 tool_result。
+
+## 演练
+
+五步。第 1 步是 Step 00 的脚本原样；第 2 步整个文件的绿底就是 Step 01 加的东西；后三步把加的东西拆开看：工具 schema、搜索函数和分发表、两层 while。
+
+<CodeWalkthrough variant="commerce" step={1} nav />
+
+## 设计决策
+
+**为什么不从 LangChain、CrewAI 这些框架开始。** 规则 1：一个模型拥有对话。框架的路由和编排在这个项目里是多余的中间层，直接调 API 才能完全控制发给模型的每个字节，后面做缓存断点、围栏、门控时都要靠这个控制权。
+
+**工具的 JSON Schema 不是随便写的。** 模型看不到函数体，只看得到 schema，所以每个字段的 `description` 就是给模型的指令。`search_products` 的 description 写了什么时候该用、怎么用、多个商品分开搜，这些话放在工具描述、系统提示词还是技能里，取决于它被用到的频率，[架构指南](../../前言/高效商务Agent架构指南/index.mdx)里“按频率决定”一节讲的就是这个取舍。
+
+**为什么外层循环不清空 messages。** 第二句“便宜点的呢”模型得知道说的是耳机。代价是上下文越聊越长、每轮都全量重发，Step 10 的提示词缓存会处理这个。
+
+能搜了，但还不能看详情、不能加购物车，模型也会编出不存在的商品 ID。下一页先加工具，再收拾第一个 bug。
