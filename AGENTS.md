@@ -145,7 +145,7 @@ sidebar_position: 1
 
 ### 路线页面
 
-docs 形态（非 blog），目录布局和文风都照 `docs/MCP` 课程章节。每个项目在 `roadmap/<项目>/` 下：`index.mdx` 是课程索引页（`CourseHero` + `RoadmapOverview` 总览图 + 学习目标 + 六条规则表 + 前提条件 + `DocCardList`），一个 Stage 一个中文目录（不带编号，`index.md` 写 `sidebar_position`、`description`、H1、一句话、`DocCardList`），一课一页 `NN-english-slug.mdx`（frontmatter 只写 `description`，H1 是中文课名不带编号）。文风：课程讲解口吻，用“我们”“您”，句子完整不省主语，每段先给结论再举具体例子，段落之间有过渡句；动画每帧的说明、演练每步的说明同样口吻。内容取舍上仍是自己的学习线：没有 `run` 输出面板、没有“试一下”、没有对照源码，`BUILD_ROADMAP.md` 里的 checklist 和当时给自己看的话不搬，几个路线 Step 可以合成一课。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
+docs 形态（非 blog），目录布局和文风都照 `docs/MCP` 课程章节。每个项目在 `roadmap/<项目>/` 下：`index.mdx` 是课程索引页（`CourseHero` + `RoadmapOverview` 总览图 + 学习目标 + 六条规则表 + 前提条件 + `DocCardList`），一个 Stage 一个中文目录（不带编号，`index.md` 写 `sidebar_position`、`description`、H1、一句话、`DocCardList`），一课一页 `NN-english-slug.mdx`（frontmatter 只写 `description`，H1 是中文课名不带编号）。文风：课程讲解口吻，用“我们”“您”，句子完整不省主语，每段先给结论再举具体例子，段落之间有过渡句；动画每帧的说明、演练每步的说明同样口吻。内容取舍上仍是自己的学习线：没有 `run` 输出面板、没有“试一下”、没有对照源码，`BUILD_ROADMAP.md` 里的 checklist 和当时给自己看的话不搬，几个路线 Step 可以合成一课。博客单独看就要能懂：正文、演练说明、总览图、规则表里都**不提** `BUILD_ROADMAP.md` 的 Step 编号、dev 仓库的文件路径，引用位置一律用课名或 Stage 名。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
 
 每课固定五段，但小标题照 MCP 课文写成这一课内容的短语（“只会聊天的模型”“循环的工作原理”“逐步查看代码”“为什么这样设计”），不用“起点 / 方案”这类通用标签：**起点**（上一课留下的问题）→ **方案**（`<AgentLoopViz variant="..." />`，静止是结构图、播放是运行示例，前面一段话说明动画演示了什么，下面可配一张信号/动作表）→ **演练**（`<CodeWalkthrough variant="commerce" step={n} nav />`，说明写在步骤数据里）→ **设计决策**（引用六条规则的编号）→ **踩坑**（可选）。结尾不加收尾标题，直接一段话带到下一课。
 

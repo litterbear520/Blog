@@ -1,5 +1,5 @@
 // commerce-agents 路线第 01 页：两层循环 + 一个 search_products 工具，用户找耳机。
-// 对话内容是示意的；工具名、参数字段、stop_reason 与 cookbooks/stage_a/s01_search_tool.py 一致。
+// 对话内容是示意的；工具名、参数字段、stop_reason 与这一课演练里的代码一致。
 export default {
   loopLabel: 'while True:  # 外层等输入，内层 stop_reason == "tool_use" 就继续',
   nodes: [
