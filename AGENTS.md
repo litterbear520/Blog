@@ -33,7 +33,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   ├── 高效商务Agent架构指南/ # Anthropic 商务 Agent 架构指南中译（index.mdx + 原文配图同目录）
 │   │   ├── 构建高效的智能体/      # Anthropic《Building Effective Agents》中译（index.md + 8 张原图同目录），商务指南里的“标准 Agent 循环”链到这里
 │   │   └── 为Agent编写高效工具/  # Anthropic《Writing effective tools for agents》中译（index.md + 8 张原图同目录），商务指南“工程化 Agent 工具”一节链到这里
-│   └── commerce-agents/           # anthropics/commerce-agents 学习线：index.mdx（路线总览图 + 六条规则 + DocCardList），stage-a/ 等一个 Stage 一个目录（_category_.json 定标签），一步一页 NN-主题.mdx
+│   └── commerce-agents/           # anthropics/commerce-agents 学习线，目录布局照 docs/MCP 课程：index.mdx（CourseHero + 总览图 + 学习目标 + 六条规则 + 前提条件 + DocCardList），一个 Stage 一个中文目录（index.md 分组页），一课一页 NN-english-slug.mdx
 ├── docs/                          # 笔记文档（15 个分类目录）
 │   ├── Agent/                     # 智能体
 │   ├── AIGC/                      # AI 生成内容
@@ -145,9 +145,9 @@ sidebar_position: 1
 
 ### 路线页面
 
-docs 形态（非 blog），写给自己看的学习线，读者能跟着看最好。每个项目在 `roadmap/<项目>/` 下：`index.mdx` 是项目首页（`RoadmapOverview` 总览图 + 六条规则表 + `DocCardList`），一个 Stage 一个目录（`stage-a/` + `_category_.json` 定标签和顺序），一步一页 `NN-主题.mdx`，编号全局连续。frontmatter 写 `sidebar_position`、`title`（`NN · 主题`）、`sidebar_label`（`NN 主题`）、`description`（一句话，DocCardList 卡片上显示）。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
+docs 形态（非 blog），目录布局和文风都照 `docs/MCP` 课程章节。每个项目在 `roadmap/<项目>/` 下：`index.mdx` 是课程索引页（`CourseHero` + `RoadmapOverview` 总览图 + 学习目标 + 六条规则表 + 前提条件 + `DocCardList`），一个 Stage 一个中文目录（不带编号，`index.md` 写 `sidebar_position`、`description`、H1、一句话、`DocCardList`），一课一页 `NN-english-slug.mdx`（frontmatter 只写 `description`，H1 是中文课名不带编号）。文风：课程讲解口吻，用“我们”“您”，句子完整不省主语，每段先给结论再举具体例子，段落之间有过渡句；动画每帧的说明、演练每步的说明同样口吻。内容取舍上仍是自己的学习线：没有 `run` 输出面板、没有“试一下”、没有对照源码，`BUILD_ROADMAP.md` 里的 checklist 和当时给自己看的话不搬，几个路线 Step 可以合成一课。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
 
-每页固定五段：**起点**（上一步留下的问题）→ **方案**（`<AgentLoopViz variant="..." />`，静止是结构图、播放是运行示例，下面可配一张信号/动作表）→ **演练**（`<CodeWalkthrough variant="commerce" step={n} nav />`，说明写在步骤数据里）→ **设计决策**（引用六条规则的编号）→ **踩坑**（可选）。没有 `run` 输出面板、没有“试一下”、没有对照源码。`BUILD_ROADMAP.md` 里的 checklist 和当时给自己看的话不搬，几个路线 Step 可以合成一页。结尾不加收尾标题，直接一段话带到下一页。
+每课固定五段，但小标题照 MCP 课文写成这一课内容的短语（“只会聊天的模型”“循环的工作原理”“逐步查看代码”“为什么这样设计”），不用“起点 / 方案”这类通用标签：**起点**（上一课留下的问题）→ **方案**（`<AgentLoopViz variant="..." />`，静止是结构图、播放是运行示例，前面一段话说明动画演示了什么，下面可配一张信号/动作表）→ **演练**（`<CodeWalkthrough variant="commerce" step={n} nav />`，说明写在步骤数据里）→ **设计决策**（引用六条规则的编号）→ **踩坑**（可选）。结尾不加收尾标题，直接一段话带到下一课。
 
 代码从同级 `../commerce-agents-dev` 抽：在 `tools/roadmap-sync/commerce.config.mjs` 里登记每步的文件与展示路径，跑 `npm run roadmap-sync`，生成的 `commerce.files.js` 一起提交。Stage A 每步在 dev 里是独立文件，演练里统一显示成 `agent.py`，相邻步骤才能按行 diff。
 
