@@ -7,14 +7,14 @@ import styles from './styles.module.css';
  */
 
 const STAGES = [
-  { key: 'A', name: '一个文件，一段对话', steps: 'Step 00–05' },
-  { key: 'B', name: '代码膨胀，该拆了', steps: 'Step 06–09' },
-  { key: 'C', name: '从能用到好用', steps: 'Step 10–16' },
-  { key: 'D', name: '第二个角色催生共享层', steps: 'Step 17–21' },
-  { key: 'E', name: '加上 Web 界面', steps: 'Step 22–26' },
-  { key: 'F', name: '扩展验证', steps: 'Step 27–28' },
-  { key: 'G', name: '验证与交付', steps: 'Step 29–32' },
-  { key: 'H', name: '生产闭环', steps: 'Step 33–39' },
+  { key: 'A', name: '一个文件，一段对话', sub: '搜索、购物车、门控、围栏' },
+  { key: 'B', name: '代码膨胀，该拆了', sub: '拆文件、拆包、加测试' },
+  { key: 'C', name: '从能用到好用', sub: '缓存、展示层、技能、记忆' },
+  { key: 'D', name: '第二个角色催生共享层', sub: '商户 agent、共享层' },
+  { key: 'E', name: '加上 Web 界面', sub: 'FastAPI、前端、商户门户' },
+  { key: 'F', name: '扩展验证', sub: '更多运行路径与行业' },
+  { key: 'G', name: '验证与交付', sub: 'CI、部署、插件、文档' },
+  { key: 'H', name: '生产闭环', sub: '真实后端、认证、监测' },
 ];
 const CURRENT = 'A';
 
@@ -87,7 +87,7 @@ export default function RoadmapOverview() {
                 {b.name}
               </text>
               <text x={b.x + 12} y={b.y + 64} className={styles.sub}>
-                {b.steps}
+                {b.sub}
               </text>
             </g>
           );

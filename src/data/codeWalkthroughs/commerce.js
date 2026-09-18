@@ -7,7 +7,7 @@ export const steps = [
     title: '第一次 API 调用',
     body: [
       '我们先写一个最简单的脚本：用 `Anthropic()` 创建客户端，调用 `messages.create()` 发送一句系统提示词和一条用户消息，然后把回复里的 text 块打印出来。这里没有工具，也没有循环，模型只能聊天。',
-      '这个脚本走的是 DeepSeek 的 Anthropic 兼容接口，所以 `base_url` 和 `model` 填的是 DeepSeek 的值。如果换回官方接口，只需要删掉 `base_url` 并改模型名。在 dev 仓库里，这一步对应 `cookbooks/stage_a/s00_llm_request.py`。',
+      '这个脚本走的是 DeepSeek 的 Anthropic 兼容接口，所以 `base_url` 和 `model` 填的是 DeepSeek 的值。如果换回官方接口，只需要删掉 `base_url` 并改模型名。',
     ],
     file: 'agent.py',
     files: { 'agent.py': SNAP.s00['agent.py'] },
@@ -16,7 +16,7 @@ export const steps = [
     title: '加入 search_products 工具',
     body: [
       '这一步一次加入了四样东西：假商品列表、工具 schema、搜索函数和对话循环。绿底的行是相对上一步新增的内容，右上角可以切换到“只看当前”查看完整文件。',
-      '接下来的三步，我们把这四样东西拆开逐段来看。在 dev 仓库里，这一步对应 `cookbooks/stage_a/s01_search_tool.py`。',
+      '接下来的三步，我们把这四样东西拆开逐段来看。',
     ],
     file: 'agent.py',
     files: { 'agent.py': SNAP.s01['agent.py'] },
