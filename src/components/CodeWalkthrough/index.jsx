@@ -6,6 +6,7 @@ import WALKTHROUGHS, { UI } from '@site/src/data/codeWalkthroughs';
 import useTypewriter from '@site/src/theme/CodeBlock/RunOutput/useTypewriter';
 import { diffLines, plainRows } from './diff';
 import CopyCodeButton from './CopyCodeButton';
+import SymbolsIcon from './SymbolsIcon';
 import styles from './styles.module.css';
 
 /**
@@ -246,7 +247,7 @@ function Walkthrough({ data, initialStep, nav }) {
             style={indent}
             className={clsx(styles.treeItem, active && styles.treeItemActive)}
           >
-            <span aria-hidden="true">📄</span>
+            <SymbolsIcon path={node.path} tree />
             <span className={styles.treeName}>{node.name}</span>
             {status !== 'same' && (
               <span
@@ -267,7 +268,7 @@ function Walkthrough({ data, initialStep, nav }) {
             style={indent}
             className={styles.treeItem}
           >
-            <span aria-hidden="true">{isCollapsed ? '📁' : '📂'}</span>
+            <SymbolsIcon path={node.path} folder tree expanded={!isCollapsed} />
             <span className={styles.treeName}>{node.name}</span>
           </button>
           {!isCollapsed && renderTree(node.children, depth + 1)}
@@ -333,6 +334,7 @@ function Walkthrough({ data, initialStep, nav }) {
                     style={active ? { backgroundColor: editorBg } : undefined}
                   >
                     <button type="button" aria-pressed={active} onClick={() => openFile(path)} className={styles.tabBtn}>
+                      <SymbolsIcon path={path} />
                       {path.split('/').pop()}
                       {status !== 'same' && (
                         <span className={clsx(styles.badge, status === 'new' && styles.badgeNew)}>
