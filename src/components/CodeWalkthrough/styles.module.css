@@ -212,16 +212,12 @@
 }
 
 /* 操作浮层与滚动区是兄弟节点；滚动代码不会把按钮带走。
-   同色顶部留白始终保留，避免悬停时跳动或滚动后遮住源码。 */
+   与原生代码块一样直接叠放，不为按钮预留整行；显隐不改变源码的位置或高度。 */
 .codeShell {
   --cw-action-size: 2rem;
   --cw-action-inset: 0.5rem;
   position: relative;
   min-width: 0;
-}
-
-.codeShellWithActions {
-  padding-top: calc(var(--cw-action-size) + var(--cw-action-inset) * 2);
 }
 
 .codeActions {
@@ -406,7 +402,7 @@
   font-family: var(--ifm-font-family-monospace);
 }
 
-/* 覆盖 custom.css 的全局 pre 边框，避免留白区与源码之间多出一张内嵌卡片。 */
+/* 覆盖 custom.css 的全局 pre 边框，避免代码查看器中出现重复的内边框。 */
 .codeShell .pre {
   background: transparent !important;
   border: 0 !important;

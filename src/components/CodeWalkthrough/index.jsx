@@ -357,7 +357,7 @@ function Walkthrough({ data, initialStep, nav }) {
             </div>
           </div>
           <div
-            className={clsx(styles.codeShell, activeFile !== null && styles.codeShellWithActions)}
+            className={styles.codeShell}
             style={{ backgroundColor: editorBg, '--cw-editor-bg': editorBg }}
           >
             {activeFile !== null && (
