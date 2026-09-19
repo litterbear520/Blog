@@ -195,7 +195,7 @@
   flex-direction: column;
 }
 
-/* 标签可横向滚动，操作区始终留在右侧，不覆盖代码。 */
+/* 标签栏只显示文件；代码操作放到下方代码区内。 */
 .editorToolbar {
   display: flex;
   min-width: 0;
@@ -211,68 +211,89 @@
   overflow-x: auto;
 }
 
-.editorActions {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.15rem 0.4rem;
-  border-left: 1px solid var(--ifm-color-emphasis-300);
+/* 操作浮层与滚动区是兄弟节点；滚动代码不会把按钮带走。
+   同色顶部留白始终保留，避免悬停时跳动或滚动后遮住源码。 */
+.codeShell {
+  --cw-action-size: 2rem;
+  --cw-action-inset: 0.5rem;
+  position: relative;
+  min-width: 0;
 }
 
-.copyButton {
+.codeShellWithActions {
+  padding-top: calc(var(--cw-action-size) + var(--cw-action-inset) * 2);
+}
+
+.codeActions {
+  position: absolute;
+  top: var(--cw-action-inset);
+  right: var(--cw-action-inset);
+  z-index: 1;
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ifm-transition-fast, 150ms) ease-in-out;
+}
+
+/* 只响应代码区，而非文件树/标签栏；键盘聚焦也可发现按钮。
+   不用 focus-within，避免鼠标点击后移出代码区仍被焦点强制显示。 */
+.codeShell:hover .codeActions,
+.codeShell:has(:focus-visible) .codeActions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 与原生代码块一致的细边框、小圆角、淡显图标；不硬编码深色背景。
+   避免 copyButton 类名，以免全局旧版复制按钮的 !important 样式串入。 */
+.codeActionButton {
   display: inline-flex;
-  flex-shrink: 0;
+  flex: none;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
-  min-width: 5.5rem;
-  min-height: 1.75rem;
-  padding: 0.25rem 0.45rem;
+  box-sizing: border-box;
+  width: var(--cw-action-size);
+  height: var(--cw-action-size);
+  padding: 0;
   border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--ifm-color-content-secondary);
-  font-family: var(--ifm-font-family-base);
-  font-size: 0.7rem;
-  line-height: 1.2;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
-
-.copyButton:hover:not(:disabled) {
-  background: var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-global-radius);
+  background: var(--cw-editor-bg, var(--ifm-background-surface-color));
   color: var(--ifm-font-color-base);
-}
-
-.copyButton:focus-visible,
-.diffToggle:focus-visible {
-  outline: 2px solid var(--th-accent);
-  outline-offset: 1px;
-}
-
-.copyButton:disabled {
+  line-height: 0;
+  cursor: pointer;
   opacity: 0.5;
+  transition: opacity var(--ifm-transition-fast, 150ms) ease-in-out;
+}
+
+.codeActionButton:hover:not(:disabled),
+.codeActionButton:focus-visible {
+  opacity: 1;
+}
+
+.codeActionButton:focus-visible {
+  outline: 2px solid var(--th-accent);
+  outline-offset: 2px;
+}
+
+.codeActionButton:disabled {
   cursor: not-allowed;
 }
 
-.copyButtonCopied {
+.codeActionCopied {
   color: var(--th-code-added-bar);
+  opacity: 1;
 }
 
-.copyButtonError {
+.codeActionError {
   color: var(--th-code-removed-bar);
+  opacity: 1;
 }
 
-.copyIcon {
-  width: 0.9rem;
-  height: 0.9rem;
-  flex-shrink: 0;
-}
-
-.copyLabel {
-  white-space: nowrap;
+.codeActionIcon {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  flex: none;
 }
 
 .copyStatus {
@@ -285,19 +306,19 @@
   white-space: nowrap;
 }
 
-@media (max-width: 480px) {
-  .copyButton {
-    min-width: 2rem;
-    min-height: 2rem;
-    padding: 0.35rem;
+/* 触屏没有悬停：始终显示并增大点击区域；不按屏幕宽度猜输入方式。 */
+@media (hover: none), (pointer: coarse) {
+  .codeShell {
+    --cw-action-size: 2.75rem;
   }
 
-  .copyLabel {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
+  .codeActions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .codeActionButton {
+    opacity: 1;
   }
 }
 
@@ -367,23 +388,6 @@
   color: var(--ifm-font-color-base);
 }
 
-/* 与复制按钮一起固定在右侧操作区。 */
-.diffToggle {
-  flex-shrink: 0;
-  border: 0;
-  background: transparent;
-  padding: 0.25rem 0.4rem;
-  font-family: inherit;
-  font-size: 0.7rem;
-  color: var(--ifm-color-content-secondary);
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.diffToggle:hover {
-  color: var(--ifm-font-color-base);
-}
-
 .codeScroll {
   position: relative;
   min-height: 8rem;
@@ -400,6 +404,13 @@
   font-size: 0.78rem;
   line-height: 1.55;
   font-family: var(--ifm-font-family-monospace);
+}
+
+/* 覆盖 custom.css 的全局 pre 边框，避免留白区与源码之间多出一张内嵌卡片。 */
+.codeShell .pre {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
 }
 
 .line {
@@ -592,6 +603,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .codeActions,
+  .codeActionButton {
+    transition: none;
+  }
+
   .termRunning::after {
     animation: none;
   }

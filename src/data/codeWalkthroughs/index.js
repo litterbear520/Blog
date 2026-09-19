@@ -28,6 +28,7 @@ export const UI = {
   'terminal.collapse': '收起',
   'terminal.running': '运行中…',
   'terminal.exit': '进程退出，退出码 {code}',
+  'aria.codeActions': '代码操作',
   'aria.openFiles': '已打开的文件',
   'aria.closeTab': '关闭 {path}',
   'empty.title': '没有打开的文件',
