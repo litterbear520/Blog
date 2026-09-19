@@ -1,0 +1,33 @@
+/* 保留 Symbols 原始配色；只约束尺寸，避免长文件名挤扁图标。 */
+.icon {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 1rem;
+}
+
+.treeIcon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  flex-shrink: 0;
+}
+
+/* 叶子文件保留同宽占位，让同层级的图标与名称对齐。 */
+.chevron {
+  display: block;
+  width: 0.625rem;
+  height: 0.625rem;
+  flex: 0 0 0.625rem;
+  transition: transform 0.15s;
+}
+
+.expanded {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}
