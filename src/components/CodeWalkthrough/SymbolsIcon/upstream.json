@@ -1,0 +1,44 @@
+{
+  "repository": "https://github.com/miguelsolorio/vscode-symbols",
+  "license": "MIT",
+  "retrieved": "2026-09-19",
+  "themeBlob": "d58526e20dce509e0d52c5418f63bc5c0f99930a",
+  "icons": {
+    "python": {
+      "path": "src/icons/files/python.svg",
+      "blob": "d6d7beded6db03ef88ee80fb1c88c43dd19d09a2"
+    },
+    "git": {
+      "path": "src/icons/files/git.svg",
+      "blob": "609a2e43b657e15f9f4791917c54a1857033aca8"
+    },
+    "gear": {
+      "path": "src/icons/files/gear.svg",
+      "blob": "b04757a4df46a3c7f1b156bde54a3e3672c5afae"
+    },
+    "document": {
+      "path": "src/icons/files/document.svg",
+      "blob": "ca60cc7965964412da17ba07bbe52011bd30a46a"
+    },
+    "markdown": {
+      "path": "src/icons/files/markdown.svg",
+      "blob": "382f137beb47ccc4f587b5132ecf048e073f0697"
+    },
+    "brackets-yellow": {
+      "path": "src/icons/files/brackets-yellow.svg",
+      "blob": "23f59572bdff0b94e45d02748015cb3d450ec76d"
+    },
+    "folder": {
+      "path": "src/icons/folders/folder.svg",
+      "blob": "57915e514a468b72ecf8d79e1031fb158033e802"
+    },
+    "folder-red-code": {
+      "path": "src/icons/folders/folder-red-code.svg",
+      "blob": "8ef26e58693e18758c457b9c545c5e6f8b095854"
+    },
+    "text": {
+      "path": "src/icons/files/text.svg",
+      "blob": "3efbf5e463089da49aa7b86433968c9d9202a667"
+    }
+  }
+}
