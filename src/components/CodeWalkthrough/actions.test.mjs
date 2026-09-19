@@ -12,10 +12,10 @@ const css = read('./styles.module.css');
 
 test('actions live in the code shell, not the tabs or scrolling code', () => {
   const toolbar = viewer.indexOf('className={styles.editorToolbar}');
-  const shell = viewer.indexOf('styles.codeShell,');
+  const shell = viewer.indexOf('className={styles.codeShell}');
   const actions = viewer.indexOf('className={styles.codeActions}');
   const scroll = viewer.indexOf('ref={scrollRef}');
-  assert.ok(toolbar < shell && shell < actions && actions < scroll);
+  assert.ok(toolbar >= 0 && toolbar < shell && shell < actions && actions < scroll);
   assert.doesNotMatch(viewer.slice(toolbar, shell), /CopyCodeButton|styles\.codeActions/);
   assert.doesNotMatch(viewer, /styles\.(editorActions|diffToggle)/);
   assert.match(viewer, /role="group" aria-label=\{UI\['aria\.codeActions'\]\}/);
@@ -60,8 +60,7 @@ test('hover is code-scoped and keyboard focus reveals the actions without trappi
   assert.doesNotMatch(css, /visibility:\s*hidden/);
 });
 
-test('overlay has stable space, theme-aware buttons, and scoped pre resets', () => {
-  assert.match(css, /\.codeShellWithActions\s*\{[^}]*padding-top: calc\(/s);
+test('overlay uses absolute positioning, theme-aware buttons, and scoped pre resets', () => {
   assert.match(css, /\.codeActions\s*\{[^}]*position: absolute;/s);
   assert.match(css, /background: var\(--cw-editor-bg,/);
   assert.match(css, /\.codeShell \.pre\s*\{[^}]*border: 0 !important;/s);
@@ -72,4 +71,18 @@ test('touch targets and reduced-motion preferences have explicit fallbacks', () 
   assert.match(css, /@media \(hover: none\), \(pointer: coarse\)/);
   assert.match(css, /--cw-action-size: 2\.75rem/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.codeActions,\s*\.codeActionButton\s*\{\s*transition: none;/);
+});
+
+// A floating toolbar must not add a blank row above the source (desktop or touch).
+test('actions do not reserve vertical space or move the first code line', () => {
+  assert.doesNotMatch(viewer, /styles\.codeShellWithActions/);
+  assert.doesNotMatch(css, /\.codeShellWithActions/);
+  const layoutRules = [...css.matchAll(/\.(?:codeShell|codeScroll|pre)\s*\{([^}]*)\}/g)];
+  assert.ok(layoutRules.length >= 3);
+  for (const [, declarations] of layoutRules) {
+    assert.doesNotMatch(declarations, /(?:padding|margin)-(?:top|block(?:-start)?):/);
+    assert.doesNotMatch(declarations, /(?:padding|margin|height|min-height):[^;]*--cw-action-/);
+  }
+  // Preserve the original, symmetric source padding instead of growing it for the toolbar.
+  assert.match(css, /\.pre\s*\{[^}]*padding: 0\.5rem 0;/s);
 });
