@@ -708,8 +708,12 @@ pre {
   color: var(--th-text);
 }
 
-.theme-code-block.run-output-open .run-output__body {
+/* 全站 pre 与 [data-theme='dark'] pre 都带 !important 的底色 / 边框，这里用更高特异性压掉，输出正文不再套一层框 */
+.run-output pre.run-output__body {
   padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
 }
 
 .run-output__line {
