@@ -442,9 +442,10 @@ function Walkthrough({ data, initialStep, nav }) {
 
       {runs.length > 0 && (
         <div className={styles.terminal} style={{ backgroundColor: editorBg, color: prismTheme.plain.color }}>
-          <div className={styles.termHead} title={UI['terminal.hint']}>
-            <IconTerminal className={styles.termHeadIcon} aria-label={UI['terminal.heading']} role="img" />
-          </div>
+          {/* 角标：绝对定位在右上角，不单独占一行；命令行的运行按钮紧跟命令文字，把右上角让出来 */}
+          <span className={styles.termMark} title={UI['terminal.hint']}>
+            <IconTerminal className={styles.termMarkIcon} aria-label={UI['terminal.heading']} role="img" />
+          </span>
           {runs.map((run, k) => {
             const open = runIndex === k;
             return (
