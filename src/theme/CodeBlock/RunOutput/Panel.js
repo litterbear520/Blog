@@ -33,24 +33,26 @@ export default function RunOutputPanel() {
 
   return (
     <div className="run-output" role="region" aria-label="运行输出">
-      {/* 角标：和代码块右上角的复制按钮同一列，不单独占一行 */}
-      <span className="run-output__mark" title="预先录制的运行结果，不是浏览器实时执行">
-        <IconTerminal aria-label="输出" role="img" />
-      </span>
-      <pre className="run-output__body" aria-live="polite">
-        {!started && <span className="run-output__running">运行中…</span>}
-        {lines.slice(0, shown).map((line, i) => (
-          <div
-            className={clsx(
-              'run-output__line',
-              run.highlight.has(i + 1) && 'run-output__line--highlight',
-            )}
-            key={i}>
-            {line === '' ? ' ' : line}
-          </div>
-        ))}
-        {started && !done && <span className="run-output__cursor" />}
-      </pre>
+      {/* 终端图标排在输出第一行的行首，文字紧随其后，不单独占一行也不做角标 */}
+      <div className="run-output__row">
+        <span className="run-output__mark" title="预先录制的运行结果，不是浏览器实时执行">
+          <IconTerminal aria-label="输出" role="img" />
+        </span>
+        <pre className="run-output__body" aria-live="polite">
+          {!started && <span className="run-output__running">运行中…</span>}
+          {lines.slice(0, shown).map((line, i) => (
+            <div
+              className={clsx(
+                'run-output__line',
+                run.highlight.has(i + 1) && 'run-output__line--highlight',
+              )}
+              key={i}>
+              {line === '' ? ' ' : line}
+            </div>
+          ))}
+          {started && !done && <span className="run-output__cursor" />}
+        </pre>
+      </div>
       {done && (
         <div className={clsx('run-output__foot', `run-output__foot--${run.status.split(':')[0]}`)}>
           {run.status === 'hang' && <span className="run-output__cursor" />}
