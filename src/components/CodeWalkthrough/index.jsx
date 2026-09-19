@@ -5,6 +5,7 @@ import { usePrismTheme } from '@docusaurus/theme-common';
 import WALKTHROUGHS, { UI } from '@site/src/data/codeWalkthroughs';
 import useTypewriter from '@site/src/theme/CodeBlock/RunOutput/useTypewriter';
 import { diffLines, plainRows } from './diff';
+import CopyCodeButton from './CopyCodeButton';
 import styles from './styles.module.css';
 
 /**
@@ -320,45 +321,55 @@ function Walkthrough({ data, initialStep, nav }) {
           <div className={styles.treeScroll}>{renderTree(tree, 0)}</div>
         </aside>
         <div className={styles.editorMain}>
-          <div className={styles.tabs} aria-label={UI['aria.openFiles']}>
-            {openTabs.map((path) => {
-              const active = path === activeFile;
-              const status = statusOf(path);
-              return (
-                <div
-                  key={path}
-                  className={clsx(styles.tab, active && styles.tabActive)}
-                  style={active ? { backgroundColor: editorBg } : undefined}
-                >
-                  <button type="button" aria-pressed={active} onClick={() => openFile(path)} className={styles.tabBtn}>
-                    {path.split('/').pop()}
-                    {status !== 'same' && (
-                      <span className={clsx(styles.badge, status === 'new' && styles.badgeNew)}>
-                        {status === 'new' ? UI['badge.new'] : UI['badge.changed']}
-                      </span>
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={fmt(UI['aria.closeTab'], { path })}
-                    onClick={() => closeTab(path)}
-                    className={styles.tabClose}
+          <div className={styles.editorToolbar}>
+            <div className={styles.tabs} aria-label={UI['aria.openFiles']}>
+              {openTabs.map((path) => {
+                const active = path === activeFile;
+                const status = statusOf(path);
+                return (
+                  <div
+                    key={path}
+                    className={clsx(styles.tab, active && styles.tabActive)}
+                    style={active ? { backgroundColor: editorBg } : undefined}
                   >
-                    ×
-                  </button>
-                </div>
-              );
-            })}
-            {activeStatus === 'changed' && (
-              <button
-                type="button"
-                aria-pressed={showDiff}
-                onClick={() => setShowDiff((v) => !v)}
-                className={styles.diffToggle}
-              >
-                {showDiff ? UI['diff.hide'] : UI['diff.show']}
-              </button>
-            )}
+                    <button type="button" aria-pressed={active} onClick={() => openFile(path)} className={styles.tabBtn}>
+                      {path.split('/').pop()}
+                      {status !== 'same' && (
+                        <span className={clsx(styles.badge, status === 'new' && styles.badgeNew)}>
+                          {status === 'new' ? UI['badge.new'] : UI['badge.changed']}
+                        </span>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={fmt(UI['aria.closeTab'], { path })}
+                      onClick={() => closeTab(path)}
+                      className={styles.tabClose}
+                    >
+                      ×
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.editorActions}>
+              {activeStatus === 'changed' && (
+                <button
+                  type="button"
+                  aria-pressed={showDiff}
+                  onClick={() => setShowDiff((v) => !v)}
+                  className={styles.diffToggle}
+                >
+                  {showDiff ? UI['diff.hide'] : UI['diff.show']}
+                </button>
+              )}
+              {/* 从快照复制完整源码，不复制含删除行、行号的展示内容。 */}
+              <CopyCodeButton
+                key={JSON.stringify([current, activeFile])}
+                text={activeFile === null ? undefined : snapshot[activeFile]}
+                path={activeFile}
+              />
+            </div>
           </div>
           {activeFile !== null && rows.length > 0 ? (
             <div ref={scrollRef} className={styles.codeScroll} style={{ backgroundColor: editorBg }}>
