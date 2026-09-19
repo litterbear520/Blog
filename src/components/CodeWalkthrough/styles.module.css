@@ -195,12 +195,110 @@
   flex-direction: column;
 }
 
-.tabs {
+/* 标签可横向滚动，操作区始终留在右侧，不覆盖代码。 */
+.editorToolbar {
   display: flex;
-  align-items: stretch;
-  overflow-x: auto;
+  min-width: 0;
   border-bottom: 1px solid var(--ifm-color-emphasis-300);
   background: var(--ifm-color-emphasis-100);
+}
+
+.tabs {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: stretch;
+  overflow-x: auto;
+}
+
+.editorActions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.4rem;
+  border-left: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.copyButton {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 5.5rem;
+  min-height: 1.75rem;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ifm-color-content-secondary);
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.7rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.copyButton:hover:not(:disabled) {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-font-color-base);
+}
+
+.copyButton:focus-visible,
+.diffToggle:focus-visible {
+  outline: 2px solid var(--th-accent);
+  outline-offset: 1px;
+}
+
+.copyButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.copyButtonCopied {
+  color: var(--th-code-added-bar);
+}
+
+.copyButtonError {
+  color: var(--th-code-removed-bar);
+}
+
+.copyIcon {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex-shrink: 0;
+}
+
+.copyLabel {
+  white-space: nowrap;
+}
+
+.copyStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .copyButton {
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: 0.35rem;
+  }
+
+  .copyLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
 }
 
 .tab {
@@ -269,16 +367,16 @@
   color: var(--ifm-font-color-base);
 }
 
-/* 「显示改动 / 只看当前」开关靠右 */
+/* 与复制按钮一起固定在右侧操作区。 */
 .diffToggle {
-  margin-left: auto;
   flex-shrink: 0;
   border: 0;
   background: transparent;
-  padding: 0 0.75rem;
+  padding: 0.25rem 0.4rem;
   font-family: inherit;
   font-size: 0.7rem;
   color: var(--ifm-color-content-secondary);
+  white-space: nowrap;
   cursor: pointer;
 }
 
