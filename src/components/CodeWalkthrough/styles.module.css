@@ -101,8 +101,15 @@
 }
 
 /* ── 代码查看器 ── */
+/* 固定整个查看器（含标签栏）的高度，短文件/空状态不收缩，长文件不撑高。
+   svh 避免移动浏览器地址栏收放引起高度跳动；vh 是旧浏览器回退。 */
 .editor {
+  --code-viewer-header-height: 2.5rem;
   display: flex;
+  flex: none;
+  box-sizing: border-box;
+  height: clamp(20rem, 65vh, 32rem);
+  height: clamp(20rem, 65svh, 32rem);
   min-width: 0;
   overflow: hidden;
   border-radius: 12px;
@@ -110,9 +117,19 @@
   background: var(--ifm-background-surface-color);
 }
 
+/* 小屏缩小视窗，但依然不依赖文件长度。 */
+@media (max-width: 639px) {
+  .editor {
+    height: clamp(16rem, 60vh, 24rem);
+    height: clamp(16rem, 60svh, 24rem);
+  }
+}
+
 .fileTree {
   display: none;
   width: 10rem;
+  min-height: 0;
+  overflow: hidden;
   flex-shrink: 0;
   flex-direction: column;
   border-right: 1px solid var(--ifm-color-emphasis-300);
@@ -126,8 +143,13 @@
 }
 
 .fileTreeHeading {
+  display: flex;
+  flex: none;
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--code-viewer-header-height);
   margin: 0;
-  padding: 0.5rem 0.75rem;
+  padding: 0 0.75rem;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -139,7 +161,9 @@
 
 .treeScroll {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   padding: 0.25rem 0;
 }
 
@@ -191,6 +215,8 @@
 .editorMain {
   display: flex;
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   flex: 1;
   flex-direction: column;
 }
@@ -198,6 +224,9 @@
 /* 标签栏只显示文件；代码操作放到下方代码区内。 */
 .editorToolbar {
   display: flex;
+  flex: none;
+  box-sizing: border-box;
+  height: var(--code-viewer-header-height);
   min-width: 0;
   border-bottom: 1px solid var(--ifm-color-emphasis-300);
   background: var(--ifm-color-emphasis-100);
@@ -217,6 +246,10 @@
   --cw-action-size: 2rem;
   --cw-action-inset: 0.5rem;
   position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
   min-width: 0;
 }
 
@@ -331,7 +364,9 @@
   gap: 0.4rem;
   border: 0;
   background: transparent;
-  padding: 0.4rem 0.25rem 0.4rem 0.75rem;
+  align-self: stretch;
+  padding: 0 0.25rem 0 0.75rem;
+  white-space: nowrap;
   font-family: var(--ifm-font-family-monospace);
   font-size: 0.75rem;
   color: var(--ifm-color-content-secondary);
@@ -386,9 +421,11 @@
 
 .codeScroll {
   position: relative;
-  min-height: 8rem;
-  max-height: 22rem;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
   overflow: auto;
+  scrollbar-gutter: stable;
 }
 
 .pre {
@@ -460,7 +497,9 @@
 
 .empty {
   display: flex;
-  min-height: 8rem;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   align-items: center;
   justify-content: center;
   text-align: center;
