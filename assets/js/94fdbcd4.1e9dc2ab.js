@@ -1,0 +1,462 @@
+"use strict";(self.webpackChunkmy_blog=self.webpackChunkmy_blog||[]).push([["8104"],{54177(e,t,s){s.r(t),s.d(t,{metadata:()=>r,default:()=>u,frontMatter:()=>l,contentTitle:()=>o,toc:()=>d,assets:()=>c});var r=JSON.parse('{"id":"python/unittest","title":"unittest","description":"\u8FD9\u7BC7\u6587\u7AE0\u6211\u4EEC\u8BB2\u4E00\u4E0B\u6D4B\u8BD5\u3002\u6211\u53D1\u73B0\u5F88\u591A\u4EBA\u4E0D\u77E5\u9053\u5982\u4F55\u5BF9\u81EA\u5DF1\u7684\u4EE3\u7801\u5B8C\u6210\u4E00\u4E2A\u6BD4\u8F83\u57FA\u7840\u7684\u6D4B\u8BD5\uFF0C\u6216\u8005\u8BF4\uFF0C\u4ED6\u4EEC\u53EF\u80FD\u4E0D\u77E5\u9053\u4E00\u4E2A\u6BD4\u8F83\u597D\u7684\u5DE5\u7A0B\u5B9E\u8DF5\u662F\u4EC0\u4E48\u6837\u7684\u3002\u6240\u4EE5\u8FD9\u6B21\u6211\u4EEC\u63D0\u4F9B\u4E00\u4E2A\u53EF\u4EE5\u76F4\u63A5\u6284\u8FC7\u53BB\u7528\u7684\u5B9E\u8DF5\u65B9\u5F0F\uFF0C\u6765\u5E2E\u52A9\u5927\u5BB6\u5B8C\u6210\u4E00\u4E2A\u66F4\u6B63\u89C4\u7684\u7F16\u7A0B\u9879\u76EE\u3002\u5E9F\u8BDD\u4E0D\u591A\u8BF4\uFF0C\u6211\u4EEC\u76F4\u63A5\u5F00\u59CB\u3002","source":"@site/docs/python/unittest.mdx","sourceDirName":"python","slug":"/python/unittest","permalink":"/docs/python/unittest","draft":false,"unlisted":false,"tags":[],"version":"current","frontMatter":{},"sidebar":"tutorialSidebar","previous":{"title":"queue","permalink":"/docs/python/queue"},"next":{"title":"\u5168\u5C40\u548C\u95ED\u5305\u53D8\u91CF","permalink":"/docs/python/\u5168\u5C40\u548C\u95ED\u5305\u53D8\u91CF"}}'),n=s(74848),i=s(28453),a=s(86216);let l={},o="unittest",c={},d=[{value:"\u6587\u4EF6\u7ED3\u6784",id:"\u6587\u4EF6\u7ED3\u6784",level:2},{value:"\u6D4B\u8BD5\u662F\u4EC0\u4E48",id:"\u6D4B\u8BD5\u662F\u4EC0\u4E48",level:2},{value:"\u6D4B\u8BD5\u6587\u4EF6\u600E\u4E48\u5199",id:"\u6D4B\u8BD5\u6587\u4EF6\u600E\u4E48\u5199",level:2},{value:"assertEqual \u8FD8\u662F assertTrue",id:"assertequal-\u8FD8\u662F-asserttrue",level:2},{value:"\u7528 assertRaises \u6D4B\u5F02\u5E38",id:"\u7528-assertraises-\u6D4B\u5F02\u5E38",level:2},{value:"setUp \u4E0E tearDown",id:"setup-\u4E0E-teardown",level:2},{value:"setUpClass \u4E0E tearDownClass",id:"setupclass-\u4E0E-teardownclass",level:2},{value:"\u7528 skipIf \u8DF3\u8FC7\u6D4B\u8BD5",id:"\u7528-skipif-\u8DF3\u8FC7\u6D4B\u8BD5",level:2},{value:"\u8FD0\u884C\u6307\u5B9A\u7684\u6D4B\u8BD5",id:"\u8FD0\u884C\u6307\u5B9A\u7684\u6D4B\u8BD5",level:2}];function p(e){let t={a:"a",code:"code",h1:"h1",h2:"h2",header:"header",p:"p",...(0,i.R)(),...e.components};return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsx)(t.header,{children:(0,n.jsx)(t.h1,{id:"unittest",children:"unittest"})}),"\n",(0,n.jsx)(t.p,{children:"\u8FD9\u7BC7\u6587\u7AE0\u6211\u4EEC\u8BB2\u4E00\u4E0B\u6D4B\u8BD5\u3002\u6211\u53D1\u73B0\u5F88\u591A\u4EBA\u4E0D\u77E5\u9053\u5982\u4F55\u5BF9\u81EA\u5DF1\u7684\u4EE3\u7801\u5B8C\u6210\u4E00\u4E2A\u6BD4\u8F83\u57FA\u7840\u7684\u6D4B\u8BD5\uFF0C\u6216\u8005\u8BF4\uFF0C\u4ED6\u4EEC\u53EF\u80FD\u4E0D\u77E5\u9053\u4E00\u4E2A\u6BD4\u8F83\u597D\u7684\u5DE5\u7A0B\u5B9E\u8DF5\u662F\u4EC0\u4E48\u6837\u7684\u3002\u6240\u4EE5\u8FD9\u6B21\u6211\u4EEC\u63D0\u4F9B\u4E00\u4E2A\u53EF\u4EE5\u76F4\u63A5\u6284\u8FC7\u53BB\u7528\u7684\u5B9E\u8DF5\u65B9\u5F0F\uFF0C\u6765\u5E2E\u52A9\u5927\u5BB6\u5B8C\u6210\u4E00\u4E2A\u66F4\u6B63\u89C4\u7684\u7F16\u7A0B\u9879\u76EE\u3002\u5E9F\u8BDD\u4E0D\u591A\u8BF4\uFF0C\u6211\u4EEC\u76F4\u63A5\u5F00\u59CB\u3002"}),"\n",(0,n.jsx)(t.h2,{id:"\u6587\u4EF6\u7ED3\u6784",children:"\u6587\u4EF6\u7ED3\u6784"}),"\n",(0,n.jsx)(t.p,{children:"\u9996\u5148\u8BB2\u4E00\u4E0B\u6587\u4EF6\u7ED3\u6784\u3002\u6211\u4EEC\u770B\u5DE6\u8FB9\uFF0C\u6211\u63A8\u8350\u7684\u6587\u4EF6\u7ED3\u6784\u662F\u8FD9\u6837\u7684\uFF1A\u5728\u6839\u76EE\u5F55\u4E0B\uFF0C\u53EA\u9700\u8981\u4E00\u4E2A\u5165\u53E3\u6587\u4EF6\u5373\u53EF\u3002\u90A3\u5982\u679C\u4F60\u662F\u5F00\u53D1\u4E00\u4E9B\u5305\u6216\u8005\u67D0\u4E00\u4E9B\u540E\u7AEF\u7684\u8BDD\uFF0C\u8FDE\u8FD9\u4E2A\u5165\u53E3\u6587\u4EF6\u90FD\u53EF\u4EE5\u4E0D\u8981\u3002"}),"\n",(0,n.jsxs)(t.p,{children:["\u90A3\u8FD9\u6B21\u6211\u4EEC\u7684\u4F8B\u5B50\u5462\uFF0C\u662F\u5199\u4E86\u4E00\u4E2A\u975E\u5E38\u7B80\u5355\u7684\u4E8C\u7EF4\u5411\u91CF\u7684\u8FD9\u4E48\u4E00\u4E2A\u5E93\u3002\u4F60\u6240\u6709\u7684\u6838\u5FC3\u4EE3\u7801\u90FD\u5E94\u8BE5\u653E\u5230\u4E00\u4E2A\u6587\u4EF6\u5939\u91CC\u3002\u5728\u8FD9\u4E2A\u4F8B\u5B50\u91CC\uFF0C\u6211\u4EEC\u653E\u5230 vector \u8FD9\u4E2A\u6587\u4EF6\u5939\u91CC\u3002\u6211\u4EEC\u8981\u628A\u8FD9\u4E2A\u6587\u4EF6\u5939\u53D8\u6210\u4E00\u4E2A package\uFF0C\u4E5F\u5C31\u662F\u8BF4\uFF0C\u8FD9\u4E2A\u6587\u4EF6\u5939\u91CC\u9762\u6211\u4EEC\u9700\u8981\u8FD9\u4E2A ",(0,n.jsx)(t.code,{children:"__init__.py"}),"\u3002\u8FD9\u4E2A ",(0,n.jsx)(t.code,{children:"__init__.py"})," \u91CC\u9762\u53EF\u4EE5\u653E\u4E00\u4E9B\u63A5\u53E3\uFF0C\u4E5F\u53EF\u4EE5\u538B\u6839\u4EC0\u4E48\u90FD\u6CA1\u6709\u3002\u8FD9\u4E2A vector \u6587\u4EF6\u5939\u91CC\u9762\u7684 vector.py \u5C31\u662F\u6211\u4EEC\u6838\u5FC3\u4EE3\u7801\u4FDD\u5B58\u7684\u5730\u65B9\u3002\u5F53\u7136\uFF0C\u4F60\u8FD9\u4E2A\u6587\u4EF6\u5939\u91CC\u9762\u53EF\u80FD\u6709\u5F88\u591A\u6587\u4EF6\uFF0C\u5BF9\u5427\uFF0C\u4E0D\u540C\u7684\u529F\u80FD\u3002"]}),"\n",(0,n.jsxs)(t.p,{children:["\u5728\u6839\u76EE\u5F55\u4E0B\u653E\u4E00\u4E2A\u53EB\u505A test \u7684\u6587\u4EF6\u5939\uFF0C\u8FD9\u91CC\u9762\u4E13\u95E8\u653E\u6211\u4EEC\u7684\u6D4B\u8BD5\u3002\u540C\u6837\u7684\uFF0C\u6D4B\u8BD5\u6587\u4EF6\u5939\u4E5F\u628A\u5B83\u53D8\u6210\u4E00\u4E2A package\uFF0C\u4E5F\u5C31\u662F\u91CC\u9762\u653E\u4E00\u4E2A ",(0,n.jsx)(t.code,{children:"__init__.py"}),"\u3002\u8FD9\u4E2A ",(0,n.jsx)(t.code,{children:"__init__.py"})," \u91CC\u53EF\u4EE5\u4EC0\u4E48\u90FD\u6CA1\u6709\u3002\u90A3\u8FD9\u4E2A\u6587\u4EF6\u5939\u91CC\u9762\u5176\u4ED6\u7684\u6587\u4EF6\u5C31\u90FD\u662F\u6211\u4EEC\u5199\u7684\u6D4B\u8BD5\u6587\u4EF6\u3002"]}),"\n",(0,n.jsx)(t.p,{children:"\u6211\u4EEC\u8FD9\u6B21\u7ED9\u5927\u5BB6\u8BB2\u7684\u6D4B\u8BD5\u7684\u6846\u67B6\u5462\uFF0C\u662F unittest\uFF0C\u662F Python \u81EA\u5E26\u7684\u4E00\u4E2A\u6D4B\u8BD5\u6846\u67B6\u3002\u6211\u672C\u4EBA\u662F\u975E\u5E38\u559C\u6B22\u7528\u6807\u51C6\u5E93\u7684\uFF0C\u6240\u4EE5\u4E00\u76F4\u5728\u7528 unittest\u3002\u5927\u5BB6\u5148\u628A unittest \u5B66\u660E\u767D\u4E86\uFF0C\u4EE5\u540E\u5982\u679C\u4F60\u60F3\u7528\u5176\u4ED6\u7684 framework\uFF0C\u4E5F\u5DEE\u4E0D\u591A\u3002"}),"\n",(0,n.jsxs)(t.p,{children:["\u5F53\u4F60\u50CF\u6211\u4ECB\u7ECD\u7684\u8FD9\u6837\u628A\u9879\u76EE\u6574\u7406\u597D\u4E4B\u540E\uFF0C\u4F60\u53EA\u9700\u8981\u5728\u6839\u76EE\u5F55\u4E0B\u8FD0\u884C ",(0,n.jsx)(t.code,{children:"python -m unittest"}),"\uFF0CPython \u5C31\u4F1A\u81EA\u52A8\u53BB\u5BFB\u627E\u4F60\u7684\u6D4B\u8BD5\uFF0C\u5E76\u4E14\u8FD0\u884C\u6D4B\u8BD5\u3002\u6211\u4EEC\u53EF\u4EE5\u770B\u5230\uFF0C\u8FD9\u91CC\u5B83\u8FD0\u884C\u4E86\u4E00\u4E2A\u6D4B\u8BD5\uFF0C\u7136\u540E\u6CA1\u6709\u4EFB\u4F55\u6D4B\u8BD5 fail \u4E86\u3002"]}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:1}),"\n",(0,n.jsx)(t.h2,{id:"\u6D4B\u8BD5\u662F\u4EC0\u4E48",children:"\u6D4B\u8BD5\u662F\u4EC0\u4E48"}),"\n",(0,n.jsx)(t.p,{children:"\u6211\u4EEC\u63A5\u4E0B\u6765\u5C31\u4ECB\u7ECD\u4E00\u4E0B\u6D4B\u8BD5\u600E\u4E48\u5199\uFF0C\u7ED9\u5927\u5BB6\u4E00\u4E9B\u57FA\u7840\u7684\u77E5\u8BC6\uFF0C\u8BA9\u4F60\u53EF\u4EE5\u7ED9\u81EA\u5DF1\u7684\u9879\u76EE\u5199\u6D4B\u8BD5\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u9996\u5148\uFF0C\u6D4B\u8BD5\u662F\u4EC0\u4E48\uFF1F\u6D4B\u8BD5\u662F\u68C0\u67E5\u4F60\u7A0B\u5E8F\u7684\u8FD0\u884C\u7ED3\u679C\u662F\u4E0D\u662F\u4F60\u7684\u671F\u5F85\u7ED3\u679C\u3002\u6362\u8A00\u4E4B\uFF0C\u5728\u5199\u6D4B\u8BD5\u7684\u65F6\u5019\uFF0C\u4F60\u5FC5\u987B\u8981\u77E5\u9053\u6B63\u786E\u7B54\u6848\u3002\u5B83\u662F\u4E00\u4E2A\u5224\u5377\u5B50\u7684\u8FC7\u7A0B\uFF0C\u6240\u4EE5\u8BF4\uFF0C\u4F60\u8981\u77E5\u9053\u4F60\u7684\u4EE3\u7801\u5E94\u8BE5\u505A\u4EC0\u4E48\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u6211\u4EEC\u6765\u770B\u4E00\u4E0B\u6211\u4EEC\u7684\u6E90\u4EE3\u7801\u3002\u6211\u4EEC\u5199\u7684\u662F\u4E00\u4E2A\u975E\u5E38\u975E\u5E38\u7B80\u5355\u7684\u4E8C\u7EF4\u5411\u91CF\u7C7B\u3002\u90A3\u5728 initialization \u7684\u65F6\u5019\uFF0C\u6211\u4EEC\u4F20\u4E00\u4E2A x\uFF0C\u4F20\u4E00\u4E2A y\u3002\u7136\u540E\u6211\u4EEC\u505A\u4E86\u5411\u91CF\u7684\u52A0\u6CD5\u3001\u5411\u91CF\u7684\u6570\u4E58\uFF0C\u5411\u91CF\u7684\u70B9\u4E58\uFF0C\u8FD8\u6709\u4E00\u4E2A\u5411\u91CF\u7684\u6A21\u3002\u90A3\u8FD9\u4E9B\u5185\u5BB9\u90FD\u5F88\u7B80\u5355\uFF0C\u6211\u4EEC\u4E0D\u8D58\u8FF0\u554A\u3002\u6211\u4EEC\u8FD9\u7BC7\u6587\u7AE0\u7684\u6838\u5FC3\u662F\u8C08\u6D4B\u8BD5\u3002"}),"\n",(0,n.jsx)(t.h2,{id:"\u6D4B\u8BD5\u6587\u4EF6\u600E\u4E48\u5199",children:"\u6D4B\u8BD5\u6587\u4EF6\u600E\u4E48\u5199"}),"\n",(0,n.jsx)(t.p,{children:"\u597D\uFF0C\u6211\u4EEC\u770B\u56DE\u6211\u4EEC\u7684\u6D4B\u8BD5\u6587\u4EF6\u5939\u3002\u9996\u5148\uFF0C\u6BCF\u4E00\u4E2A\u6D4B\u8BD5\u6587\u4EF6\u5FC5\u987B\u8981\u662F test \u4E0B\u5212\u7EBF\u5F00\u5934\uFF0C\u5C31\u662F\u5B83\u5FC5\u987B\u5F97\u53EB test \u4E0B\u5212\u7EBF\u4EC0\u4E48\u4EC0\u4E48\u4E1C\u897F\u3002\u8FD9\u4E2A\u662F unittest \u672C\u8EAB\u7684\u89C4\u5B9A\u554A\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u5728\u6D4B\u8BD5\u6587\u4EF6\u91CC\u5462\uFF0C\u6211\u4EEC\u8981\u5E72\u8FD9\u4E48\u51E0\u4EF6\u4E8B\u513F\u3002\u9996\u5148\uFF0C\u6211\u4EEC\u8981\u628A\u8FD9\u4E2A unittest \u7ED9 import \u8FDB\u6765\uFF0C\u56E0\u4E3A\u6211\u4EEC\u9700\u8981\u7EE7\u627F\u5B83\u7684 TestCase \u8FD9\u4E2A\u7C7B\u3002\u7B2C\u4E8C\uFF0C\u628A\u6211\u4EEC\u8981\u6D4B\u8BD5\u7684\u5185\u5BB9\u7ED9 import \u8FDB\u6765\u3002\u4E4B\u524D\u4E3A\u4EC0\u4E48\u6211\u5F3A\u8C03\u60F3\u628A\u5B83\u505A\u6210\u4E00\u4E2A package\uFF1F\u56E0\u4E3A\u8FD9\u6837\u7684\u8BDD\uFF0C\u4F60\u5728 import \u7684\u65F6\u5019\u6BD4\u8F83\u65B9\u4FBF\u3002\u4F60\u53EF\u4EE5\u76F4\u63A5\u505A from vector import vector\uFF0C\u6211\u4EEC\u5C31\u628A\u8FD9\u4E2A vector \u7C7B\u7ED9 import \u8FDB\u6765\u4E86\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u63A5\u4E0B\u6765\u5C31\u662F\u5199 test class\u3002\u8FD9\u4E2A test class \u9996\u5148\u5FC5\u987B\u8981\u7EE7\u627F\u8FD9\u4E2A unittest \u91CC\u9762\u7684 TestCase \u8FD9\u4E2A\u7C7B\u3002\u5176\u6B21\uFF0C\u4E00\u822C\u6765\u8BF4\uFF0C\u8FD9\u4E2A class \u662F test \u5F00\u5934\u6216\u8005 test \u7ED3\u5C3E\u3002\u8FD9\u662F\u4E00\u4E2A\u4E60\u60EF\u95EE\u9898\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u6BCF\u4E00\u4E2A test class \u91CC\u9762\u53EF\u4EE5\u6709\u82E5\u5E72\u4E2A test method\uFF0C\u800C\u8FD9\u4E9B test method \u5FC5\u987B\u4EE5 test \u4E0B\u5212\u7EBF\u5F00\u5934\uFF0C\u5426\u5219 unittest \u4F1A\u68C0\u6D4B\u4E0D\u5230\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u5728\u6BCF\u4E00\u4E2A test method \u91CC\u9762\uFF0C\u6211\u4EEC\u5C31\u8981\u8FDB\u884C\u6B63\u5F0F\u7684\u6D4B\u8BD5\u4E86\u3002\u6240\u8C13\u6D4B\u8BD5\uFF0C\u5C31\u662F\u6211\u505A\u4E00\u4E2A\u6211\u5DF2\u7ECF\u77E5\u9053\u7ED3\u679C\u7684\u4E8B\u60C5\uFF0C\u7136\u540E\u9A8C\u8BC1\u5F97\u5230\u7684\u7ED3\u679C\u662F\u4E0D\u662F\u6211\u5DF2\u7ECF\u77E5\u9053\u7684\u7ED3\u679C\u3002\u6BD4\u5982\u8BF4\uFF0C\u5F53\u6211\u4EEC\u65B0\u5EFA\u4E86\u4E00\u4E2A vector\uFF0C\u7136\u540E\u628A 1\u30012 \u7ED9\u5F53\u4F5C argument \u4F20\u8FDB\u53BB\u7684\u65F6\u5019\uFF0C\u8FD9\u4E2A vector \u91CC\u9762\u7684 x \u548C y \u8FD9\u4E24\u4E2A attribute \u5E94\u8BE5\u5206\u522B\u88AB\u8D4B\u503C\u6210 1 \u548C 2\u3002"}),"\n",(0,n.jsxs)(t.p,{children:["\u800C\u5728 unittest \u91CC\u9762\uFF0C\u6709\u4E00\u7EC4\u53BB\u68C0\u9A8C\u6211\u4EEC\u5B9E\u9645\u5F97\u5230\u7684\u7ED3\u679C\uFF0C\u662F\u4E0D\u662F\u7406\u8BBA\u7ED3\u679C\u7684\u51FD\u6570\u3002\u5B83\u4EEC\u90FD\u662F self.assert \u5F00\u5934\u7684\u3002\u6BD4\u5982\u5728\u8FD9\u91CC\uFF0C\u6211\u4EEC\u5C31\u7528\u5230\u4E86 self.assertEqual\u3002\u90A3\u5982\u679C\u4F60\u6253\u5F00 ",(0,n.jsx)(t.a,{href:"https://docs.python.org/zh-cn/3/library/unittest.html#assert-methods",children:"Python unittest \u7684\u5B98\u65B9\u6587\u6863"}),"\uFF0C\u4F60\u53EF\u4EE5\u770B\u5230\uFF0C\u8FD9\u91CC\u9762\u6709\u5F88\u591A\u7684 assert \u4EC0\u4E48\u7684\u51FD\u6570\u3002\u5F53\u7136\uFF0C\u8FD9\u4E9B\u53EA\u662F\u76F8\u5BF9\u5E38\u7528\u7684\uFF0C\u8FD8\u6709\u5F88\u591A\u6CA1\u6709\u90A3\u4E48\u5E38\u7528\u7684\uFF0C\u6BD4\u5982\u8BF4\u8FD9\u4E9B\u3002"]}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u5F53\u4F60\u60F3\u5224\u65AD\u4E00\u4E2A\u7ED3\u679C\u7684\u65F6\u5019\uFF0C\u9996\u5148\u8981\u67E5\u4E00\u4E0B\uFF0Cunittest \u5B98\u65B9\u6709\u6CA1\u6709\u7ED9\u51FA\u8FD9\u79CD\u7ED3\u679C\u7684\u5224\u65AD\u65B9\u5F0F\u3002"}),"\n",(0,n.jsx)(t.h2,{id:"assertequal-\u8FD8\u662F-asserttrue",children:"assertEqual \u8FD8\u662F assertTrue"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u4E48\uFF0C\u65E2\u7136\u5B83\u63D0\u4F9B\u4E86 assertTrue \u8FD9\u4E2A\u65B9\u5F0F\uFF0C\u4E3A\u4EC0\u4E48\u6211\u4EEC\u4E0D\u6240\u6709\u7684\u5730\u65B9\u90FD\u7528 assertTrue \u5462\uFF1F\u6BD4\u5982\u8BF4\uFF0C\u8FD9\u91CC\u6211\u4EEC\u7528 assertEqual(v.x, 0) \u548C assertTrue(v.x == 0)\uFF0C\u5B83\u4EEC\u4FE9\u662F\u7B49\u4EF7\u7684\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u8FD9\u91CC\u6211\u4EEC\u4E4B\u6240\u4EE5\u8981\u7528 assertEqual\uFF0C\u662F\u56E0\u4E3A assertEqual \u5728 fail \u7684\u65F6\u5019\u53EF\u4EE5\u7ED9\u51FA\u66F4\u591A\u7684\u4FE1\u606F\u3002\u6211\u4EEC\u770B\uFF0C\u5728\u8FD9\u4E2A\u4F8B\u5B50\u91CC\u9762\uFF0Cv.x \u663E\u7136\u662F 1\uFF0C\u5BF9\u5427\uFF1F\u90A3\u4E48\u8FD9\u4E24\u4E2A\u4E1C\u897F\u90FD\u4F1A fail \u6389\u3002\u5982\u679C\u8FD9\u91CC\u662F assertEqual fail \u6389\uFF0C\u5B83\u4F1A\u544A\u8BC9\u4F60 1 \u4E0D\u7B49\u4E8E 0\uFF0C\u4F60\u5C31\u77E5\u9053 v.x \u662F 1 \u4E86\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u8FD9\u91CC\u6CE8\u610F\u4E00\u4E0B\uFF0C\u6BCF\u4E2A test method\uFF0C\u5F53\u5B83\u6709\u4E00\u4E2A\u5730\u65B9 fail \u7684\u65F6\u5019\uFF0C\u5B83\u5C31\u4E0D\u4F1A\u7EE7\u7EED\u5F80\u4E0B\u8FD0\u884C\u4E86\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u5047\u8BBE\u6211\u4EEC\u7528 assertTrue \u7684\u8BDD\uFF0C\u5B83\u53EA\u4F1A\u8DDF\u4F60\u8BF4 False is not true\u3002\u6211\u4EEC\u53EA\u77E5\u9053 v.x \u4E0D\u662F 0\uFF0C\u4F46\u6211\u4EEC\u4E0D\u77E5\u9053\u5B83\u662F\u4EC0\u4E48\u3002\u6240\u4EE5\u8BF4\uFF0C\u5F53\u6211\u4EEC\u660E\u786E\u5730\u77E5\u9053\u8981\u5224\u65AD\u4EC0\u4E48\u4E1C\u897F\u7684\u65F6\u5019\uFF0C\u6211\u4EEC\u5E94\u8BE5\u5C3D\u91CF\u907F\u514D\u4F7F\u7528 assertTrue \u548C assertFalse\u3002"}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:2}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:3}),"\n",(0,n.jsx)(t.h2,{id:"\u7528-assertraises-\u6D4B\u5F02\u5E38",children:"\u7528 assertRaises \u6D4B\u5F02\u5E38"}),"\n",(0,n.jsxs)(t.p,{children:["\u90A3\u8FD9\u91CC\u6211\u4EEC\u8981\u5355\u72EC\u62FF\u51FA\u6765\u8BF4\u4E00\u4E0B\uFF0C\u662F\u8FD9\u4E2A assertRaises\u3002\u8FD9\u91CC\u6BD4\u5982\u8BF4\uFF0C\u6211\u4EEC\u628A\u8FD9\u4E2A vector ",(0,n.jsx)(t.code,{children:"__init__"})," \u51FD\u6570\u6539\u4E00\u4E0B\u3002\u6211\u4EEC\u9996\u5148\u8981\u786E\u8BA4\u8FD9\u4E2A x\u3001y\uFF0C\u5FC5\u987B\u8981\u662F\u6570\u624D\u53EF\u4EE5\u3002\u5426\u5219\u7684\u8BDD\uFF0C\u6211\u4EEC raise \u4E00\u4E2A ValueError\u3002"]}),"\n",(0,n.jsxs)(t.p,{children:["\u8FD9\u4E2A\u65F6\u5019\uFF0C\u6211\u4EEC\u60F3\u6D4B\u8BD5\u6211\u4EEC\u8FD9\u4E2A ",(0,n.jsx)(t.code,{children:"__init__"})," \u51FD\u6570\u662F\u4E0D\u662F\u6210\u529F\u5730 raise \u4E86\u8FD9\u4E2A error\u3002\u90A3\u6211\u4EEC\u7684\u5199\u6CD5\u5462\uFF0C\u5C31\u662F with self.assertRaises\uFF0C\u7136\u540E\u628A\u8FD9\u4E2A exception \u653E\u8FDB\u53BB\uFF0C\u5728\u8FD9\u4E2A with \u91CC\u9762\u53BB\u505A raise \u8FD9\u4E2A exception \u7684\u4E8B\u3002\u6211\u4EEC\u53EF\u4EE5\u770B\u5230\u53F3\u8FB9\uFF0C\u6211\u4EEC\u8FD0\u884C\u4E00\u4E0B\u8FD9\u4E2A unittest\uFF0C\u5B83\u5C31 pass \u4E86\uFF0C\u56E0\u4E3A\u6211\u4EEC\u4F20\u8FDB\u53BB\u8FD9\u4E24\u4E2A\u503C\u4E0D\u662F\u6B63\u5E38\u7684 value\u3002\u76F8\u53CD\u7684\uFF0C\u5982\u679C\u6211\u4EEC\u4F20\u8FDB\u53BB\u7684\u503C\u662F\u5408\u6CD5\u503C\u7684\u8BDD\uFF0C\u90A3\u4E48\u8FD9\u4E2A\u6D4B\u8BD5\u5C31\u4F1A fail\u3002\u5B83\u5C31\u4F1A\u5199 ValueError not raised\u3002"]}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:4}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:5}),"\n",(0,n.jsx)(t.h2,{id:"setup-\u4E0E-teardown",children:"setUp \u4E0E tearDown"}),"\n",(0,n.jsx)(t.p,{children:"\u597D\uFF0C\u90A3\u63A5\u4E0B\u6765\u6211\u4EEC\u6765\u4ECB\u7ECD\u51E0\u4E2A\u975E\u5E38\u5E38\u7528\u7684 unittest \u7684\u4E00\u4E9B feature\u3002\u9996\u5148\uFF0C\u6211\u4EEC\u6709\u53EF\u80FD\u4F1A\u5728\u8FD0\u884C\u6BCF\u4E00\u4E2A test method \u4E4B\u524D\u6216\u8005\u4E4B\u540E\u505A\u4E00\u4E9B\u4E8B\u513F\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u6211\u4EEC\u4E3E\u4E2A\u6700\u7B80\u5355\u7684\u4F8B\u5B50\u3002\u5047\u8BBE\u6211\u4EEC\u5728\u8FD0\u884C\u6BCF\u4E00\u4E2A\u6D4B\u8BD5\u4E4B\u524D\u3001\u4E4B\u540E\uFF0C\u90FD\u8981\u6253\u5370\u8FD9\u4E2A\u201C\u6D4B\u8BD5\u5F00\u59CB\u4E86\u201D\uFF0C\u201C\u6D4B\u8BD5\u7ED3\u675F\u4E86\u201D\u3002\u90A3\u6211\u4EEC\u53EF\u4EE5\u5728\u8FD9\u4E2A test class \u4E4B\u5185\uFF0C\u901A\u8FC7\u5B9A\u4E49 setUp \u51FD\u6570\u548C tearDown \u51FD\u6570\u6765\u5B8C\u6210\u3002\u6211\u4EEC\u770B\uFF0C\u5728 setUp \u51FD\u6570\u91CC\u9762\uFF0C\u6211\u4EEC\u6253\u5370\u4E86\u4E00\u4E2A start\uFF0C\u7136\u540E\u5728 tearDown \u51FD\u6570\u91CC\u9762\uFF0C\u6211\u4EEC\u6253\u5370\u4E86\u4E00\u4E2A end\u3002\u4E8E\u662F\u6211\u4EEC\u5728\u8FD0\u884C unittest \u7684\u65F6\u5019\uFF0C\u8F93\u51FA\u91CC\u9762\u5C31\u4F1A\u6709\u4E00\u4E2A start \u8DDF\u4E00\u4E2A end\u3002\u90A3\u5982\u679C\u6211\u4EEC\u53C8\u589E\u52A0\u4E86\u4E00\u4E2A test method\uFF0C\u5C31\u53EF\u4EE5\u770B\u5230 start \u8DDF end \u88AB\u6253\u5370\u4E86\u4E24\u6B21\u3002"}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:6}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:7}),"\n",(0,n.jsx)(t.h2,{id:"setupclass-\u4E0E-teardownclass",children:"setUpClass \u4E0E tearDownClass"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u5982\u679C\u6211\u4EEC\u60F3\u6BCF\u4E00\u4E2A test class \u8FD0\u884C\u4E4B\u524D\u548C\u7ED3\u675F\u4E4B\u540E\u505A\u4E00\u4E9B\u4E8B\u513F\u7684\u8BDD\uFF0C\u6211\u4EEC\u7528\u5230\u7684\u51FD\u6570\u5C31\u662F setUpClass \u8DDF tearDownClass\u3002\u6CE8\u610F\uFF0C\u8FD9\u4E24\u4E2A\u4E1C\u897F\u5FC5\u987B\u8981\u7528 classmethod \u8FD9\u4E2A\u88C5\u9970\u5668\u88C5\u9970\u4E00\u4E0B\u3002"}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:8}),"\n",(0,n.jsx)(t.h2,{id:"\u7528-skipif-\u8DF3\u8FC7\u6D4B\u8BD5",children:"\u7528 skipIf \u8DF3\u8FC7\u6D4B\u8BD5"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u8FD8\u6709\u4E00\u4E2A\u5F88\u5E38\u89C1\u7684\u9700\u6C42\uFF0C\u5C31\u662F\u6211\u5E0C\u671B\u6211\u7684\u6D4B\u8BD5\u5728\u67D0\u4E9B\u60C5\u51B5\u4E0B\u4E0D\u8FD0\u884C\u3002\u8FD9\u65F6\u5019\u6211\u4EEC\u5C31\u8981\u7528\u5230\u4E00\u4E2A decorator\uFF0C\u662F unittest.skipIf\u3002\u6211\u4EEC\u770B\uFF0C\u8FD9\u91CC\u8FD9\u4E2A decorator take \u4E86\u4E24\u4E2A argument\u3002\u7B2C\u4E00\u4E2A\u662F\u4E00\u4E2A boolean\uFF0C\u5728\u8FD9\u4E2A boolean evaluate \u6210 True \u7684\u65F6\u5019\uFF0C\u8FD9\u4E2A\u6D4B\u8BD5\u5C31\u4E0D\u8FD0\u884C\u3002\u90A3\u7B2C\u4E8C\u4E2A\u5462\uFF0C\u662F\u4E00\u4E2A message\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u5728\u8FD9\u4E2A\u4F8B\u5B50\u91CC\u9762\uFF0C\u6211\u6D4B\u8BD5\u4E86\u4E00\u4E0B\uFF0C\u5982\u679C\u6211 sys.platform \u662F win32 \u7684\u8BDD\uFF0C\u5C31\u4E0D\u8FD0\u884C\u8FD9\u4E2A\u6D4B\u8BD5\uFF0C\u4E5F\u5C31\u662F\u8FD9\u4E2A\u6D4B\u8BD5\u4E0D\u5728 Windows \u4E0A\u8FD0\u884C\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u8FD8\u6709\u4E00\u4E2A\u6BD4\u8F83\u5E38\u89C1\u7684\u6761\u4EF6\u5462\uFF0C\u5C31\u662F version_info\uFF0C\u5C31\u662F\u8FD9\u4E2A Python \u7684\u7248\u672C\u3002\u6BD4\u5982\u8FD9\u91CC\u6211\u5199\u7684 sys.version_info \u5C0F\u4E8E 3.7\uFF0C\u5C31\u662F\u8BF4\u5B83\u53EA\u652F\u6301 3.7 \u53CA\u4EE5\u4E0A\u7684\u7248\u672C\u3002"}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:9}),"\n",(0,n.jsx)(t.h2,{id:"\u8FD0\u884C\u6307\u5B9A\u7684\u6D4B\u8BD5",children:"\u8FD0\u884C\u6307\u5B9A\u7684\u6D4B\u8BD5"}),"\n",(0,n.jsx)(t.p,{children:"\u597D\uFF0C\u90A3\u6700\u540E\u5462\uFF0C\u6211\u4EEC\u4ECB\u7ECD\u4E00\u4E0B\u600E\u4E48\u8FD0\u884C\u6307\u5B9A\u7684\u6D4B\u8BD5\u3002\u6211\u4EEC\u73B0\u5728\u6240\u6709\u7684\u6D4B\u8BD5\u88AB\u5206\u6210\u4E86\u4E09\u7EA7\u3002\u7B2C\u4E00\u4E2A\u5462\uFF0C\u662F module level\uFF0C\u4E5F\u5C31\u662F\u67D0\u4E2A\u6587\u4EF6\uFF0C\u6BD4\u5982\u8BF4 test_vector.py\u3002\u5728\u4E00\u4E2A\u6587\u4EF6\u91CC\u9762\uFF0C\u6211\u4EEC\u53EF\u80FD\u6709\u82E5\u5E72\u4E2A test class\uFF0C\u6BD4\u5982\u8BF4\u8FD9\u4E2A test vector class\u3002\u5728\u6BCF\u4E00\u4E2A test class \u91CC\u9762\uFF0C\u6211\u4EEC\u53EF\u80FD\u6709\u82E5\u5E72\u4E2A test method\uFF0C\u6BD4\u5982\u8BF4\u6211\u4EEC\u73B0\u5728\u7684 test_init \u8DDF test_add\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u6211\u4EEC\u53EF\u4EE5\u901A\u8FC7\u63A7\u5236 unittest command line \u7684 argument\uFF0C\u6765\u544A\u8BC9 unittest \u8FD0\u884C\u54EA\u4E9B test\u3002\u6BD4\u5982\u5728\u8FD9\u91CC\uFF0C\u6211\u4EEC\u8FD0\u884C\u7684\u662F\uFF0Ctests \u8FD9\u4E2A\u6587\u4EF6\u5939\u4E0B\u7684 test_vector \u8FD9\u4E2A module\uFF0C\u91CC\u9762\u7684 test vector \u8FD9\u4E2A class \u91CC\u9762\u7684 test_add \u8FD9\u4E2A method\u3002\u53EF\u4EE5\u770B\u5230\uFF0C\u5B83\u53EA\u8FD0\u884C\u4E86\u4E00\u4E2A test\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u90A3\u5982\u679C\u6211\u4EEC\u628A\u6761\u4EF6\u653E\u5BBD\u4E00\u4E9B\uFF0C\u6211\u4EEC\u8FD0\u884C test \u8FD9\u4E2A\u6587\u4EF6\u5939\u91CC\u9762\u7684 test_vector \u8FD9\u4E2A file\uFF0C\u5B83\u5C31\u4F1A\u8FD0\u884C\u4E24\u4E2A test \u4E86\u3002"}),"\n",(0,n.jsx)(a.A,{variant:"unittest",step:10,nav:!0}),"\n",(0,n.jsx)(t.p,{children:"\u6211\u4EEC\u4ECA\u5929\u8BB2\u7684\u662F unittest \u7684\u4E00\u4E9B\u6700\u6700\u57FA\u7840\u7684\u529F\u80FD\uFF0C\u4F46\u662F\u5C31\u662F\u8FD9\u4E9B\u6700\u57FA\u7840\u7684\u529F\u80FD\uFF0C\u5DF2\u7ECF\u6DB5\u76D6\u4E86\u81F3\u5C11 90% \u5230 95% \u7684\u4F7F\u7528\u60C5\u51B5\u4E86\u3002\u4E5F\u5C31\u662F\u8BF4\uFF0C\u5BF9\u4E8E\u4F60\u81EA\u5DF1\u7684\u9879\u76EE\uFF0C\u8FD9\u4E00\u5957\u6D41\u7A0B\u5DF2\u7ECF\u57FA\u672C\u8DB3\u591F\u7528\u4E86\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u4F60\u5E94\u8BE5\u53EF\u4EE5\u611F\u53D7\u5230\uFF0C\u7ED9\u81EA\u5DF1\u7684\u9879\u76EE\u5199\u6D4B\u8BD5\uFF0C\u5176\u5B9E\u4E0D\u662F\u4E00\u4E2A\u975E\u5E38\u8D39\u52B2\u7684\u4E8B\u3002\u5B83\u7684 overhead \u8FD8\u662F\u633A\u4F4E\u7684\u3002"}),"\n",(0,n.jsx)(t.p,{children:"\u597D\uFF0C\u90A3\u8FD9\u7BC7\u6587\u7AE0\u5C31\u5230\u8FD9\u91CC\u3002\u5E0C\u671B\u5BF9\u5927\u5BB6\u6709\u6240\u5E2E\u52A9\u3002"})]})}function u(e={}){let{wrapper:t}={...(0,i.R)(),...e.components};return t?(0,n.jsx)(t,{...e,children:(0,n.jsx)(p,{...e})}):p(e)}},83573(e,t,s){s.d(t,{A:()=>o});var r=s(96540);let n=(...e)=>e.filter((e,t,s)=>!!e&&""!==e.trim()&&s.indexOf(e)===t).join(" ").trim(),i=e=>{let t=e.replace(/^([A-Z])|[\s-_]+(\w)/g,(e,t,s)=>s?s.toUpperCase():t.toLowerCase());return t.charAt(0).toUpperCase()+t.slice(1)};var a={xmlns:"http://www.w3.org/2000/svg",width:24,height:24,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"};let l=(0,r.forwardRef)(({color:e="currentColor",size:t=24,strokeWidth:s=2,absoluteStrokeWidth:i,className:l="",children:o,iconNode:c,...d},p)=>(0,r.createElement)("svg",{ref:p,...a,width:t,height:t,stroke:e,strokeWidth:i?24*Number(s)/Number(t):s,className:n("lucide",l),...!o&&!(e=>{for(let t in e)if(t.startsWith("aria-")||"role"===t||"title"===t)return!0;return!1})(d)&&{"aria-hidden":"true"},...d},[...c.map(([e,t])=>(0,r.createElement)(e,t)),...Array.isArray(o)?o:[o]])),o=(e,t)=>{let s=(0,r.forwardRef)(({className:s,...a},o)=>(0,r.createElement)(l,{ref:o,iconNode:t,className:n(`lucide-${i(e).replace(/([a-z0-9])([A-Z])/g,"$1-$2").toLowerCase()}`,`lucide-${e}`,s),...a}));return s.displayName=i(e),s}},45773(e,t,s){s.d(t,{A:()=>r});let r=(0,s(83573).A)("check",[["path",{d:"M20 6 9 17l-5-5",key:"1gmf2c"}]])},35404(e,t,s){s.d(t,{A:()=>r});let r=(0,s(83573).A)("copy",[["rect",{width:"14",height:"14",x:"8",y:"8",rx:"2",ry:"2",key:"17jyea"}],["path",{d:"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2",key:"zix9uf"}]])},67810(e,t,s){s.d(t,{A:()=>i});var r=s(83941),n=s(61022);function i(){let{prism:e}=(0,n.p)(),{colorMode:t}=(0,r.G)(),s=e.theme,i=e.darkTheme||s;return"dark"===t?i:s}},86216(e,t,s){s.d(t,{A:()=>V});var r=s(74848),n=s(96540),i=s(34164),a=s(71765),l=s(67810);let o=[{title:"\u642D\u597D\u9879\u76EE\u9AA8\u67B6",body:["\u6838\u5FC3\u4EE3\u7801\u653E\u8FDB `vector/` \u5305\uFF0C\u6D4B\u8BD5\u653E\u8FDB `tests/` \u5305\uFF0C\u4E24\u4E2A\u6587\u4EF6\u5939\u90FD\u6709 `__init__.py`\uFF0C\u6839\u76EE\u5F55\u53EA\u7559\u4E00\u4E2A\u5165\u53E3\u6587\u4EF6\u3002","\u5728\u6839\u76EE\u5F55\u8FD0\u884C `python -m unittest`\uFF0Cunittest \u4F1A\u81EA\u52A8\u627E\u5230 `tests/test_vector.py` \u91CC\u7684 `test_init` \u5E76\u8FD0\u884C\u3002\u70B9\u5DE6\u4FA7\u6587\u4EF6\u6811\u53EF\u4EE5\u770B\u6BCF\u4E2A\u6587\u4EF6\u3002"],file:"tests/test_vector.py",files:{"examply.py":"",".gitignore":`# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+`,"pyproject.toml":`[project]
+name = "unittest-example"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+`,"vector/__init__.py":"from .vector import Vector","vector/vector.py":`class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def add(self, other):
+        return Vector(self.x + other.x,
+                      self.y + other.y)
+
+    def mul(self, factor):
+        return Vector(self.x * factor,
+                      self.y * factor)
+
+    def dot(self, other):
+        return self.x * other.x + \\
+               self.y * other.y
+
+    def norm(self):
+        return (self.x * self.x +
+                self.y * self.y) ** 0.5
+`,"tests/__init__.py":"","tests/test_vector.py":`import unittest
+from vector import Vector
+
+
+class TestVector(unittest.TestCase):
+    def test_init(self):
+        v = Vector(1, 2)
+        self.assertEqual(v.x, 1)
+        self.assertEqual(v.y, 2)
+`},runs:[{cmd:"python -m unittest",exit:0,output:`.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+`}]},{title:"\u628A assertEqual \u7684\u671F\u671B\u503C\u6539\u6210 0",body:["`v.x` \u5176\u5B9E\u662F 1\uFF0C\u8FD9\u4E00\u884C\u5FC5\u7136\u5931\u8D25\u3002`assertEqual` \u5931\u8D25\u65F6\u628A\u4E24\u8FB9\u7684\u503C\u90FD\u544A\u8BC9\u4F60\uFF1A`1 != 0`\u3002"],files:{"tests/test_vector.py":`import unittest
+from vector import Vector
+
+
+class TestVector(unittest.TestCase):
+    def test_init(self):
+        v = Vector(1, 2)
+        self.assertEqual(v.x, 0)
+        self.assertEqual(v.y, 2)
+`},runs:[{cmd:"python -m unittest",exit:1,output:`F
+======================================================================
+FAIL: test_init (tests.test_vector.TestVector.test_init)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/user/unittest_example/tests/test_vector.py", line 8, in test_init
+    self.assertEqual(v.x, 0)
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
+`}]},{title:"\u6362\u6210 assertTrue \u518D\u8BD5\u4E00\u6B21",body:["\u540C\u4E00\u4E2A\u5224\u65AD\u6362\u6210 `assertTrue(v.x == 0)`\uFF0C\u5931\u8D25\u4FE1\u606F\u53EA\u5269 `False is not true`\uFF0C\u770B\u4E0D\u51FA `v.x` \u5230\u5E95\u662F\u51E0\u3002"],files:{"tests/test_vector.py":`import unittest
+from vector import Vector
+
+
+class TestVector(unittest.TestCase):
+    def test_init(self):
+        v = Vector(1, 2)
+        self.assertTrue(v.x == 0)
+        self.assertEqual(v.y, 2)
+`},runs:[{cmd:"python -m unittest",exit:1,output:`F
+======================================================================
+FAIL: test_init (tests.test_vector.TestVector.test_init)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/user/unittest_example/tests/test_vector.py", line 8, in test_init
+    self.assertTrue(v.x == 0)
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
+`}]},{title:"\u7528 assertRaises \u6D4B\u5F02\u5E38",body:["`__init__` \u52A0\u4E0A\u7C7B\u578B\u68C0\u67E5\uFF0C\u4E0D\u662F\u6570\u5C31\u629B `ValueError`\u3002\u6D4B\u8BD5\u91CC\u628A\u4F1A\u629B\u5F02\u5E38\u7684\u8C03\u7528\u653E\u8FDB `with self.assertRaises(ValueError)` \u5757\uFF0C\u671F\u671B\u503C\u4E5F\u6539\u56DE 1\u3002"],file:"vector/vector.py",files:{"vector/vector.py":`class Vector:
+    def __init__(self, x, y):
+        if isinstance(x, (int, float)) and isinstance(y, (int, float)):
+            self.x = x
+            self.y = y
+        else:
+            raise ValueError("not a number")
+
+    def add(self, other):
+        return Vector(self.x + other.x,
+                      self.y + other.y)
+
+    def mul(self, factor):
+        return Vector(self.x * factor,
+                      self.y * factor)
+
+    def dot(self, other):
+        return self.x * other.x + \\
+               self.y * other.y
+
+    def norm(self):
+        return (self.x * self.x +
+                self.y * self.y) ** 0.5
+`,"tests/test_vector.py":`import unittest
+from vector import Vector
+
+
+class TestVector(unittest.TestCase):
+    def test_init(self):
+        v = Vector(1, 2)
+        self.assertEqual(v.x, 1)
+        self.assertEqual(v.y, 2)
+
+        with self.assertRaises(ValueError):
+            v = Vector("1", "2")
+`},runs:[{cmd:"python -m unittest",exit:0,output:`.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+`}]},{title:"\u4F20\u5408\u6CD5\u503C\u4F1A\u600E\u6837",body:["\u628A with \u5757\u91CC\u7684\u8C03\u7528\u6362\u6210 `Vector(1.5, 2)`\uFF0C\u4E24\u4E2A\u90FD\u662F\u6570\uFF0C\u5F02\u5E38\u4E0D\u4F1A\u629B\u51FA\uFF0C\u6D4B\u8BD5\u5931\u8D25\uFF1A`ValueError not raised`\u3002"],files:{"tests/test_vector.py":`import unittest
+from vector import Vector
+
+
+class TestVector(unittest.TestCase):
+    def test_init(self):
+        v = Vector(1, 2)
+        self.assertEqual(v.x, 1)
+        self.assertEqual(v.y, 2)
+
+        with self.assertRaises(ValueError):
+            v = Vector(1.5, 2)
+`},runs:[{cmd:"python -m unittest",exit:1,output:`F
+======================================================================
+FAIL: test_init (tests.test_vector.TestVector.test_init)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/user/unittest_example/tests/test_vector.py", line 11, in test_init
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
+`}]},{title:"setUp \u4E0E tearDown",body:["\u628A\u4E0A\u4E00\u6B65\u7684\u8C03\u7528\u6539\u56DE\u53BB\uFF0C\u518D\u52A0\u4E0A `setUp` \u548C `tearDown`\u3002\u5B83\u4EEC\u5728\u6BCF\u4E2A\u6D4B\u8BD5\u65B9\u6CD5\u8FD0\u884C\u524D\u540E\u5404\u8C03\u7528\u4E00\u6B21\uFF0C\u8F93\u51FA\u91CC\u51FA\u73B0\u4E00\u5BF9 start / end\u3002"],files:{"tests/test_vector.py":`import unittest
+from vector import Vector
+
+
+class TestVector(unittest.TestCase):
+    def setUp(self):
+        print("start")
+
+    def tearDown(self):
+        print("end")
+
+    def test_init(self):
+        v = Vector(1, 2)
+        self.assertEqual(v.x, 1)
+        self.assertEqual(v.y, 2)
+
+        with self.assertRaises(ValueError):
+            v = Vector("1", "2")
+`},runs:[{cmd:"python -m unittest",exit:0,output:`start
+end
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+OK
+`}]},{title:"\u518D\u52A0\u4E00\u4E2A\u6D4B\u8BD5\u65B9\u6CD5",body:["\u591A\u4E86 `test_add` \u4E4B\u540E\uFF0Cstart / end \u5404\u6253\u5370\u4E24\u6B21\u3002\u7B2C\u4E8C\u4E2A start \u7D27\u8DDF\u5728\u4E0A\u4E00\u4E2A\u6D4B\u8BD5\u7684\u70B9\u53F7\u540E\u9762\uFF0C\u662F\u56E0\u4E3A unittest \u628A\u70B9\u53F7\u5199\u5230 stderr \u4E14\u4E0D\u6362\u884C\u3002"],files:{"tests/test_vector.py":`import unittest
+from vector import Vector
+
+
+class TestVector(unittest.TestCase):
+    def setUp(self):
+        print("start")
+
+    def tearDown(self):
+        print("end")
+
+    def test_init(self):
+        v = Vector(1, 2)
+        self.assertEqual(v.x, 1)
+        self.assertEqual(v.y, 2)
+
+        with self.assertRaises(ValueError):
+            v = Vector("1", "2")
+
+    def test_add(self):
+        v1 = Vector(1, 2)
+        v2 = Vector(2, 3)
+        v3 = v1.add(v2)
+        self.assertEqual(v3.x, 3)
+`},runs:[{cmd:"python -m unittest",exit:0,output:`start
+end
+.start
+end
+.
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+`}]},{title:"setUpClass \u4E0E tearDownClass",body:["\u628A `setUp` / `tearDown` \u6362\u6210 `setUpClass` / `tearDownClass`\uFF0C\u6253\u5370\u7684\u8FD8\u662F start / end\u3002\u5B83\u4EEC\u5728\u6574\u4E2A\u6D4B\u8BD5\u7C7B\u8FD0\u884C\u524D\u540E\u53EA\u8C03\u7528\u4E00\u6B21\uFF0C\u6240\u4EE5\u4E24\u4E2A\u6D4B\u8BD5\u53EA\u6709\u4E00\u5BF9 start / end\u3002\u5FC5\u987B\u7528 `@classmethod` \u88C5\u9970\uFF0C\u53C2\u6570\u662F `cls`\u3002"],files:{"tests/test_vector.py":`import unittest
+from vector import Vector
+
+
+class TestVector(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        print("start")
+
+    @classmethod
+    def tearDownClass(cls):
+        print("end")
+
+    def test_init(self):
+        v = Vector(1, 2)
+        self.assertEqual(v.x, 1)
+        self.assertEqual(v.y, 2)
+
+        with self.assertRaises(ValueError):
+            v = Vector("1", "2")
+
+    def test_add(self):
+        v1 = Vector(1, 2)
+        v2 = Vector(2, 3)
+        v3 = v1.add(v2)
+        self.assertEqual(v3.x, 3)
+`},runs:[{cmd:"python -m unittest",exit:0,output:`start
+..end
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK
+`}]},{title:"\u7528 skipIf \u8DF3\u8FC7\u6D4B\u8BD5",body:["\u5148\u628A `setUp` / `tearDown` \u6362\u56DE\u6765\uFF0C\u518D\u7ED9 `test_add` \u52A0\u4E24\u4E2A `skipIf`\u3002\u7B2C\u4E00\u4E2A\u53C2\u6570\u4E3A\u771F\u65F6\u8DF3\u8FC7\uFF0C\u7B2C\u4E8C\u4E2A\u53C2\u6570\u662F\u8DF3\u8FC7\u539F\u56E0\u3002\u8FD9\u4E24\u4E2A\u6761\u4EF6\u5728 Linux \u52A0 Python 3.12 \u4E0A\u90FD\u4E0D\u6210\u7ACB\uFF0C\u6240\u4EE5\u4E24\u4E2A\u6D4B\u8BD5\u7167\u5E38\u8FD0\u884C\uFF1B\u6362\u5230 Windows \u4E0A `test_add` \u4F1A\u663E\u793A\u6210 s\uFF08skipped\uFF09\u3002"],files:{"tests/test_vector.py":`import sys
+import unittest
+from vector import Vector
+
+
+class TestVector(unittest.TestCase):
+    def setUp(self):
+        print("start")
+
+    def tearDown(self):
+        print("end")
+
+    def test_init(self):
+        v = Vector(1, 2)
+        self.assertEqual(v.x, 1)
+        self.assertEqual(v.y, 2)
+
+        with self.assertRaises(ValueError):
+            v = Vector("1", "2")
+
+    @unittest.skipIf(sys.platform == "win32", "Do not support Windows")
+    @unittest.skipIf(sys.version_info < (3, 7), "Only support 3.7+")
+    def test_add(self):
+        v1 = Vector(1, 2)
+        v2 = Vector(2, 3)
+        v3 = v1.add(v2)
+        self.assertEqual(v3.x, 3)
+`},runs:[{cmd:"python -m unittest",exit:0,output:`start
+end
+.start
+end
+.
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+`}]},{title:"\u53EA\u8FD0\u884C\u6307\u5B9A\u7684\u6D4B\u8BD5",body:["\u6587\u4EF6\u4E0D\u53D8\u3002\u7528\u70B9\u53F7\u8DEF\u5F84\u9010\u7EA7\u7F29\u5C0F\u8303\u56F4\uFF1A\u6A21\u5757 `tests.test_vector` \u2192 \u7C7B `TestVector` \u2192 \u65B9\u6CD5 `test_add`\u3002\u4E24\u6761\u547D\u4EE4\u5404\u8DD1\u4E00\u6B21\uFF0C\u770B Ran \u540E\u9762\u7684\u6570\u91CF\u3002"],file:"tests/test_vector.py",files:{},runs:[{cmd:"python -m unittest tests.test_vector.TestVector.test_add",exit:0,output:`start
+end
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+`},{cmd:"python -m unittest tests.test_vector",exit:0,output:`start
+end
+.start
+end
+.
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+`}]}],c={s00:{"agent.py":`if __name__ == "__main__":
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    from anthropic import Anthropic
+
+    client = Anthropic(base_url="https://api.deepseek.com/anthropic")
+    model = "deepseek-v4-flash"
+    system = "\u{4F60}\u{662F}\u{4E00}\u{4E2A} ACME \u{8D2D}\u{7269}\u{52A9}\u{624B}\u{3002}"
+    messages: list = [{"role": "user", "content": "\u{4F60}\u{597D}"}]
+
+    response = client.messages.create(
+        model=model, system=system, max_tokens=1000, messages=messages
+    )
+
+    for block in response.content:
+        # print(block)
+        if block.type == "text":
+            print(block.text)
+`},s01:{"agent.py":`import json
+
+# \u{2500}\u{2500} \u{5047}\u{5546}\u{54C1}\u{5217}\u{8868}\u{FF08}\u{6765}\u{81EA} EVALS.md \u{7684} 6 \u{4E2A}\u{5546}\u{54C1}\u{FF09}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}
+PRODUCTS = [
+    {
+        "id": "AR-1104",
+        "title": "ACME Select \u{77EE}\u{8F74}\u{673A}\u{68B0}\u{952E}\u{76D8}",
+        "price": 99.0,
+        "rating": 4.6,
+        "in_stock": True,
+    },
+    {
+        "id": "AR-1105",
+        "title": "ACME Select \u{4E3B}\u{52A8}\u{964D}\u{566A}\u{8033}\u{673A}",
+        "price": 249.0,
+        "rating": 4.8,
+        "in_stock": True,
+    },
+    {
+        "id": "AR-1106",
+        "title": "ACME Select 1080p \u{81EA}\u{52A8}\u{53D6}\u{666F}\u{6444}\u{50CF}\u{5934}",
+        "price": 69.0,
+        "rating": 4.3,
+        "in_stock": True,
+    },
+    {
+        "id": "AR-1107",
+        "title": "ACME Studio \u{53EF}\u{8C03}\u{8282}\u{94DD}\u{5408}\u{91D1}\u{7B14}\u{8BB0}\u{672C}\u{652F}\u{67B6}",
+        "price": 39.0,
+        "rating": 4.5,
+        "in_stock": True,
+    },
+    {
+        "id": "AR-1002",
+        "title": "ACME Signature 15Bar \u{610F}\u{5F0F}\u{5496}\u{5561}\u{673A}\u{FF08}\u{5E26}\u{84B8}\u{6C7D}\u{68D2}\u{FF09}",
+        "price": 329.0,
+        "rating": 4.7,
+        "in_stock": False,
+    },
+    {
+        "id": "AR-1008",
+        "title": "ACME Rest \u{52A0}\u{91CD}\u{6BEF} Queen \u{5C3A}\u{5BF8}",
+        "price": 49.0,
+        "rating": 4.4,
+        "in_stock": True,
+    },
+]
+
+# \u{2500}\u{2500} \u{5DE5}\u{5177} Schema \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}
+search_products_schema = {
+    "name": "search_products",
+    "description": (
+        "\u{641C}\u{7D22}\u{5546}\u{54C1}\u{76EE}\u{5F55}\u{FF0C}\u{8FD4}\u{56DE}\u{5546}\u{54C1}\u{7684} id\u{3001}\u{6807}\u{9898}\u{3001}\u{4EF7}\u{683C}\u{3001}\u{8BC4}\u{5206}\u{548C}\u{5E93}\u{5B58}\u{72B6}\u{6001}\u{3002}"
+        "\u{7528}\u{5177}\u{4F53}\u{7684}\u{5173}\u{952E}\u{8BCD}\u{641C}\u{7D22}\u{3002}"
+        "\u{987E}\u{5BA2}\u{63D0}\u{5230}\u{591A}\u{4E2A}\u{4E0D}\u{540C}\u{5546}\u{54C1}\u{65F6}\u{FF0C}\u{6BCF}\u{4E2A}\u{5546}\u{54C1}\u{5355}\u{72EC}\u{641C}\u{4E00}\u{6B21}\u{3002}"
+    ),
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "query": {
+                "type": "string",
+                "description": "\u{8981}\u{641C}\u{7D22}\u{7684}\u{5173}\u{952E}\u{8BCD}\u{3002}",
+            },
+            "limit": {
+                "type": "integer",
+                "description": "\u{6700}\u{591A}\u{8FD4}\u{56DE}\u{51E0}\u{6761}\u{7ED3}\u{679C}\u{3002}",
+            },
+        },
+        "required": ["query"],
+        "additionalProperties": False,
+    },
+}
+
+
+# \u{2500}\u{2500} \u{641C}\u{7D22}\u{51FD}\u{6570} \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}
+def search_products(query: str, limit: int = 5) -> str:
+    """\u{5728}\u{5047}\u{5546}\u{54C1}\u{5217}\u{8868}\u{91CC}\u{505A}\u{7B80}\u{5355}\u{7684}\u{5173}\u{952E}\u{8BCD}\u{5339}\u{914D}\u{FF0C}\u{8FD4}\u{56DE} JSON \u{5B57}\u{7B26}\u{4E32}\u{3002}"""
+    query_lower = query.lower()
+    results = [p for p in PRODUCTS if query_lower in p["title"].lower()]
+    results = results[:limit]
+    return json.dumps(results, ensure_ascii=False)
+
+
+# \u{2500}\u{2500} \u{5DE5}\u{5177}\u{8C03}\u{7528}\u{5206}\u{53D1} \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}
+TOOL_MAP = {
+    "search_products": search_products,
+}
+
+
+# \u{2500}\u{2500} \u{5BF9}\u{8BDD}\u{5FAA}\u{73AF} \u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}\u{2500}
+if __name__ == "__main__":
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    from anthropic import Anthropic
+
+    client = Anthropic(base_url="https://api.deepseek.com/anthropic")
+    model = "deepseek-v4-flash"
+    system = "\u{4F60}\u{662F}\u{4E00}\u{4E2A} ACME \u{8D2D}\u{7269}\u{52A9}\u{624B}\u{3002}"
+    messages: list = []
+
+    while True:
+        user_input = input(">>")
+        if not user_input:
+            break
+        messages.append({"role": "user", "content": user_input})
+
+        while True:
+            response = client.messages.create(
+                model=model,
+                system=system,
+                max_tokens=1000,
+                tools=[search_products_schema],  # type: ignore[list-item]
+                messages=messages,
+            )
+            messages.append({"role": "assistant", "content": response.content})
+
+            for block in response.content:
+                if block.type == "text":
+                    print(f"AI: {block.text}")
+
+            if response.stop_reason != "tool_use":
+                break
+
+            tool_results = []
+            for block in response.content:
+                if block.type == "tool_use":
+                    print(f"[\u{8C03}\u{7528}\u{5DE5}\u{5177}] {block.name}({block.input})")
+                    run = TOOL_MAP[block.name]
+                    output = run(**block.input)  # type: ignore[arg-type]
+                    print(f"[\u{5DE5}\u{5177}\u{7ED3}\u{679C}] {output}")
+                    tool_results.append(
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": block.id,
+                            "content": output,
+                        }
+                    )
+            messages.append({"role": "user", "content": tool_results})
+`}},d=[{title:"\u7B2C\u4E00\u6B21 API \u8C03\u7528",body:["\u6211\u4EEC\u5148\u5199\u4E00\u4E2A\u6700\u7B80\u5355\u7684\u811A\u672C\uFF1A\u7528 `Anthropic()` \u521B\u5EFA\u5BA2\u6237\u7AEF\uFF0C\u8C03\u7528 `messages.create()` \u53D1\u9001\u4E00\u53E5\u7CFB\u7EDF\u63D0\u793A\u8BCD\u548C\u4E00\u6761\u7528\u6237\u6D88\u606F\uFF0C\u7136\u540E\u628A\u56DE\u590D\u91CC\u7684 text \u5757\u6253\u5370\u51FA\u6765\u3002\u8FD9\u91CC\u6CA1\u6709\u5DE5\u5177\uFF0C\u4E5F\u6CA1\u6709\u5FAA\u73AF\uFF0C\u6A21\u578B\u53EA\u80FD\u804A\u5929\u3002","\u8FD9\u4E2A\u811A\u672C\u8D70\u7684\u662F DeepSeek \u7684 Anthropic \u517C\u5BB9\u63A5\u53E3\uFF0C\u6240\u4EE5 `base_url` \u548C `model` \u586B\u7684\u662F DeepSeek \u7684\u503C\u3002\u5982\u679C\u6362\u56DE\u5B98\u65B9\u63A5\u53E3\uFF0C\u53EA\u9700\u8981\u5220\u6389 `base_url` \u5E76\u6539\u6A21\u578B\u540D\u3002"],file:"agent.py",files:{"agent.py":c.s00["agent.py"]}},{title:"\u52A0\u5165 search_products \u5DE5\u5177",body:["\u8FD9\u4E00\u6B65\u4E00\u6B21\u52A0\u5165\u4E86\u56DB\u6837\u4E1C\u897F\uFF1A\u5047\u5546\u54C1\u5217\u8868\u3001\u5DE5\u5177 schema\u3001\u641C\u7D22\u51FD\u6570\u548C\u5BF9\u8BDD\u5FAA\u73AF\u3002\u7EFF\u5E95\u7684\u884C\u662F\u76F8\u5BF9\u4E0A\u4E00\u6B65\u65B0\u589E\u7684\u5185\u5BB9\uFF0C\u53F3\u4E0A\u89D2\u53EF\u4EE5\u5207\u6362\u5230\u201C\u53EA\u770B\u5F53\u524D\u201D\u67E5\u770B\u5B8C\u6574\u6587\u4EF6\u3002","\u63A5\u4E0B\u6765\u7684\u4E09\u6B65\uFF0C\u6211\u4EEC\u628A\u8FD9\u56DB\u6837\u4E1C\u897F\u62C6\u5F00\u9010\u6BB5\u6765\u770B\u3002"],file:"agent.py",files:{"agent.py":c.s01["agent.py"]}},{title:"\u5DE5\u5177 schema \u5C31\u662F\u7ED9\u6A21\u578B\u7684\u8BF4\u660E\u4E66",body:["`description` \u4E0D\u662F\u6CE8\u91CA\uFF0C\u800C\u662F\u7ED9\u6A21\u578B\u7684\u4F7F\u7528\u8BF4\u660E\uFF1A\u4EC0\u4E48\u65F6\u5019\u8BE5\u641C\u3001\u600E\u4E48\u641C\u3001\u987E\u5BA2\u63D0\u5230\u591A\u4E2A\u5546\u54C1\u65F6\u8981\u5206\u5F00\u641C\u3002`input_schema` \u91CC\u6BCF\u4E2A\u5B57\u6BB5\u7684 description \u4E5F\u662F\u540C\u6837\u7684\u9053\u7406\u3002","\u6A21\u578B\u53EA\u80FD\u770B\u5230\u8FD9\u6BB5\u6587\u5B57\uFF0C\u770B\u4E0D\u5230\u51FD\u6570\u4F53\u3002\u56E0\u6B64\u51FD\u6570\u5199\u5F97\u518D\u597D\uFF0C\u5982\u679C description \u6CA1\u6709\u8BF4\u6E05\u695A\uFF0C\u6A21\u578B\u7167\u6837\u4E0D\u4F1A\u7528\uFF0C\u6216\u8005\u7528\u9519\u3002"],file:"agent.py",lines:[[49,72]]},{title:"\u641C\u7D22\u51FD\u6570\u4E0E\u5206\u53D1\u8868",body:["\u641C\u7D22\u51FD\u6570\u53EA\u505A\u5173\u952E\u8BCD\u5339\u914D\uFF0C\u5E76\u8FD4\u56DE JSON \u5B57\u7B26\u4E32\u3002\u8FD9\u662F\u56E0\u4E3A\u5DE5\u5177\u7ED3\u679C\u6700\u7EC8\u8981\u4F5C\u4E3A\u6587\u672C\u653E\u8FDB messages\uFF0C\u6240\u4EE5\u6211\u4EEC\u5728\u8FD9\u91CC\u76F4\u63A5\u5E8F\u5217\u5316\u3002","`TOOL_MAP` \u628A\u5DE5\u5177\u540D\u6620\u5C04\u5230\u5BF9\u5E94\u7684\u51FD\u6570\u3002\u4EE5\u540E\u52A0\u65B0\u5DE5\u5177\u65F6\uFF0C\u53EA\u9700\u8981\u5F80\u8FD9\u5F20\u8868\u91CC\u6DFB\u4E00\u884C\uFF0C\u5FAA\u73AF\u672C\u8EAB\u4E0D\u7528\u6539\u52A8\u3002"],file:"agent.py",lines:[[75,87]]},{title:"\u4E24\u5C42 while",body:["\u5916\u5C42 `while` \u8D1F\u8D23\u7B49\u5F85\u7528\u6237\u8F93\u5165\uFF0C\u9047\u5230\u7A7A\u8F93\u5165\u5C31\u9000\u51FA\u3002\u5185\u5C42 `while` \u624D\u662F agent \u5FAA\u73AF\u7684\u672C\u4F53\uFF1A\u8C03\u7528\u6A21\u578B\uFF0C\u628A assistant \u7684\u56DE\u590D\u6574\u4E2A\u8FFD\u52A0\u8FDB messages\uFF1B\u5982\u679C `stop_reason` \u4E0D\u662F `tool_use` \u5C31\u8DF3\u51FA\uFF1B\u5426\u5219\u6267\u884C\u6BCF\u4E00\u4E2A tool_use \u5757\uFF0C\u628A `tool_result` \u6253\u5305\u6210\u4E00\u6761 user \u6D88\u606F\u8FFD\u52A0\u8FDB\u53BB\uFF0C\u7136\u540E\u518D\u5FAA\u73AF\u4E00\u6B21\u3002","\u6709\u4E00\u4E2A\u7EC6\u8282\u9700\u8981\u6CE8\u610F\uFF1Aassistant \u7684 `response.content` \u8981\u539F\u6837\u8FFD\u52A0\uFF0C\u5305\u62EC\u5176\u4E2D\u7684 tool_use \u5757\uFF1B\u4E0B\u4E00\u6761 user \u6D88\u606F\u91CC\u7684 `tool_use_id` \u5FC5\u987B\u4E0E\u4E4B\u5BF9\u5E94\uFF0C\u6A21\u578B\u624D\u77E5\u9053\u54EA\u4E2A\u7ED3\u679C\u5C5E\u4E8E\u54EA\u6B21\u8C03\u7528\u3002"],file:"agent.py",lines:[[102,139]]}],p={"step.heading":"\u7B2C {n} \u6B65 \xb7 {title}","step.counter":"{n} / {total}","btn.prev":"\u4E0A\u4E00\u6B65","btn.next":"\u4E0B\u4E00\u6B65","files.heading":"\u6587\u4EF6","copy.idle":"\u590D\u5236\u4EE3\u7801","copy.copying":"\u590D\u5236\u4E2D\u2026","copy.copied":"\u5DF2\u590D\u5236","copy.error":"\u590D\u5236\u5931\u8D25","copy.hint":"\u590D\u5236\u5F53\u524D\u6B65\u9AA4\u4E2D {path} \u7684\u5B8C\u6574\u4EE3\u7801","copy.empty":"\u8BF7\u5148\u9009\u62E9\u4E00\u4E2A\u6587\u4EF6","copy.errorHint":"\u590D\u5236\u5931\u8D25\uFF0C\u8BF7\u91CD\u8BD5\u6216\u624B\u52A8\u9009\u62E9\u4EE3\u7801\u590D\u5236","diff.show":"\u663E\u793A\u6539\u52A8","diff.hide":"\u53EA\u770B\u5F53\u524D","badge.new":"\u65B0\u6587\u4EF6","badge.changed":"\u5DF2\u4FEE\u6539","terminal.heading":"\u7EC8\u7AEF","terminal.hint":"\u9884\u5148\u5F55\u5236\u7684\u8FD0\u884C\u7ED3\u679C\uFF0C\u4E0D\u662F\u6D4F\u89C8\u5668\u5B9E\u65F6\u6267\u884C","terminal.run":"\u8FD0\u884C","terminal.collapse":"\u6536\u8D77","terminal.running":"\u8FD0\u884C\u4E2D\u2026","terminal.exit":"\u8FDB\u7A0B\u9000\u51FA\uFF0C\u9000\u51FA\u7801 {code}","aria.openFiles":"\u5DF2\u6253\u5F00\u7684\u6587\u4EF6","aria.closeTab":"\u5173\u95ED {path}","empty.title":"\u6CA1\u6709\u6253\u5F00\u7684\u6587\u4EF6","empty.body":"\u5728\u5DE6\u4FA7\u6587\u4EF6\u6811\u91CC\u9009\u62E9\u4E00\u4E2A\u6587\u4EF6"},u={unittest:{steps:o},commerce:{steps:d}};var h=s(51507),m=s(45773);let f=(0,s(83573).A)("circle-alert",[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["line",{x1:"12",x2:"12",y1:"8",y2:"12",key:"1pkeuh"}],["line",{x1:"12",x2:"12.01",y1:"16",y2:"16",key:"4dfq90"}]]);var x=s(35404);let y="btn_JmFc",_="btnPrimary_x2Yk",v="treeItem_H3my",j="treeName_gOPr",g="termIcon_Zbcm";function b({text:e,path:t}){let[s,a]=(0,n.useState)("idle"),l=(0,n.useRef)(null),o=(0,n.useRef)(0),c="string"==typeof e;(0,n.useEffect)(()=>()=>{clearTimeout(l.current),o.current+=1},[]);let d=async()=>{if(!c||"copying"===s)return;let t=++o.current;clearTimeout(l.current),a("copying");try{if(await navigator.clipboard.writeText(e),t!==o.current)return;a("copied"),l.current=setTimeout(()=>a("idle"),2e3)}catch{if(t!==o.current)return;a("error")}},u=p[`copy.${s}`],h=c?"error"===s?p["copy.errorHint"]:"idle"===s?p["copy.hint"].replace("{path}",t):u:p["copy.empty"],y="copied"===s?m.A:"error"===s?f:x.A;return(0,r.jsxs)(r.Fragment,{children:[(0,r.jsxs)("button",{type:"button",className:(0,i.A)("copyButton_Yrgt","copied"===s&&"copyButtonCopied_gDZ_","error"===s&&"copyButtonError_mtmR"),disabled:!c||"copying"===s,onClick:d,title:h,"aria-label":h,"aria-busy":"copying"===s,children:[(0,r.jsx)(y,{className:"copyIcon_Hx0P","aria-hidden":"true",focusable:"false"}),(0,r.jsx)("span",{className:"copyLabel_rkk9",children:u})]}),(0,r.jsx)("span",{className:"copyStatus_DCdD",role:"status","aria-live":"polite","aria-atomic":"true",children:"copied"===s?p["copy.copied"]:"error"===s?p["copy.errorHint"]:""})]})}let w={py:"python",md:"markdown",json:"json",toml:"toml",txt:"text"};function k(e,t){return e.replace(/\{(\w+)\}/g,(e,s)=>void 0!==t[s]?String(t[s]):`{${s}}`)}function A({text:e}){return e.split(/(`[^`]+`)/g).map((e,t)=>e.startsWith("`")&&e.endsWith("`")&&e.length>=2?(0,r.jsx)("code",{className:"inlineCode_AI70",children:e.slice(1,-1)},t):(0,r.jsx)(n.Fragment,{children:e},t))}function C(e){return(0,r.jsx)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",...e,children:(0,r.jsx)("polygon",{points:"6 3 20 12 6 21 6 3"})})}function E(e){return(0,r.jsxs)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",...e,children:[(0,r.jsx)("rect",{width:"18",height:"18",x:"3",y:"3",rx:"2"}),(0,r.jsx)("path",{d:"m7 11 2-2-2-2"}),(0,r.jsx)("path",{d:"M11 13h4"})]})}function N(e){return(0,r.jsx)("svg",{viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round",...e,children:(0,r.jsx)("rect",{x:"4",y:"4",width:"16",height:"16",rx:"2"})})}function T({run:e}){let t=(0,n.useMemo)(()=>e.output.replace(/\n$/,"").split("\n"),[e.output]),{shown:s,started:a,done:l}=(0,h.A)(t,!0);return(0,r.jsxs)("div",{className:"termOutput_aJer","aria-live":"polite",children:[!a&&(0,r.jsx)("div",{className:"termRunning_L5SW",children:p["terminal.running"]}),t.slice(0,s).map((e,t)=>(0,r.jsx)("div",{className:(0,i.A)("run-output__line","termLine_seW0"),children:""===e?" ":e},t)),a&&!l&&(0,r.jsx)("span",{className:"run-output__cursor"}),l&&(0,r.jsx)("div",{className:(0,i.A)("termFoot_BTl4",0!==e.exit&&"termFootFail_H1CC"),children:k(p["terminal.exit"],{code:e.exit})})]})}function V({variant:e,step:t=1,nav:s=!1}){let n=u[e];if(!n)throw Error(`CodeWalkthrough: unknown variant "${e}"`);return(0,r.jsx)(q,{data:n,initialStep:t,nav:s},e)}function R(e,t){let s=Object.keys(e.files||{}).filter(e=>e in t);return(e.file?[e.file,...s.filter(t=>t!==e.file)]:s).filter(e=>e in t)}function q({data:e,initialStep:t,nav:s}){let{steps:o}=e,c=(0,l.A)(),d=(0,n.useMemo)(()=>(function(e){let t=[],s={};for(let r of e){for(let[e,t]of(s={...s},Object.entries(r.files||{})))null===t?delete s[e]:s[e]=t;t.push(s)}return t})(o),[o]),u=Math.min(Math.max(t-1,0),o.length-1),[h,m]=(0,n.useState)(u),[f,x]=(0,n.useState)(()=>R(o[u],d[u])),[V,S]=(0,n.useState)(()=>R(o[u],d[u])[0]??null),[D,O]=(0,n.useState)(!0),[F,M]=(0,n.useState)(()=>new Set),[L,I]=(0,n.useState)(null),P=(0,n.useRef)(null),U=o[h],W=d[h],B=h>0?d[h-1]:null,H=(0,n.useMemo)(()=>(function(e){let t={type:"folder",name:"",path:"",children:[]};for(let s of e){let e=s.split("/"),r=t;e.forEach((t,n)=>{if(n===e.length-1)return void r.children.push({type:"file",name:t,path:s});let i=e.slice(0,n+1).join("/"),a=r.children.find(e=>"folder"===e.type&&e.path===i);a||(a={type:"folder",name:t,path:i,children:[]},r.children.push(a)),r=a})}let s=e=>[...e].sort((e,t)=>e.type===t.type?e.name.localeCompare(t.name):"folder"===e.type?-1:1).map(e=>"folder"===e.type?{...e,children:s(e.children)}:e);return s(t.children)})(Object.keys(W)),[W]),$=e=>B?e in B?B[e]!==W[e]?"changed":"same":"new":"same",K=e=>{if(!o[e])return;let t=d[e],s=R(o[e],t);m(e),I(null),x(e=>{let r=e.filter(e=>e in t&&!s.includes(e));return s.length>0?[...s,...r]:r}),S(e=>s[0]??(e&&e in t?e:null))},J=e=>{S(e),x(t=>t.includes(e)?t:[...t,e])},z=V?$(V):"same",Y=(0,n.useMemo)(()=>null!==V&&V in W?D&&"changed"===z?function(e,t){let s=e.replace(/\n$/,"").split("\n"),r=t.replace(/\n$/,"").split("\n"),n=s.length,i=r.length,a=Array.from({length:n+1},()=>new Uint32Array(i+1));for(let e=n-1;e>=0;e-=1)for(let t=i-1;t>=0;t-=1)a[e][t]=s[e]===r[t]?a[e+1][t+1]+1:Math.max(a[e+1][t],a[e][t+1]);let l=[],o=0,c=0,d=0;for(;o<n||c<i;)o<n&&c<i&&s[o]===r[c]?(d+=1,l.push({type:"same",text:r[c],newNo:d}),o+=1,c+=1):c<i&&(o>=n||a[o][c+1]>=a[o+1][c])?(d+=1,l.push({type:"add",text:r[c],newNo:d}),c+=1):(l.push({type:"del",text:s[o],newNo:null}),o+=1);return l}(B[V],W[V]):W[V].replace(/\n$/,"").split("\n").map((e,t)=>({type:"same",text:e,newNo:t+1})):[],[V,W,B,D,z]),Z=V===(U.file??V)&&U.lines||[];(0,n.useEffect)(()=>{let e=P.current;if(!e)return;let t=e.querySelector("[data-change]")||e.querySelector("[data-focus]");if(!t)return void e.scrollTo({top:0});let s=t.offsetTop-e.clientHeight/2+t.offsetHeight/2;e.scrollTo({top:Math.max(s,0),behavior:"smooth"})},[h,V,D]);let G=(e,t)=>e.map(e=>{let s={paddingLeft:`${8+14*t}px`};if("file"===e.type){let t=e.path===V,n=$(e.path);return(0,r.jsxs)("button",{type:"button",onClick:()=>J(e.path),"aria-pressed":t,style:s,className:(0,i.A)(v,t&&"treeItemActive_J3RB"),children:[(0,r.jsx)("span",{"aria-hidden":"true",children:"\u{1F4C4}"}),(0,r.jsx)("span",{className:j,children:e.name}),"same"!==n&&(0,r.jsx)("span",{className:(0,i.A)("treeDot_LDfP","new"===n&&"treeDotNew_x66i"),title:"new"===n?p["badge.new"]:p["badge.changed"]})]},e.path)}let n=F.has(e.path);return(0,r.jsxs)("div",{children:[(0,r.jsxs)("button",{type:"button","aria-expanded":!n,onClick:()=>{var t;return t=e.path,void M(e=>{let s=new Set(e);return s.has(t)?s.delete(t):s.add(t),s})},style:s,className:v,children:[(0,r.jsx)("span",{"aria-hidden":"true",children:n?"\u{1F4C1}":"\u{1F4C2}"}),(0,r.jsx)("span",{className:j,children:e.name})]}),!n&&G(e.children,t+1)]},e.path)}),Q=c.plain.backgroundColor,X=Y.map(e=>e.text).join("\n"),ee=U.runs||[];return(0,r.jsxs)("div",{className:"root_lC3A",children:[(0,r.jsxs)("div",{className:"stepsPanel_A8J6",children:[(0,r.jsxs)("div",{className:"stepHead_rWEC",children:[(0,r.jsx)("span",{className:"stepTitle_eRCc",children:k(p["step.heading"],{n:h+1,title:U.title})}),(0,r.jsx)("span",{className:"stepCounter_d1xs",children:k(p["step.counter"],{n:h+1,total:o.length})})]}),(0,r.jsx)("div",{className:"stepBody_xfZr",children:U.body.map((e,t)=>(0,r.jsx)("p",{children:(0,r.jsx)(A,{text:e})},t))}),s&&(0,r.jsxs)("div",{className:"navButtons_ENqt",children:[(0,r.jsx)("button",{type:"button",disabled:0===h,onClick:()=>K(h-1),className:(0,i.A)(y,_),children:p["btn.prev"]}),(0,r.jsx)("button",{type:"button",disabled:h===o.length-1,onClick:()=>K(h+1),className:(0,i.A)(y,_),children:p["btn.next"]})]})]}),(0,r.jsxs)("div",{className:"editor_qYbS",children:[(0,r.jsxs)("aside",{className:"fileTree_JOD2",children:[(0,r.jsx)("h4",{className:"fileTreeHeading_Y6Lw",children:p["files.heading"]}),(0,r.jsx)("div",{className:"treeScroll_n0Wz",children:G(H,0)})]}),(0,r.jsxs)("div",{className:"editorMain_i2Rz",children:[(0,r.jsxs)("div",{className:"editorToolbar_fR_P",children:[(0,r.jsx)("div",{className:"tabs_tXbO","aria-label":p["aria.openFiles"],children:f.map(e=>{let t=e===V,s=$(e);return(0,r.jsxs)("div",{className:(0,i.A)("tab_xRRt",t&&"tabActive_aLPS"),style:t?{backgroundColor:Q}:void 0,children:[(0,r.jsxs)("button",{type:"button","aria-pressed":t,onClick:()=>J(e),className:"tabBtn_eZA1",children:[e.split("/").pop(),"same"!==s&&(0,r.jsx)("span",{className:(0,i.A)("badge_LVSu","new"===s&&"badgeNew_XShG"),children:"new"===s?p["badge.new"]:p["badge.changed"]})]}),(0,r.jsx)("button",{type:"button","aria-label":k(p["aria.closeTab"],{path:e}),onClick:()=>{let t;x(t=f.filter(t=>t!==e)),V===e&&S(t.length>0?t[t.length-1]:null)},className:"tabClose_O9Id",children:"\xd7"})]},e)})}),(0,r.jsxs)("div",{className:"editorActions_ykAt",children:["changed"===z&&(0,r.jsx)("button",{type:"button","aria-pressed":D,onClick:()=>O(e=>!e),className:"diffToggle_l4yF",children:D?p["diff.hide"]:p["diff.show"]}),(0,r.jsx)(b,{text:null===V?void 0:W[V],path:V},JSON.stringify([h,V]))]})]}),null!==V&&Y.length>0?(0,r.jsx)("div",{ref:P,className:"codeScroll_IkCA",style:{backgroundColor:Q},children:(0,r.jsx)(a.f4,{theme:c,code:X,language:w[V.split(".").pop()]||"text",children:({tokens:e,getLineProps:t,getTokenProps:s})=>(0,r.jsx)("pre",{className:"pre_KPR6",style:{color:c.plain.color},children:e.map((e,n)=>{let a,l=Y[n]||{type:"same",newNo:n+1},o=t({line:e}),c="same"!==l.type,d=!c&&null!=(a=l.newNo)&&Z.some(([e,t])=>a>=e&&a<=(t??e));return(0,r.jsxs)("div",{...o,"data-change":c?l.type:void 0,"data-focus":d?"":void 0,className:(0,i.A)(o.className,"line_V6Xs","add"===l.type&&"lineAdd_r_VM","del"===l.type&&"lineDel_hneO",d&&"lineFocus_OY48"),children:[(0,r.jsx)("span",{"aria-hidden":"true",className:"lineNo_RmKD",children:l.newNo??""}),(0,r.jsx)("span",{"aria-hidden":"true",className:"lineSign_o58z",children:"add"===l.type?"+":"del"===l.type?"\u2212":""}),(0,r.jsx)("span",{className:"lineContent_h7_E",children:e.map((e,t)=>(0,r.jsx)("span",{...s({token:e})},t))})]},n)})})})}):(0,r.jsx)("div",{className:"empty_rG8E",style:{backgroundColor:Q},children:(0,r.jsxs)("div",{children:[(0,r.jsx)("p",{children:p["empty.title"]}),(0,r.jsx)("p",{className:"emptySub_uyFT",children:p["empty.body"]})]})})]})]}),ee.length>0&&(0,r.jsxs)("div",{className:"terminal_x6YH",style:{backgroundColor:Q,color:c.plain.color},children:[(0,r.jsx)("div",{className:"termHead_Wogc",title:p["terminal.hint"],children:(0,r.jsx)(E,{className:"termHeadIcon_kENG","aria-label":p["terminal.heading"],role:"img"})}),ee.map((e,t)=>{let s=L===t;return(0,r.jsxs)("div",{className:"termRun_pPQl",children:[(0,r.jsxs)("div",{className:"termPrompt__Qbi",children:[(0,r.jsx)("span",{className:"termDollar_FMaj","aria-hidden":"true",children:"$"}),(0,r.jsx)("code",{className:"termCmd_KH0y",children:e.cmd}),(0,r.jsx)("button",{type:"button","aria-expanded":s,"aria-label":s?p["terminal.collapse"]:p["terminal.run"],title:s?p["terminal.collapse"]:p["terminal.run"],onClick:()=>I(s?null:t),className:(0,i.A)("termBtn_CC8E",s&&"termBtnOpen_rzSH"),children:s?(0,r.jsx)(N,{className:g}):(0,r.jsx)(C,{className:g})})]}),s&&(0,r.jsx)(T,{run:e})]},`${h}-${t}`)})]})]})}},51507(e,t,s){s.d(t,{A:()=>n});var r=s(96540);function n(e,t){let s=e.length,[n,i]=(0,r.useState)(0),[a,l]=(0,r.useState)(!1);return(0,r.useEffect)(()=>{if(!t){i(0),l(!1);return}if("u">typeof window&&window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){l(!0),i(s);return}let e=window.setTimeout(()=>{l(!0),e=window.setInterval(()=>{i(t=>t+1>=s?(window.clearInterval(e),s):t+1)},80)},350);return()=>{window.clearTimeout(e),window.clearInterval(e)}},[t,s]),{shown:n,started:a,done:a&&n>=s}}},28453(e,t,s){s.d(t,{R:()=>a,x:()=>l});var r=s(96540);let n={},i=r.createContext(n);function a(e){let t=r.useContext(i);return r.useMemo(function(){return"function"==typeof e?e(t):{...t,...e}},[t,e])}function l(e){let t;return t=e.disableParentContext?"function"==typeof e.components?e.components(n):e.components||n:a(e.components),r.createElement(i.Provider,{value:t},e.children)}}}]);
