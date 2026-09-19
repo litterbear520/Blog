@@ -52,9 +52,9 @@ export default function CopyCodeButton({ text, path }) {
       <button
         type="button"
         className={clsx(
-          styles.copyButton,
-          status === 'copied' && styles.copyButtonCopied,
-          status === 'error' && styles.copyButtonError,
+          styles.codeActionButton,
+          status === 'copied' && styles.codeActionCopied,
+          status === 'error' && styles.codeActionError,
         )}
         disabled={!hasFile || status === 'copying'}
         onClick={handleCopy}
@@ -62,8 +62,7 @@ export default function CopyCodeButton({ text, path }) {
         aria-label={hint}
         aria-busy={status === 'copying'}
       >
-        <Icon className={styles.copyIcon} aria-hidden="true" focusable="false" />
-        <span className={styles.copyLabel}>{label}</span>
+        <Icon className={styles.codeActionIcon} aria-hidden="true" focusable="false" />
       </button>
       <span className={styles.copyStatus} role="status" aria-live="polite" aria-atomic="true">
         {status === 'copied' ? UI['copy.copied'] : status === 'error' ? UI['copy.errorHint'] : ''}

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
+import { FileCode2, FileDiff } from 'lucide-react';
 import { Highlight } from 'prism-react-renderer';
 import { usePrismTheme } from '@docusaurus/theme-common';
 import WALKTHROUGHS, { UI } from '@site/src/data/codeWalkthroughs';
@@ -354,75 +355,88 @@ function Walkthrough({ data, initialStep, nav }) {
                 );
               })}
             </div>
-            <div className={styles.editorActions}>
-              {activeStatus === 'changed' && (
-                <button
-                  type="button"
-                  aria-pressed={showDiff}
-                  onClick={() => setShowDiff((v) => !v)}
-                  className={styles.diffToggle}
-                >
-                  {showDiff ? UI['diff.hide'] : UI['diff.show']}
-                </button>
-              )}
-              {/* 从快照复制完整源码，不复制含删除行、行号的展示内容。 */}
-              <CopyCodeButton
-                key={JSON.stringify([current, activeFile])}
-                text={activeFile === null ? undefined : snapshot[activeFile]}
-                path={activeFile}
-              />
-            </div>
           </div>
-          {activeFile !== null && rows.length > 0 ? (
-            <div ref={scrollRef} className={styles.codeScroll} style={{ backgroundColor: editorBg }}>
-              <Highlight theme={prismTheme} code={code} language={languageOf(activeFile)}>
-                {({ tokens, getLineProps, getTokenProps }) => (
-                  <pre className={styles.pre} style={{ color: prismTheme.plain.color }}>
-                    {tokens.map((line, i) => {
-                      const row = rows[i] || { type: 'same', newNo: i + 1 };
-                      const lineProps = getLineProps({ line });
-                      const changed = row.type !== 'same';
-                      const focused = !changed && inFocus(row.newNo);
-                      return (
-                        <div
-                          key={i}
-                          {...lineProps}
-                          data-change={changed ? row.type : undefined}
-                          data-focus={focused ? '' : undefined}
-                          className={clsx(
-                            lineProps.className,
-                            styles.line,
-                            row.type === 'add' && styles.lineAdd,
-                            row.type === 'del' && styles.lineDel,
-                            focused && styles.lineFocus,
-                          )}
-                        >
-                          <span aria-hidden="true" className={styles.lineNo}>
-                            {row.newNo ?? ''}
-                          </span>
-                          <span aria-hidden="true" className={styles.lineSign}>
-                            {row.type === 'add' ? '+' : row.type === 'del' ? '−' : ''}
-                          </span>
-                          <span className={styles.lineContent}>
-                            {line.map((token, k) => (
-                              <span key={k} {...getTokenProps({ token })} />
-                            ))}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </pre>
+          <div
+            className={clsx(styles.codeShell, activeFile !== null && styles.codeShellWithActions)}
+            style={{ backgroundColor: editorBg, '--cw-editor-bg': editorBg }}
+          >
+            {activeFile !== null && (
+              <div className={styles.codeActions} role="group" aria-label={UI['aria.codeActions']}>
+                {activeStatus === 'changed' && (
+                  <button
+                    type="button"
+                    className={styles.codeActionButton}
+                    aria-label={UI['diff.show']}
+                    aria-pressed={showDiff}
+                    title={showDiff ? UI['diff.hide'] : UI['diff.show']}
+                    onClick={() => setShowDiff((v) => !v)}
+                  >
+                    {showDiff ? (
+                      <FileDiff className={styles.codeActionIcon} aria-hidden="true" focusable="false" />
+                    ) : (
+                      <FileCode2 className={styles.codeActionIcon} aria-hidden="true" focusable="false" />
+                    )}
+                  </button>
                 )}
-              </Highlight>
-            </div>
-          ) : (
-            <div className={styles.empty} style={{ backgroundColor: editorBg }}>
-              <div>
-                <p>{UI['empty.title']}</p>
-                <p className={styles.emptySub}>{UI['empty.body']}</p>
+                {/* 始终复制当前快照，不包含 diff 删除行、行号或标记。 */}
+                <CopyCodeButton
+                  key={JSON.stringify([current, activeFile])}
+                  text={snapshot[activeFile]}
+                  path={activeFile}
+                />
               </div>
-            </div>
-          )}
+            )}
+            {activeFile !== null && rows.length > 0 ? (
+              <div ref={scrollRef} className={styles.codeScroll} style={{ backgroundColor: editorBg }}>
+                <Highlight theme={prismTheme} code={code} language={languageOf(activeFile)}>
+                  {({ tokens, getLineProps, getTokenProps }) => (
+                    <pre className={styles.pre} style={{ color: prismTheme.plain.color }}>
+                      {tokens.map((line, i) => {
+                        const row = rows[i] || { type: 'same', newNo: i + 1 };
+                        const lineProps = getLineProps({ line });
+                        const changed = row.type !== 'same';
+                        const focused = !changed && inFocus(row.newNo);
+                        return (
+                          <div
+                            key={i}
+                            {...lineProps}
+                            data-change={changed ? row.type : undefined}
+                            data-focus={focused ? '' : undefined}
+                            className={clsx(
+                              lineProps.className,
+                              styles.line,
+                              row.type === 'add' && styles.lineAdd,
+                              row.type === 'del' && styles.lineDel,
+                              focused && styles.lineFocus,
+                            )}
+                          >
+                            <span aria-hidden="true" className={styles.lineNo}>
+                              {row.newNo ?? ''}
+                            </span>
+                            <span aria-hidden="true" className={styles.lineSign}>
+                              {row.type === 'add' ? '+' : row.type === 'del' ? '−' : ''}
+                            </span>
+                            <span className={styles.lineContent}>
+                              {line.map((token, k) => (
+                                <span key={k} {...getTokenProps({ token })} />
+                              ))}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </pre>
+                  )}
+                </Highlight>
+              </div>
+            ) : (
+              <div className={styles.empty} style={{ backgroundColor: editorBg }}>
+                <div>
+                  <p>{UI['empty.title']}</p>
+                  <p className={styles.emptySub}>{UI['empty.body']}</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
