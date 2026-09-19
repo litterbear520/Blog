@@ -3,6 +3,17 @@ import clsx from 'clsx';
 import {useRunOutput} from '@site/src/theme/CodeBlock/RunOutput/context';
 import useTypewriter from '@site/src/theme/CodeBlock/RunOutput/useTypewriter';
 
+// Lucide square-terminal：与 CodeWalkthrough 终端头部同一个图标，两处面板统一
+function IconTerminal(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="m7 11 2-2-2-2" />
+      <path d="M11 13h4" />
+    </svg>
+  );
+}
+
 function statusText(status) {
   if (status === 'hang') return '进程未退出，需要 Ctrl + C 终止';
   if (status === 'empty') return '没有任何输出，进程退出';
@@ -22,12 +33,8 @@ export default function RunOutputPanel() {
 
   return (
     <div className="run-output" role="region" aria-label="运行输出">
-      <div className="run-output__head">
-        <span
-          className="run-output__label"
-          title="预先录制的运行结果，不是浏览器实时执行">
-          输出
-        </span>
+      <div className="run-output__head" title="预先录制的运行结果，不是浏览器实时执行">
+        <IconTerminal className="run-output__icon" aria-label="输出" role="img" />
         {!started && <span className="run-output__running">运行中…</span>}
       </div>
       <pre className="run-output__body" aria-live="polite">
