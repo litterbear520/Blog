@@ -33,11 +33,12 @@ export default function RunOutputPanel() {
 
   return (
     <div className="run-output" role="region" aria-label="运行输出">
-      <div className="run-output__head" title="预先录制的运行结果，不是浏览器实时执行">
-        <IconTerminal className="run-output__icon" aria-label="输出" role="img" />
-        {!started && <span className="run-output__running">运行中…</span>}
-      </div>
+      {/* 角标：和代码块右上角的复制按钮同一列，不单独占一行 */}
+      <span className="run-output__mark" title="预先录制的运行结果，不是浏览器实时执行">
+        <IconTerminal aria-label="输出" role="img" />
+      </span>
       <pre className="run-output__body" aria-live="polite">
+        {!started && <span className="run-output__running">运行中…</span>}
         {lines.slice(0, shown).map((line, i) => (
           <div
             className={clsx(
