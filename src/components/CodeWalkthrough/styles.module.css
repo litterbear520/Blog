@@ -517,7 +517,6 @@
 
 /* ── 终端 ── */
 .terminal {
-  position: relative;
   border-radius: 12px;
   border: 1px solid var(--ifm-color-emphasis-300);
   overflow: hidden;
@@ -526,12 +525,11 @@
   line-height: 1.6;
 }
 
-/* 终端角标：右上角一个终端图标，悬停提示这是预录输出；与代码块输出面板的角标同款 */
+/* 终端图标是输出的行首标记：与第一行输出同一行，悬停提示这是预录输出；与代码块输出面板同一布局 */
 .termMark {
-  position: absolute;
-  top: 0.45rem;
-  right: 0.75rem;
   display: flex;
+  flex-shrink: 0;
+  padding-top: 0.15em;
   color: var(--ifm-color-content-secondary);
   cursor: help;
 }
@@ -545,12 +543,11 @@
   border-top: 1px dashed var(--th-line);
 }
 
-/* 右侧留出角标的位置，命令再长也不会压到图标 */
 .termPrompt {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.45rem 2.4rem 0.45rem 0.75rem;
+  padding: 0.45rem 0.75rem;
 }
 
 .termDollar {
@@ -559,7 +556,7 @@
 }
 
 .termCmd {
-  flex: 0 1 auto;
+  flex: 1;
   min-width: 0;
   padding: 0;
   border: 0;
@@ -599,6 +596,16 @@
 .termOutput {
   padding: 0 0.75rem 0.6rem;
   white-space: pre;
+}
+
+.termOutputRow {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.termOutputBody {
+  flex: 1;
+  min-width: 0;
   overflow-x: auto;
 }
 

@@ -117,13 +117,21 @@ function TerminalOutput({ run }) {
   const { shown, started, done } = useTypewriter(lines, true);
   return (
     <div className={styles.termOutput} aria-live="polite">
-      {!started && <div className={styles.termRunning}>{UI['terminal.running']}</div>}
-      {lines.slice(0, shown).map((line, i) => (
-        <div key={i} className={clsx('run-output__line', styles.termLine)}>
-          {line === '' ? ' ' : line}
+      {/* 终端图标排在输出第一行的行首，文字紧随其后，与代码块输出面板同一布局 */}
+      <div className={styles.termOutputRow}>
+        <span className={styles.termMark} title={UI['terminal.hint']}>
+          <IconTerminal className={styles.termMarkIcon} aria-label={UI['terminal.heading']} role="img" />
+        </span>
+        <div className={styles.termOutputBody}>
+          {!started && <div className={styles.termRunning}>{UI['terminal.running']}</div>}
+          {lines.slice(0, shown).map((line, i) => (
+            <div key={i} className={clsx('run-output__line', styles.termLine)}>
+              {line === '' ? ' ' : line}
+            </div>
+          ))}
+          {started && !done && <span className="run-output__cursor" />}
         </div>
-      ))}
-      {started && !done && <span className="run-output__cursor" />}
+      </div>
       {done && (
         <div className={clsx(styles.termFoot, run.exit !== 0 && styles.termFootFail)}>
           {fmt(UI['terminal.exit'], { code: run.exit })}
@@ -442,10 +450,6 @@ function Walkthrough({ data, initialStep, nav }) {
 
       {runs.length > 0 && (
         <div className={styles.terminal} style={{ backgroundColor: editorBg, color: prismTheme.plain.color }}>
-          {/* 角标：绝对定位在右上角，不单独占一行；命令行的运行按钮紧跟命令文字，把右上角让出来 */}
-          <span className={styles.termMark} title={UI['terminal.hint']}>
-            <IconTerminal className={styles.termMarkIcon} aria-label={UI['terminal.heading']} role="img" />
-          </span>
           {runs.map((run, k) => {
             const open = runIndex === k;
             return (

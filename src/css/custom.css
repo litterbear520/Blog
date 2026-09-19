@@ -641,7 +641,6 @@ pre {
 }
 
 .run-output {
-  position: relative;
   font-family: var(--ifm-font-family-monospace);
   font-size: 13px;
   line-height: 1.6;
@@ -660,15 +659,17 @@ pre {
   border-bottom-right-radius: 8px;
 }
 
-/* 终端角标：与代码块复制按钮同一列（右上角、同样偏移），底色继承面板，压在长输出行上也不打架 */
-.run-output__mark {
-  position: absolute;
-  top: calc(var(--ifm-pre-padding) / 2);
-  right: calc(var(--ifm-pre-padding) / 2);
+/* 图标 + 输出排成一行：图标是行首标记，和第一行输出对齐，文字紧随其后 */
+.run-output__row {
   display: flex;
-  padding: 2px;
-  border-radius: 4px;
-  background: inherit;
+  gap: 0.75rem;
+  padding: 0.6rem var(--ifm-pre-padding);
+}
+
+.run-output__mark {
+  display: flex;
+  flex-shrink: 0;
+  padding-top: 0.15em;
   color: var(--th-text-3);
   cursor: help;
 }
@@ -695,8 +696,10 @@ pre {
 }
 
 .run-output__body {
+  flex: 1;
+  min-width: 0;
   margin: 0;
-  padding: 0.4rem var(--ifm-pre-padding) 0.6rem;
+  padding: 0;
   background: transparent;
   border: 0 !important;
   border-radius: 0 !important;
@@ -706,7 +709,7 @@ pre {
 }
 
 .theme-code-block.run-output-open .run-output__body {
-  padding-top: 0.5rem !important;
+  padding: 0 !important;
 }
 
 .run-output__line {
@@ -716,8 +719,8 @@ pre {
 
 /* 高亮输出行（```output {3,7-9}）：标出读者该关注的输出，配色与代码块高亮行一致 */
 .run-output__line--highlight {
-  margin: 0 calc(-1 * var(--ifm-pre-padding));
-  padding: 0 var(--ifm-pre-padding);
+  margin: 0 calc(-1 * var(--ifm-pre-padding)) 0 -0.5rem;
+  padding: 0 var(--ifm-pre-padding) 0 0.5rem;
   background: var(--docusaurus-highlighted-code-line-bg);
   box-shadow: inset 3px 0 0 var(--th-code-added-bar);
 }
