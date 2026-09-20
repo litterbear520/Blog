@@ -79,5 +79,3 @@ python agent.py
 在 `>>` 后直接按回车可以结束对话。这里只关注请求、执行、回传这条链路，不要求模型每次使用相同措辞，也不要求每个问题都调用工具。
 
 至此，我们已经有了一个能够查询商品并继续对话的助手。以后增加商品详情或购物车能力时，仍然沿用同一条循环：让模型提出请求，由程序执行，再把结果交回对话。
-
-参考资料：[工具调用入门 · Claude Academy](https://academy.claude.com/courses/building-with-the-claude-api/introducing-tool-use) · [处理工具调用与结果 · Claude API 文档](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls)

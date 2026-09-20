@@ -33,3 +33,5 @@ docs/多模态探索/image/index/1755149583346.png
 /tools/covers/.preview
 # Playwright MCP 浏览器测试产物（截图、控制台日志）
 /.playwright-mcp
+# 实际页面浏览器回归测试截图与结果
+/test-results/

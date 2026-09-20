@@ -19,8 +19,24 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - run: npm run build
+      - name: Verify real walkthrough pages on desktop and mobile
+        run: node tools/walkthrough-browser.mjs
       - uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+      - name: Verify deployed walkthrough pages
+        if: github.ref == 'refs/heads/main'
+        env:
+          WALKTHROUGH_BASE_URL: https://huangsitao.fun
+          WALKTHROUGH_WAIT_SECONDS: 300
+        run: node tools/walkthrough-browser.mjs
+      - name: Save walkthrough browser screenshots and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: walkthrough-browser-${{ github.run_id }}
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
