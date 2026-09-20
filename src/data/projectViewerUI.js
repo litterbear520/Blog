@@ -1,0 +1,20 @@
+// Shared viewer text only: importing this never loads a lesson's code snapshots.
+export const UI = {
+  'files.heading': '文件',
+  'copy.idle': '复制代码',
+  'copy.copying': '复制中…',
+  'copy.copied': '已复制',
+  'copy.error': '复制失败',
+  'copy.hint': '复制当前步骤中 {path} 的完整代码',
+  'copy.empty': '请先选择一个文件',
+  'copy.errorHint': '复制失败，请重试或手动选择代码复制',
+  'diff.show': '显示改动',
+  'diff.hide': '只看当前',
+  'badge.new': '新文件',
+  'badge.changed': '已修改',
+  'aria.codeActions': '代码操作',
+  'aria.openFiles': '已打开的文件',
+  'aria.closeTab': '关闭 {path}',
+  'empty.title': '没有打开的文件',
+  'empty.body': '从文件列表打开一个文件，或通过演练步骤进行导航',
+};

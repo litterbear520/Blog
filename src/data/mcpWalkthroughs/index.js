@@ -1,4 +1,4 @@
-// 三个演练（sampling / notifications / roots）的数据入口，以及界面文案（取自官方中文版）。
+// 三个演练（sampling / notifications / roots）的数据入口，以及教学界面文案。
 import sampling from './sampling';
 import notifications from './notifications';
 import roots from './roots';
@@ -17,14 +17,8 @@ export const UI = {
   "tour.btn.finish": "完成",
   "step.heading": "{n}. {title}",
   "btn.prev": "← 上一步",
-  "btn.next": "下一步 →",
-  "files.heading": "文件",
-  "aria.openFiles": "打开的文件",
-  "aria.closeTab": "关闭 {path}",
-  "empty.title": "没有打开的文件",
-  "empty.body": "从资源管理器中打开一个文件，或通过教程步骤进行导航"
+  "btn.next": "下一步 →"
 };
 
 const WALKTHROUGHS = { sampling, notifications, roots };
-
 export default WALKTHROUGHS;
