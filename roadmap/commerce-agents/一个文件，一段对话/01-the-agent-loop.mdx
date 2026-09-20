@@ -1,47 +1,97 @@
 ---
-description: 最小的购物 agent 是一个循环：调用模型、执行工具、把结果送回去。
+description: 以商品搜索为例，理解模型如何请求工具，以及程序为什么要把结果送回对话。
 ---
 
+import CodeBlock from '@theme/CodeBlock';
 import AgentLoopViz from '@site/src/components/AgentLoopViz';
 import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
+import { snippets } from '@site/src/data/commerceAgentLoopLesson';
 
 # 循环与第一个工具
 
-最小的购物 agent 是一个循环：调用模型、执行工具、把结果送回去。
+工具让模型能够取得对话之外的信息。以购物助手为例，我们可以提供一个商品搜索工具，让模型先查询商品目录，再根据结果回答用户。
 
-## 只会聊天的模型
+## 为什么需要工具
 
-我们从一个空目录开始：建一个 venv，`pip install anthropic python-dotenv`。第一版脚本只做一件事：把一句话发给模型，再把模型的回复打印出来。
+假设用户问：“店里有没有降噪耳机？”模型可以介绍降噪耳机，却无法仅凭已有知识确认这家店的商品和库存。要回答这个问题，它需要取得商店的数据。
 
-此时模型已经可以对话，但它对商品目录一无所知。当您问“有没有耳机”时，它只能凭训练数据编造一个答案。要解决这个问题，我们需要做两件事：给模型一个能查询商品目录的工具，然后加一个循环。当模型表示要使用工具时，我们先执行工具，把结果送回给模型，再让它继续回答。
+我们可以让程序查询商品目录，再把结果交给模型。这里有一个重要的分工：**模型决定需要查询什么，程序负责执行查询，模型再根据结果回答。** 模型发出工具调用请求，并不代表 Python 函数已经执行。
 
-## 循环的工作原理
+## 定义商品搜索
 
-下面这个动画就是这一步的结构。静止时它是一张流程图，点击播放可以看到一次完整的运行：用户说“我想找耳机”，模型决定调用 `search_products`，拿到结果后组织回答，最后回到等待输入的状态。右侧的 `messages[]` 展示了对话在这个过程中是如何累积的。
+先为程序准备一个普通的 Python 函数。为了专注于工具调用，我们用内存中的 `PRODUCTS` 列表代替数据库，按商品名称匹配关键词：
+
+<CodeBlock language="python" title="搜索函数（节选）">{snippets.search}</CodeBlock>
+
+调用 `search_products("耳机")`，就会找到名称中包含“耳机”的商品，并把结果转换为 JSON 字符串。此时，搜索已经能在 Python 中独立工作，但模型还不知道怎样请求它。
+
+我们还需要一份工具定义，也就是 Schema。它通过 `name` 标识工具，通过 `description` 说明用途，再用 `input_schema` 描述参数。在这个例子中，`query` 是必填的关键词，`limit` 是可选的结果数量。
+
+<details>
+<summary>查看搜索工具的定义</summary>
+
+<CodeBlock language="python" title="工具 Schema">{snippets.schema}</CodeBlock>
+
+</details>
+
+把这份定义放进请求的 `tools=[search_products_schema]` 后，模型就可以提出搜索请求。例如，针对用户的问题，它可以选择 `search_products`，并提供参数 `{"query": "耳机"}`。**工具定义描述调用方式，函数负责实际搜索。**
+
+## 执行工具并返回结果
+
+模型需要搜索时，回复中会出现 `tool_use` 内容块，包含工具名称、参数和调用 ID。程序先把完整的 `response.content` 作为 `assistant` 消息追加到 `messages`，再处理其中的工具调用。
+
+下面的代码用 `TOOL_MAP` 按名称找到搜索函数，执行后把结果包装成 `tool_result`：
+
+<CodeBlock language="python" title="执行工具并追加结果（节选）">{snippets.results}</CodeBlock>
+
+`tool_use_id` 对应这次请求的 `block.id`，用来说明“这是哪一次调用的结果”，而不是搜索到的商品 ID。结果放在一条 `user` 消息中；这里的 `user` 是 Messages API 的角色，并不表示用户又输入了一句话。
+
+只有把这些消息带入下一次模型请求，模型才能读到搜索结果。仅在终端打印结果，并不会把数据交给模型。
+
+## 为什么需要循环
+
+第一次请求让模型提出搜索，下一次请求才让它读到结果。如果信息还不够，模型也可以继续请求工具。因此，程序需要重复“请求模型—执行工具—回传结果”，而不是调用一次 API 就结束。
+
+模型回复中的 `stop_reason` 用来区分这些情况：`tool_use` 表示需要执行工具并继续；`end_turn` 表示当前这一轮回答正常结束。示例中的内层循环用下面的条件决定是否继续：
+
+<CodeBlock language="python" title="循环中的判断（节选）">{snippets.stop}</CodeBlock>
+
+这段最小实现遇到非 `tool_use` 的情况都会退出；实际应用还需要单独处理 `max_tokens` 等停止原因，不能把退出都当成正常完成。
+
+下面用一次找耳机的过程串起这些步骤。留意搜索结束后，程序为什么还要请求一次模型，以及 `messages` 中增加了哪些消息。演示是预设过程的回放，不会发送真实 API 请求。
 
 <AgentLoopViz variant="commerceLoop" />
 
-整个循环由一个信号控制，就是模型回复里的 `stop_reason`：
+完整脚本的外层循环负责等待用户输入，内层循环负责完成当前问题所需的工具调用。外层保留 `messages`，所以用户继续追问时，模型仍能看到前面的对话。
 
-| stop_reason | 含义 | 循环做什么 |
-| ---- | ---- | ---- |
-| `tool_use` | 模型想调用工具 | 执行每一个 tool_use 块，把 tool_result 追加进 messages，再调用一次模型 |
-| `end_turn` | 模型已经说完 | 打印文本，回到外层循环等待下一句 |
+<details>
+<summary>查看完整代码与运行方式</summary>
 
-需要注意的是，messages 从头到尾只有一份，两层循环都往里追加。这意味着模型每次看到的都是完整的对话，包括它自己发出的 tool_use 和我们送回去的 tool_result。
+下面的演练默认定位到完整循环，也可以回看搜索函数和工具定义。正文中的代码节选来自同一份快照。
 
-## 逐步查看代码
+<CodeWalkthrough variant="commerce" step={5} nav />
 
-下面的演练分五步。第 1 步是最初只会聊天的脚本；第 2 步整个文件的绿底就是加入工具后新增的内容；后三步把新增的内容拆开来看：工具 schema、搜索函数和分发表、两层 while 循环。点击“下一步”会自动打开对应文件并滚动到相关代码。
+将最终版本保存为 `agent.py`，在虚拟环境中安装依赖：
 
-<CodeWalkthrough variant="commerce" step={1} nav />
+```bash
+python -m pip install anthropic python-dotenv
+```
 
-## 为什么这样设计
+当前代码快照使用 DeepSeek 的 Anthropic 兼容接口。在本地 `.env` 中配置该服务的 `ANTHROPIC_API_KEY`，不要把真实密钥提交到仓库；使用其他服务时，需要一并核对接口地址、模型名和密钥。
 
-**为什么不从 LangChain、CrewAI 这些框架开始？** 这是规则 1“一个模型拥有对话”的体现。框架提供的路由和编排在这个项目里是多余的中间层。直接调用 API，我们才能完全控制发给模型的每一个字节，后面做缓存断点、围栏和门控时，都要依赖这种控制权。
+```bash
+python agent.py
+```
 
-**工具的 JSON Schema 不是随便写的。** 模型看不到函数体，只能看到 schema，所以每个字段的 `description` 实际上就是给模型的指令。`search_products` 的 description 告诉模型什么时候该搜、怎么搜、遇到多个商品时要分开搜。一条规则应该放在工具描述、系统提示词还是技能里，取决于它被用到的频率，[架构指南](../../前言/高效商务Agent架构指南/index.mdx)中“按频率决定”一节讨论的正是这个取舍。
+输入“我想找耳机”，观察搜索结果如何进入后续回答。也可以输入目录中不存在的“望远镜”，观察模型怎样处理空结果。真实模型的措辞和调用次数可能不同，这里关注的是调用与回传的过程。
 
-**为什么外层循环不清空 messages？** 当用户接着说“便宜点的呢”时，模型需要知道说的是耳机。保留 messages 的代价是上下文会越聊越长，而且每一轮都要全量重发。后面讲到提示词缓存时会处理这个问题。
+</details>
 
-现在我们的 agent 能搜索了，但还不能查看商品详情，也不能加入购物车，而且模型有时会编造出不存在的商品 ID。下一课我们先加更多工具，再来处理这第一个 bug。
+这就是购物助手的基本循环：模型提出工具请求，程序执行并送回结果，模型继续回答。以后加入商品详情和购物车时，我们仍会沿用这个过程，只是让模型可以选择更多工具。
+
+<details>
+<summary>参考资料</summary>
+
+[工具调用入门 · Claude Academy](https://academy.claude.com/courses/building-with-the-claude-api/introducing-tool-use) · [处理工具调用与结果 · Claude API 文档](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls)
+
+</details>
