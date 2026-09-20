@@ -185,16 +185,29 @@ def scenario(browser, name, width, height, touch, theme, origin=LOCAL, full=True
             if name == 'roots':
                 group = viewer.get_by_role('group', name='代码操作')
                 copy = group.locator('button').last
-                page.evaluate("window.savedWrite=navigator.clipboard.writeText.bind(navigator.clipboard);navigator.clipboard.writeText=async()=>{throw new DOMException('denied','NotAllowedError')}")
+                # Explicit void-returning callback: Playwright otherwise invokes
+                # a function returned by a bare assignment expression itself.
+                page.evaluate("() => { window.savedWrite=navigator.clipboard.writeText.bind(navigator.clipboard); navigator.clipboard.writeText=async()=>{throw new DOMException('denied','NotAllowedError')}; }")
                 if not touch:
                     viewer.locator('[class*=codeShell]').hover()
                 act(copy)
                 expect(copy).to_have_attribute('aria-label', re.compile('复制失败'))
-                page.evaluate('navigator.clipboard.writeText=window.savedWrite')
+                page.evaluate('() => { navigator.clipboard.writeText=window.savedWrite; }')
                 act(copy)
                 expect(copy).to_have_attribute('aria-label', '已复制')
                 check(True, 'simulated clipboard denial can be retried')
-        viewer.scroll_into_view_if_needed()
+            if name == 'unittest':
+                # Show a meaningful nonempty file in review images after the
+                # empty-file recovery checks, through the real file controls.
+                path = next(p for p in paths if p.endswith('test_vector.py'))
+                if width < 640:
+                    viewer.locator('select').select_option(path)
+                else:
+                    act(viewer.locator('aside button[aria-pressed][title=' + json.dumps(path) + ']'))
+        # Position the unmodified page for review, below the sticky navbar.
+        page.wait_for_timeout(350)
+        viewer.locator('[class*=codeScroll]').evaluate('e=>{ const t=e.querySelector("[data-focus]"); e.scrollLeft=0; e.scrollTop=t?Math.max(0,t.offsetTop-e.clientHeight/2):0; }')
+        viewer.evaluate('e=>window.scrollTo({top:Math.max(0,window.scrollY+e.getBoundingClientRect().top-80),behavior:"instant"})')
         page.screenshot(path=str(OUT / f'{tag}.png'))
         check(not errors, 'no uncaught page JavaScript errors')
         result['status'] = 'passed'
