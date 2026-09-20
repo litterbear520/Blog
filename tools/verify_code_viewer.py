@@ -43,7 +43,6 @@ def scenario(browser, name, width, height, touch, theme, origin=LOCAL, full=True
     page.set_default_timeout(9000)
     errors = []
     page.on('pageerror', lambda error: errors.append(str(error)))
-    page.add_init_script(f"localStorage.setItem('theme', {json.dumps(theme)})")
     tag = f'{name}-{width}x{height}-{theme}-' + ('build' if origin == LOCAL else 'live')
     def check(condition, message):
         if not condition:
@@ -54,7 +53,9 @@ def scenario(browser, name, width, height, touch, theme, origin=LOCAL, full=True
     def computed(locator, prop):
         return locator.evaluate('(e,p)=>getComputedStyle(e)[p]', prop)
     def current_text(viewer):
-        return viewer.locator('[data-line]').evaluate_all('ns=>ns.map(n=>n.querySelector("[class*=lineContent]").textContent).join("\\n")')
+        # Prism renders a newline sentinel inside an otherwise empty line span.
+        # Remove that sentinel, not real source indentation or blank source rows.
+        return viewer.locator('[data-line]').evaluate_all(r'ns=>ns.map(n=>n.querySelector("[class*=lineContent]").textContent).map(s=>s === "\n" ? "" : s).join("\n")')
     try:
         response = page.goto(origin + quote(PAGES[name], safe='/'), wait_until='networkidle', timeout=25000)
         check(response is not None and response.status == 200, 'page HTTP 200')
@@ -65,7 +66,15 @@ def scenario(browser, name, width, height, touch, theme, origin=LOCAL, full=True
           return b && Object.keys(b).some(k => k.startsWith('__reactProps'));
         }''')
         check(True, 'actual React page hydrated')
+        # Use the real navbar, not an assumed localStorage key: Docusaurus
+        # namespaces that key (currently theme-3a6) for this deployment.
+        for _ in range(3):
+            if page.locator('html').get_attribute('data-theme') == theme:
+                break
+            act(page.locator('.navbar button[class*=toggleButton]:visible').first)
+            page.wait_for_timeout(100)
         expect(page.locator('html')).to_have_attribute('data-theme', theme)
+        check(True, 'requested theme selected through real controls')
         viewer.scroll_into_view_if_needed()
         base_height = viewer.bounding_box()['height']
         check(page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'no horizontal page overflow')
@@ -102,8 +111,21 @@ def scenario(browser, name, width, height, touch, theme, origin=LOCAL, full=True
         act(copy)
         expect(copy).to_have_attribute('aria-label', '已复制')
         copied = page.evaluate('navigator.clipboard.readText()')
+        if copied.removesuffix('\n') != visible:
+            result['copy_mismatch'] = {'clipboard_prefix': repr(copied[:180]), 'rendered_prefix': repr(visible[:180])}
         check(copied.removesuffix('\n') == visible, 'real clipboard contains code without line numbers or diff markers')
         result['copied_characters'] = len(copied)
+        # Scroll the actual rendered code, verifying that the overlay stays put.
+        scroll = viewer.locator('[class*=codeScroll]')
+        before = group.bounding_box()
+        dimensions = scroll.evaluate('e=>({x:e.scrollWidth-e.clientWidth,y:e.scrollHeight-e.clientHeight})')
+        scroll.evaluate('e=>{e.scrollTop=e.scrollHeight;e.scrollLeft=e.scrollWidth}')
+        after = group.bounding_box()
+        check(abs(before['x']-after['x']) < 1 and abs(before['y']-after['y']) < 1, 'code scrolling does not move action overlay')
+        if dimensions['y'] > 0:
+            check(scroll.evaluate('e=>e.scrollTop') > 0, 'long source scrolls vertically inside viewer')
+        if dimensions['x'] > 0:
+            check(scroll.evaluate('e=>e.scrollLeft') > 0, 'wide source scrolls horizontally inside viewer')
         if full:
             paths = viewer.locator('select option').evaluate_all('ns=>ns.map(n=>n.value).filter(Boolean)')
             chosen = list(dict.fromkeys([paths[0], paths[-1]] + [p for p in paths if p.endswith('__init__.py')][:1]))
