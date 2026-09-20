@@ -39,11 +39,16 @@ function Walkthrough({ data }) {
   const { files, steps } = data;
   const panelPrefix = useId();
   const stepListRef = useRef(null);
+  const [ready, setReady] = useState(false);
   const [current, setCurrent] = useState(0);
   const [expanded, setExpanded] = useState(0);
   const [highlight, setHighlight] = useState(steps[0] ?? null);
   const [selectionKey, setSelectionKey] = useState(0);
   const [tour, setTour] = useState(0);
+  // Static HTML is readable before hydration, but controls must not promise an
+  // action before React has attached their handlers. The navigation marker is
+  // published at the same point, so browser tests wait for real interactivity.
+  useEffect(() => { setReady(true); }, []);
   const focusRanges = useMemo(() => highlight ? [[highlight.line, highlight.endLine ?? highlight.line]] : [], [highlight]);
   const goToStep = (index) => {
     const step = steps[index];
@@ -86,14 +91,14 @@ function Walkthrough({ data }) {
           <p className={styles.tourBody}>{UI[`tour.${TOUR[tour]}.body`]}</p>
           <div className={styles.tourActions}>
             {tour > 0 ? (
-              <button type="button" onClick={() => setTour(tour - 1)} className={clsx(styles.btn, styles.btnSecondary)}>{UI['tour.btn.prev']}</button>
+              <button type="button" disabled={!ready} onClick={() => setTour(tour - 1)} className={clsx(styles.btn, styles.btnSecondary)}>{UI['tour.btn.prev']}</button>
             ) : (
-              <button type="button" onClick={() => setTour(null)} className={clsx(styles.btn, styles.btnSecondary)}>{UI['tour.btn.skip']}</button>
+              <button type="button" disabled={!ready} onClick={() => setTour(null)} className={clsx(styles.btn, styles.btnSecondary)}>{UI['tour.btn.skip']}</button>
             )}
             {tour < TOUR.length - 1 ? (
-              <button type="button" onClick={() => setTour(tour + 1)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['tour.btn.next']}</button>
+              <button type="button" disabled={!ready} onClick={() => setTour(tour + 1)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['tour.btn.next']}</button>
             ) : (
-              <button type="button" onClick={() => setTour(null)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['tour.btn.finish']}</button>
+              <button type="button" disabled={!ready} onClick={() => setTour(null)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['tour.btn.finish']}</button>
             )}
           </div>
         </div>
@@ -106,7 +111,7 @@ function Walkthrough({ data }) {
               const panelId = `${panelPrefix}-step-${i}`;
               return (
                 <div key={i} data-walkthrough-step={i} className={styles.step}>
-                  <button type="button" aria-expanded={isExpanded} aria-controls={panelId}
+                  <button type="button" disabled={!ready} aria-expanded={isExpanded} aria-controls={panelId}
                     onClick={() => isExpanded ? setExpanded(null) : goToStep(i)}
                     className={clsx(styles.stepHeader, current === i && styles.stepHeaderActive)}>
                     <span>{fmt(UI['step.heading'], { n: i + 1, title: step.title })}</span>
@@ -117,9 +122,9 @@ function Walkthrough({ data }) {
               );
             })}
           </div>
-          <div data-walkthrough-nav="" className={clsx(styles.navButtons, ring('buttons'))}>
-            <button type="button" disabled={current === 0} onClick={() => goToStep(current - 1)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['btn.prev']}</button>
-            <button type="button" disabled={current === steps.length - 1} onClick={() => goToStep(current + 1)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['btn.next']}</button>
+          <div data-walkthrough-nav={ready ? '' : undefined} className={clsx(styles.navButtons, ring('buttons'))}>
+            <button type="button" disabled={!ready || current === 0} onClick={() => goToStep(current - 1)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['btn.prev']}</button>
+            <button type="button" disabled={!ready || current === steps.length - 1} onClick={() => goToStep(current + 1)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['btn.next']}</button>
           </div>
         </div>
         <ProjectCodeViewer files={files} stepKey={selectionKey} preferredFiles={steps[current]?.file ? [steps[current].file] : []}
