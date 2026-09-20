@@ -1,0 +1,35 @@
+name: Viewer device validation
+on:
+  push:
+    branches: [verify/code-viewer-devices]
+permissions:
+  contents: read
+concurrency:
+  group: viewer-validation-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Install isolated browser test runner
+        run: |
+          python3 -m venv "$RUNNER_TEMP/viewer-test"
+          "$RUNNER_TEMP/viewer-test/bin/pip" install playwright==1.55.0
+      - name: Real production pages on desktop and touch screens
+        run: "$RUNNER_TEMP/viewer-test/bin/python tools/verify_code_viewer.py"
+      - name: Save validation report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewer-device-report
+          path: viewer-validation/
+          if-no-files-found: warn
+          retention-days: 7
