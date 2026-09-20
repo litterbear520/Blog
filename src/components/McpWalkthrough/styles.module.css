@@ -51,10 +51,12 @@
 .btn {
   border: 0;
   border-radius: 8px;
+  min-height: 2.75rem;
   padding: 0.4rem 0.8rem;
   font-size: 0.8rem;
   font-family: inherit;
   cursor: pointer;
+  touch-action: manipulation;
   transition: background 0.15s, opacity 0.15s;
 }
 
@@ -134,6 +136,7 @@
   font-family: inherit;
   color: var(--ifm-font-color-base);
   cursor: pointer;
+  touch-action: manipulation;
   transition: background 0.15s;
 }
 

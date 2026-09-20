@@ -18,9 +18,18 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - name: Install Chinese fonts for browser verification
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
       - run: npm run build
       - name: Verify real walkthrough pages on desktop and mobile
-        run: node tools/walkthrough-browser.mjs
+        run: |
+          if ! node tools/walkthrough-browser.mjs; then
+            # Preserve the static site for reproducing a browser failure offline.
+            cp -a build test-results/repro-site
+            exit 1
+          fi
       - uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
         with:
@@ -36,7 +45,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: walkthrough-browser-${{ github.run_id }}
+          name: walkthrough-browser-${{ github.run_id }}-${{ github.run_attempt }}
           path: test-results/
           if-no-files-found: ignore
           retention-days: 7
