@@ -82,17 +82,23 @@ test('docs and roadmap entrypoints all use the supported adapters', { skip: !com
     return entry.isDirectory() ? walk(path) : /\.mdx?$/.test(entry.name) ? [path] : [];
   });
   const pages = ['docs/', 'roadmap/', 'blog/'].flatMap((dir) => walk(new URL(dir, repo)));
+  const supported = {
+    CodeWalkthrough: ['unittest', 'commerce'],
+    McpWalkthrough: ['sampling', 'notifications', 'roots', 'commerceAgentLoop'],
+  };
   const found = [];
   for (const file of pages) {
     const text = readFileSync(file, 'utf8');
     for (const match of text.matchAll(/<(CodeWalkthrough|McpWalkthrough)\s+variant="([^"]+)"/g)) {
-      assert.ok(['unittest', 'commerce', 'sampling', 'notifications', 'roots'].includes(match[2]));
+      assert.ok(supported[match[1]].includes(match[2]), `unsupported ${match[1]} variant: ${match[2]}`);
       assert.ok(text.includes(`@site/src/components/${match[1]}`));
       found.push({ file: decodeURIComponent(file.pathname), variant: match[2] });
     }
   }
-  for (const variant of ['unittest', 'commerce', 'sampling', 'notifications', 'roots']) {
+  // The first roadmap page now uses the guided reader. The commerce snapshot
+  // adapter remains supported for lessons that explain code changes over time.
+  for (const variant of ['unittest', 'commerceAgentLoop', 'sampling', 'notifications', 'roots']) {
     assert.ok(found.some((page) => page.variant === variant), `missing ${variant}`);
   }
-  assert.ok(found.some((page) => page.variant === 'commerce' && page.file.includes('/roadmap/')));
+  assert.ok(found.some((page) => page.variant === 'commerceAgentLoop' && page.file.includes('/roadmap/')));
 });
