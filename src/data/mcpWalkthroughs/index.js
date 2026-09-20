@@ -1,7 +1,8 @@
-// 三个演练（sampling / notifications / roots）的数据入口，以及教学界面文案。
+// Guided-reader data and UI copy shared by MCP courses and the first roadmap lesson.
 import sampling from './sampling';
 import notifications from './notifications';
 import roots from './roots';
+import commerceAgentLoop from '../commerceAgentLoopLesson.js';
 
 export const UI = {
   "tour.aria": "第 {n} 步，共 {total} 步",
@@ -20,5 +21,5 @@ export const UI = {
   "btn.next": "下一步 →"
 };
 
-const WALKTHROUGHS = { sampling, notifications, roots };
+const WALKTHROUGHS = { sampling, notifications, roots, commerceAgentLoop };
 export default WALKTHROUGHS;
