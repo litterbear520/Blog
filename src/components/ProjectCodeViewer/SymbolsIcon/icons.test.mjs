@@ -9,24 +9,20 @@ const read = (path) => readFileSync(new URL(path, root), 'utf8');
 
 test('unittest 文件使用 Symbols 对应图标', () => {
   const examples = [
-    ['tests/test_vector.py', 'python'],
-    ['tests/__init__.py', 'python'],
-    ['vector/vector.py', 'python'],
-    ['vector/__init__.py', 'python'],
-    ['examply.py', 'python'],
-    ['.gitignore', 'git'],
-    ['pyproject.toml', 'gear'],
+    ['tests/test_vector.py', 'python'], ['tests/__init__.py', 'python'],
+    ['vector/vector.py', 'python'], ['vector/__init__.py', 'python'],
+    ['examply.py', 'python'], ['.gitignore', 'git'], ['pyproject.toml', 'gear'],
   ];
   for (const [path, expected] of examples) assert.equal(getSymbolIconName(path), expected, path);
 });
 
-test('文件名规则优先，其他已有演练语言也有图标', () => {
+test('文件名优先；MCP 与路线文件也使用同一套映射', () => {
   for (const [path, expected] of [
     ['requirements.txt', 'python'], ['setup.cfg', 'python'], ['.python-version', 'python'],
-    ['.gitattributes', 'git'], ['.gitmodules', 'git'],
-    ['notes.txt', 'text'], ['README.md', 'markdown'], ['settings.toml', 'gear'],
-    ['data.json', 'brackets-yellow'], ['data.jsonc', 'brackets-yellow'],
-    ['data.json5', 'brackets-yellow'],
+    ['.gitattributes', 'git'], ['.gitmodules', 'git'], ['notes.txt', 'text'],
+    ['README.md', 'markdown'], ['settings.toml', 'gear'], ['data.json', 'brackets-yellow'],
+    ['data.jsonc', 'brackets-yellow'], ['data.json5', 'brackets-yellow'],
+    ['mcp_server.py', 'python'], ['agent.py', 'python'], ['core/chat.py', 'python'],
   ]) assert.equal(getSymbolIconName(path), expected, path);
 });
 
@@ -73,12 +69,12 @@ test('每个 SVG 与上游原件的 Git blob 完全一致', () => {
   assert.match(read('LICENSE'), /Copyright \(c\) 2020-22 Miguel Solorio/);
 });
 
-test('树与标签复用相同组件，保留复制行为且不加载远程图标', () => {
+test('树与标签复用同一组件，复制读原文且不加载远程图标', () => {
   const viewer = read('../index.jsx');
   assert.doesNotMatch(viewer, /[📄📁📂]/u);
   assert.equal((viewer.match(/<SymbolsIcon\b/g) || []).length, 3);
   assert.match(viewer, /folder tree expanded=\{!isCollapsed\}/);
-  assert.match(viewer, /text=\{activeFile === null \? undefined : snapshot\[activeFile\]\}/);
+  assert.match(viewer, /text=\{source\}/);
   const component = read('index.jsx');
   const icons = Object.keys(JSON.parse(read('upstream.json')).icons).sort();
   const imports = [...component.matchAll(/from '\.\/icons\/([^']+)\.svg'/g)].map((match) => match[1]).sort();

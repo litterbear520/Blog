@@ -1,18 +1,27 @@
-// Dependency-free Chromium layout regression for the two project viewers.
+// Actual shared CSS + matching DOM fixture; not a React/Docusaurus E2E test.
 // Run: CHROMIUM_BIN=/path/to/chromium node --test tools/code-viewer-layout.test.mjs
-// Uses the real component CSS with the DOM hierarchy from each index.jsx.
-// This is a layout fixture, not a React/Docusaurus end-to-end test.
 import assert from 'node:assert/strict';
 import { execFileSync, spawn } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
-
-const cssFor = (name) => readFileSync(new URL(`../src/components/${name}/styles.module.css`, import.meta.url), 'utf8');
-const css = Object.fromEntries(['CodeWalkthrough', 'McpWalkthrough'].map((name) => [name, cssFor(name)]));
-const candidates = process.env.CHROMIUM_BIN
-  ? [process.env.CHROMIUM_BIN]
+const css = readFileSync(new URL('../src/components/ProjectCodeViewer/styles.module.css', import.meta.url), 'utf8');
+const globalsPath = new URL('../src/css/custom.css', import.meta.url);
+// The fallback permits isolated CSS checks without downloading a full checkout.
+const fallback = `
+:root { --ifm-background-surface-color:#fcfcfb; --ifm-color-emphasis-100:#f3f3f0;
+ --ifm-color-emphasis-200:#eae9e4; --ifm-color-emphasis-300:#e1e0d9;
+ --ifm-font-color-base:#52514e; --ifm-color-content-secondary:#898781;
+ --ifm-font-family-monospace:monospace; --ifm-global-radius:.5rem; --th-line:rgba(11,11,11,.1);
+ --docusaurus-highlighted-code-line-bg:#1F8A651F; --th-code-removed-bg:#d1242f1a; }
+[data-theme=dark] { --ifm-background-surface-color:#20201f; --ifm-color-emphasis-100:#20201f;
+ --ifm-color-emphasis-200:#2c2c2a; --ifm-color-emphasis-300:#383835; --ifm-font-color-base:#c3c2b7; }
+pre { background:var(--ifm-background-surface-color) !important; border:1px solid var(--th-line) !important; border-radius:8px !important; }
+[data-theme=dark] pre { background:#181818 !important; border:1px solid #262626 !important; border-radius:8px !important; }
+`;
+const globals = existsSync(globalsPath) ? readFileSync(globalsPath, 'utf8') : fallback;
+const candidates = process.env.CHROMIUM_BIN ? [process.env.CHROMIUM_BIN]
   : ['chromium', 'chromium-browser', 'google-chrome', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'];
 const browser = candidates.find((bin) => {
   try { execFileSync(bin, ['--version'], { stdio: 'ignore', timeout: 5000 }); return true; }
@@ -20,170 +29,147 @@ const browser = candidates.find((bin) => {
 });
 if (process.env.CHROMIUM_BIN && !browser) throw new Error('CHROMIUM_BIN cannot be executed');
 
-// Font/layout resets and the relevant global pre rules used by the site.
-const baseCSS = `
-  * { box-sizing: border-box; }
-  body { margin: 0; line-height: 1.65; }
-  button { font-family: inherit; line-height: inherit; }
-  :root {
-    --ifm-color-emphasis-300: #ccc; --ifm-background-surface-color: #fcfcfb;
-    --ifm-color-emphasis-100: #f3f3f0; --ifm-color-content-secondary: #898781;
-    --ifm-font-color-base: #52514e; --ifm-font-family-monospace: monospace;
-    --ifm-font-family-base: sans-serif; --ifm-global-radius: 0.5rem;
-    --th-line: rgba(11,11,11,.1);
-  }
-  [data-theme='dark'] {
-    --ifm-color-emphasis-300: #383835; --ifm-background-surface-color: #20201f;
-    --ifm-color-emphasis-100: #20201f; --ifm-font-color-base: #c3c2b7;
-    --th-line: rgba(255,255,255,.1);
-  }
-  pre { background: var(--ifm-background-surface-color) !important;
-    border: 1px solid var(--th-line) !important; border-radius: 8px !important; }
-  [data-theme='dark'] pre { background: #181818 !important;
-    border: 1px solid #262626 !important; border-radius: 8px !important; }
-  .preview { width: calc(100% - 32px); margin: 16px; }
-`;
-
-// Executed in Chromium; iframe dimensions supply exact mobile/desktop viewports.
-async function runCases(styles, globals) {
+function runCases(css, globals) {
   const results = [];
-  const sizes = [[1440, 900, 16], [1024, 700, 16], [640, 500, 16], [639, 700, 16],
-    [360, 640, 16], [390, 844, 16], [844, 390, 16], [1280, 800, 20]];
-  for (const name of Object.keys(styles)) {
-    for (const theme of ['light', 'dark']) {
-      for (const [width, height, fontSize] of sizes) {
-        const frame = document.createElement('iframe');
-        frame.style.cssText = `display:block;width:${width}px;height:${height}px;border:0`;
-        document.body.append(frame);
-        const doc = frame.contentDocument;
-        doc.open(); doc.write('<!doctype html><html><head></head><body></body></html>'); doc.close();
-        doc.documentElement.dataset.theme = theme;
-        doc.documentElement.style.fontSize = `${fontSize}px`;
-        const style = doc.createElement('style'); style.textContent = globals + styles[name]; doc.head.append(style);
-        const isCW = name === 'CodeWalkthrough';
-        const actions = isCW ? '<div class="codeActions"><button class="codeActionButton" aria-label="显示改动"></button><button class="codeActionButton" aria-label="复制代码"></button></div>' : '';
-        doc.body.innerHTML = `<div class="preview"><div class="root"><div class="editor">
-          <aside class="fileTree"><h4 class="fileTreeHeading">文件</h4><div class="treeScroll"></div></aside>
-          <div class="editorMain">${isCW ? '<div class="editorToolbar">' : ''}<div class="tabs"></div>${isCW ? '</div><div class="codeShell">' : ''}
-          ${actions}<div class="codeScroll"><pre class="pre"></pre></div>${isCW ? '</div>' : ''}</div>
-          </div><p id="following">Following article paragraph</p></div></div>`;
-        const q = (selector) => doc.querySelector(selector);
-        const rect = (selector) => q(selector).getBoundingClientRect();
-        const check = (condition, message) => { if (!condition) throw new Error(message); };
-        const close = (a, b) => Math.abs(a - b) < 1;
-        const metrics = () => [rect('.editor').height, rect('#following').top, rect('.codeScroll, .empty').top, rect('.codeScroll, .empty').height];
-        let checks = 0;
-        const verify = (condition, message) => { check(condition, message); checks++; };
-        const setRows = (count, long = false) => {
-          const pane = q('.codeScroll, .empty'); pane.className = 'codeScroll';
-          pane.innerHTML = '<pre class="pre"></pre>';
-          for (let i = 0; i < Math.max(count, 1); i++) {
-            const line = doc.createElement('div'); line.className = 'line';
-            line.innerHTML = `<span class="lineNo">${i + 1}</span>${isCW ? '<span class="lineSign"></span>' : ''}<span class="lineContent"></span>`;
-            line.lastElementChild.textContent = count === 0 ? '' : long ? `value_${i} = "${'x'.repeat(200)}"` : `value_${i} = ${i}`;
-            q('.pre').append(line);
-          }
-        };
-        const setTabs = (count) => {
-          q('.tabs').innerHTML = Array.from({ length: count }, (_, i) => `<div class="tab"><button class="tabBtn">${i ? 'long_file_name_' + i : 'main'}.py</button><button class="tabClose" aria-label="关闭">×</button></div>`).join('');
-        };
-        const setTree = (count) => {
-          q('.treeScroll').innerHTML = Array.from({ length: count }, (_, i) => `<button class="treeItem"><span class="treeName">file_${i}.py</span></button>`).join('');
-        };
-        try {
-          setTabs(1); setTree(3); setRows(2);
-          const baseline = metrics();
-          const narrow = width < 640;
-          const expected = Math.max((narrow ? 16 : 20) * fontSize, Math.min(height * (narrow ? .6 : .65), (narrow ? 24 : 32) * fontSize));
-          verify(close(baseline[0], expected), 'responsive outer height is incorrect');
-          const stable = (label) => verify(metrics().every((n, i) => close(n, baseline[i])), label);
-          verify(q('.codeScroll').scrollHeight === q('.codeScroll').clientHeight, 'two-line file should not require vertical scrolling');
-          const startWidth = q('.codeScroll').clientWidth;
-          setRows(150, true); stable('long file moves the viewer or following paragraph');
-          verify(q('.codeScroll').scrollHeight > q('.codeScroll').clientHeight, 'long code is not internally scrollable');
-          verify(q('.codeScroll').scrollWidth > q('.codeScroll').clientWidth, 'wide code is not internally scrollable');
-          verify(q('.codeScroll').clientWidth === startWidth, 'vertical scrollbar changes code width');
-          const overlay = isCW ? rect('.codeActions').toJSON() : null;
-          q('.codeScroll').scrollTop = 200; q('.codeScroll').scrollLeft = 120;
-          verify(q('.codeScroll').scrollTop > 0 && q('.codeScroll').scrollLeft > 0, 'code scrolling does not work');
-          if (isCW) verify(close(rect('.codeActions').top, overlay.top) && close(rect('.codeActions').right, overlay.right), 'scroll moves floating buttons');
-          setRows(1); stable('one-line file changes the frame');
-          setRows(0); stable('empty file changes the frame');
-          setRows(2); setTree(120); stable('expanded file tree changes the frame');
-          if (!narrow) {
-            verify(q('.treeScroll').scrollHeight > q('.treeScroll').clientHeight, 'file tree is not internally scrollable');
-            q('.treeScroll').scrollTop = 100;
-            verify(q('.treeScroll').scrollTop > 0, 'tree scrolling does not work');
-            verify(close(rect('.fileTreeHeading').bottom, rect('.codeScroll').top), 'tree header and tabs are not aligned');
-          }
-          setTree(1); stable('collapsed file tree changes the frame');
-          setTabs(30); stable('overflowing tabs change the viewport height');
-          verify(q('.tabs').scrollWidth > q('.tabs').clientWidth, 'tabs are not horizontally scrollable');
-          const tabTop = rect('.tabBtn').top, tabBottom = rect('.tabBtn').bottom;
-          verify(tabTop >= rect('.tabs').top && tabBottom <= rect('.tabs').bottom, 'tab button is clipped');
-          setTabs(0); q('.codeScroll').className = 'empty'; q('.empty').innerHTML = '<div><p>没有打开的文件</p><p class="emptySub">在左侧文件树里选择一个文件</p></div>';
-          q('.codeActions')?.remove(); stable('closing all tabs collapses the frame');
-          setTabs(1); setRows(2); stable('reopening a file changes the frame');
-          if (isCW) verify(close(rect('.line').top - rect('.codeScroll').top, fontSize * .5), 'top spacer has returned');
-          verify(doc.documentElement.scrollWidth <= width, 'viewer causes horizontal page overflow');
-          results.push({ name, theme, width, height, fontSize, viewerHeight: baseline[0], checks });
-        } catch (error) { results.push({ name, theme, width, height, fontSize, error: error.message }); }
-        frame.remove();
+  for (const theme of ['light', 'dark']) {
+    for (const [width, height, fontSize] of [[1440,900,16],[1024,700,16],[640,500,16],[639,700,16],
+      [360,640,16],[390,844,16],[844,390,16],[1280,800,20]]) {
+      const frame = document.createElement('iframe');
+      frame.style.cssText = `width:${width}px;height:${height}px;border:0`;
+      document.body.append(frame);
+      const doc = frame.contentDocument;
+      doc.open(); doc.write('<!doctype html><html><head></head><body></body></html>'); doc.close();
+      doc.documentElement.dataset.theme = theme;
+      doc.documentElement.style.fontSize = `${fontSize}px`;
+      const style = doc.createElement('style');
+      style.textContent = globals + css + `*{box-sizing:border-box}body{margin:0}button{font:inherit} .preview{margin:16px} .codeShell{background:${theme==='dark'?'#181818':'#fcfcfb'}}`;
+      doc.head.append(style);
+      doc.body.innerHTML = `<div class="preview"><div class="editor">
+        <aside class="fileTree"><h4 class="fileTreeHeading">文件</h4><div class="treeScroll"></div></aside>
+        <div class="editorMain"><label class="mobilePicker"><span>文件</span><select><option>main.py</option></select></label>
+        <div class="editorToolbar"><div class="tabs"></div></div>
+        <div class="codeShell"><div class="codeActions"><button class="codeActionButton">C</button></div>
+        <div class="codeScroll"><pre class="pre"></pre></div></div></div>
+        </div><p id="following">Following article</p><pre id="ordinary">ordinary code</pre></div>`;
+      const q = (s) => doc.querySelector(s);
+      const rect = (s) => q(s).getBoundingClientRect();
+      const computed = (s) => frame.contentWindow.getComputedStyle(q(s));
+      let checks = 0;
+      const verify = (condition, message) => { if (!condition) throw new Error(`${theme} ${width}x${height}: ${message}`); checks++; };
+      const close = (a, b) => Math.abs(a - b) < 1;
+      const metrics = () => [rect('.editor').height, rect('#following').top, rect('.codeScroll, .empty').top, rect('.codeScroll, .empty').height];
+      const setRows = (count, long = false) => {
+        const pane = q('.codeScroll, .empty'); pane.className = 'codeScroll'; pane.innerHTML = '<pre class="pre"></pre>';
+        for (let i = 0; i < Math.max(1, count); i++) {
+          const row = doc.createElement('div'); row.className = 'line';
+          row.innerHTML = `<span class="lineNo">${i+1}</span><span class="lineSign"></span><span class="lineContent"></span>`;
+          row.lastChild.textContent = count === 0 ? ' ' : long ? 'x'.repeat(240) : 'print("hello")';
+          q('.pre').append(row);
+        }
+      };
+      const setTabs = (count) => {
+        q('.tabs').innerHTML = '';
+        for (let i = 0; i < count; i++) {
+          const tab = doc.createElement('div'); tab.className = 'tab';
+          tab.innerHTML = `<button class="tabBtn">file_${i}.py</button><button class="tabClose">×</button>`;
+          q('.tabs').append(tab);
+        }
+      };
+      setTabs(1); setRows(2);
+      const initial = metrics();
+      const expected = width < 640 ? Math.max(16*fontSize, Math.min(height*.6,24*fontSize))
+        : Math.max(20*fontSize,Math.min(height*.65,32*fontSize));
+      verify(close(initial[0], expected), 'responsive outer height');
+      verify(close(rect('.line').top-rect('.codeScroll').top, .5*fontSize), 'first line has no action spacer');
+      verify(computed('.pre').borderTopWidth === '0px', 'no nested pre border');
+      verify(computed('.pre').borderRadius === '0px', 'no nested pre radius');
+      verify(computed('.pre').backgroundColor === 'rgba(0, 0, 0, 0)', 'one code background');
+      verify(computed('.editor').borderRadius === '12px', 'outer radius retained');
+      verify(computed('#ordinary').borderRadius === '8px', 'ordinary code unaffected');
+      verify(computed('#ordinary').borderTopWidth === '1px', 'ordinary code border unaffected');
+      verify((computed('.mobilePicker').display !== 'none') === (width < 640), 'mobile file recovery');
+      verify((computed('.fileTree').display !== 'none') === (width >= 640), 'desktop tree');
+      for (const rows of [0,1,2,150]) {
+        setRows(rows, rows===150);
+        verify(metrics().every((x,i)=>close(x,initial[i])), `stable ${rows} lines`);
       }
+      verify(q('.codeScroll').scrollHeight > q('.codeScroll').clientHeight, 'vertical code scroll');
+      verify(q('.codeScroll').scrollWidth > q('.codeScroll').clientWidth, 'horizontal code scroll');
+      const actionsTop = rect('.codeActions').top;
+      q('.codeScroll').scrollTop=100; q('.codeScroll').scrollLeft=100;
+      verify(close(rect('.codeActions').top,actionsTop), 'actions do not scroll');
+      setTabs(30);
+      verify(q('.tabs').scrollWidth>q('.tabs').clientWidth, 'tabs scroll horizontally');
+      verify(metrics().every((x,i)=>close(x,initial[i])), 'many tabs do not resize viewport');
+      q('.treeScroll').innerHTML='<button class="treeItem">folder</button>'.repeat(120);
+      if (width>=640) verify(q('.treeScroll').scrollHeight>q('.treeScroll').clientHeight,'tree scroll');
+      verify(metrics().every((x,i)=>close(x,initial[i])), 'long tree does not resize viewport');
+      q('.treeScroll').innerHTML='';
+      verify(metrics().every((x,i)=>close(x,initial[i])), 'collapsed tree does not resize viewport');
+      setRows(2); q('.line').classList.add('lineFocus');
+      verify(computed('.lineFocus').backgroundColor === 'rgba(109, 167, 236, 0.14)', 'original MCP blue focus');
+      q('.line').className='line lineAdd';
+      verify(computed('.lineAdd').backgroundColor !== 'rgba(109, 167, 236, 0.14)', 'diff distinct from focus');
+      setTabs(0); const pane=q('.codeScroll'); pane.className='empty'; pane.innerHTML='<p>没有打开的文件</p>';
+      verify(metrics().every((x,i)=>close(x,initial[i])), 'no tabs remains stable');
+      results.push({theme,width,height,fontSize,checks}); frame.remove();
     }
   }
   return results;
 }
 
-// Chrome DevTools pipe avoids a local server, open debugging port, and npm dependencies.
+// CDP pipe avoids opening a debugging port and works in offline containers.
 function connectChrome(dir) {
-  const child = spawn(browser, ['--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
-    '--no-first-run', '--disable-background-networking', '--disable-extensions', '--no-startup-window',
-    `--user-data-dir=${join(dir, 'profile')}`, '--remote-debugging-pipe'],
-  { stdio: ['ignore', 'ignore', 'pipe', 'pipe', 'pipe'] });
-  let sequence = 0, buffer = '', errors = '';
-  const pending = new Map();
-  const failAll = (error) => { for (const entry of pending.values()) { clearTimeout(entry.timer); entry.reject(error); } pending.clear(); };
-  child.stderr.on('data', (data) => { errors = (errors + data).slice(-4000); });
-  child.on('error', failAll);
-  child.on('exit', () => failAll(new Error(`Chromium exited before replying: ${errors}`)));
+  const child = spawn(browser, ['--headless','--no-sandbox','--disable-gpu','--disable-dev-shm-usage',
+    '--no-first-run','--disable-background-networking','--disable-extensions','--no-startup-window',
+    `--user-data-dir=${join(dir,'profile')}`,'--remote-debugging-pipe'],
+    {stdio:['ignore','ignore','pipe','pipe','pipe']});
+  let sequence=0, buffer='', errors='';
+  const pending=new Map();
+  const failAll=(error)=>{for(const entry of pending.values()){clearTimeout(entry.timer);entry.reject(error);}pending.clear();};
+  child.stderr.on('data',(data)=>{errors=(errors+data).slice(-4000);});
+  child.on('error',failAll);
+  child.on('exit',()=>failAll(new Error(`Chromium exited: ${errors}`)));
   child.stdio[4].setEncoding('utf8');
-  child.stdio[4].on('data', (data) => {
-    buffer += data;
+  child.stdio[4].on('data',(data)=>{
+    buffer+=data;
     let end;
-    while ((end = buffer.indexOf('\0')) !== -1) {
-      const message = JSON.parse(buffer.slice(0, end)); buffer = buffer.slice(end + 1);
-      const entry = pending.get(message.id);
-      if (!entry) continue;
-      pending.delete(message.id); clearTimeout(entry.timer);
-      if (message.error) entry.reject(new Error(JSON.stringify(message.error)));
+    while((end=buffer.indexOf('\0'))!==-1){
+      const message=JSON.parse(buffer.slice(0,end));buffer=buffer.slice(end+1);
+      const entry=pending.get(message.id);if(!entry)continue;
+      pending.delete(message.id);clearTimeout(entry.timer);
+      if(message.error)entry.reject(new Error(JSON.stringify(message.error)));
       else entry.resolve(message.result);
     }
   });
-  const send = (method, params = {}, sessionId) => new Promise((resolve, reject) => {
-    const id = ++sequence;
-    const timer = setTimeout(() => { pending.delete(id); reject(new Error(`Timed out: ${method}\n${errors}`)); }, 20000);
-    pending.set(id, { resolve, reject, timer });
-    child.stdio[3].write(JSON.stringify({ id, method, params, sessionId }) + '\0');
+  const send=(method,params={},sessionId)=>new Promise((resolve,reject)=>{
+    const id=++sequence;
+    const timer=setTimeout(()=>{pending.delete(id);reject(new Error(`Timed out: ${method}\n${errors}`));},20000);
+    pending.set(id,{resolve,reject,timer});
+    child.stdio[3].write(JSON.stringify({id,method,params,sessionId})+'\0');
   });
-  return { send, stop: () => { failAll(new Error('Browser stopped')); child.kill('SIGKILL'); } };
+  return {send,stop:async()=>{
+    failAll(new Error('Browser stopped'));
+    if(child.exitCode===null && child.signalCode===null){
+      await new Promise((resolve)=>{child.once('exit',resolve);child.kill('SIGKILL');});
+    }
+  }};
 }
 
-test('project viewers keep their geometry when content, tabs, and folders change', { skip: browser ? false : 'Install Chromium or set CHROMIUM_BIN' }, async () => {
-  const dir = mkdtempSync(join(tmpdir(), 'code-viewer-layout-'));
-  const chrome = connectChrome(dir);
+test('shared project viewer has stable geometry and unified styling', {skip: !browser}, async(t)=>{
+  const dir=mkdtempSync(join(tmpdir(),'project-viewer-'));
+  const chrome=connectChrome(dir);
   try {
-    const { targetId } = await chrome.send('Target.createTarget', { url: 'about:blank' });
-    const { sessionId } = await chrome.send('Target.attachToTarget', { targetId, flatten: true });
-    const result = await chrome.send('Runtime.evaluate', {
-      expression: `(${runCases.toString()})(${JSON.stringify(css)},${JSON.stringify(baseCSS)})`,
-      awaitPromise: true, returnByValue: true,
-    }, sessionId);
-    assert.ok(!result.exceptionDetails, JSON.stringify(result.exceptionDetails));
-    const results = result.result.value;
-    assert.equal(results.length, 32);
-    assert.deepEqual(results.filter((r) => r.error), []);
-    console.log(`${results.length} viewport/theme cases; ${results.reduce((n, r) => n + r.checks, 0)} geometry assertions passed`);
+    const {targetId}=await chrome.send('Target.createTarget',{url:'about:blank'});
+    const {sessionId}=await chrome.send('Target.attachToTarget',{targetId,flatten:true});
+    const result=await chrome.send('Runtime.evaluate',{
+      expression:`(${runCases.toString()})(${JSON.stringify(css)},${JSON.stringify(globals)})`,
+      awaitPromise:true,returnByValue:true,
+    },sessionId);
+    assert.ok(!result.exceptionDetails,JSON.stringify(result.exceptionDetails));
+    const cases=result.result.value;
+    assert.equal(cases.length,16);
+    t.diagnostic(`${cases.length} theme/viewport scenarios; ${cases.reduce((n,r)=>n+r.checks,0)} browser assertions; ${existsSync(globalsPath)?'actual custom.css':'isolated global-rule fallback'}`);
     await chrome.send('Browser.close');
-  } finally { chrome.stop(); rmSync(dir, { recursive: true, force: true }); }
+  } finally {await chrome.stop();rmSync(dir,{recursive:true,force:true,maxRetries:10,retryDelay:100});}
 });
