@@ -1,3 +1,4 @@
+/* Guided lesson chrome only. File-viewer styles live in ProjectCodeViewer. */
 .root {
   display: flex;
   flex-direction: column;
@@ -5,7 +6,6 @@
   margin: 1rem 0 1.5rem;
 }
 
-/* ── 引导气泡 ── */
 .tour {
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: 12px;
@@ -48,7 +48,6 @@
   margin-top: 0.75rem;
 }
 
-/* ── 按钮 ── */
 .btn {
   border: 0;
   border-radius: 8px;
@@ -59,7 +58,6 @@
   transition: background 0.15s, opacity 0.15s;
 }
 
-/* 中性色主按钮：浅色主题黑底白字，深色主题白底黑字（emphasis 变量在两套主题里自动反转） */
 .btnPrimary {
   background: var(--ifm-color-emphasis-900);
   color: var(--ifm-color-emphasis-0);
@@ -84,14 +82,12 @@
   background: var(--ifm-color-emphasis-300);
 }
 
-/* ── 布局：步骤面板在上、代码查看器在下，纵向堆叠 ── */
 .layout {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-/* ── 步骤面板 ── */
 .stepsPanel {
   display: flex;
   flex-direction: column;
@@ -194,240 +190,6 @@
   font-size: 0.875rem;
 }
 
-/* ── 代码查看器 ── */
-/* 固定整个查看器（含标签栏）的高度，短文件/空状态不收缩，长文件不撑高。
-   svh 避免移动浏览器地址栏收放引起高度跳动；vh 是旧浏览器回退。 */
-.editor {
-  --code-viewer-header-height: 2.5rem;
-  display: flex;
-  flex: none;
-  box-sizing: border-box;
-  height: clamp(20rem, 65vh, 32rem);
-  height: clamp(20rem, 65svh, 32rem);
-  min-width: 0;
-  overflow: hidden;
-  border-radius: 12px;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  background: var(--ifm-background-surface-color);
-}
-
-/* 小屏缩小视窗，但依然不依赖文件长度。 */
-@media (max-width: 639px) {
-  .editor {
-    height: clamp(16rem, 60vh, 24rem);
-    height: clamp(16rem, 60svh, 24rem);
-  }
-}
-
-.fileTree {
-  display: none;
-  width: 10rem;
-  min-height: 0;
-  overflow: hidden;
-  flex-shrink: 0;
-  flex-direction: column;
-  border-right: 1px solid var(--ifm-color-emphasis-300);
-  background: var(--ifm-background-surface-color);
-}
-
-@media (min-width: 640px) {
-  .fileTree {
-    display: flex;
-  }
-}
-
-.fileTreeHeading {
-  display: flex;
-  flex: none;
-  align-items: center;
-  box-sizing: border-box;
-  height: var(--code-viewer-header-height);
-  margin: 0;
-  padding: 0 0.75rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--ifm-color-content-secondary);
-  border-bottom: 1px solid var(--ifm-color-emphasis-300);
-  background: var(--ifm-color-emphasis-100);
-}
-
-.treeScroll {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-  padding: 0.25rem 0;
-}
-
-.treeItem {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 0.25rem;
-  border: 0;
-  background: transparent;
-  padding: 0.15rem 0.5rem 0.15rem 0;
-  text-align: left;
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.75rem;
-  color: var(--ifm-color-content-secondary);
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.treeItem:hover {
-  background: var(--ifm-color-emphasis-200);
-}
-
-.treeItemActive {
-  background: var(--ifm-color-emphasis-200);
-  color: var(--ifm-font-color-base);
-}
-
-.treeName {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.editorMain {
-  display: flex;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-  flex: 1;
-  flex-direction: column;
-}
-
-.tabs {
-  display: flex;
-  flex: none;
-  box-sizing: border-box;
-  height: var(--code-viewer-header-height);
-  overflow-x: auto;
-  border-bottom: 1px solid var(--ifm-color-emphasis-300);
-  background: var(--ifm-color-emphasis-100);
-}
-
-.tab {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  border-right: 1px solid var(--ifm-color-emphasis-300);
-}
-
-.tabBtn {
-  display: flex;
-  align-items: center;
-  border: 0;
-  background: transparent;
-  align-self: stretch;
-  padding: 0 0.25rem 0 0.75rem;
-  white-space: nowrap;
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.75rem;
-  color: var(--ifm-color-content-secondary);
-  cursor: pointer;
-}
-
-.tabBtn:hover {
-  color: var(--ifm-font-color-base);
-}
-
-.tabActive .tabBtn {
-  color: var(--ifm-font-color-base);
-}
-
-.tabClose {
-  border: 0;
-  background: transparent;
-  margin-right: 0.25rem;
-  padding: 0 0.3rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  color: var(--ifm-color-content-secondary);
-  opacity: 0;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.tab:hover .tabClose,
-.tabClose:focus-visible {
-  opacity: 1;
-}
-
-.tabClose:hover {
-  background: var(--ifm-color-emphasis-200);
-  color: var(--ifm-font-color-base);
-}
-
-.codeScroll {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  overflow: auto;
-  scrollbar-gutter: stable;
-}
-
-.pre {
-  margin: 0;
-  padding: 0.5rem 0;
-  min-width: fit-content;
-  background: transparent;
-  border-radius: 0;
-  font-size: 0.78rem;
-  line-height: 1.55;
-  font-family: var(--ifm-font-family-monospace);
-}
-
-.line {
-  display: flex;
-  border-left: 2px solid transparent;
-}
-
-.lineHl {
-  border-left-color: var(--ifm-color-primary);
-  background: rgba(109, 167, 236, 0.14);
-}
-
-.lineNo {
-  width: 2.5rem;
-  flex-shrink: 0;
-  padding-right: 0.75rem;
-  text-align: right;
-  user-select: none;
-  opacity: 0.45;
-}
-
-.lineContent {
-  white-space: pre;
-  padding-right: 1rem;
-}
-
-.empty {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--ifm-color-content-secondary);
-}
-
-.empty p {
-  margin: 0;
-}
-
-.emptySub {
-  font-size: 0.75rem;
-}
-
-/* 引导气泡当前指向的区域 */
 .ring {
   box-shadow: 0 0 0 2px var(--ifm-color-primary);
 }

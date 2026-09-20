@@ -1,0 +1,437 @@
+/* All project viewers share this one stylesheet, including docs and roadmap. */
+.editor {
+  --code-viewer-header-height: 2.5rem;
+  --code-viewer-focus-bg: rgba(109, 167, 236, 0.14);
+  --code-viewer-focus-bar: #6da7ec;
+  display: flex;
+  flex: none;
+  box-sizing: border-box;
+  height: clamp(20rem, 65vh, 32rem);
+  height: clamp(20rem, 65svh, 32rem);
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
+}
+
+.fileTree {
+  display: flex;
+  width: 10rem;
+  min-height: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+  flex-direction: column;
+  border-right: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
+}
+
+.fileTreeHeading {
+  display: flex;
+  flex: none;
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--code-viewer-header-height);
+  margin: 0;
+  padding: 0 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ifm-color-content-secondary);
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-color-emphasis-100);
+}
+
+.treeScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding: 0.25rem 0;
+}
+
+.treeItem {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.25rem;
+  border: 0;
+  background: transparent;
+  padding: 0.15rem 0.5rem 0.15rem 0;
+  text-align: left;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.treeItem:hover,
+.treeItemActive {
+  background: var(--ifm-color-emphasis-200);
+}
+
+.treeItemActive {
+  color: var(--ifm-font-color-base);
+}
+
+.treeName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.treeDot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-left: 0.15rem;
+  border-radius: 50%;
+  background: var(--th-accent);
+}
+
+.treeDotNew {
+  background: var(--th-code-added-bar);
+}
+
+.editorMain {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  flex: 1;
+  flex-direction: column;
+}
+
+.mobilePicker {
+  display: none;
+}
+
+.editorToolbar {
+  display: flex;
+  flex: none;
+  box-sizing: border-box;
+  height: var(--code-viewer-header-height);
+  min-width: 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-color-emphasis-100);
+}
+
+.tabs {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: stretch;
+  overflow-x: auto;
+}
+
+/* Overlaid actions are siblings of the scroll area, never a spacer above code. */
+.codeShell {
+  --cw-action-size: 2rem;
+  --cw-action-inset: 0.5rem;
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.codeActions {
+  position: absolute;
+  top: var(--cw-action-inset);
+  right: var(--cw-action-inset);
+  z-index: 1;
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ifm-transition-fast, 150ms) ease-in-out;
+}
+
+.codeShell:hover .codeActions,
+.codeShell:has(:focus-visible) .codeActions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.codeActionButton {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--cw-action-size);
+  height: var(--cw-action-size);
+  padding: 0;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  background: var(--cw-editor-bg, var(--ifm-background-surface-color));
+  color: var(--ifm-font-color-base);
+  line-height: 0;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity var(--ifm-transition-fast, 150ms) ease-in-out;
+}
+
+.codeActionButton:hover:not(:disabled),
+.codeActionButton:focus-visible {
+  opacity: 1;
+}
+
+.codeActionButton:focus-visible {
+  outline: 2px solid var(--th-accent);
+  outline-offset: 2px;
+}
+
+.codeActionButton:disabled {
+  cursor: not-allowed;
+}
+
+.codeActionCopied {
+  color: var(--th-code-added-bar);
+  opacity: 1;
+}
+
+.codeActionError {
+  color: var(--th-code-removed-bar);
+  opacity: 1;
+}
+
+.codeActionIcon {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+.copyStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tab {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  border-right: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.tabBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 0;
+  background: transparent;
+  align-self: stretch;
+  padding: 0 0.25rem 0 0.75rem;
+  white-space: nowrap;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+  cursor: pointer;
+}
+
+.tabBtn:hover,
+.tabActive .tabBtn {
+  color: var(--ifm-font-color-base);
+}
+
+.badge {
+  padding: 0 0.35em;
+  border-radius: 999px;
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.65rem;
+  line-height: 1.5;
+  color: var(--th-accent);
+  background: color-mix(in srgb, var(--th-accent) 14%, transparent);
+}
+
+.badgeNew {
+  color: var(--th-code-added-bar);
+  background: var(--docusaurus-highlighted-code-line-bg);
+}
+
+.tabClose {
+  border: 0;
+  background: transparent;
+  margin-right: 0.25rem;
+  padding: 0 0.3rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: var(--ifm-color-content-secondary);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.tab:hover .tabClose,
+.tabClose:focus-visible {
+  opacity: 1;
+}
+
+.tabClose:hover {
+  background: var(--ifm-color-emphasis-200);
+  color: var(--ifm-font-color-base);
+}
+
+.codeScroll {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+.pre {
+  margin: 0;
+  padding: 0.5rem 0;
+  min-width: fit-content;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  font-family: var(--ifm-font-family-monospace);
+}
+
+/* Scope the reset: leave ordinary fenced code blocks untouched. */
+.editor .pre {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.line {
+  display: flex;
+}
+
+.lineAdd {
+  background: var(--docusaurus-highlighted-code-line-bg);
+}
+
+.lineDel {
+  background: var(--th-code-removed-bg);
+  opacity: 0.75;
+}
+
+/* The original MCP translucent blue is semantic FOCUS, not a diff color. */
+.lineFocus {
+  background: var(--code-viewer-focus-bg);
+  box-shadow: inset 2px 0 var(--code-viewer-focus-bar);
+}
+
+.lineNo {
+  width: 2.5rem;
+  flex-shrink: 0;
+  padding-right: 0.5rem;
+  text-align: right;
+  user-select: none;
+  opacity: 0.45;
+}
+
+.lineSign {
+  width: 1rem;
+  flex-shrink: 0;
+  text-align: center;
+  user-select: none;
+  font-weight: 600;
+}
+
+.lineAdd .lineSign {
+  color: var(--th-code-added-bar);
+}
+
+.lineDel .lineSign {
+  color: var(--th-code-removed-bar);
+}
+
+.lineContent {
+  white-space: pre;
+  padding-right: 1rem;
+}
+
+.empty {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--ifm-color-content-secondary);
+}
+
+.empty p {
+  margin: 0;
+}
+
+.emptySub {
+  font-size: 0.75rem;
+}
+
+@media (max-width: 639px) {
+  .editor {
+    height: clamp(16rem, 60vh, 24rem);
+    height: clamp(16rem, 60svh, 24rem);
+  }
+
+  .fileTree {
+    display: none;
+  }
+
+  .mobilePicker {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.5rem;
+    height: var(--code-viewer-header-height);
+    margin: 0;
+    padding: 0 0.5rem;
+    border-bottom: 1px solid var(--ifm-color-emphasis-300);
+    font-size: 0.75rem;
+    color: var(--ifm-color-content-secondary);
+  }
+
+  .mobilePicker select {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--ifm-font-color-base);
+    font: inherit;
+  }
+
+  .mobilePicker option {
+    background: var(--ifm-background-surface-color);
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .codeShell {
+    --cw-action-size: 2.75rem;
+  }
+
+  .codeActions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .codeActionButton,
+  .tabClose {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .codeActions,
+  .codeActionButton {
+    transition: none;
+  }
+}
