@@ -233,8 +233,8 @@ try {
       await call('Emulation.setDeviceMetricsOverride', { width: scenario.width, height: scenario.height, deviceScaleFactor: 1, mobile: !!scenario.touch });
       await call('Emulation.setTouchEmulationEnabled', { enabled: !!scenario.touch });
       await call('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: scenario.theme }, { name: 'prefers-reduced-motion', value: 'reduce' }] });
-      await call('Page.addScriptToEvaluateOnNewDocument', { source: `localStorage.setItem('theme', '${scenario.theme}'); localStorage.setItem('theme-choice', '${scenario.theme}');` });
-      await call('Page.navigate', { url: new URL(encodeURI(lesson.path) + `?verify=${process.env.GITHUB_SHA || 'local'}`, baseURL).href });
+      // Use Docusaurus' documented theme query, not internal storage key names.
+      await call('Page.navigate', { url: new URL(encodeURI(lesson.path) + `?verify=${process.env.GITHUB_SHA || 'local'}&docusaurus-theme=${scenario.theme}`, baseURL).href });
       await waitFor("document.readyState === 'complete' && !!document.querySelector('[data-walkthrough-nav]')");
       await evaluate('document.fonts.ready.then(() => true)');
       if (scenario.fontSize) await evaluate(`document.documentElement.style.fontSize='${scenario.fontSize}px'`);
@@ -281,9 +281,12 @@ try {
       console.log(`PASS ${label}: ${lesson.data.steps.length} steps; mouse/touch, navigation, exact highlights, glyph bounds, stable viewport`);
     } catch (error) {
       await capture('failure').catch(() => {});
-      throw error;
+      report.cases.push({ lesson: lesson.name, ...scenario, status: 'failed', error: error.stack });
+      console.error(`FAIL ${label}: ${error.stack}`);
     } finally { await chrome.call('Target.closeTarget', { targetId }); }
   }
+  const failed = report.cases.filter((entry) => entry.status === 'failed');
+  assert.equal(failed.length, 0, `${failed.length} of ${report.cases.length} actual-page scenarios failed`);
   console.log(`PASS ${report.cases.length} actual-page scenarios; ${report.assertions} assertions; target=${report.target}`);
 } catch (error) {
   report.error = error.stack;
