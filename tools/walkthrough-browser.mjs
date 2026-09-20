@@ -213,7 +213,16 @@ try {
       throw new Error(`${label}: timeout waiting for ${expression}`);
     };
     const click = async (selector) => {
-      const point = await evaluate(`(() => { const e=document.querySelector(${JSON.stringify(selector)}); if(!e) throw Error('Missing button'); e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}); const r=e.getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2,pageY:scrollY}; })()`);
+      // Let layout AND the compositor consume scrolling before native input.
+      // Unlike HTMLElement.click(), CDP touch events use browser hit testing.
+      await evaluate(`(() => { const e=document.querySelector(${JSON.stringify(selector)}); if(!e) throw Error('Missing button'); e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}); })()`);
+      await evaluate('new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))');
+      const point = await evaluate(`(() => {
+        const e=document.querySelector(${JSON.stringify(selector)}), r=e.getBoundingClientRect();
+        const x=r.x+r.width/2, y=r.y+r.height/2, hit=document.elementFromPoint(x,y);
+        if(!hit || !(hit===e || e.contains(hit))) throw Error('Button is covered: '+(hit?.outerHTML || 'outside viewport'));
+        return {x,y,pageY:scrollY};
+      })()`);
       if (scenario.touch) {
         await call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: point.x, y: point.y }] });
         await call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
@@ -254,7 +263,7 @@ try {
         assert.deepEqual(result.failures, [], `${label} step ${index + 1}`);
         if (height === undefined) height = result.viewerHeight;
         assert.ok(Math.abs(result.viewerHeight - height) < 1, `${label}: stable code viewport`);
-        if (before && lesson.name === 'commerce') assert.ok(Math.abs(result.pageY - before.pageY) < 2, `${label}: navigation does not scroll article`);
+        if (before && lesson.name === 'commerce') assert.ok(Math.abs(result.pageY - before.pageY) < 2, `${label} step ${index + 1}: navigation moved article from ${before.pageY} to ${result.pageY}`);
         report.assertions += result.checks + 1;
         if (index === 1) await capture('step-2');
       }
