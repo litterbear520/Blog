@@ -103,10 +103,16 @@
   gap: 0.5rem;
   max-height: 20rem;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
+  /* Explicit step navigation owns list position; do not anchor the article here. */
+  overflow-anchor: none;
+  scrollbar-gutter: stable;
   border-radius: 8px;
 }
 
 .step {
+  /* The list scrolls; individual lessons must NEVER shrink and clip their text. */
+  flex: 0 0 auto;
   border-radius: 8px;
   background: var(--ifm-color-emphasis-100);
   overflow: hidden;
@@ -115,6 +121,7 @@
 .stepHeader {
   display: flex;
   width: 100%;
+  min-height: 2.75rem;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
@@ -123,10 +130,21 @@
   padding: 0.5rem 0.75rem;
   text-align: left;
   font-size: 0.875rem;
+  line-height: 1.5;
   font-family: inherit;
   color: var(--ifm-font-color-base);
   cursor: pointer;
   transition: background 0.15s;
+}
+
+.stepHeader > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.stepHeader:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: -2px;
 }
 
 .stepHeader:hover,
@@ -135,6 +153,7 @@
 }
 
 .chevron {
+  flex-shrink: 0;
   font-size: 0.65rem;
   color: var(--ifm-color-content-secondary);
   transition: transform 0.15s;
@@ -148,6 +167,7 @@
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   line-height: 1.6;
+  overflow-wrap: anywhere;
   color: var(--ifm-color-content-secondary);
   background: var(--ifm-background-color);
 }

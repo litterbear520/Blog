@@ -1,4 +1,4 @@
-import React, { useId, useMemo, useState } from 'react';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import WALKTHROUGHS, { UI } from '@site/src/data/mcpWalkthroughs';
 import ProjectCodeViewer from '../ProjectCodeViewer';
@@ -38,6 +38,7 @@ export default function McpWalkthrough({ variant = 'sampling' }) {
 function Walkthrough({ data }) {
   const { files, steps } = data;
   const panelPrefix = useId();
+  const stepListRef = useRef(null);
   const [current, setCurrent] = useState(0);
   const [expanded, setExpanded] = useState(0);
   const [highlight, setHighlight] = useState(steps[0] ?? null);
@@ -53,11 +54,29 @@ function Walkthrough({ data }) {
     // Reopening the current lesson must also reveal its file after manual browsing.
     setSelectionKey((key) => key + 1);
   };
+
+  useEffect(() => {
+    const list = stepListRef.current;
+    const step = expanded === null ? null : list?.children[expanded];
+    if (!step) return;
+    const viewport = list.getBoundingClientRect();
+    const bounds = step.getBoundingClientRect();
+    const top = viewport.top + list.clientTop;
+    const bottom = top + list.clientHeight;
+    // Scroll ONLY the inner list, not the article. A long mobile explanation
+    // starts at its header and remains fully reachable by scrolling the list.
+    if (bounds.height > list.clientHeight || bounds.top < top) {
+      list.scrollTop += bounds.top - top;
+    } else if (bounds.bottom > bottom) {
+      list.scrollTop += bounds.bottom - bottom;
+    }
+  }, [expanded, selectionKey]);
+
   const tourTarget = tour === null ? null : TOUR[tour];
   const ring = (name) => tourTarget === name ? styles.ring : undefined;
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} data-guided-walkthrough="">
       {tour !== null && (
         <div className={styles.tour}>
           <div className={styles.tourDots} aria-label={fmt(UI['tour.aria'], { n: tour + 1, total: TOUR.length })}>
@@ -81,12 +100,12 @@ function Walkthrough({ data }) {
       )}
       <div className={styles.layout}>
         <div className={styles.stepsPanel}>
-          <div className={clsx(styles.stepList, ring('steps'))}>
+          <div ref={stepListRef} data-walkthrough-steps="" className={clsx(styles.stepList, ring('steps'))}>
             {steps.map((step, i) => {
               const isExpanded = expanded === i;
               const panelId = `${panelPrefix}-step-${i}`;
               return (
-                <div key={i} className={styles.step}>
+                <div key={i} data-walkthrough-step={i} className={styles.step}>
                   <button type="button" aria-expanded={isExpanded} aria-controls={panelId}
                     onClick={() => isExpanded ? setExpanded(null) : goToStep(i)}
                     className={clsx(styles.stepHeader, current === i && styles.stepHeaderActive)}>
@@ -98,7 +117,7 @@ function Walkthrough({ data }) {
               );
             })}
           </div>
-          <div className={clsx(styles.navButtons, ring('buttons'))}>
+          <div data-walkthrough-nav="" className={clsx(styles.navButtons, ring('buttons'))}>
             <button type="button" disabled={current === 0} onClick={() => goToStep(current - 1)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['btn.prev']}</button>
             <button type="button" disabled={current === steps.length - 1} onClick={() => goToStep(current + 1)} className={clsx(styles.btn, styles.btnPrimary)}>{UI['btn.next']}</button>
           </div>
