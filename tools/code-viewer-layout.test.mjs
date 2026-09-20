@@ -123,7 +123,11 @@ function connectChrome(dir) {
   const child = spawn(browser, ['--headless','--no-sandbox','--disable-gpu','--disable-dev-shm-usage',
     '--no-first-run','--disable-background-networking','--disable-extensions','--no-startup-window',
     `--user-data-dir=${join(dir,'profile')}`,'--remote-debugging-pipe'],
-    {stdio:['ignore','ignore','pipe','pipe','pipe']});
+    {detached:process.platform!=='win32',stdio:['ignore','ignore','pipe','pipe','pipe']});
+  // Browser.close acknowledges the request before all profile writers stop.
+  // Wait for process AND stdio closure; killing the parent immediately can leave
+  // Chromium children writing into the directory while rmSync removes it.
+  const closed=new Promise((resolve)=>child.once('close',resolve));
   let sequence=0, buffer='', errors='';
   const pending=new Map();
   const failAll=(error)=>{for(const entry of pending.values()){clearTimeout(entry.timer);entry.reject(error);}pending.clear();};
@@ -149,10 +153,16 @@ function connectChrome(dir) {
     child.stdio[3].write(JSON.stringify({id,method,params,sessionId})+'\0');
   });
   return {send,stop:async()=>{
-    failAll(new Error('Browser stopped'));
-    if(child.exitCode===null && child.signalCode===null){
-      await new Promise((resolve)=>{child.once('exit',resolve);child.kill('SIGKILL');});
-    }
+    // Give graceful shutdown time to flush files. On failure, terminate the
+    // isolated process group, not just the parent, before directory cleanup.
+    const kill=setTimeout(()=>{
+      try {
+        if(process.platform==='win32')child.kill('SIGKILL');
+        else process.kill(-child.pid,'SIGKILL');
+      } catch(error) {if(error.code!=='ESRCH')child.kill('SIGKILL');}
+    },5000);
+    try {await closed;}
+    finally {clearTimeout(kill);failAll(new Error('Browser stopped'));}
   }};
 }
 
