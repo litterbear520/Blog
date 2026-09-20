@@ -104,6 +104,8 @@
   max-height: 20rem;
   overflow-y: auto;
   overscroll-behavior-y: contain;
+  /* Explicit step navigation owns list position; do not anchor the article here. */
+  overflow-anchor: none;
   scrollbar-gutter: stable;
   border-radius: 8px;
 }
