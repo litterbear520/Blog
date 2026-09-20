@@ -19,8 +19,11 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - run: npm run build
-      - name: Install isolated browser test runner
+      - name: Install isolated browser test runner and CJK system fonts
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+          fc-match 'monospace:lang=zh-cn'
           python3 -m venv "$RUNNER_TEMP/viewer-test"
           "$RUNNER_TEMP/viewer-test/bin/pip" install playwright==1.55.0
       - name: Real production pages on desktop and touch screens
