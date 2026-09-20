@@ -177,11 +177,17 @@ const report = { target: live || 'production build on localhost', cases: [], ass
 try {
   server = live ? null : await serveBuild();
   const baseURL = live || server.url;
+  const revision = process.env.GITHUB_SHA;
+  if (!live && revision) writeFileSync(join(repo, 'build', 'walkthrough-revision.json'), JSON.stringify({ revision }));
   if (live) {
     const deadline = Date.now() + Number(process.env.WALKTHROUGH_WAIT_SECONDS || 300) * 1000;
     let ready = false;
     while (Date.now() < deadline) {
       try {
+        if (revision) {
+          const marker = await fetch(new URL(`/walkthrough-revision.json?verify=${Date.now()}`, baseURL), { signal: AbortSignal.timeout(15000) });
+          if (!marker.ok || (await marker.json()).revision !== revision) { await sleep(5000); continue; }
+        }
         const response = await fetch(new URL(encodeURI(lessons[0].path) + `?verify=${Date.now()}`, baseURL), { signal: AbortSignal.timeout(15000) });
         const html = await response.text();
         if (response.ok && html.includes('data-walkthrough-steps') && !html.includes('参考资料：')) { ready = true; break; }
@@ -207,7 +213,7 @@ try {
       throw new Error(`${label}: timeout waiting for ${expression}`);
     };
     const click = async (selector) => {
-      const point = await evaluate(`(() => { const e=document.querySelector(${JSON.stringify(selector)}); if(!e) throw Error('Missing button'); e.scrollIntoView({block:'center',inline:'nearest'}); const r=e.getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2,pageY:scrollY}; })()`);
+      const point = await evaluate(`(() => { const e=document.querySelector(${JSON.stringify(selector)}); if(!e) throw Error('Missing button'); e.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}); const r=e.getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2,pageY:scrollY}; })()`);
       if (scenario.touch) {
         await call('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: point.x, y: point.y }] });
         await call('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
@@ -218,7 +224,7 @@ try {
       return point;
     };
     const capture = async (suffix) => {
-      await evaluate("document.querySelector('[data-guided-walkthrough]')?.scrollIntoView({block:'start'}); window.scrollBy(0,-80)");
+      await evaluate("document.querySelector('[data-guided-walkthrough]')?.scrollIntoView({block:'start',behavior:'instant'}); window.scrollBy({top:-80,behavior:'instant'})");
       const image = await call('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
       writeFileSync(join(output, `${label}-${suffix}.png`), Buffer.from(image.data, 'base64'));
     };
@@ -257,10 +263,11 @@ try {
       const previous = lesson.data.steps.length - 2;
       await waitFor(`document.querySelector('[data-walkthrough-step="${previous}"] > button').getAttribute('aria-expanded') === 'true'`);
       await click('[data-walkthrough-step="0"] > button');
+      await waitFor(`document.querySelector('[data-walkthrough-step="0"] > button').getAttribute('aria-expanded') === 'true'`);
       await click('[data-walkthrough-step="0"] > button');
       await waitFor("document.querySelector('[data-walkthrough-step=" + '"0"' + "] > button').getAttribute('aria-expanded') === 'false'");
       await evaluate("document.querySelector('[data-walkthrough-step=" + '"0"' + "] > button').focus({preventScroll:true})");
-      await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
+      await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, text: '\r', unmodifiedText: '\r' });
       await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
       await waitFor("document.querySelector('[data-walkthrough-step=" + '"0"' + "] > button').getAttribute('aria-expanded') === 'true'");
       // Negative control: recreating the old shrink rule must reproduce clipping.
