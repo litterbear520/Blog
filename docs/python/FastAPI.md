@@ -38,7 +38,7 @@ Pydantic是一个第三方库，用于数据验证和序列化。它基于 Pytho
 
 1.数据模型定义
 
-使用 **BaseModel** 类定义数据模型，结合类型注解指定字段类型。
+使用 **`BaseModel`** 类定义数据模型，结合类型注解指定字段类型。
 
 ```python
 from pydantic import BaseModel
@@ -52,7 +52,7 @@ class User(BaseModel):
 
 2.运行时数据验证
 
-**Pydantic** 会在运行时验证输入数据是否符合模型定义的类型和约束，抛出 **ValidationError** 如果数据不合法。
+**Pydantic** 会在运行时验证输入数据是否符合模型定义的类型和约束，抛出 **`ValidationError`** 如果数据不合法。
 
 ```python
 from pydantic import BaseModel
