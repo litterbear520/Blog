@@ -6,9 +6,9 @@
 
 首先讲一下文件结构。我们看左边，我推荐的文件结构是这样的：在根目录下，只需要一个入口文件即可。那如果你是开发一些包或者某一些后端的话，连这个入口文件都可以不要。
 
-那这次我们的例子呢，是写了一个非常简单的二维向量的这么一个库。你所有的核心代码都应该放到一个文件夹里。在这个例子里，我们放到 vector 这个文件夹里。我们要把这个文件夹变成一个 package，也就是说，这个文件夹里面我们需要这个 `__init__.py`。这个 `__init__.py` 里面可以放一些接口，也可以压根什么都没有。这个 vector 文件夹里面的 vector.py 就是我们核心代码保存的地方。当然，你这个文件夹里面可能有很多文件，对吧，不同的功能。
+那这次我们的例子呢，是写了一个非常简单的二维向量的这么一个库。你所有的核心代码都应该放到一个文件夹里。在这个例子里，我们放到 `vector` 这个文件夹里。我们要把这个文件夹变成一个 package，也就是说，这个文件夹里面我们需要这个 `__init__.py`。这个 `__init__.py` 里面可以放一些接口，也可以压根什么都没有。这个 `vector` 文件夹里面的 `vector.py` 就是我们核心代码保存的地方。当然，你这个文件夹里面可能有很多文件，对吧，不同的功能。
 
-在根目录下放一个叫做 test 的文件夹，这里面专门放我们的测试。同样的，测试文件夹也把它变成一个 package，也就是里面放一个 `__init__.py`。这个 `__init__.py` 里可以什么都没有。那这个文件夹里面其他的文件就都是我们写的测试文件。
+在根目录下放一个叫做 `test` 的文件夹，这里面专门放我们的测试。同样的，测试文件夹也把它变成一个 package，也就是里面放一个 `__init__.py`。这个 `__init__.py` 里可以什么都没有。那这个文件夹里面其他的文件就都是我们写的测试文件。
 
 我们这次给大家讲的测试的框架呢，是 unittest，是 Python 自带的一个测试框架。我本人是非常喜欢用标准库的，所以一直在用 unittest。大家先把 unittest 学明白了，以后如果你想用其他的 framework，也差不多。
 
@@ -22,33 +22,33 @@
 
 首先，测试是什么？测试是检查你程序的运行结果是不是你的期待结果。换言之，在写测试的时候，你必须要知道正确答案。它是一个判卷子的过程，所以说，你要知道你的代码应该做什么。
 
-那我们来看一下我们的源代码。我们写的是一个非常非常简单的二维向量类。那在 initialization 的时候，我们传一个 x，传一个 y。然后我们做了向量的加法、向量的数乘，向量的点乘，还有一个向量的模。那这些内容都很简单，我们不赘述啊。我们这篇文章的核心是谈测试。
+那我们来看一下我们的源代码。我们写的是一个非常非常简单的二维向量类。那在 initialization 的时候，我们传一个 `x`，传一个 `y`。然后我们做了向量的加法、向量的数乘，向量的点乘，还有一个向量的模。那这些内容都很简单，我们不赘述啊。我们这篇文章的核心是谈测试。
 
 ## 测试文件怎么写
 
-好，我们看回我们的测试文件夹。首先，每一个测试文件必须要是 test 下划线开头，就是它必须得叫 test 下划线什么什么东西。这个是 unittest 本身的规定啊。
+好，我们看回我们的测试文件夹。首先，每一个测试文件必须要是 `test` 下划线开头，就是它必须得叫 `test` 下划线什么什么东西。这个是 unittest 本身的规定啊。
 
-那在测试文件里呢，我们要干这么几件事儿。首先，我们要把这个 unittest 给 import 进来，因为我们需要继承它的 TestCase 这个类。第二，把我们要测试的内容给 import 进来。之前为什么我强调想把它做成一个 package？因为这样的话，你在 import 的时候比较方便。你可以直接做 from vector import vector，我们就把这个 vector 类给 import 进来了。
+那在测试文件里呢，我们要干这么几件事儿。首先，我们要把这个 unittest 给 import 进来，因为我们需要继承它的 `TestCase` 这个类。第二，把我们要测试的内容给 import 进来。之前为什么我强调想把它做成一个 package？因为这样的话，你在 import 的时候比较方便。你可以直接做 `from vector import vector`，我们就把这个 `vector` 类给 import 进来了。
 
-接下来就是写 test class。这个 test class 首先必须要继承这个 unittest 里面的 TestCase 这个类。其次，一般来说，这个 class 是 test 开头或者 test 结尾。这是一个习惯问题。
+接下来就是写 test class。这个 test class 首先必须要继承这个 unittest 里面的 `TestCase` 这个类。其次，一般来说，这个 class 是 `test` 开头或者 `test` 结尾。这是一个习惯问题。
 
-每一个 test class 里面可以有若干个 test method，而这些 test method 必须以 test 下划线开头，否则 unittest 会检测不到。
+每一个 test class 里面可以有若干个 test method，而这些 test method 必须以 `test` 下划线开头，否则 unittest 会检测不到。
 
-那在每一个 test method 里面，我们就要进行正式的测试了。所谓测试，就是我做一个我已经知道结果的事情，然后验证得到的结果是不是我已经知道的结果。比如说，当我们新建了一个 vector，然后把 1、2 给当作 argument 传进去的时候，这个 vector 里面的 x 和 y 这两个 attribute 应该分别被赋值成 1 和 2。
+那在每一个 test method 里面，我们就要进行正式的测试了。所谓测试，就是我做一个我已经知道结果的事情，然后验证得到的结果是不是我已经知道的结果。比如说，当我们新建了一个 `vector`，然后把 1、2 给当作 argument 传进去的时候，这个 `vector` 里面的 `x` 和 `y` 这两个 attribute 应该分别被赋值成 1 和 2。
 
-而在 unittest 里面，有一组去检验我们实际得到的结果，是不是理论结果的函数。它们都是 self.assert 开头的。比如在这里，我们就用到了 self.assertEqual。那如果你打开 [Python unittest 的官方文档](https://docs.python.org/zh-cn/3/library/unittest.html#assert-methods)，你可以看到，这里面有很多的 assert 什么的函数。当然，这些只是相对常用的，还有很多没有那么常用的，比如说这些。
+而在 unittest 里面，有一组去检验我们实际得到的结果，是不是理论结果的函数。它们都是 `self.assert` 开头的。比如在这里，我们就用到了 `self.assertEqual`。那如果你打开 [Python unittest 的官方文档](https://docs.python.org/zh-cn/3/library/unittest.html#assert-methods)，你可以看到，这里面有很多的 `assert` 什么的函数。当然，这些只是相对常用的，还有很多没有那么常用的，比如说这些。
 
 那当你想判断一个结果的时候，首先要查一下，unittest 官方有没有给出这种结果的判断方式。
 
 ## assertEqual 还是 assertTrue
 
-那么，既然它提供了 assertTrue 这个方式，为什么我们不所有的地方都用 assertTrue 呢？比如说，这里我们用 assertEqual(v.x, 0) 和 assertTrue(v.x == 0)，它们俩是等价的。
+那么，既然它提供了 `assertTrue` 这个方式，为什么我们不所有的地方都用 `assertTrue` 呢？比如说，这里我们用 `assertEqual(v.x, 0)` 和 `assertTrue(v.x == 0)`，它们俩是等价的。
 
-那这里我们之所以要用 assertEqual，是因为 assertEqual 在 fail 的时候可以给出更多的信息。我们看，在这个例子里面，v.x 显然是 1，对吧？那么这两个东西都会 fail 掉。如果这里是 assertEqual fail 掉，它会告诉你 1 不等于 0，你就知道 v.x 是 1 了。
+那这里我们之所以要用 `assertEqual`，是因为 `assertEqual` 在 fail 的时候可以给出更多的信息。我们看，在这个例子里面，`v.x` 显然是 1，对吧？那么这两个东西都会 fail 掉。如果这里是 `assertEqual` fail 掉，它会告诉你 1 不等于 0，你就知道 `v.x` 是 1 了。
 
 这里注意一下，每个 test method，当它有一个地方 fail 的时候，它就不会继续往下运行了。
 
-那假设我们用 assertTrue 的话，它只会跟你说 False is not true。我们只知道 v.x 不是 0，但我们不知道它是什么。所以说，当我们明确地知道要判断什么东西的时候，我们应该尽量避免使用 assertTrue 和 assertFalse。
+那假设我们用 `assertTrue` 的话，它只会跟你说 `False is not true`。我们只知道 `v.x` 不是 0，但我们不知道它是什么。所以说，当我们明确地知道要判断什么东西的时候，我们应该尽量避免使用 `assertTrue` 和 `assertFalse`。
 
 <CodeWalkthrough variant="unittest" step={2} />
 
@@ -56,9 +56,9 @@
 
 ## 用 assertRaises 测异常
 
-那这里我们要单独拿出来说一下，是这个 assertRaises。这里比如说，我们把这个 vector `__init__` 函数改一下。我们首先要确认这个 x、y，必须要是数才可以。否则的话，我们 raise 一个 ValueError。
+那这里我们要单独拿出来说一下，是这个 `assertRaises`。这里比如说，我们把这个 `vector` `__init__` 函数改一下。我们首先要确认这个 `x`、`y`，必须要是数才可以。否则的话，我们 raise 一个 `ValueError`。
 
-这个时候，我们想测试我们这个 `__init__` 函数是不是成功地 raise 了这个 error。那我们的写法呢，就是 with self.assertRaises，然后把这个 exception 放进去，在这个 with 里面去做 raise 这个 exception 的事。我们可以看到右边，我们运行一下这个 unittest，它就 pass 了，因为我们传进去这两个值不是正常的 value。相反的，如果我们传进去的值是合法值的话，那么这个测试就会 fail。它就会写 ValueError not raised。
+这个时候，我们想测试我们这个 `__init__` 函数是不是成功地 raise 了这个 error。那我们的写法呢，就是 `with self.assertRaises`，然后把这个 exception 放进去，在这个 `with` 里面去做 raise 这个 exception 的事。我们可以看到右边，我们运行一下这个 unittest，它就 pass 了，因为我们传进去这两个值不是正常的 value。相反的，如果我们传进去的值是合法值的话，那么这个测试就会 fail。它就会写 `ValueError not raised`。
 
 <CodeWalkthrough variant="unittest" step={4} />
 
@@ -68,7 +68,7 @@
 
 好，那接下来我们来介绍几个非常常用的 unittest 的一些 feature。首先，我们有可能会在运行每一个 test method 之前或者之后做一些事儿。
 
-我们举个最简单的例子。假设我们在运行每一个测试之前、之后，都要打印这个“测试开始了”，“测试结束了”。那我们可以在这个 test class 之内，通过定义 setUp 函数和 tearDown 函数来完成。我们看，在 setUp 函数里面，我们打印了一个 start，然后在 tearDown 函数里面，我们打印了一个 end。于是我们在运行 unittest 的时候，输出里面就会有一个 start 跟一个 end。那如果我们又增加了一个 test method，就可以看到 start 跟 end 被打印了两次。
+我们举个最简单的例子。假设我们在运行每一个测试之前、之后，都要打印这个“测试开始了”，“测试结束了”。那我们可以在这个 test class 之内，通过定义 `setUp` 函数和 `tearDown` 函数来完成。我们看，在 `setUp` 函数里面，我们打印了一个 start，然后在 `tearDown` 函数里面，我们打印了一个 end。于是我们在运行 unittest 的时候，输出里面就会有一个 start 跟一个 end。那如果我们又增加了一个 test method，就可以看到 start 跟 end 被打印了两次。
 
 <CodeWalkthrough variant="unittest" step={6} />
 
@@ -76,27 +76,27 @@
 
 ## setUpClass 与 tearDownClass
 
-那如果我们想每一个 test class 运行之前和结束之后做一些事儿的话，我们用到的函数就是 setUpClass 跟 tearDownClass。注意，这两个东西必须要用 classmethod 这个装饰器装饰一下。
+那如果我们想每一个 test class 运行之前和结束之后做一些事儿的话，我们用到的函数就是 `setUpClass` 跟 `tearDownClass`。注意，这两个东西必须要用 `classmethod` 这个装饰器装饰一下。
 
 <CodeWalkthrough variant="unittest" step={8} />
 
 ## 用 skipIf 跳过测试
 
-那还有一个很常见的需求，就是我希望我的测试在某些情况下不运行。这时候我们就要用到一个 decorator，是 unittest.skipIf。我们看，这里这个 decorator take 了两个 argument。第一个是一个 boolean，在这个 boolean evaluate 成 True 的时候，这个测试就不运行。那第二个呢，是一个 message。
+那还有一个很常见的需求，就是我希望我的测试在某些情况下不运行。这时候我们就要用到一个 decorator，是 `unittest.skipIf`。我们看，这里这个 decorator take 了两个 argument。第一个是一个 boolean，在这个 boolean evaluate 成 `True` 的时候，这个测试就不运行。那第二个呢，是一个 message。
 
-在这个例子里面，我测试了一下，如果我 sys.platform 是 win32 的话，就不运行这个测试，也就是这个测试不在 Windows 上运行。
+在这个例子里面，我测试了一下，如果我 `sys.platform` 是 `win32` 的话，就不运行这个测试，也就是这个测试不在 Windows 上运行。
 
-那还有一个比较常见的条件呢，就是 version_info，就是这个 Python 的版本。比如这里我写的 sys.version_info 小于 3.7，就是说它只支持 3.7 及以上的版本。
+那还有一个比较常见的条件呢，就是 `version_info`，就是这个 Python 的版本。比如这里我写的 `sys.version_info` 小于 3.7，就是说它只支持 3.7 及以上的版本。
 
 <CodeWalkthrough variant="unittest" step={9} />
 
 ## 运行指定的测试
 
-好，那最后呢，我们介绍一下怎么运行指定的测试。我们现在所有的测试被分成了三级。第一个呢，是 module level，也就是某个文件，比如说 test_vector.py。在一个文件里面，我们可能有若干个 test class，比如说这个 test vector class。在每一个 test class 里面，我们可能有若干个 test method，比如说我们现在的 test_init 跟 test_add。
+好，那最后呢，我们介绍一下怎么运行指定的测试。我们现在所有的测试被分成了三级。第一个呢，是 module level，也就是某个文件，比如说 `test_vector.py`。在一个文件里面，我们可能有若干个 test class，比如说这个 test vector class。在每一个 test class 里面，我们可能有若干个 test method，比如说我们现在的 `test_init` 跟 `test_add`。
 
-我们可以通过控制 unittest command line 的 argument，来告诉 unittest 运行哪些 test。比如在这里，我们运行的是，tests 这个文件夹下的 test_vector 这个 module，里面的 test vector 这个 class 里面的 test_add 这个 method。可以看到，它只运行了一个 test。
+我们可以通过控制 unittest command line 的 argument，来告诉 unittest 运行哪些 test。比如在这里，我们运行的是，`tests` 这个文件夹下的 `test_vector` 这个 module，里面的 test vector 这个 class 里面的 `test_add` 这个 method。可以看到，它只运行了一个 test。
 
-那如果我们把条件放宽一些，我们运行 test 这个文件夹里面的 test_vector 这个 file，它就会运行两个 test 了。
+那如果我们把条件放宽一些，我们运行 `test` 这个文件夹里面的 `test_vector` 这个 file，它就会运行两个 test 了。
 
 <CodeWalkthrough variant="unittest" step={10} nav />
 
