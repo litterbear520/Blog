@@ -52,6 +52,17 @@ function IconTerminal(props) {
   );
 }
 
+function IconWrapText(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M3 6h18" />
+      <path d="M3 12h15a3 3 0 1 1 0 6h-4" />
+      <path d="m16 16-2 2 2 2" />
+      <path d="M3 18h7" />
+    </svg>
+  );
+}
+
 function IconStop(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -60,11 +71,11 @@ function IconStop(props) {
   );
 }
 
-function TerminalOutput({ run }) {
+function TerminalOutput({ run, wrap }) {
   const lines = useMemo(() => run.output.replace(/\n$/, '').split('\n'), [run.output]);
   const { shown, started, done } = useTypewriter(lines, true);
   return (
-    <div className={styles.termOutput} aria-live="polite">
+    <div className={clsx(styles.termOutput, wrap && styles.termOutputWrap)} aria-live="polite">
       <div className={styles.termOutputRow}>
         <span className={styles.termMark} title={UI['terminal.hint']}>
           <IconTerminal className={styles.termMarkIcon} aria-label={UI['terminal.heading']} role="img" />
@@ -100,6 +111,7 @@ function Walkthrough({ data, initialStep, nav }) {
   const snapshots = useMemo(() => buildSnapshots(steps), [steps]);
   const [current, setCurrent] = useState(() => Math.min(Math.max(initialStep - 1, 0), steps.length - 1));
   const [runIndex, setRunIndex] = useState(null);
+  const [wrap, setWrap] = useState(false);
   const step = steps[current];
   const snapshot = snapshots[current];
   const previous = current > 0 ? snapshots[current - 1] : null;
@@ -139,6 +151,14 @@ function Walkthrough({ data, initialStep, nav }) {
                 <div className={styles.termPrompt}>
                   <span className={styles.termDollar} aria-hidden="true">$</span>
                   <code className={styles.termCmd}>{run.cmd}</code>
+                  {open && (
+                    <button type="button" aria-pressed={wrap}
+                      aria-label={wrap ? UI['terminal.nowrap'] : UI['terminal.wrap']}
+                      title={wrap ? UI['terminal.nowrap'] : UI['terminal.wrap']}
+                      onClick={() => setWrap(!wrap)} className={clsx(styles.termBtn, wrap && styles.termBtnOpen)}>
+                      <IconWrapText className={styles.termIcon} />
+                    </button>
+                  )}
                   <button type="button" aria-expanded={open}
                     aria-label={open ? UI['terminal.collapse'] : UI['terminal.run']}
                     title={open ? UI['terminal.collapse'] : UI['terminal.run']}
@@ -146,7 +166,7 @@ function Walkthrough({ data, initialStep, nav }) {
                     {open ? <IconStop className={styles.termIcon} /> : <IconPlay className={styles.termIcon} />}
                   </button>
                 </div>
-                {open && <TerminalOutput run={run} />}
+                {open && <TerminalOutput run={run} wrap={wrap} />}
               </div>
             );
           })}

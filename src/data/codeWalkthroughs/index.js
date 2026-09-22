@@ -12,6 +12,8 @@ export const UI = {
   'terminal.heading': '终端',
   'terminal.hint': '预先录制的运行结果，不是浏览器实时执行',
   'terminal.run': '运行',
+  'terminal.wrap': '自动换行',
+  'terminal.nowrap': '取消自动换行',
   'terminal.collapse': '收起',
   'terminal.running': '运行中…',
   'terminal.exit': '进程退出，退出码 {code}',

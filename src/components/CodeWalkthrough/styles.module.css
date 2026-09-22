@@ -179,6 +179,12 @@
   white-space: pre;
 }
 
+/* 换行按钮打开时：长行折行显示，路径这类没有空格的长串也允许从中间断开 */
+.termOutputWrap {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .termOutputRow {
   display: flex;
   gap: 0.6rem;
