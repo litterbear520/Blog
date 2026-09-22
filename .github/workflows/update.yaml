@@ -9,6 +9,8 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # 浏览器步骤偶尔会卡住，别让它占满默认的 6 小时
+    timeout-minutes: 25
     permissions:
       contents: write
     steps:
@@ -18,29 +20,66 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci --no-audit --no-fund
+
       - name: Install Chinese fonts for browser verification
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y fonts-noto-cjk
-      - run: npm run build
+          # 先把 fontconfig 缓存建好，Chromium 首次启动不必再付这笔时间
+          fc-cache -f
+
+      # 两个浏览器脚本都读 CHROMIUM_BIN；在这里定一次，省得各自去猜，
+      # 版本号也留在日志里，方便以后把失败和 runner 镜像更新对上。
+      - name: Resolve browser
+        run: |
+          BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"
+          if [ -z "$BIN" ]; then
+            echo "::error::runner 上没有可用的 Chrome/Chromium"
+            exit 1
+          fi
+          echo "CHROMIUM_BIN=$BIN" >> "$GITHUB_ENV"
+          "$BIN" --version
+
+      - name: Run data tests
+        run: npm run test:commerce-lesson
+
+      # 真实 Chromium 偶尔起不来（首条 CDP 命令无应答），重试两次再判失败；
+      # 真实回归会连着三次都挂，不会被重试掩盖。
+      - name: Run project viewer layout tests
+        run: |
+          for attempt in 1 2 3; do
+            if npm run test:code-viewer; then exit 0; fi
+            echo "::warning title=浏览器测试重试::第 ${attempt} 次失败，重试"
+            sleep 5
+          done
+          exit 1
+
+      # 测试上面已经单独跑过，这里跳过 prebuild 不再重复
+      - name: Build site
+        run: npm run build --ignore-scripts
+
       - name: Verify real walkthrough pages on desktop and mobile
         run: |
           if ! node tools/walkthrough-browser.mjs; then
             # Preserve the static site for reproducing a browser failure offline.
+            mkdir -p test-results
             cp -a build test-results/repro-site
             exit 1
           fi
+
       - uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+
       - name: Verify deployed walkthrough pages
         if: github.ref == 'refs/heads/main'
         env:
           WALKTHROUGH_BASE_URL: https://huangsitao.fun
           WALKTHROUGH_WAIT_SECONDS: 300
         run: node tools/walkthrough-browser.mjs
+
       - name: Save walkthrough browser screenshots and results
         if: always()
         uses: actions/upload-artifact@v4
