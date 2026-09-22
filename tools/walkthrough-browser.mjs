@@ -80,7 +80,7 @@ function startChrome() {
   });
   const call = (method, params = {}, sessionId) => new Promise((resolveCall, reject) => {
     const seq = ++id;
-    const timer = setTimeout(() => { pending.delete(seq); reject(new Error(`Timed out: ${method}`)); }, 30000);
+    const timer = setTimeout(() => { pending.delete(seq); reject(new Error(`Timed out: ${method}\n${stderr}`)); }, 45000);
     pending.set(seq, { resolve: resolveCall, reject, timer });
     child.stdio[3].write(JSON.stringify({ id: seq, method, params, sessionId }) + '\0');
   });

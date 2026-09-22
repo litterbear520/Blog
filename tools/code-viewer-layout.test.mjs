@@ -148,7 +148,7 @@ function connectChrome(dir) {
   });
   const send=(method,params={},sessionId)=>new Promise((resolve,reject)=>{
     const id=++sequence;
-    const timer=setTimeout(()=>{pending.delete(id);reject(new Error(`Timed out: ${method}\n${errors}`));},20000);
+    const timer=setTimeout(()=>{pending.delete(id);reject(new Error(`Timed out: ${method}\n${errors}`));},45000);
     pending.set(id,{resolve,reject,timer});
     child.stdio[3].write(JSON.stringify({id,method,params,sessionId})+'\0');
   });
