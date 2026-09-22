@@ -1,6 +1,7 @@
 // Snapshot lesson registry: variant -> { steps }. Each step has title/body,
 // changed files (null deletes), optional file/lines, and prerecorded runs.
 import unittest from './unittest';
+import codeObject from './codeObject';
 import commerce from './commerce';
 
 export const UI = {
@@ -16,4 +17,4 @@ export const UI = {
   'terminal.exit': '进程退出，退出码 {code}',
 };
 
-export default { unittest, commerce };
+export default { unittest, codeObject, commerce };
