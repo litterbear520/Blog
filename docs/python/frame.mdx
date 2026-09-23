@@ -1,0 +1,87 @@
+import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
+
+# frame
+
+这篇文章我们来介绍一个在 Python 运行时非常重要、非常基础，但是平时不太会接触到的东西：frame。frame 中文常被翻成“帧”，我不是特别喜欢这个翻译，所以这里就管它叫 frame。
+
+## frame 保存运行时状态
+
+可能有人还记得前面那篇有关 [CodeObject](./CodeObject.mdx) 的文章。我们写的 Python 代码会先被编译成 code object。code object 是不可变的，编译完成之后，程序运行时会使用它，但不能单纯依赖它，因为还有很多运行时状态需要保存。
+
+比如，code object 记录了某个函数会用到哪些局部变量：这个函数需要 `a`、`b`、`c`。但是它不会记录这一次调用里 `a`、`b`、`c` 分别是多少。记录当前运行状态的责任就落在了 frame 身上。[Python 官方文档对 code object 和 frame object 的定义](https://docs.python.org/3/reference/datamodel.html#internal-types)也可以放在一起对照着看。
+
+同一段函数定义通常对应一个 code object，而一个函数在运行时可能被重复调用，也可能递归调用。每一次调用都有自己的 frame。code object 保存这段代码在编译时确定的信息；frame 保存这一次调用特有的状态，比如当前局部变量的值。
+
+## 函数调用与 frame 栈
+
+可以把 Python 的运行时想象成一座大楼。程序开始执行时在一层；每进入一次函数调用，就往上走一层，每一层都记录着当前这一次调用的状态。最常见的换层情况，就是函数的调用与返回。
+
+为了简单起见，可以认为每一次函数调用都会有一个新的 frame，函数的代码就在这个 frame 里运行。它调用另一个函数，就进入下一个 frame；它返回，就回到调用者的 frame。这是一个 stack，也就是栈的结构。每个 frame 还可以通过 `f_back` 找到调用它的上一个 frame。
+
+## 取得当前 frame
+
+在 Python 代码里，我们可以直接拿到当前的 frame object。一般使用 [`inspect.currentframe()`](https://docs.python.org/3/library/inspect.html#inspect.currentframe)。也可以使用 [`sys._getframe()`](https://docs.python.org/3/library/sys.html#sys._getframe)。在 CPython 中，前者会调用后者；区别之一是无法取得 frame 时，`inspect.currentframe()` 可以返回 `None`，而 `sys._getframe()` 是面向内部和特殊用途的接口。这里更推荐使用 `inspect` 里的函数。
+
+我们可以用第三方库 [`objprint`](https://github.com/gaogaotiantian/objprint) 的 `op` 把 frame 的属性展开。下面这段代码需要先安装 `objprint`；输出包含对象地址和当前环境信息，所以这里不预录固定结果。
+
+<CodeWalkthrough variant="frame" step={1} />
+
+可以看到，frame 的主要属性以 `f_` 开头。如果还记得的话，code object 的属性大多以 `co_` 开头。下面逐一看看这些属性。
+
+## frame 的主要属性
+
+### 调用关系与代码对象
+
+`f_back` 指向上一个 frame，也就是调用当前函数的那个函数对应的 frame。刚才说 frame 是栈结构；从当前 frame 沿着 `f_back` 一层层往回找，就能看到调用链。这是理解调用关系的方式，不必把它理解成底层一定用链表存储。
+
+`f_builtins` 是当前 frame 用来查找内置名称的命名空间，不只有内置函数，也包括内置类型等名称。
+
+`f_code` 就是前面讲过的 code object。程序需要用到其中编译期确定的信息才知道该怎么运行，比如字节码、变量名等。
+
+### 全局变量与局部变量
+
+`f_globals` 和 `f_locals` 比较好理解：分别是当前 frame 所见的全局变量和局部变量。
+
+`f_locals` 让我们看到这一次调用中局部变量当前绑定的值。在函数里写完 `a = 1`，再查看这个 frame 的 `f_locals`，就能看到 `a` 对应的是 `1`。不过，不能把 `f_locals` 简单理解为解释器在内部直接使用的一张普通字典；局部变量的底层保存方式，以及 `f_locals` 返回对象的写入行为，都和 Python 的实现及版本有关。这里先把它当作查看局部变量的入口就够了。
+
+### 执行到哪里
+
+`f_lasti` 表示当前 frame 的字节码执行位置，可以把它近似理解为 program counter。一个函数怎么知道自己运行到哪儿、返回后该从哪里继续？这一次调用的 frame 会保存执行位置。比如函数 `a` 调用函数 `b`，`b` 返回后，`a` 就能继续运行。
+
+`f_lineno` 是当前对应的源代码行号，更方便人阅读。它和 `f_lasti` 看的不是同一种位置：一个对应源代码行，一个对应字节码指令。
+
+### 跟踪回调
+
+下面三个属性和 trace 有关，理解起来稍难一些。Python 允许程序在调用、返回、进入新的一行，或执行字节码指令等事件发生时触发回调。调试器 `pdb` 和代码覆盖率工具可以利用这类机制。
+
+`f_trace` 是当前 frame 的局部跟踪函数；为 `None` 时，这个 frame 没有局部跟踪回调。通过 [`sys.settrace()`](https://docs.python.org/3/library/sys.html#sys.settrace) 可以安装跟踪函数，但是否给某个 frame 设置 `f_trace`，还取决于跟踪函数怎样处理它。`f_trace_lines` 控制是否产生逐行事件，`f_trace_opcodes` 控制是否产生逐条字节码事件；它们是两个独立的开关。
+
+## 从 frame 查看调用者
+
+有了 frame，我们在 Python 代码中的某个位置就能沿着 `f_back` 查看当前线程的调用栈，以及各层 frame 暴露的状态。这也让一些“黑魔法”成为可能。
+
+### 调用者的函数名
+
+比如，想知道调用 `f` 的函数叫什么名字，可以从当前 frame 的 `f_back` 找到调用者，再取它的 `f_code.co_name`。这里 `f` 是由 `g` 调用的，所以会打印 `g`。
+
+<CodeWalkthrough variant="frame" step={2} />
+
+### 调用者的局部变量
+
+还可以查看调用者的 `f_locals`。在 `g` 调用 `f` 之前，先把 `a` 设为 3、`b` 设为 4；`f` 运行时，就能从 `g` 的 frame 看到这两个值。
+
+<CodeWalkthrough variant="frame" step={3} />
+
+### 调用发生的位置
+
+有时候一个工具函数在很多地方被调用，我们想知道这一次是谁从哪里调用了它。调用者的 `f_code.co_filename` 给出所在文件，调用者的 `f_lineno` 给出当前源代码行号。运行下面的代码，会看到示例文件的路径，以及 `g` 中调用 `f()` 的那一行；路径会随保存位置变化。
+
+<CodeWalkthrough variant="frame" step={4} nav />
+
+## frame 的用途与开销
+
+frame 机制让 Python 的调用结构变得清晰。我们可以在程序中查看当前线程的 Python 调用栈，以及其中每个 frame 的状态。这对调试很有帮助，也给一些利用运行时信息的做法提供了入口。
+
+从另一个角度看，每次函数调用都要维护相应的执行状态，也会有开销。CPython 对 frame 做过优化；例如，[Python 3.11 的说明](https://docs.python.org/3/whatsnew/3.11.html#faster-cpython)提到，Python 层的 frame object 可以按需创建。所以不能把“每次调用有一个 frame”理解成每次都要新建一个完整的 Python frame object。即便如此，当函数非常短、调用又非常频繁时，函数调用本身仍可能成为耗时的部分。
+
+这篇文章对 frame 的介绍就到这里。希望对大家有所帮助。
