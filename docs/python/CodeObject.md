@@ -6,13 +6,13 @@
 
 <CodeWalkthrough variant="codeObject" step={1} />
 
-## CodeObject 里保存了什么
+## CodeObject 的属性
 
 好，这个 CodeObject 里保存了什么呢？我们看一下[官方文档](https://docs.python.org/3/library/inspect.html)。这里是官方文档的 `inspect` 里面来介绍的 CodeObject 里面有的 attribute。那除了文档之外呢，你也可以在程序里 `dir` 一下这个 object，可以看到 attribute 的部分是一样的啊。那我们把这些 attribute 来分分类，分别讨论一下它们都是干嘛的。
 
 <CodeWalkthrough variant="codeObject" step={2} />
 
-## 字节码的保存形式
+## co_code 与字节码
 
 那首先呢，是这个 CodeObject 的 `co_code` 这个 attribute。它里面保存的呢，是这一段代码真正的 bytecode，是用二进制，也就是 binary 来表示的 bytecode。通俗一点理解呢，你可以认为这块是它的汇编。
 
@@ -20,7 +20,7 @@
 
 <CodeWalkthrough variant="codeObject" step={3} />
 
-## 名字、文件与行号映射
+## 名称、文件与行号
 
 接下来这三个属性呢，我管它叫做 metadata，就是它们和真正的代码运行关系并不大，它们是作为辅助数据出现的。分别是这段 code 的名字，名字一般就是你定义的函数的名字，然后它是在哪一个文件里被定义的。
 
@@ -30,7 +30,7 @@
 
 <CodeWalkthrough variant="codeObject" step={4} />
 
-## 虚拟机需要的数据
+## flags 与栈空间
 
 接下来，`co_flags` 跟 `co_stacksize`，这两个东西呢，都是在 Python 的 runtime 里面，virtual machine 需要的一些数据。stack size 比较好理解，对不对？就是它需要的栈的空间有多大。
 
@@ -42,7 +42,7 @@
 
 <CodeWalkthrough variant="codeObject" step={5} />
 
-## 参数数量的三个计数
+## 参数数量
 
 好，那接下来这个部分就比较重要了啊，是关于输入参数的数量的。那这些属性呢，决定了这个 Python 在往里面传参数的时候，怎么处理这些参数。它们呢，也是 Python 进行函数重载的一个基础。大家知道，Python 的重载机制其实是非常非常灵活的。
 
@@ -58,7 +58,7 @@
 
 <CodeWalkthrough variant="codeObject" step={6} />
 
-### 什么是 positional-only 参数
+### positional-only 参数
 
 好，那问题来了，什么叫做 positional-only arguments？好，我们来看这段代码啊。这个斜杠可能很多人比较陌生啊，这个就是 Python 里面 positional-only argument 的一个语法。
 
@@ -76,7 +76,7 @@
 
 <CodeWalkthrough variant="codeObject" step={8} />
 
-### 什么是 keyword-only 参数
+### keyword-only 参数
 
 知道了什么叫 positional-only 之后呢，什么叫 keyword-only argument？我们看，我们又改了一下函数的 definition。现在 `a` 逗号后面有一个什么都没有的星号了，那这个星号就表示，这个星号之后所有的参数都是 keyword-only argument。
 
@@ -92,7 +92,7 @@
 
 好了，在了解了什么叫 positional-only argument，什么叫 keyword-only argument 之后，我们再回头看这三个东西就比较好理解了。后面两个分别就是 positional-only argument 和 keyword-only argument 的数量。第一个 `co_argcount`，就是除了星和星星，还有 keyword-only argument 之外的所有的参数的数量。那这个知识点呢，我们以后讲到这个函数重载的时候可能会用得到。
 
-## 字节码为什么不直接存变量名
+## 用索引表示名字
 
 好，那接下来就到了最复杂、最容易混淆、这个世界上都没有几个人搞得明白的这一大串 names 里面了。
 
@@ -108,7 +108,7 @@
 
 那当然，有的时候我们确实需要这个位置和变量名之间的对应关系，怎么办呢？我们就同样地维护名字的一个数组，就是把我们见到的名字们，`a` 啊、`b` 啊，也维护到一个数组里面，保证顺序不变。这样我们就可以通过 index，而不是一些复杂的 mapping，找到它们之间的关系。好，那讲了这么多理论啊，下面我们来说一下这几个东西分别是什么意思。
 
-## 局部变量与 co_varnames
+## co_varnames 与局部变量
 
 第一个概念呢，叫做 local variable，就是局部变量。local variable 包括了函数进来的所有的参数，也就是 argument，以及只在这个函数 scope 里面用到的变量。那在我们现在的这个例子里呢，显然 `b` 和 `a` 都是局部变量。所有的 local variable 的名字，包括 argument 的名字，都被保存到 `co_varnames` 里。
 
@@ -122,7 +122,7 @@
 
 我们运行一下，看一下这里的，实际上字节码是 <Term tip="按角标读取局部变量，把它压入运行栈。">LOAD_FAST</Term> 0，然后 <Term tip="把栈顶的值写入指定角标的局部变量。">STORE_FAST</Term> 1。后面那个括号的部分呢，是 `dis` 这个 module 帮我们写上去的。在实际的字节码里，只有 `LOAD_FAST 0`。那 0 这个位置对应的是什么呢？是 varnames 里面第 0 个 index，这里的名字，也就是 `a`。
 
-## co_names 保存了什么
+## co_names 与其他名字
 
 那 varnames 是一个相对来说比较容易理解的概念，就是 local variable，对不对？这个 names 是什么？如果大家还有印象的话，我们刚才讲过一个 `co_name`，那个 `co_name` 是这个函数的名字。`co_names` 和 `co_name` 没有一毛钱的关系，这里这个名字的设计稍微有点愚蠢，它俩没有任何关系啊。这个 names 里面保存的就是除了 varnames，除了 cellvars 和 freevars，剩下的所有需要保存的 name 都扔到这个 `co_names` 里。比如说，当我们尝试 access 一个 attribute，对吧，`b = a.attr`，我们想一下，这个 `attr` 存在哪了呢？就存在这个 `co_names` 里。我们来看一下。
 
@@ -140,7 +140,7 @@
 
 <CodeWalkthrough variant="codeObject" step={16} />
 
-## cellvars 与 freevars 的分工
+## cellvars 与 freevars
 
 好，接下来我们讲 cellvars 跟 freevars 啊。这两个概念呢，有点像硬币的两面啊，它们经常成对出现，一般来说呢，都是辅助完成闭包的。
 
@@ -166,7 +166,7 @@ cellvars 的意思呢，是我这个地方的 variable 还会在其他的 scope 
 
 <CodeWalkthrough variant="codeObject" step={21} />
 
-## co_consts 保存的常量
+## co_consts 与常量
 
 好，那最后一个是 const 啊。const 跟上面我们介绍的这四个保存 string，也就是保存名字的属性都不一样。const 保存的是 Python object。你在这个函数里面所有出现的常量值，都会保存在 `co_consts` 里。比如说，我们现在 `f` 定义，`a` 等于 1，`b` 等于 abcabc，对不对？那么这个 1 跟 abcabc 都会保存在这个 const 里。我们看一下，这个 const 里面呢，有 `None`、1 跟 abcabc。`None` 这个东西呢，是常驻嘉宾啊，它永远会在 const 里。然后我们注意，这里的 1 是一个 integer，对不对？abcabc 是一个 string。
 
