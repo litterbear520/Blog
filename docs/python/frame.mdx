@@ -8,7 +8,7 @@ import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
 
 可能有人还记得前面那篇有关 [CodeObject](./CodeObject.mdx) 的文章。我们写的 Python 代码会先被编译成 code object。code object 是不可变的，编译完成之后，程序运行时会使用它，但不能单纯依赖它，因为还有很多运行时状态需要保存。
 
-比如，code object 记录了某个函数会用到哪些局部变量：这个函数需要 `a`、`b`、`c`。但是它不会记录这一次调用里 `a`、`b`、`c` 分别是多少。记录当前运行状态的责任就落在了 frame 身上。[Python 官方文档对 code object 和 frame object 的定义](https://docs.python.org/3/reference/datamodel.html#internal-types)也可以放在一起对照着看。
+比如，code object 记录了某个函数会用到哪些局部变量：这个函数需要 `a`、`b`、`c`。但是它不会记录这一次调用里 `a`、`b`、`c` 分别是多少。记录当前运行状态的责任就落在了 frame 身上。
 
 同一段函数定义通常对应一个 code object，而一个函数在运行时可能被重复调用，也可能递归调用。每一次调用都有自己的 frame。code object 保存这段代码在编译时确定的信息；frame 保存这一次调用特有的状态，比如当前局部变量的值。
 
