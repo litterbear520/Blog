@@ -108,6 +108,20 @@ const config = {
     },
   ],
 
+  headTags: [
+    // Inter 的拉丁字符分片每页都用，提前下载，不必等字体 CSS 解析完才发请求
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preload',
+        href: '/fonts/inter-3100e775e8616cd2.woff2',
+        as: 'font',
+        type: 'font/woff2',
+        crossorigin: 'anonymous',
+      },
+    },
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({

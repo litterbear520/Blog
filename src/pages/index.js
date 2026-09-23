@@ -2,6 +2,8 @@ import Layout from '@theme/Layout';
 import React, { useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import wallpaper from '@site/static/img/city.webp';
+import wallpaper1280 from '@site/static/img/city-1280.webp';
+import wallpaper1920 from '@site/static/img/city-1920.webp';
 import portraitWallpaper from '@site/static/img/city-portrait.webp';
 import styles from './index.module.css';
 
@@ -170,9 +172,12 @@ function HomepageHeader() {
           srcSet={portraitWallpaper}
           type="image/webp"
         />
+        {/* 同一张图按宽度出三档，屏幕小的只下够用的那档；cover 铺满时宽度取 100vw 与 16:9 按高折算宽的较大者 */}
         <img
           className={styles.wallpaper}
           src={wallpaper}
+          srcSet={`${wallpaper1280} 1280w, ${wallpaper1920} 1920w, ${wallpaper} 2560w`}
+          sizes="max(100vw, 177.7vh)"
           width="2560"
           height="1440"
           alt=""
