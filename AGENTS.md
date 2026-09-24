@@ -27,7 +27,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 ## 项目结构
 
 ```
-├── blog/                          # 博客文章（6 篇，一篇一个文件夹 <slug>/index.md，图片同目录）
+├── blog/                          # 博客文章（7 篇，一篇一个文件夹 <slug>/index.md，图片同目录）
 ├── roadmap/                       # 路线：一个开源项目一条学习线，按步不按天（第二个 docs 实例，/roadmap 路由）
 │   ├── 前言/                      # index.md 是 /roadmap 首页（slug: /），三篇前置阅读放在这个目录下
 │   │   ├── 高效商务Agent架构指南/ # Anthropic 商务 Agent 架构指南中译（index.mdx + 原文配图同目录）
