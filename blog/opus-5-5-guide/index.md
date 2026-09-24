@@ -5,6 +5,9 @@ date: 2026-09-24
 toc_max_heading_level: 2
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 如何给 Opus 5.5 写提示词、引导长时间运行的任务，以及在 Claude 应用和 Claude Code 中检查结果。
 
 Opus 5.5 能很好地适应您现在使用 Claude 的方式。不过，有几处表现不太一样：它能独立工作更长时间，会直白地告诉您它做了什么，并且每次回复前都会先思考。本指南介绍如何在 Claude 应用和 Claude Code 中与 Opus 5.5 协作，包括如何给模型写提示词、如何引导长时间运行的任务，以及如何检查结果。
@@ -29,12 +32,28 @@ Opus 5.5 能很好地适应您现在使用 Claude 的方式。不过，有几处
 
 **怎么做。** 以 Claude Code 为例：
 
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+Migrate the payment endpoints from the old client to the new one.
+Done means: every endpoint uses the new client, the old client is
+deleted, and the test suite passes.
+Stop and ask me only if a test fails for a reason you can't explain.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
 ```text
 把支付接口从旧客户端迁移到新客户端。
 完成的标准是：每个接口都使用新客户端，旧客户端已删除，
 并且测试套件全部通过。
 只有当某个测试失败、而你又解释不了原因时，才停下来问我。
 ```
+
+</TabItem>
+</Tabs>
 
 ![示例提示词被拆成三个带标签的框：整个任务（把支付接口从旧客户端迁移到新客户端）、高亮显示的终点线（每个接口都使用新客户端，旧客户端已删除，测试套件全部通过），以及何时停下（只有当某个测试失败且无法解释原因时）。底部文字：“在一条消息里给出整个任务。说明终点线。然后别管它。”](./fig-a-whole-task.png)
 
@@ -64,12 +83,28 @@ Opus 5.5 能很好地适应您现在使用 Claude 的方式。不过，有几处
 
 **怎么做。** 点名这些样式：
 
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+Build a personal website with placeholder content.
+Don't use a cream or off-white background, italic accent words in
+headings, numbered "01 / 02 / 03" section labels, monospace labels, or
+pill-shaped buttons.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
 ```text
 做一个带占位内容的个人网站。
 不要用奶油色或米白色背景、标题里的斜体强调词、
 “01 / 02 / 03”这样的编号章节标签、等宽字体标签，
 也不要用药丸形按钮。
 ```
+
+</TabItem>
+</Tabs>
 
 然后看看它改用了什么。如果那个您也不喜欢，就把它也加进清单，再让它重做。
 
@@ -83,12 +118,29 @@ Opus 5.5 能很好地适应您现在使用 Claude 的方式。不过，有几处
 
 **怎么做。** 把下面这段加进 CLAUDE.md，并根据您的项目修改：
 
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+When a step doesn't need my input, keep going. Put status notes in the
+same message as your next action.
+Stop and ask only when you can't continue without me, or before anything
+destructive: deleting data, force-pushing, or changing anything outside
+this repository.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
 ```text
 当某一步不需要我的输入时，就继续做。把进度说明和你的下一个动作
 放在同一条消息里。
 只有在没有我就无法继续时，或者在做任何破坏性操作之前，才停下来问我：
 删除数据、强制推送，或者改动这个仓库以外的任何东西。
 ```
+
+</TabItem>
+</Tabs>
 
 ![一张 CLAUDE.md 卡片，标题为“告诉它您希望在哪些地方停下”，里面有两个框。继续做：当某一步不需要我的输入时就继续做，并把进度说明和下一个动作放在同一条消息里。停下来问：只有在没有我就无法继续时，或者在任何破坏性操作之前：删除数据、强制推送，或改动这个仓库以外的任何东西。底部文字：“根据您的项目修改。对破坏性命令也要保持权限确认开启。”](./fig-b-claude-md-stops.png)
 
@@ -108,12 +160,28 @@ Opus 5.5 能很好地适应您现在使用 Claude 的方式。不过，有几处
 
 **怎么做。**
 
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+Audit every service in services/ for the retry bug in the linked issue.
+Give each service to its own subagent. When a subagent reports back,
+check its evidence before you accept it.
+Finish with one table: service, affected yes or no, and the evidence.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
 ```text
 针对关联 issue 里的重试 bug，审计 services/ 下的每一个服务。
 每个服务交给一个单独的子代理。子代理汇报回来时，
 先核查它的证据，再决定是否采纳。
 最后给出一张表：服务、是否受影响，以及证据。
 ```
+
+</TabItem>
+</Tabs>
 
 ![图示标题为“每个服务交给一个单独的子代理”。提示词“针对关联 issue 里的重试 bug，审计 services/ 下的每一个服务”分发给四个子代理。它们的汇报在“核查证据”这一步汇合（“子代理汇报回来时，先核查它的证据，再决定是否采纳”），然后一个箭头指向“最后给出一张表”，那是一张空表，列为：服务、是否受影响、证据。](./fig-c-subagents.png)
 
@@ -145,11 +213,26 @@ Opus 5.5 能很好地适应您现在使用 Claude 的方式。不过，有几处
 
 **怎么做。** 把这段提示词交给 Claude：
 
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+Review the diff on this branch against main.
+List only problems you'd block the merge for. For each one, give the
+file and line, why it's wrong, and how to show it fails.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
 ```text
 对照 main 审查这个分支上的 diff。
 只列出你会因此阻止合并的问题。每个问题都给出
 文件和行号、错在哪里，以及如何证明它会出错。
 ```
+
+</TabItem>
+</Tabs>
 
 ### 让它标出无法确认的内容
 
@@ -195,11 +278,26 @@ Opus 5.5 能很好地适应您现在使用 Claude 的方式。不过，有几处
 
 **怎么做。** 把这段加到项目的指令里：
 
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+Once you have answered something, treat that answer as done. Focus on
+what I'm asking now, and don't go back over an earlier answer unless I
+ask about it or point out a problem with it.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
 ```text
 一旦你回答过某个问题，就把那个回答当作已经完成。专注于
 我现在问的内容，除非我问起之前的回答或指出其中的问题，
 否则不要回头重新推敲。
 ```
+
+</TabItem>
+</Tabs>
 
 如果项目是做长篇分析的，就别加这条，因为在那种项目里，后面的步骤可能会暴露前面某一步的错误。
 
