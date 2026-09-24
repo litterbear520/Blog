@@ -1,0 +1,131 @@
+import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
+
+# 迭代器
+
+这篇文章我们讲一些 for loop 和迭代器。在之前的文章里，我们其实不太常把两个概念一起来聊，但是在 Python 中，这两个概念确实关系非常紧密，所以咱们今天就一块说了。
+
+## for loop 与可迭代对象
+
+大家看下面写了一个非常简单的 for loop。只要你会一点点 Python，你就能知道这个程序在干嘛。
+
+<CodeWalkthrough variant="iteratorLoop" step={1} />
+
+有的人可能觉得这件事很符合直觉，但是有的人，比如说你可能之前学过其他的语言，或者是你深入地考虑过它是怎么实现的，你就会发现这个事儿它并不简单，对吧？list 它本身是一个有序的结构，那你一个一个拿的话，可以是第 0 个、第 1 个、第 2 个，这个事儿比较符合直觉。
+
+但是我们知道 dictionary 也可以这么用，那 dictionary 可不是按顺序的第 0 个给你摆在这儿、第 1 个给你摆在这儿的，对不对？它怎么也可以用这个 `for in` 的结构呢？甚至包括在 Python 中打开的文件，都可以用 `for in` 的结构。那我们知道文件肯定是一个相对来说比较复杂的数据结构了，对吧？它肯定也不是给你标好的第 0 个、第 1 个、第 2 个，它怎么也能这么用呢？那我们今天就来揭示这件事儿背后的秘密。
+
+## iterable 与 iterator
+
+在 for loop 的实现背后呢，有两个核心概念：一个叫可迭代对象，一个叫迭代器。那么英文分别是 iterable 跟 iterator。我们先来看一下 Python 官网上给这两个词下的定义。
+
+那 [iterable](https://docs.python.org/3.10/glossary.html#term-iterable)，也就是可迭代对象，它说的是一个对象，然后可以一个一个地返回它的成员。它给了一些例子，对吧？比如说 list、string、tuple，包括 dictionary。然后它也特别强调了，对吧，这个 iterable 可以在 for loop 里面使用。
+
+当然确切地说呢，是 for loop 里面 `in` 后面那个东西必须是一个 iterable，也就是必须是一个可迭代对象。这件事儿不难理解，对吧？因为 for loop 就是在那个对象里面一个一个拿出它的成员来。它们两个定义几乎是完全重合的。这也是为什么我们要把 for loop 跟这个可迭代对象放到一起讲。
+
+那我们再看 [iterator](https://docs.python.org/3.10/glossary.html#term-iterator)，也就是迭代器。iterator 是一个表示数据流的对象，你可以使用 `next` 函数不断地从这个对象里面获取新的数据。那这两个概念确实有很多相似的地方，但是如果你想把这块的理论全都搞明白的话，你就必须要分清它们俩有什么区别。
+
+### 数据与状态
+
+从一个 high level 的角度看，一个 iterable 更像是一个数据的保存者，一个 container。它是可以没有状态的，它可以完全不知道你这个 iterator 数到哪了。它需要有能力产生一个 iterator，而 iterator 一定是有状态的，但是它并不需要实现一个 container。它当然内部肯定知道它代表这个 iterable 里面是什么数据，但是它不用实现一个 interface，不用实现一个接口来修改这个 iterable 里面的数据。
+
+### `__iter__()` 与 `__next__()`
+
+从实现上看，一个 iterable 要么就有 `__iter__()`，要么就有 `__getitem__()`。这两者都是为了保证它可以在 [`iter`](https://docs.python.org/3.10/library/functions.html#iter) 这个函数的作用下返回一个 iterator。而 iterator 必须要有 `__next__()` 这个 method，这个 method 保证它在被 [`next`](https://docs.python.org/3.10/library/functions.html#next) 作用的时候可以返回下一个 iterable 里面的值。
+
+## GET_ITER 与 for loop
+
+我们看一下这段程序的 bytecode。
+
+```python run
+import dis
+
+s = """
+lst = [1, 3, 5]
+for i in lst:
+    print(i)
+"""
+dis.dis(s)
+```
+
+```output exit=0 {6-8}
+  2           0 BUILD_LIST               0
+              2 LOAD_CONST               0 ((1, 3, 5))
+              4 LIST_EXTEND              1
+              6 STORE_NAME               0 (lst)
+
+  3           8 LOAD_NAME                0 (lst)
+             10 GET_ITER
+        >>   12 FOR_ITER                 6 (to 26)
+             14 STORE_NAME               1 (i)
+
+  4          16 LOAD_NAME                2 (print)
+             18 LOAD_NAME                1 (i)
+             20 CALL_FUNCTION            1
+             22 POP_TOP
+             24 JUMP_ABSOLUTE            6 (to 12)
+
+  3     >>   26 LOAD_CONST               1 (None)
+             28 RETURN_VALUE
+```
+
+在 `LOAD_NAME` 之后，它做了一个 [`GET_ITER`](https://docs.python.org/3.10/library/dis.html#opcode-GET_ITER)，而 `GET_ITER` 这个 bytecode，就是从栈顶的这个 iterable 里面拿出来它所对应的 iterator。所有的 for loop 的实现都是这样的。
+
+![GET_ITER 的解释器实现：从栈顶取出 iterable，调用 PyObject_GetIter，再将栈顶替换为 iterator](./image/迭代器/get-iter.png)
+
+所以你可以理解为，当你写一个 `for` 什么 `in` 一个 iterable 的时候，for loop 首先悄悄地做了一个从 iterable 里面拿到 iterator 的操作。你可以把它想象成下面这个样子。
+
+<CodeWalkthrough variant="iteratorLoop" step={2} />
+
+当然实际上不是这样的，因为你在做这个 for loop 的时候，它还会对这个 `it` 进行一次 `iter` 的这么一个操作。但你脑子里要有个概念，在进行 for loop 之前，这个 iterable 会先被取一个 iterator 的值，然后这个 for loop 是根据这个 iterator 来进行操作的。
+
+## 链表的迭代器
+
+那有的人可能会问，对吧，说我知道这个有什么用呢？除了让你理解 Python 究竟在底层是怎么工作的之外，你有的时候有可能会需要自己写一个 iterable 或者 iterator。我们举一个很简单的例子，就是链表，linked list。那我们知道 Python 里是没有这种内置的数据结构的，但是这种数据结构又非常常见。如果我们想在 for loop 里面使用链表的话，那我们就要自己把链表变成一个 iterable。
+
+### Node 与 NodeIter
+
+那下面就实现了一个最简单的链表跟它的 iterator。这个链表就是有一个名字，然后有一个 `next` 指针，对吧？然后我给它写了一个 iterator class。大家还记得我们之前讲的吧？iterator class 最核心的部分是要有这个 `__next__()` 函数。每次调用这个 `__next__()` 函数的时候，你需要在两件事中选择一个。第一，如果你这个 iterator 已经到头了，没有办法再给出数据了，你需要 raise 一个 [`StopIteration`](https://docs.python.org/3.10/library/exceptions.html#StopIteration) 这个 exception。第二，如果你还有数据的话，把这个数据 return 回去。
+
+<CodeWalkthrough variant="iterator" step={1} />
+
+那在我的这个实现里呢，我用 `self.curr_node` 表示现在已经数到哪一个 node 了。如果 `self.curr_node` 是 `None` 的话，就说明已经没了，我就 raise 这个 `StopIteration`。否则的话我就往前进一个，然后把现在这个 node 返回回去。
+
+我们看这个 `NodeIter` 就是一个 iterator，它实现了 `__next__()` 函数。那 `Node` 呢，就是一个 iterable，它实现了这个 `__iter__()` 函数，返回 `NodeIter` 的一个 object。
+
+那在下面我也做了一个简单的测试，建立了三个 node，然后 `node1` 的下一个是 `node2`，`node2` 的下一个是 `node3`。这里我用了 `for node in node1`，因为每一个 node 都是 iterable。那最开始那个 node 呢，就是链表的表头。然后我 `for node in node1`，然后我打印 `node.name`。运行一下，我们看它很成功地打印出了 `node1`、`node2`、`node3`。这就是我们自己实现的一个比较简单的 iterable 的一个数据结构。
+
+## 让 iterator 也是 iterable
+
+好，那可能很多人看到这里会产生一个疑问，就是我看到的所有教程里，这个 iterator 除了 `__next__()` 函数之外，还要实现这个 `__iter__()` 函数，为什么你这里没实现呢？我们看回 Python 的[官方文档](https://docs.python.org/3.10/library/stdtypes.html#iterator-types)，官方文档这也说，说 iterator 必须要有这个 `__iter__()` method。当然它也把这么规定的原因写明白了。它说这么做是为了让每一个 iterator 也是 iterable，就是让每一个迭代器也是可迭代的。
+
+### 显式获取 iterator
+
+我们来看一下为什么它这么要求。我们回到刚才的代码，现在第 27 行是 `for node in node1`，对吧？那我们刚才说过，实际上它是先管 `node1` 要了一个 iterator，但是有的时候有人可能这么写，他直接把这个 `node1` 显式地求了它的 iterator。
+
+<CodeWalkthrough variant="iterator" step={2} />
+
+当然这么看可能有些别扭，对吧？我们换一个实际上有可能真的会出现的写法。
+
+### 从第二个节点开始
+
+我们看一下这段程序啊，它是想第一个 node 不要，从第二个开始打。当然它也可以通过刚才的 for loop 实现，当然它就想用 iterator。它先拿到了 `node1` 的 iterator，然后从里面拿到了一个值，再对这个 iterator 做一个 for loop。看起来应该是一个挺合理的逻辑，对不对？
+
+<CodeWalkthrough variant="iterator" step={3} />
+
+我们运行一下，可以看到这块就报错了。为什么会报错呢？因为在我们做 `for node in it` 的时候，这个 `it` 本身虽然它是个 iterator，但它不是一个 iterable，所以它不能放到 for loop 里。可是这件事说实话比较反直觉，就是你怎么琢磨怎么都不对。
+
+因此呢，Python 官方规定说你这个 iterator 本身必须要是一个 iterable，这样你把它放到 for loop 里，或者放到一些其他的需要 iterable，像 `zip` 和 `map` 这些函数里面，这都能用。这才是一个比较符合直觉的概念。
+
+### 返回 self
+
+那实现的方式其实也很简单。对于 iterator 本身来说，几乎所有情况下，你只需要定义一个 `__iter__()` 函数，返回 `self` 就可以了。就是当你对这个 iterator 求它的 iterator 的时候，就是它自己。那让我们再运行一下刚才一段程序，我们看结果已经和我们想要的一样了。
+
+<CodeWalkthrough variant="iterator" step={4} nav />
+
+### CPython 的实现细节
+
+当然了，如果你看回 [CPython 文档](https://docs.python.org/3.10/glossary.html#term-iterator)的话，你会发现它下面写了一行话，叫做 CPython 本身也并不总是遵循每一个 iterator 都是 iterable 的要求。你说这些人讨厌不讨厌，自己定了一个要求，自己不遵守。
+
+那对于 iterator 到底需不需要有 `__iter__()` 这个函数，或者是需不需要 iterable 这个事，我的观点是，首先最好写，因为这件事很简单，就两行代码。但是更重要的应该是，你应该知道 `__iter__()` 这个函数是干嘛的，`__next__()` 这个函数是干嘛的，它们俩有什么区别。也就是你要分清什么是 iterable，什么是 iterator，这两个东西是不一样的。如果你能理解它们两个有什么区别，那到底谁要写 `__next__()` 函数，谁要写 `__iter__()` 函数，就非常一目了然了。
+
+好，那我们这篇文章就到这里。希望大家有所收获。
