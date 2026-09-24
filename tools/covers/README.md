@@ -68,6 +68,7 @@ clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
+| opus-5-5-guide | heather | cover-opus-5-5-guide.svg | recipes/opus-5-5-guide.js |
 | voice-agent-memory | plum | cover-voice-agent-memory.svg | recipes/voice-agent-memory.js |
 | html-effectiveness | oat | cover-html-effectiveness.svg | recipes/html-effectiveness.js |
 | fable-guide | mineral | cover-fable-guide.svg | recipes/fable-guide.js |
