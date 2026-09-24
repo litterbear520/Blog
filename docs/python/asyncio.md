@@ -1,6 +1,6 @@
 # asyncio
 
-## 概念
+## asyncio 适合做什么
 
 `asyncio`是python引入的一个新语法，接下来说的都是python3.7以上才支持的新用法，毕竟学新不学旧。它并不是一个新的神奇的机制，本质上还是一段非常正常的python运行的<mark>单进程单线程</mark>的程序。
 
@@ -10,7 +10,7 @@
 
 在`asyncio`里同时执行的任务只能有一个，和线程不一样的是，它不存在系统级的上下文切换。它需要每一个任务主动告诉`event loop`，我这边结束了，你可以让别的任务开始了。这样有个好处就是，它不存在竞争冒险的问题，你可以明确知道我每一个任务什么时候停止运算了。
 
-## coroutine
+## coroutine 的运行方式
 
 协程，在 python 语境中一般指两种东西，coroutine function 和 coroutine object，一般所有`async def`开头的东西都叫 coroutine function，例如：
 
@@ -43,13 +43,13 @@ world
 
 它会做两件事，第一建立起这个 event loop，第二会把这个 coroutine 变成 event loop 里面的第一个 task，在事件循环建立后它会去找哪个任务可以执行，当然这里只有一个任务，所以就会开始运行 `run` 给进来的 coroutine。
 
-## task
+## 把 coroutine 变成 task
 
 我们刚刚说过，event loop 的核心是有很多很多个 task，然后他来决定哪个 task 来运行，所以一个很重要的事情是当我们处于 async 模式下的时候，要如何增加 task 呢？
 
 接下来介绍几个可以把 coroutine 变成 task 的方法，让它可以排队执行的方法。
 
-### create_task
+### 用 create_task 创建 task
 
 我们先看这段代码的执行过程。
 
@@ -174,7 +174,7 @@ world - 2
 finished at 02:31:28
 ```
 
-### gather
+### 用 gather 等待多个 task
 
 这时候就有个问题，如果我有很多个 task，是不是就需要写 10 个 `await`，这是不是太蠢了，事实确实是这样的。
 
@@ -246,7 +246,7 @@ finished at 02:31:32
 
 尽管 asyncio 里还有不少的功能，但是掌握了这几个，基本就理解了 asyncio 的核心理念了。
 
-## 总结
+## event loop 如何调度 task
 
 首先脑海里要建立一个 event loop 的概念，上面有一个 event loop 作为大脑，下面是若干个可执行的 task，并且 task 是没有办法控制 event loop 去执行某一个 task 的，它只能告诉 event loop 说我在等这个 task，最终由 event loop 决定下面要运行哪个 task。
 
