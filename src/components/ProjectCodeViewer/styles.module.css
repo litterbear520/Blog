@@ -255,7 +255,7 @@
 
 .badgeNew {
   color: var(--th-code-added-bar);
-  background: var(--docusaurus-highlighted-code-line-bg);
+  background: var(--th-code-added-bg);
 }
 
 .tabClose {
@@ -311,7 +311,7 @@
 }
 
 .lineAdd {
-  background: var(--docusaurus-highlighted-code-line-bg);
+  background: var(--th-code-added-bg);
 }
 
 .lineDel {

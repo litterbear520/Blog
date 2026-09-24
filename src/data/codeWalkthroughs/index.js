@@ -4,7 +4,6 @@ import unittest from './unittest';
 import codeObject from './codeObject';
 import frame from './frame';
 import commerce from './commerce';
-import iterator, { iteratorLoop } from './iterator';
 
 export const UI = {
   'step.heading': '第 {n} 步 · {title}',
@@ -21,4 +20,4 @@ export const UI = {
   'terminal.exit': '进程退出，退出码 {code}',
 };
 
-export default { unittest, codeObject, frame, commerce, iterator, iteratorLoop };
+export default { unittest, codeObject, frame, commerce };

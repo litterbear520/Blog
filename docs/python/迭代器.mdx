@@ -1,5 +1,3 @@
-import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
-
 # 迭代器
 
 这篇文章我们讲一些 for loop 和迭代器。在之前的文章里，我们其实不太常把两个概念一起来聊，但是在 Python 中，这两个概念确实关系非常紧密，所以咱们今天就一块说了。
@@ -8,7 +6,17 @@ import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
 
 大家看下面写了一个非常简单的 for loop。只要你会一点点 Python，你就能知道这个程序在干嘛。
 
-<CodeWalkthrough variant="iteratorLoop" step={1} />
+```python run
+lst = [1, 3, 5]
+for i in lst:
+    print(i)
+```
+
+```output exit=0
+1
+3
+5
+```
 
 有的人可能觉得这件事很符合直觉，但是有的人，比如说你可能之前学过其他的语言，或者是你深入地考虑过它是怎么实现的，你就会发现这个事儿它并不简单，对吧？list 它本身是一个有序的结构，那你一个一个拿的话，可以是第 0 个、第 1 个、第 2 个，这个事儿比较符合直觉。
 
@@ -87,7 +95,13 @@ case TARGET(GET_ITER): {
 
 所以你可以理解为，当你写一个 `for` 什么 `in` 一个 iterable 的时候，for loop 首先悄悄地做了一个从 iterable 里面拿到 iterator 的操作。你可以把它想象成下面这个样子。
 
-<CodeWalkthrough variant="iteratorLoop" step={2} />
+```diff
+ lst = [1, 3, 5]
+-for i in lst:
++it = iter(lst)
++for i in it:
+     print(i)
+```
 
 当然实际上不是这样的，因为你在做这个 for loop 的时候，它还会对这个 `it` 进行一次 `iter` 的这么一个操作。但你脑子里要有个概念，在进行 for loop 之前，这个 iterable 会先被取一个 iterator 的值，然后这个 for loop 是根据这个 iterator 来进行操作的。
 
@@ -99,7 +113,42 @@ case TARGET(GET_ITER): {
 
 那下面就实现了一个最简单的链表跟它的 iterator。这个链表就是有一个名字，然后有一个 `next` 指针，对吧？然后我给它写了一个 iterator class。大家还记得我们之前讲的吧？iterator class 最核心的部分是要有这个 `__next__()` 函数。每次调用这个 `__next__()` 函数的时候，你需要在两件事中选择一个。第一，如果你这个 iterator 已经到头了，没有办法再给出数据了，你需要 raise 一个 [`StopIteration`](https://docs.python.org/3.10/library/exceptions.html#StopIteration) 这个 exception。第二，如果你还有数据的话，把这个数据 return 回去。
 
-<CodeWalkthrough variant="iterator" step={1} />
+```python run showLineNumbers
+class NodeIter:
+    def __init__(self, node):
+        self.curr_node = node
+
+    def __next__(self):
+        if self.curr_node is None:
+            raise StopIteration
+        node, self.curr_node = self.curr_node, self.curr_node.next
+        return node
+
+
+class Node:
+    def __init__(self, name):
+        self.name = name
+        self.next = None
+
+    def __iter__(self):
+        return NodeIter(self)
+
+
+node1 = Node("node1")
+node2 = Node("node2")
+node3 = Node("node3")
+node1.next = node2
+node2.next = node3
+
+for node in node1:
+    print(node.name)
+```
+
+```output exit=0
+node1
+node2
+node3
+```
 
 那在我的这个实现里呢，我用 `self.curr_node` 表示现在已经数到哪一个 node 了。如果 `self.curr_node` 是 `None` 的话，就说明已经没了，我就 raise 这个 `StopIteration`。否则的话我就往前进一个，然后把现在这个 node 返回回去。
 
@@ -115,7 +164,13 @@ case TARGET(GET_ITER): {
 
 我们来看一下为什么它这么要求。我们回到刚才的代码，现在第 27 行是 `for node in node1`，对吧？那我们刚才说过，实际上它是先管 `node1` 要了一个 iterator，但是有的时候有人可能这么写，他直接把这个 `node1` 显式地求了它的 iterator。
 
-<CodeWalkthrough variant="iterator" step={2} />
+```diff
+ node2.next = node3
+
+-for node in node1:
++for node in iter(node1):
+     print(node.name)
+```
 
 当然这么看可能有些别扭，对吧？我们换一个实际上有可能真的会出现的写法。
 
@@ -123,9 +178,24 @@ case TARGET(GET_ITER): {
 
 我们看一下这段程序啊，它是想第一个 node 不要，从第二个开始打。当然它也可以通过刚才的 for loop 实现，当然它就想用 iterator。它先拿到了 `node1` 的 iterator，然后从里面拿到了一个值，再对这个 iterator 做一个 for loop。看起来应该是一个挺合理的逻辑，对不对？
 
-<CodeWalkthrough variant="iterator" step={3} />
+```diff
+ node2.next = node3
 
-我们运行一下，可以看到这块就报错了。为什么会报错呢？因为在我们做 `for node in it` 的时候，这个 `it` 本身虽然它是个 iterator，但它不是一个 iterable，所以它不能放到 for loop 里。可是这件事说实话比较反直觉，就是你怎么琢磨怎么都不对。
+-for node in iter(node1):
++it = iter(node1)
++first = next(it)
++
++for node in it:
+     print(node.name)
+```
+
+我们运行一下，可以看到这块就报错了。
+
+```text
+TypeError: 'NodeIter' object is not iterable
+```
+
+为什么会报错呢？因为在我们做 `for node in it` 的时候，这个 `it` 本身虽然它是个 iterator，但它不是一个 iterable，所以它不能放到 for loop 里。可是这件事说实话比较反直觉，就是你怎么琢磨怎么都不对。
 
 因此呢，Python 官方规定说你这个 iterator 本身必须要是一个 iterable，这样你把它放到 for loop 里，或者放到一些其他的需要 iterable，像 `zip` 和 `map` 这些函数里面，这都能用。这才是一个比较符合直觉的概念。
 
@@ -133,7 +203,63 @@ case TARGET(GET_ITER): {
 
 那实现的方式其实也很简单。对于 iterator 本身来说，几乎所有情况下，你只需要定义一个 `__iter__()` 函数，返回 `self` 就可以了。就是当你对这个 iterator 求它的 iterator 的时候，就是它自己。那让我们再运行一下刚才一段程序，我们看结果已经和我们想要的一样了。
 
-<CodeWalkthrough variant="iterator" step={4} nav />
+```diff
+         node, self.curr_node = self.curr_node, self.curr_node.next
+         return node
++
++    def __iter__(self):
++        return self
+
+
+ class Node:
+```
+
+<details>
+<summary>完整代码</summary>
+
+```python run
+class NodeIter:
+    def __init__(self, node):
+        self.curr_node = node
+
+    def __next__(self):
+        if self.curr_node is None:
+            raise StopIteration
+        node, self.curr_node = self.curr_node, self.curr_node.next
+        return node
+
+    def __iter__(self):
+        return self
+
+
+class Node:
+    def __init__(self, name):
+        self.name = name
+        self.next = None
+
+    def __iter__(self):
+        return NodeIter(self)
+
+
+node1 = Node("node1")
+node2 = Node("node2")
+node3 = Node("node3")
+node1.next = node2
+node2.next = node3
+
+it = iter(node1)
+first = next(it)
+
+for node in it:
+    print(node.name)
+```
+
+```output exit=0
+node2
+node3
+```
+
+</details>
 
 ### CPython 的实现细节
 

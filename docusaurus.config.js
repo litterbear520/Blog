@@ -203,7 +203,7 @@ const config = {
       prism: {
         theme: cursorLightTheme,
         darkTheme: cursorTheme,
-        additionalLanguages: ['bash', 'json', 'python', 'java', 'typescript', 'rust', 'go', 'cpp', 'c'],
+        additionalLanguages: ['bash', 'json', 'python', 'java', 'typescript', 'rust', 'go', 'cpp', 'c', 'diff'],
       },
     }),
 };
