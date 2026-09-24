@@ -54,10 +54,10 @@ test('copy is raw, asynchronous, repeat-guarded and cleans up after unmount', ()
   assert.doesNotMatch(copy, /innerText|textContent|data\/codeWalkthroughs/);
 });
 
-test('focus blue and diff colors are distinct; ordinary code blocks are not restyled', () => {
+test('focus is blue and diff colors remain distinct', () => {
   assert.match(css, /--code-viewer-focus-bg: rgba\(109, 167, 236, 0.14\)/);
   assert.match(css, /\.lineFocus\s*\{[^}]*background: var\(--code-viewer-focus-bg\)/s);
-  assert.match(css, /\.lineAdd\s*\{[^}]*--docusaurus-highlighted-code-line-bg/s);
+  assert.match(css, /\.lineAdd\s*\{[^}]*--th-code-added-bg/s);
   assert.match(css, /\.lineDel\s*\{[^}]*--th-code-removed-bg/s);
   assert.match(css, /\.editor \.pre\s*\{[^}]*border: 0 !important;[^}]*border-radius: 0 !important/s);
   assert.doesNotMatch(css, /(?:^|\n)pre\s*\{|\.theme-code-block/);
@@ -83,7 +83,7 @@ test('docs and roadmap entrypoints all use the supported adapters', { skip: !com
   });
   const pages = ['docs/', 'roadmap/', 'blog/'].flatMap((dir) => walk(new URL(dir, repo)));
   const supported = {
-    CodeWalkthrough: ['unittest', 'codeObject', 'frame', 'commerce', 'iterator', 'iteratorLoop'],
+    CodeWalkthrough: ['unittest', 'codeObject', 'frame', 'commerce'],
     McpWalkthrough: ['sampling', 'notifications', 'roots', 'commerceAgentLoop'],
   };
   const found = [];

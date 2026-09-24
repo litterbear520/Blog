@@ -14,7 +14,7 @@ const fallback = `
  --ifm-color-emphasis-200:#eae9e4; --ifm-color-emphasis-300:#e1e0d9;
  --ifm-font-color-base:#52514e; --ifm-color-content-secondary:#898781;
  --ifm-font-family-monospace:monospace; --ifm-global-radius:.5rem; --th-line:rgba(11,11,11,.1);
- --docusaurus-highlighted-code-line-bg:#1F8A651F; --th-code-removed-bg:#d1242f1a; }
+ --th-code-added-bg:#1F8A651F; --th-code-removed-bg:#d1242f1a; }
 [data-theme=dark] { --ifm-background-surface-color:#20201f; --ifm-color-emphasis-100:#20201f;
  --ifm-color-emphasis-200:#2c2c2a; --ifm-color-emphasis-300:#383835; --ifm-font-color-base:#c3c2b7; }
 pre { background:var(--ifm-background-surface-color) !important; border:1px solid var(--th-line) !important; border-radius:8px !important; }
@@ -110,6 +110,27 @@ function runCases(css, globals) {
       verify(computed('.lineFocus').backgroundColor === 'rgba(109, 167, 236, 0.14)', 'original MCP blue focus');
       q('.line').className='line lineAdd';
       verify(computed('.lineAdd').backgroundColor !== 'rgba(109, 167, 236, 0.14)', 'diff distinct from focus');
+      if (globals.includes('--th-code-focus-bg')) {
+        const sample = doc.createElement('div');
+        sample.className = 'language-diff';
+        // Prism carries an empty token from the previous line; only the prefix
+        // identifies whether this line is inserted, deleted, or unchanged.
+        sample.innerHTML = '<div class="token-line" id="diff-add"><span class="token deleted"></span><span class="token inserted prefix">+</span><span class="token inserted">new</span></div>'
+          + '<div class="token-line" id="diff-remove"><span class="token inserted"></span><span class="token deleted prefix">-</span><span class="token deleted">old</span></div>'
+          + '<div class="token-line" id="diff-context"><span class="token inserted"></span><span class="token unchanged prefix"> </span><span class="token unchanged">same</span></div>'
+          + '<div id="code-focus" class="theme-code-block-highlighted-line">focus</div>'
+          + '<div class="run-output__line--highlight">output</div>';
+        doc.body.append(sample);
+        const focus = 'rgba(109, 167, 236, 0.14)';
+        verify(computed('#code-focus').backgroundColor === focus, 'ordinary emphasis is MCP blue');
+        verify(computed('.run-output__line--highlight').backgroundColor === focus, 'output emphasis is MCP blue');
+        verify(computed('#diff-add').backgroundColor === computed('.lineAdd').backgroundColor, 'diff blocks and viewers share added green');
+        q('.line').className='line lineDel';
+        verify(computed('#diff-remove').backgroundColor === computed('.lineDel').backgroundColor, 'diff blocks and viewers share removed red');
+        verify(computed('#diff-add').backgroundColor !== computed('#diff-remove').backgroundColor, 'add and remove remain distinct');
+        verify(computed('#diff-context').backgroundColor === 'rgba(0, 0, 0, 0)', 'unchanged lines do not inherit diff tint');
+        sample.remove();
+      }
       setTabs(0); const pane=q('.codeScroll'); pane.className='empty'; pane.innerHTML='<p>没有打开的文件</p>';
       verify(metrics().every((x,i)=>close(x,initial[i])), 'no tabs remains stable');
       results.push({theme,width,height,fontSize,checks}); frame.remove();

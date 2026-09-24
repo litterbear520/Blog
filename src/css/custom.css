@@ -105,8 +105,11 @@
   --ifm-scrollbar-thumb-background-color: #c3c2b7;
   --ifm-scrollbar-thumb-hover-background-color: #a5a49a;
 
-  /* 代码块高亮行：Cursor Light 的 diffEditor.insertedLineBackground / editorGutter.addedBackground */
-  --docusaurus-highlighted-code-line-bg: #1F8A651F;
+  /* 普通强调与 MCP 演练一致；diff 增删单独使用绿 / 红。 */
+  --th-code-focus-bg: rgba(109, 167, 236, 0.14);
+  --th-code-focus-bar: #6da7ec;
+  --docusaurus-highlighted-code-line-bg: var(--th-code-focus-bg);
+  --th-code-added-bg: #1F8A651F;
   --th-code-added-bar: #1F8A65;
   /* diff 删除行（CodeWalkthrough 组件）：GitHub 浅色 diff 的删除配色 */
   --th-code-removed-bg: #d1242f1a;
@@ -189,8 +192,7 @@ html[data-theme='dark'] {
   --ifm-scrollbar-thumb-background-color: #454442;
   --ifm-scrollbar-thumb-hover-background-color: #6d6b67;
 
-  /* 代码块高亮行：Cursor Dark 的 diffEditor.insertedLineBackground / editorGutter.addedBackground */
-  --docusaurus-highlighted-code-line-bg: #3FA26633;
+  --th-code-added-bg: #3FA26633;
   --th-code-added-bar: #3FA266;
   --th-code-removed-bg: #f8514933;
   --th-code-removed-bar: #f85149;
@@ -582,11 +584,21 @@ html[data-theme='dark'] .theme-admonition [class*='admonitionHeading'] {
   color: #f0f0f05c !important;
 }
 
-/* 高亮行（```python {3-5}）：用于标出相对上一段示例改动的行。
-   配色取 Cursor 主题的 diff 新增行：底色由上面的 --docusaurus-highlighted-code-line-bg 控制，
-   左侧色条用 --th-code-added-bar（对应 gutter 里的新增标记） */
+/* 普通强调（```python {3-5}）：蓝色提示读者关注这些行。 */
 .theme-code-block-highlighted-line {
+  background: var(--docusaurus-highlighted-code-line-bg);
+  box-shadow: inset 3px 0 0 var(--th-code-focus-bar);
+}
+
+/* diff 代码块保留 + / -，整行底色分别表示新增与删除。 */
+.language-diff .token-line:has(.token.inserted.prefix) {
+  background: var(--th-code-added-bg);
   box-shadow: inset 3px 0 0 var(--th-code-added-bar);
+}
+
+.language-diff .token-line:has(.token.deleted.prefix) {
+  background: var(--th-code-removed-bg);
+  box-shadow: inset 3px 0 0 var(--th-code-removed-bar);
 }
 
 /* 行内代码：中性底 + 一圈细边框，文字随正文色（只针对文本中的 code，不影响代码块） */
@@ -732,7 +744,7 @@ pre {
   margin: 0 calc(-1 * var(--ifm-pre-padding)) 0 -0.5rem;
   padding: 0 var(--ifm-pre-padding) 0 0.5rem;
   background: var(--docusaurus-highlighted-code-line-bg);
-  box-shadow: inset 3px 0 0 var(--th-code-added-bar);
+  box-shadow: inset 3px 0 0 var(--th-code-focus-bar);
 }
 
 .run-output__cursor {

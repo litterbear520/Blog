@@ -258,6 +258,16 @@ const theme = {
             languages: ['markdown', 'md'],
             style: { color: '#4FC3F7' },
         },
+        {
+            types: ['inserted'],
+            languages: ['diff'],
+            style: { color: 'var(--th-code-added-bar)' },
+        },
+        {
+            types: ['deleted'],
+            languages: ['diff'],
+            style: { color: 'var(--th-code-removed-bar)' },
+        },
     ],
 };
 
