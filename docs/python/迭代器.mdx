@@ -70,7 +70,20 @@ dis.dis(s)
 
 在 `LOAD_NAME` 之后，它做了一个 [`GET_ITER`](https://docs.python.org/3.10/library/dis.html#opcode-GET_ITER)，而 `GET_ITER` 这个 bytecode，就是从栈顶的这个 iterable 里面拿出来它所对应的 iterator。所有的 for loop 的实现都是这样的。
 
-![GET_ITER 的解释器实现：从栈顶取出 iterable，调用 PyObject_GetIter，再将栈顶替换为 iterator](./image/迭代器/get-iter.png)
+```c {4,6}
+case TARGET(GET_ITER): {
+    /* before: [obj]; after [getiter(obj)] */
+    PyObject *iterable = TOP();
+    PyObject *iter = PyObject_GetIter(iterable);
+    Py_DECREF(iterable);
+    SET_TOP(iter);
+    if (iter == NULL)
+        goto error;
+    PREDICT(FOR_ITER);
+    PREDICT(CALL_FUNCTION);
+    DISPATCH();
+}
+```
 
 所以你可以理解为，当你写一个 `for` 什么 `in` 一个 iterable 的时候，for loop 首先悄悄地做了一个从 iterable 里面拿到 iterator 的操作。你可以把它想象成下面这个样子。
 
