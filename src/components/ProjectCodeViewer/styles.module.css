@@ -375,6 +375,18 @@
   font-size: 0.75rem;
 }
 
+/* One file needs no tree or tabs. Like a plain code block, the card grows with
+   the code and never scrolls vertically; long lines still scroll sideways. */
+.editor.single {
+  height: auto;
+}
+
+.single .codeScroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-gutter: auto;
+}
+
 @media (max-width: 639px) {
   .editor {
     height: clamp(16rem, 60vh, 24rem);

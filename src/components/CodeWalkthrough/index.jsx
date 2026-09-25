@@ -109,6 +109,8 @@ function Walkthrough({ data, initialStep, nav }) {
   const { steps } = data;
   const prismTheme = usePrismTheme();
   const snapshots = useMemo(() => buildSnapshots(steps), [steps]);
+  // Judge by every step, so a file added later still gets the tree from step 1.
+  const single = useMemo(() => new Set(snapshots.flatMap(Object.keys)).size === 1, [snapshots]);
   const [current, setCurrent] = useState(() => Math.min(Math.max(initialStep - 1, 0), steps.length - 1));
   const [runIndex, setRunIndex] = useState(null);
   const [wrap, setWrap] = useState(false);
@@ -141,7 +143,7 @@ function Walkthrough({ data, initialStep, nav }) {
         )}
       </div>
       <ProjectCodeViewer files={snapshot} previousFiles={previous} stepKey={current}
-        preferredFiles={tabsForStep(step, snapshot)} focusFile={step.file} focusRanges={step.lines} />
+        preferredFiles={tabsForStep(step, snapshot)} focusFile={step.file} focusRanges={step.lines} single={single} />
       {runs.length > 0 && (
         <div className={styles.terminal} style={{ backgroundColor: editorBg, color: prismTheme.plain.color }}>
           {runs.map((run, k) => {

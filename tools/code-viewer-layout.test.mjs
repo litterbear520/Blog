@@ -133,6 +133,21 @@ function runCases(css, globals) {
       }
       setTabs(0); const pane=q('.codeScroll'); pane.className='empty'; pane.innerHTML='<p>没有打开的文件</p>';
       verify(metrics().every((x,i)=>close(x,initial[i])), 'no tabs remains stable');
+      // Single-file mode: no tree/tabs/picker; the card grows with the code.
+      doc.querySelector('.preview').innerHTML = `<div class="editor single"><div class="editorMain">
+        <div class="codeShell"><div class="codeActions"><button class="codeActionButton">C</button></div>
+        <div class="codeScroll"><pre class="pre"></pre></div></div></div></div><p id="following">Following article</p>`;
+      setRows(2); const short=rect('.editor').height;
+      setRows(60); const tall=rect('.editor').height;
+      verify(tall - short > 50 * fontSize, 'single file grows with its code');
+      verify(tall > Math.max(20*fontSize, Math.min(height*.65,32*fontSize)), 'single file ignores the fixed viewer height');
+      verify(q('.codeScroll').scrollHeight <= q('.codeScroll').clientHeight, 'single file has no vertical scroll');
+      verify(close(rect('.line').top-rect('.codeScroll').top, .5*fontSize), 'single file starts at the first line');
+      verify(rect('#following').top >= rect('.editor').bottom - 1, 'following text sits below the whole file');
+      setRows(3, true);
+      verify(q('.codeScroll').scrollWidth > q('.codeScroll').clientWidth, 'single file long lines scroll sideways');
+      verify(q('.codeScroll').scrollHeight <= q('.codeScroll').clientHeight, 'sideways scroll does not clip lines');
+      verify(computed('.editor').borderRadius === '12px', 'single file keeps the outer radius');
       results.push({theme,width,height,fontSize,checks}); frame.remove();
     }
   }
