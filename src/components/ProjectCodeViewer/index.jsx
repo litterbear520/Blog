@@ -18,10 +18,12 @@ const EMPTY_RANGES = [];
  * instructions/tour/terminal; this component owns files, tabs, icons and code.
  * Change stepKey to reveal preferredFiles. Omit previousFiles to disable diff.
  * focusRanges are inclusive, 1-based current-file line ranges (not diff rows).
+ * single drops the tree, tabs and picker and lets the code set the height; the
+ * adapter decides it from every step, so a later step cannot add a sidebar.
  */
 export default function ProjectCodeViewer({
   files, previousFiles = null, preferredFiles = EMPTY_PATHS, stepKey = 0,
-  focusFile, focusRanges = EMPTY_RANGES, onFileSelect, className,
+  focusFile, focusRanges = EMPTY_RANGES, onFileSelect, className, single = false,
 }) {
   const prismTheme = usePrismTheme();
   const [selection, setSelection] = useState(() => syncSelection(null, files, preferredFiles, stepKey));
@@ -95,42 +97,46 @@ export default function ProjectCodeViewer({
   });
 
   return (
-    <div className={clsx(styles.editor, className)} data-project-code-viewer="">
-      <aside className={styles.fileTree} aria-label={UI['files.heading']}>
-        <h4 className={styles.fileTreeHeading}>{UI['files.heading']}</h4>
-        <div className={styles.treeScroll}>{renderTree(tree, 0)}</div>
-      </aside>
+    <div className={clsx(styles.editor, single && styles.single, className)} data-project-code-viewer="">
+      {!single && (
+        <aside className={styles.fileTree} aria-label={UI['files.heading']}>
+          <h4 className={styles.fileTreeHeading}>{UI['files.heading']}</h4>
+          <div className={styles.treeScroll}>{renderTree(tree, 0)}</div>
+        </aside>
+      )}
       <div className={styles.editorMain}>
         {/* The desktop tree is hidden on small screens. Keep ALL files reachable,
             even when every tab has been closed; do not rely on existing tabs. */}
-        <label className={styles.mobilePicker}>
-          <span>{UI['files.heading']}</span>
-          <select aria-label={UI['files.heading']} value={activeFile ?? ''}
-            onChange={(event) => selectFile(event.target.value)}>
-            <option value="" disabled>{UI['copy.empty']}</option>
-            {Object.keys(files).map((path) => <option key={path} value={path}>{path}</option>)}
-          </select>
-        </label>
-        <div className={styles.editorToolbar}>
-          <div className={styles.tabs} aria-label={UI['aria.openFiles']}>
-            {tabs.map((path) => {
-              const active = path === activeFile;
-              const status = statusOf(path);
-              return (
-                <div key={path} className={clsx(styles.tab, active && styles.tabActive)}
-                  style={active ? { backgroundColor: editorBg } : undefined}>
-                  <button type="button" aria-pressed={active} onClick={() => selectFile(path)} className={styles.tabBtn} title={path}>
-                    <SymbolsIcon path={path} />
-                    {path.split('/').pop()}
-                    {status !== 'same' && <span className={clsx(styles.badge, status === 'new' && styles.badgeNew)}>{UI[`badge.${status}`]}</span>}
-                  </button>
-                  <button type="button" aria-label={UI['aria.closeTab'].replace('{path}', path)}
-                    onClick={() => setSelection((current) => closeFile(current, path))} className={styles.tabClose}>×</button>
-                </div>
-              );
-            })}
+        {!single && (<>
+          <label className={styles.mobilePicker}>
+            <span>{UI['files.heading']}</span>
+            <select aria-label={UI['files.heading']} value={activeFile ?? ''}
+              onChange={(event) => selectFile(event.target.value)}>
+              <option value="" disabled>{UI['copy.empty']}</option>
+              {Object.keys(files).map((path) => <option key={path} value={path}>{path}</option>)}
+            </select>
+          </label>
+          <div className={styles.editorToolbar}>
+            <div className={styles.tabs} aria-label={UI['aria.openFiles']}>
+              {tabs.map((path) => {
+                const active = path === activeFile;
+                const status = statusOf(path);
+                return (
+                  <div key={path} className={clsx(styles.tab, active && styles.tabActive)}
+                    style={active ? { backgroundColor: editorBg } : undefined}>
+                    <button type="button" aria-pressed={active} onClick={() => selectFile(path)} className={styles.tabBtn} title={path}>
+                      <SymbolsIcon path={path} />
+                      {path.split('/').pop()}
+                      {status !== 'same' && <span className={clsx(styles.badge, status === 'new' && styles.badgeNew)}>{UI[`badge.${status}`]}</span>}
+                    </button>
+                    <button type="button" aria-label={UI['aria.closeTab'].replace('{path}', path)}
+                      onClick={() => setSelection((current) => closeFile(current, path))} className={styles.tabClose}>×</button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </>)}
         <div className={styles.codeShell} style={{ backgroundColor: editorBg, '--cw-editor-bg': editorBg }}>
           {source !== undefined && (
             <div className={styles.codeActions} role="group" aria-label={UI['aria.codeActions']}>

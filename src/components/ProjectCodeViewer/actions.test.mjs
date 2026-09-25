@@ -31,6 +31,21 @@ test('MCP retains guide/accordion/focus; snapshots retain nav, previous files an
   assert.match(cw, /setRunIndex\(null\)/);
 });
 
+test('single-file walkthroughs drop the tree, picker and tabs and grow with the code', () => {
+  const cw = read('../CodeWalkthrough/index.jsx');
+  assert.match(cw, /new Set\(snapshots\.flatMap\(Object\.keys\)\)\.size === 1/);
+  assert.match(cw, /single=\{single\}/);
+  assert.match(viewer, /single && styles\.single/);
+  const tree = viewer.indexOf('className={styles.fileTree}');
+  const picker = viewer.indexOf('className={styles.mobilePicker}');
+  const guards = [...viewer.matchAll(/\{!single && \(/g)].map((match) => match.index);
+  assert.equal(guards.length, 2);
+  assert.ok(guards[0] < tree && tree < guards[1] && guards[1] < picker);
+  assert.ok(viewer.indexOf('</>)}') > viewer.indexOf('className={styles.editorToolbar}'));
+  assert.match(css, /\.editor\.single\s*\{[^}]*height: auto;/s);
+  assert.match(css, /\.single \.codeScroll\s*\{[^}]*overflow-y: hidden;/s);
+});
+
 test('actions overlay the code, not the toolbar or scrolling source', () => {
   const toolbar = viewer.indexOf('className={styles.editorToolbar}');
   const shell = viewer.indexOf('className={styles.codeShell}');
