@@ -133,8 +133,9 @@ function runCases(css, globals) {
       }
       setTabs(0); const pane=q('.codeScroll'); pane.className='empty'; pane.innerHTML='<p>没有打开的文件</p>';
       verify(metrics().every((x,i)=>close(x,initial[i])), 'no tabs remains stable');
-      // Single-file mode: no tree/tabs/picker; the card grows with the code.
+      // Single-file mode: a filename header instead of tree/tabs/picker; the card grows with the code.
       doc.querySelector('.preview').innerHTML = `<div class="editor single"><div class="editorMain">
+        <div class="fileHeader"><span class="fileHeaderName">main.py</span></div>
         <div class="codeShell"><div class="codeActions"><button class="codeActionButton">C</button></div>
         <div class="codeScroll"><pre class="pre"></pre></div></div></div></div><p id="following">Following article</p>`;
       setRows(2); const short=rect('.editor').height;
@@ -143,6 +144,8 @@ function runCases(css, globals) {
       verify(tall > Math.max(20*fontSize, Math.min(height*.65,32*fontSize)), 'single file ignores the fixed viewer height');
       verify(q('.codeScroll').scrollHeight <= q('.codeScroll').clientHeight, 'single file has no vertical scroll');
       verify(close(rect('.line').top-rect('.codeScroll').top, .5*fontSize), 'single file starts at the first line');
+      verify(close(rect('.fileHeader').height, 2.5*fontSize), 'filename header matches the tab bar height');
+      verify(close(rect('.codeScroll').top, rect('.fileHeader').bottom), 'code starts right under the filename');
       verify(rect('#following').top >= rect('.editor').bottom - 1, 'following text sits below the whole file');
       setRows(3, true);
       verify(q('.codeScroll').scrollWidth > q('.codeScroll').clientWidth, 'single file long lines scroll sideways');

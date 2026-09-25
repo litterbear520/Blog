@@ -69,10 +69,10 @@ test('每个 SVG 与上游原件的 Git blob 完全一致', () => {
   assert.match(read('LICENSE'), /Copyright \(c\) 2020-22 Miguel Solorio/);
 });
 
-test('树与标签复用同一组件，复制读原文且不加载远程图标', () => {
+test('树、标签与单文件顶栏复用同一组件，复制读原文且不加载远程图标', () => {
   const viewer = read('../index.jsx');
   assert.doesNotMatch(viewer, /[📄📁📂]/u);
-  assert.equal((viewer.match(/<SymbolsIcon\b/g) || []).length, 3);
+  assert.equal((viewer.match(/<SymbolsIcon\b/g) || []).length, 4);
   assert.match(viewer, /folder tree expanded=\{!isCollapsed\}/);
   assert.match(viewer, /text=\{source\}/);
   const component = read('index.jsx');
