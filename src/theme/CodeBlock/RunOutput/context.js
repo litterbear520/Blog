@@ -4,8 +4,10 @@ import React, {createContext, useContext, useMemo, useState} from 'react';
 // 在 Content/String 里读出后经此 context 分发给 Buttons（运行按钮）和 Layout（输出面板）。
 const RunOutputContext = createContext(null);
 
-export function RunOutputProvider({output, status, highlight, blockId, children}) {
-  const [open, setOpen] = useState(false);
+// open / onToggle 可由外部接管（ProjectCodeViewer 换步骤时要收起输出）；不传就自己管。
+export function RunOutputProvider({output, status, highlight, blockId, open: openProp, onToggle, children}) {
+  const [openState, setOpen] = useState(false);
+  const open = openProp ?? openState;
   const value = useMemo(
     () => ({
       // 空输出（```output empty）时 data-output 是空串，可能被序列化丢掉，以 status 存在与否兜底
@@ -20,9 +22,9 @@ export function RunOutputProvider({output, status, highlight, blockId, children}
       ),
       blockId: blockId || null,
       open,
-      toggle: () => setOpen((v) => !v),
+      toggle: onToggle ?? (() => setOpen((v) => !v)),
     }),
-    [output, status, highlight, blockId, open],
+    [output, status, highlight, blockId, open, onToggle],
   );
   return (
     <RunOutputContext.Provider value={value}>{children}</RunOutputContext.Provider>

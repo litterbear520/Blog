@@ -1,4 +1,4 @@
-// frame 示例按文中的顺序展示；后 3 步的输出用 Python 3.13 实跑录入。
+// frame 示例按文中的顺序展示；输出用 Python 3.13 实跑录入（第 1 步装了 objprint，已去掉终端颜色）。
 
 export const steps = [
   {
@@ -16,6 +16,19 @@ def f():
 f()
 `,
     },
+    runs: [{ cmd: 'python main.py', exit: 0, output: `<frame 0x7b49adbea8e0
+  .f_back = <frame 0x7b49ad516140 ... >,
+  .f_builtins = { ... },
+  .f_code = <code 0x7b49ad760580 ... >,
+  .f_globals = { ... },
+  .f_lasti = 62,
+  .f_lineno = 6,
+  .f_locals = <FrameLocalsProxy 0x7b49adbde7a0 ... >,
+  .f_trace = None,
+  .f_trace_lines = True,
+  .f_trace_opcodes = False
+>
+` }],
   },
   {
     title: '读取调用者的函数名',

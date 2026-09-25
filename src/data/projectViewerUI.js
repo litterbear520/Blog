@@ -8,6 +8,8 @@ export const UI = {
   'copy.hint': '复制当前步骤中 {path} 的完整代码',
   'copy.empty': '请先选择一个文件',
   'copy.errorHint': '复制失败，请重试或手动选择代码复制',
+  'run.show': '运行（显示预录输出）',
+  'run.hide': '收起输出',
   'diff.show': '显示改动',
   'diff.hide': '只看当前',
   'badge.new': '新文件',
