@@ -182,7 +182,7 @@ lock.release()
 
 第三，对于单线程的程序，或者是没法并行的多线程程序，这种全局锁的性能是非常优秀的。大家可以想到，这个要锁这件事显然是需要一些时间成本，对吧？那全局锁就保证了，你在每一次运行一个 bytecode 的时候，至多只需要要一次锁。但是如果你是那种，比如每一个 object 都有自己的锁的话，你一个 bytecode，由于你要 access 很多个 object，你就可能要拿很多次锁。
 
-最后呢，就是它让你给这个 Python 代码写 C extension 变得容易了很多。因为你可以确定，在每一个 bytecode 运行的时候，没有线程的竞争冒险问题。这样，你在你的 C 代码里面去修改 Python object 的时候，你就不用管那些乱七八糟的锁，让这个第三方开发者的编程变得容易了很多。那其实有人说，Python 能有今天的成绩，跟它的 C extension 开发比较容易，也是有密切的关系的。
+最后呢，就是它让你给这个 Python 代码写 <Term tip={<>用 C 语言写、编译成 <code>.so</code> / <code>.pyd</code> 后能在 Python 里直接 <code>import</code> 的模块，常用来加速计算或包装现成的 C 库，NumPy 的核心就是这样写的。<br />比如用 C 写一个 <code>add(a, b)</code>，编译成 <code>mymod</code> 后，<code>import mymod</code> 再调用 <code>mymod.add(2, 3)</code> 得到 5，加法是在 C 里完成的。<br />这类代码会直接读写 Python 对象和引用计数，并默认运行时拿着 GIL。</>}>C extension</Term> 变得容易了很多。因为你可以确定，在每一个 bytecode 运行的时候，没有线程的竞争冒险问题。这样，你在你的 C 代码里面去修改 Python object 的时候，你就不用管那些乱七八糟的锁，让这个第三方开发者的编程变得容易了很多。那其实有人说，Python 能有今天的成绩，跟它的 C extension 开发比较容易，也是有密切的关系的。
 
 那以上种种的优势，就是至今 GIL 仍然存在在 Python 里的原因。古往今来，也不是没有人尝试从 Python 里拿走 GIL，但是没有一次尝试是可以保证 Python 在单进程、单线程下的运行速度不受到影响的。
 
