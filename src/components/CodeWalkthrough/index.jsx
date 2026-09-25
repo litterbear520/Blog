@@ -119,6 +119,10 @@ function Walkthrough({ data, initialStep, nav }) {
   const previous = current > 0 ? snapshots[current - 1] : null;
   const editorBg = prismTheme.plain.backgroundColor;
   const runs = step.runs || [];
+  // A single file with one command runs like a plain code block: the button
+  // sits top-right and the output opens under the code, no terminal strip.
+  const inlineRun = single && runs.length === 1
+    ? { output: runs[0].output, status: `exit:${runs[0].exit}` } : null;
   const goToStep = (index) => {
     if (!steps[index]) return;
     setCurrent(index);
@@ -143,8 +147,8 @@ function Walkthrough({ data, initialStep, nav }) {
         )}
       </div>
       <ProjectCodeViewer files={snapshot} previousFiles={previous} stepKey={current}
-        preferredFiles={tabsForStep(step, snapshot)} focusFile={step.file} focusRanges={step.lines} single={single} />
-      {runs.length > 0 && (
+        preferredFiles={tabsForStep(step, snapshot)} focusFile={step.file} focusRanges={step.lines} single={single} run={inlineRun} />
+      {runs.length > 0 && !inlineRun && (
         <div className={styles.terminal} style={{ backgroundColor: editorBg, color: prismTheme.plain.color }}>
           {runs.map((run, k) => {
             const open = runIndex === k;

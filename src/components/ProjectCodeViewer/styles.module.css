@@ -410,6 +410,26 @@
   scrollbar-gutter: auto;
 }
 
+/* Run button: stays lit and visible while the recorded output is open,
+   like the run button on a plain code block. */
+.codeShell:has([aria-expanded='true']) .codeActions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.codeActionOn {
+  color: var(--th-accent);
+  opacity: 1;
+}
+
+/* The shared output panel sits inside this card, so drop its own frame and
+   corners and keep only the divider under the code. */
+.editor .editorMain :global(.run-output) {
+  border: 0;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0;
+}
+
 @media (max-width: 639px) {
   .editor {
     height: clamp(16rem, 60vh, 24rem);

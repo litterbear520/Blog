@@ -50,6 +50,23 @@ test('single-file walkthroughs swap the tree, picker and tabs for a filename hea
   assert.match(css, /\.single \.codeScroll\s*\{[^}]*overflow-y: hidden;/s);
 });
 
+test('single-file walkthroughs with one command run like a plain code block', () => {
+  const cw = read('../CodeWalkthrough/index.jsx');
+  assert.match(cw, /const inlineRun = single && runs\.length === 1/);
+  assert.match(cw, /run=\{inlineRun\}/);
+  assert.match(cw, /runs\.length > 0 && !inlineRun && \(/);
+  // Same provider and panel as ```python run blocks, not a second output UI.
+  assert.match(viewer, /import \{ RunOutputProvider \} from '@site\/src\/theme\/CodeBlock\/RunOutput\/context'/);
+  assert.match(viewer, /import RunOutputPanel from '@site\/src\/theme\/CodeBlock\/RunOutput\/Panel'/);
+  assert.match(viewer, /Object\.is\(runOpenAt\.stepKey, stepKey\)/);
+  const actions = viewer.indexOf('className={styles.codeActions}');
+  const runButton = viewer.indexOf('aria-expanded={runOpen}');
+  assert.ok(actions < runButton && runButton < viewer.indexOf('<CopyCodeButton'));
+  assert.ok(viewer.indexOf('{run && <RunOutputPanel />}') > viewer.indexOf('ref={scrollRef}'));
+  assert.match(read('../../theme/CodeBlock/RunOutput/context.js'), /const open = openProp \?\? openState;/);
+  assert.match(css, /\.codeShell:has\(\[aria-expanded='true'\]\) \.codeActions\s*\{[^}]*opacity: 1;/s);
+});
+
 test('actions overlay the code, not the toolbar or scrolling source', () => {
   const toolbar = viewer.indexOf('className={styles.editorToolbar}');
   const shell = viewer.indexOf('className={styles.codeShell}');
@@ -102,7 +119,7 @@ test('docs and roadmap entrypoints all use the supported adapters', { skip: !com
   });
   const pages = ['docs/', 'roadmap/', 'blog/'].flatMap((dir) => walk(new URL(dir, repo)));
   const supported = {
-    CodeWalkthrough: ['unittest', 'codeObject', 'frame', 'commerce', 'iterator', 'iteratorLoop'],
+    CodeWalkthrough: ['unittest', 'codeObject', 'frame', 'commerce', 'iterator', 'iteratorLoop', 'generator', 'generatorNode'],
     McpWalkthrough: ['sampling', 'notifications', 'roots', 'commerceAgentLoop'],
   };
   const found = [];
