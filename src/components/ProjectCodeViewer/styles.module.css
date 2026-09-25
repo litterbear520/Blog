@@ -375,10 +375,33 @@
   font-size: 0.75rem;
 }
 
-/* One file needs no tree or tabs. Like a plain code block, the card grows with
-   the code and never scrolls vertically; long lines still scroll sideways. */
+/* One file needs no tree or tabs, just its name. Like a plain code block, the
+   card grows with the code and never scrolls vertically; long lines still
+   scroll sideways. */
 .editor.single {
   height: auto;
+}
+
+.fileHeader {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.4rem;
+  box-sizing: border-box;
+  height: var(--code-viewer-header-height);
+  min-width: 0;
+  padding: 0 0.75rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-color-emphasis-100);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  color: var(--ifm-font-color-base);
+}
+
+.fileHeaderName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .single .codeScroll {

@@ -18,8 +18,9 @@ const EMPTY_RANGES = [];
  * instructions/tour/terminal; this component owns files, tabs, icons and code.
  * Change stepKey to reveal preferredFiles. Omit previousFiles to disable diff.
  * focusRanges are inclusive, 1-based current-file line ranges (not diff rows).
- * single drops the tree, tabs and picker and lets the code set the height; the
- * adapter decides it from every step, so a later step cannot add a sidebar.
+ * single swaps the tree, tabs and picker for a filename header and lets the code
+ * set the height; the adapter decides it from every step, so a later step cannot
+ * add a sidebar.
  */
 export default function ProjectCodeViewer({
   files, previousFiles = null, preferredFiles = EMPTY_PATHS, stepKey = 0,
@@ -137,6 +138,12 @@ export default function ProjectCodeViewer({
             </div>
           </div>
         </>)}
+        {single && activeFile && (
+          <div className={styles.fileHeader} title={activeFile}>
+            <SymbolsIcon path={activeFile} />
+            <span className={styles.fileHeaderName}>{activeFile}</span>
+          </div>
+        )}
         <div className={styles.codeShell} style={{ backgroundColor: editorBg, '--cw-editor-bg': editorBg }}>
           {source !== undefined && (
             <div className={styles.codeActions} role="group" aria-label={UI['aria.codeActions']}>

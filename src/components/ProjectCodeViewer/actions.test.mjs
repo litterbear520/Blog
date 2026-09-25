@@ -31,7 +31,7 @@ test('MCP retains guide/accordion/focus; snapshots retain nav, previous files an
   assert.match(cw, /setRunIndex\(null\)/);
 });
 
-test('single-file walkthroughs drop the tree, picker and tabs and grow with the code', () => {
+test('single-file walkthroughs swap the tree, picker and tabs for a filename header', () => {
   const cw = read('../CodeWalkthrough/index.jsx');
   assert.match(cw, /new Set\(snapshots\.flatMap\(Object\.keys\)\)\.size === 1/);
   assert.match(cw, /single=\{single\}/);
@@ -42,6 +42,10 @@ test('single-file walkthroughs drop the tree, picker and tabs and grow with the 
   assert.equal(guards.length, 2);
   assert.ok(guards[0] < tree && tree < guards[1] && guards[1] < picker);
   assert.ok(viewer.indexOf('</>)}') > viewer.indexOf('className={styles.editorToolbar}'));
+  const header = viewer.indexOf('{single && activeFile && (');
+  assert.ok(viewer.indexOf('</>)}') < header && header < viewer.indexOf('className={styles.codeShell}'));
+  assert.match(viewer.slice(header, viewer.indexOf('className={styles.codeShell}')), /<SymbolsIcon path=\{activeFile\} \/>[\s\S]*\{activeFile\}/);
+  assert.match(css, /\.fileHeader\s*\{[^}]*height: var\(--code-viewer-header-height\);/s);
   assert.match(css, /\.editor\.single\s*\{[^}]*height: auto;/s);
   assert.match(css, /\.single \.codeScroll\s*\{[^}]*overflow-y: hidden;/s);
 });
