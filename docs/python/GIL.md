@@ -227,6 +227,6 @@ if __name__ == '__main__':
 
 ### 换用没有 GIL 的解释器
 
-那当然了，你也可以尝试用一些没有 GIL 的 Python 解释器。这个事儿我们在之前的某一篇文章也提到过，像 Jython 啊，包括 IronPython 啊，好像都是没有 GIL 的，但是 PyPy 是有的。
+那当然了，你也可以尝试用一些没有 GIL 的 Python 解释器。这个事儿我们在[之前的某一篇文章](./cpython.md#其他-python-实现)也提到过，像 Jython 啊，包括 IronPython 啊，好像都是没有 GIL 的，但是 PyPy 是有的。
 
 好，那这篇文章简单地跟大家介绍了一下 GIL，希望对大家有所帮助。
