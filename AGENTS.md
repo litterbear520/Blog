@@ -98,7 +98,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   └── roadmap-sync/              # 路线代码同步：sync.mjs + <配方>.config.mjs（dev 仓库里每步的文件 → 演练里展示的路径），生成物提交进仓库
 ├── .claude/skills/
 │   ├── blog-cover/                # /blog-cover <slug>：读文章 → 视觉隐喻 → 配方 → 渲染 → 登记
-│   └── transcript-note/           # /transcript-note <目录/名>：视频讲稿 → 最小替换转写 → 小标题 → 自然的站内外链接 → 推 main 看 CI
+│   └── note/                      # /note <位置/标题> + 文稿 + 代码：视频讲稿 → 最小替换转写 → 小标题 → 自然的站内外链接 → 推 main 看 CI
 ├── static/
 │   ├── CNAME                      # 自定义域名 huangsitao.fun
 │   └── img/                       # 图片资源
