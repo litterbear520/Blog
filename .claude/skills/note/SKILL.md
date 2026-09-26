@@ -63,6 +63,8 @@ argument-hint: "[位置/标题，如 python/CPython]"
 5. **放代码、加术语（按需）。**
    - 用户给的代码按讲稿的顺序，放到讲稿提到它的那一段后面，比如“我们看下面这个程序”“这里这个函数”。代码原样保留，不改写。对不上位置的代码，在报告里说明放在了哪里。
    - 讲稿演示了完整、能独立运行的代码时，才加 `run` + `output`。输出用 `python3 xxx.py` 在本地实跑后录入，不加 `-u`：输出面板号称是真实运行结果，凭推断写一旦和读者自己跑的不一样就失去信任；加 `-u` 会让多线程的 print 交错，用户平时不这么跑。讲稿里的数字和实跑结果不一致时，正文按实跑结果改，并在报告里说明。
+   - 用户给了同一个程序一步步改动的多个版本时（常见于注释掉的一段段代码），照同目录笔记（如《类装饰器》）改用 `<CodeWalkthrough variant="..." step={n} />`，最后一个实例加 `nav`：数据写在 `src/data/codeWalkthroughs/<variant>.js`，每步一个完整 `main.py` 快照 + 实跑的 `runs`；讲稿提到“第 N 行”时给该步加 `lines: [[N, N]]`。新变体要同时登记到 `src/data/codeWalkthroughs/index.js` 和 `src/components/ProjectCodeViewer/actions.test.mjs` 的 `supported` 白名单，否则 CI 的组件测试会挂。
+   - 讲稿描述的行为只在旧版本 Python 成立时（比如“这里会报错”，新版本已经不报错），先问用户；用户选择保留讲稿的说法时，用 `uv run --no-project --python 3.x` 按旧版本实跑录入，并在那一步后加 `:::info` 说明新版本的行为。
    - 贴 CPython 源码时照已有笔记的写法：`` ```c title="Python/ceval.c" showLineNumbers=起始行 {高亮} ``。
    - 读者可能卡住的术语可以用 `<Term tip="...">词</Term>`（已全局注册）。
    - 用户没给代码时，这一步只看要不要加术语解释。
