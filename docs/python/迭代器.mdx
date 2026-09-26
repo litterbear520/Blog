@@ -30,7 +30,7 @@ import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
 
 ### `__iter__()` 与 `__next__()`
 
-从实现上看，一个 iterable 要么就有 `__iter__()`，要么就有 `__getitem__()`。这两者都是为了保证它可以在 [`iter`](https://docs.python.org/3.10/library/functions.html#iter) 这个函数的作用下返回一个 iterator。而 iterator 必须要有 `__next__()` 这个 method，这个 method 保证它在被 [`next`](https://docs.python.org/3.10/library/functions.html#next) 作用的时候可以返回下一个 iterable 里面的值。
+从实现上看，一个 iterable 要么就有 `__iter__()`，要么就有 `__getitem__()`。这两者都是为了保证它可以在 `iter` 这个[函数](https://docs.python.org/3.10/library/functions.html#iter)的作用下返回一个 iterator。而 iterator 必须要有 `__next__()` 这个 method，这个 method 保证它在被 `next` 作用的时候可以返回下一个 iterable 里面的值。
 
 ## GET_ITER 与 for loop
 
@@ -68,7 +68,7 @@ dis.dis(s)
              28 RETURN_VALUE
 ```
 
-在 `LOAD_NAME` 之后，它做了一个 [`GET_ITER`](https://docs.python.org/3.10/library/dis.html#opcode-GET_ITER)，而 `GET_ITER` 这个 bytecode，就是从栈顶的这个 iterable 里面拿出来它所对应的 iterator。所有的 for loop 的实现都是这样的。
+在 `LOAD_NAME` 之后，它做了一个 `GET_ITER`，而 `GET_ITER` 这个 [bytecode](https://docs.python.org/3.10/library/dis.html#opcode-GET_ITER)，就是从栈顶的这个 iterable 里面拿出来它所对应的 iterator。所有的 for loop 的实现都是这样的。
 
 ```c {4,6}
 case TARGET(GET_ITER): {
@@ -97,7 +97,7 @@ case TARGET(GET_ITER): {
 
 ### Node 与 NodeIter
 
-那下面就实现了一个最简单的链表跟它的 iterator。这个链表就是有一个名字，然后有一个 `next` 指针，对吧？然后我给它写了一个 iterator class。大家还记得我们之前讲的吧？iterator class 最核心的部分是要有这个 `__next__()` 函数。每次调用这个 `__next__()` 函数的时候，你需要在两件事中选择一个。第一，如果你这个 iterator 已经到头了，没有办法再给出数据了，你需要 raise 一个 [`StopIteration`](https://docs.python.org/3.10/library/exceptions.html#StopIteration) 这个 exception。第二，如果你还有数据的话，把这个数据 return 回去。
+那下面就实现了一个最简单的链表跟它的 iterator。这个链表就是有一个名字，然后有一个 `next` 指针，对吧？然后我给它写了一个 iterator class。大家还记得我们之前讲的吧？iterator class 最核心的部分是要有这个 `__next__()` 函数。每次调用这个 `__next__()` 函数的时候，你需要在两件事中选择一个。第一，如果你这个 iterator 已经到头了，没有办法再给出数据了，你需要 raise 一个 `StopIteration` 这个 [exception](https://docs.python.org/3.10/library/exceptions.html#StopIteration)。第二，如果你还有数据的话，把这个数据 return 回去。
 
 <CodeWalkthrough variant="iterator" step={1} />
 
