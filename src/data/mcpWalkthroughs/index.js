@@ -4,6 +4,7 @@ import notifications from './notifications';
 import roots from './roots';
 import commerceAgentLoop from '../commerceAgentLoopLesson.js';
 import agentToolBoundary from '../agentToolBoundaryLesson.js';
+import agentToolResults from '../agentToolResultsLesson.js';
 
 export const UI = {
   "tour.aria": "第 {n} 步，共 {total} 步",
@@ -22,5 +23,5 @@ export const UI = {
   "btn.next": "下一步 →"
 };
 
-const WALKTHROUGHS = { sampling, notifications, roots, commerceAgentLoop, agentToolBoundary };
+const WALKTHROUGHS = { sampling, notifications, roots, commerceAgentLoop, agentToolBoundary, agentToolResults };
 export default WALKTHROUGHS;

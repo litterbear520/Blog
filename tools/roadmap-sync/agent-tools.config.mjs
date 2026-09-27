@@ -11,6 +11,8 @@ export default {
         'commerce_common/execution.py': 'commerce-common/commerce_common/execution.py',
         'shopping_agent/executor.py': 'shopping-agent/core/shopping_agent/executor.py',
         'shopping_agent/backend.py': 'shopping-agent/core/shopping_agent/backend.py',
+        'commerce_common/streaming.py': 'commerce-common/commerce_common/streaming.py',
+        'shopping_agent/serialization.py': 'shopping-agent/core/shopping_agent/serialization.py',
       },
     },
   ],

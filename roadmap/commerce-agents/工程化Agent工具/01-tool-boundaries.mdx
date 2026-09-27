@@ -4,7 +4,7 @@ description: 工具把商店已有的系统接给模型：模型读定义、决�
 
 import McpWalkthrough from '@site/src/components/McpWalkthrough';
 import MessageFlow from '@site/src/components/MessageFlow';
-import { CardGrid, Card } from '@site/src/components/InfoCards';
+import Diagram from '@site/src/components/Diagram';
 
 # 工具的定义与边界
 
@@ -24,14 +24,7 @@ import { CardGrid, Card } from '@site/src/components/InfoCards';
 
 参考实现的答案是把工具建在已有系统之上，让两边各做自己擅长的事：
 
-<CardGrid columns={2}>
-  <Card title="模型判断" sub="要理解对话才能做的事">
-    搜什么关键词，顾客明确提了哪些条件，哪些结果符合顾客的目标，展示几件。
-  </Card>
-  <Card title="系统负责" sub="必须每次都成立的事" tone="accent">
-    检索和排序，参数校验和数量上限，记下这次会话见过哪些商品。
-  </Card>
-</CardGrid>
+<Diagram variant="toolBoundary" />
 
 ## 模型读到的工具定义
 

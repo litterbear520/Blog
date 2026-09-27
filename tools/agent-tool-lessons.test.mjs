@@ -19,6 +19,7 @@ const loadLesson = async (file) => {
 };
 const walkthroughs = read('../src/data/mcpWalkthroughs/index.js');
 const flows = read('../src/data/messageFlows/index.js');
+const diagrams = read('../src/data/diagrams/index.js');
 
 const LESSONS = [
   {
@@ -26,6 +27,7 @@ const LESSONS = [
     variant: 'agentToolBoundary',
     article: '../roadmap/commerce-agents/工程化Agent工具/01-tool-boundaries.mdx',
     flows: ['toolBoundarySearch'],
+    diagrams: ['toolBoundary'],
     files: [
       'shopping_agent/tools/registry.py',
       'commerce_common/execution.py',
@@ -40,6 +42,29 @@ const LESSONS = [
       ['commerce_common/execution.py', 'async def dispatch(', 'def _load_skill('],
       ['shopping_agent/executor.py', 'async def _search_products(', 'async def _get_product_details('],
       ['shopping_agent/backend.py', 'async def search_products(', 'async def get_product_details('],
+    ],
+  },
+  {
+    data: 'agentToolResultsLesson.js',
+    variant: 'agentToolResults',
+    article: '../roadmap/commerce-agents/工程化Agent工具/02-tool-results.mdx',
+    flows: [],
+    diagrams: ['toolOutcomeReaders'],
+    files: [
+      'commerce_common/streaming.py',
+      'shopping_agent/serialization.py',
+      'commerce_common/execution.py',
+      'shopping_agent/executor.py',
+    ],
+    anchors: [
+      ['commerce_common/streaming.py', 'class ToolOutcome:', 'def to_sse('],
+      ['shopping_agent/serialization.py', 'def compact_product(', '_VARIANT_ALWAYS = ('],
+      ['shopping_agent/serialization.py', '_VARIANT_ALWAYS = (', 'def product_details_payload('],
+      ['shopping_agent/serialization.py', 'SEARCH_EMPTY_HEADER = (', '# ── 购物车'],
+      ['commerce_common/execution.py', 'async def execute(', 'async def dispatch('],
+      ['commerce_common/execution.py', 'def invalid_arguments_text(', 'class BaseToolExecutor:'],
+      ['shopping_agent/executor.py', 'fence = STOREFRONT_FENCE', 'def __init__('],
+      ['shopping_agent/executor.py', 'def domain_error(', 'def handlers('],
     ],
   },
 ];
@@ -92,6 +117,10 @@ for (const spec of LESSONS) {
     for (const flow of spec.flows) {
       assert.match(article, new RegExp(`<MessageFlow variant="${flow}"`));
       assert.match(flows, new RegExp(`import ${flow} from '\\./${flow}'`));
+    }
+    for (const diagram of spec.diagrams) {
+      assert.equal((article.match(new RegExp(`<Diagram variant="${diagram}" />`, 'g')) || []).length, 1);
+      assert.match(diagrams, new RegExp(`import ${diagram} from '\\./${diagram}'`));
     }
   });
 

@@ -56,6 +56,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   ├── CodeWalkthrough/       # 代码演进演练：示例项目按步骤快照演进，文件树 / 标签 / 代码区按行标出相对上一步的增删（diff.js 行级 LCS），下方终端点击逐行打印预录输出
 │   │   ├── CopyMarkdownButton/    # 文档页"复制 Markdown"按钮
 │   │   ├── CsvTable.jsx           # CSV 表格渲染组件
+│   │   ├── Diagram/               # 结构图：diagram-design 技能画的 SVG 原样嵌入（<Diagram variant="..." />），SVG 里只写类名，styles.module.css 按角色映射到 --th-dg-* / --th-accent-*，深浅色跟着令牌切换；数据在 src/data/diagrams/
 │   │   ├── GitWorkflowViz/        # Git 工作流分步演示：Remote / Local / Disk 三区域，逐步高亮变化的提交与传输箭头，步骤数据在 steps.js
 │   │   ├── HomepageFeatures/      # 首页特性卡片
 │   │   ├── InfoCards/             # 文章内横排信息卡：CardGrid（可编号 01/02/03）+ Card（title/sub/tone）+ SkillList（中文名 + 英文 id 对照的技能清单）+ LinkCallout（带按钮链接的提示框）
@@ -72,9 +73,10 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   ├── data/
 │   │   ├── agentRuns/             # AgentLoopViz 分镜：index.js 注册表；claudeCode.js 是《The Agent Loop》笔记的默认分镜，commerceLoop.js 目前没有页面引用
 │   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出；commerce.js 是路线的步骤文案，commerce.files.js 是 roadmap-sync 生成的代码快照（不要手改）；agentTools.files.js 是“工程化 Agent 工具”专题共用的快照（配方 agent-tools）
+│   │   ├── diagrams/              # Diagram 注册表：index.js 登记 variant，注释里是类名清单；一张图一个文件（export default SVG 字符串）
 │   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
 │   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）
-│   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）+ 路线第 01 课 commerceAgentLoop（数据在 ../commerceAgentLoopLesson.js，读 commerce.files.js 快照）+ 专题课 agentToolBoundary（../agentToolBoundaryLesson.js，读 agentTools.files.js）；高亮行号都用 ../focusRange.js 的语义锚点算
+│   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）+ 路线第 01 课 commerceAgentLoop（数据在 ../commerceAgentLoopLesson.js，读 commerce.files.js 快照）+ 专题课 agentToolBoundary / agentToolResults（../agentTool*Lesson.js，读 agentTools.files.js）；高亮行号都用 ../focusRange.js 的语义锚点算
 │   │   ├── messageFlows/          # MessageFlow 注册表：index.js 登记 variant，文件头注释写了数据形状；一张图一个文件，页面里 <MessageFlow variant="..." upTo={n} /> 可以只画前 n 项
 │   │   └── skills.js              # SkillHub 技能数据（SKILLS 数组）
 │   ├── pages/
@@ -119,7 +121,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 - **SkillHub**：`/skills` 路由，技能卡片墙；数据在 `src/data/skills.js`，描述须工具中立、取材自技能仓库 README
 - **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成）。一个开源项目一个文件夹，按步不按天，一步一页；`前言/` 放前言和前置阅读。代码不手抄，从同级 dev 仓库用 `npm run roadmap-sync` 抽成快照，演练里相邻步骤按行 diff
 - **交互式可视化**：`AgentLoopViz` 组件（Agent 循环分镜动画，数据驱动：节点图、连线、逐帧高亮与消息都在 `src/data/agentRuns/<variant>.js`，静止在第 0 帧就是结构图，播放就是一次运行示例；对话内容示意即可，但工具名、字段、stop_reason 必须和代码一致）、`GitWorkflowViz` 组件（Git 工作流 15 步状态演示，在 `docs/Git工作流/index.mdx` 里通过 `BrowserOnly` 挂载）
-- **课程笔记**：一个主题写成一门课用 `/lesson`：课程索引页（`CourseHero` + 学习目标 + `DocCardList`）→ 课文（每课先讲清问题再讲机制，演练和讲解同页）→ 整门课最后一篇概念评估（`McpQuiz` + 题库里的 `explain` 解析），每课不单独出题。跨项目通用的讲解技能 `/explain` 在全局 `~/.claude/skills/`，不在仓库里
+- **课程笔记**：一个主题写成一门课用 `/lesson`：课程索引页（`CourseHero` + 学习目标 + `DocCardList`）→ 课文（每课先讲清问题再讲机制，演练和讲解同页）→ 整门课最后一篇概念评估（`McpQuiz` + 题库里的 `explain` 解析），每课不单独出题。结构图用 diagram-design 技能画，`<Diagram>` 嵌入；消息往返用 `MessageFlow`。跨项目通用的讲解技能 `/explain` 在全局 `~/.claude/skills/`，不在仓库里
 - **代码演进演练**：`CodeWalkthrough` 组件，用于“一步步改代码”的笔记（如 `docs/python/unittest.mdx`）。数据在 `src/data/codeWalkthroughs/<variant>.js`，每一步只写本步改动的文件（`null` 表示删除）、说明段落和可运行命令；不改文件、只写 `file` + `lines: [[起, 止]]` 的步骤会把这些行标成聚焦行（强调色淡底）并滚过去，用来在同一份代码里逐段讲；组件切到某步时自动打开改动的文件，相对上一步新增行绿底、删除行红底幽灵行，右上角可切「只看当前」；整个演练只有一个文件时不显示文件树和标签栏，只留一条文件名顶栏，代码卡片按行数撑开（照普通代码块），这一步只有一条命令时运行按钮放在代码右上角、输出在代码下方展开（和 `run` 代码块同一个面板），不显示终端栏；终端里的输出必须是本地实跑录下来的。文章里每一节写 `<CodeWalkthrough variant="unittest" step={3} />` 让演练停在对应步骤；上一步/下一步默认不显示，只给最后一个实例加 `nav` 让读者回翻。终端面板不写字，终端图标排在输出第一行的行首、文字紧随其后（照 Claude Cookbook 输出块的布局）
 - **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录（目前有《Model Context Protocol 简介》和《高级主题》），`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`，题目数据在 `src/data/mcp*Quiz.js`；原站的 `CodeCommand` 组件对应 bash 代码块，`GenericPrompt`（用户提示卡）对应 `:::info[用户提示]`
 - **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
