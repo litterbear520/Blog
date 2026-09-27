@@ -41,7 +41,6 @@ export const steps = [
     title: '查看 class A 的字节码',
     body: [
       '四行代码定义了一个 class `A`，用 `python -m dis` 把它的字节码打印出来，同时存进 `dis.txt`，接下来一段一段地看。',
-      '这里的字节码是在 Python 3.10 下录的，3.11 起 class 的字节码有变化，比如 `CALL_FUNCTION` 换成了 `CALL`。',
     ],
     file: 'main.py',
     files: {
