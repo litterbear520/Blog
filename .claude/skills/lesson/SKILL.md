@@ -31,7 +31,7 @@ disable-model-invocation: true
 4. **抽代码快照。** 演练里的代码不手抄：在 `tools/roadmap-sync/<配方>.config.mjs` 登记要展示的文件（没有配方就照 `commerce.config.mjs` 新建一个），跑 `npm run roadmap-sync -- <配方>`，生成的 `*.files.js` 一起提交，因为 CI 里没有源仓库。
 5. **写课文和数据。** 文件结构照 [课程结构](references/course.md)，每课照 [讲法骨架](references/skeletons.md)，组件照 [组件怎么选](references/components.md)，图照 [出图规范](references/diagrams.md)，概念评估照 course.md 里的“概念评估”一节。
    完成标准：每课的小标题和大纲表一致，每个组件的数据都在注册表里登记了。
-6. **补测试。** 新演练照 `tools/commerce-agent-loop-lesson.test.mjs` 写语义锚点测试，并加进 `tools/walkthrough-browser.mjs` 的 `lessons`；新消息流图登记后由 `npm run test:message-flow` 校验。相关的 `npm run test:*` 全部跑过。
+6. **补测试。** 新演练照 `tools/commerce-agent-loop-lesson.test.mjs` 写语义锚点测试，并加进 `tools/walkthrough-browser.mjs` 的 `lessons`；新消息流图登记后由 `npm run test:message-flow` 校验。推送前本地跑一遍 `npm run prebuild`，它就是 CI 构建前的全部测试（含代码查看器的白名单和布局测试）；布局测试要 Chrome，用 `CHROMIUM_BIN` 指定。
 7. **自检。**
    - 每课第一段就是结论，或上一课留下的问题；小标题都是“主题 + 角度”，结尾不加收尾标题。
    - 演练和代码块里的代码都来自快照或真实文件；说明里提到的函数、字段、调用关系和触发条件，都能在代码里指到出处。
