@@ -9,7 +9,7 @@ import generator, { generatorNode } from './generator';
 import timerClass, { addStr } from './classDecorator';
 import decoratorInClass from './decoratorInClass';
 import pythonExit from './pythonExit';
-import classDef from './classDef';
+import classDef, { classDis } from './classDef';
 
 export const UI = {
   'step.heading': '第 {n} 步 · {title}',
@@ -26,4 +26,4 @@ export const UI = {
   'terminal.exit': '进程退出，退出码 {code}',
 };
 
-export default { unittest, codeObject, frame, commerce, iterator, iteratorLoop, generator, generatorNode, timerClass, addStr, decoratorInClass, pythonExit, classDef };
+export default { unittest, codeObject, frame, commerce, iterator, iteratorLoop, generator, generatorNode, timerClass, addStr, decoratorInClass, pythonExit, classDef, classDis };

@@ -1,4 +1,4 @@
-// class 背后的原理示例：在 /home/claude-user/class_example 下实跑录入（Python 3.10.21，Linux）。
+// class 背后的原理示例（classDis 是字节码逐段讲解，只有 dis.txt；默认导出只有 main.py，两个都是单文件演练）：在 /home/claude-user/class_example 下实跑录入（Python 3.10.21，Linux）。
 // 字节码要用 3.10 录：讲解里的 CALL_FUNCTION 和各条指令的偏移都是 3.10 的，3.11 起 class 的字节码变了。
 
 const DIS = `  1           0 LOAD_BUILD_CLASS
@@ -36,22 +36,14 @@ Disassembly of <code object f at 0x73d83039ad90, file "main.py", line 3>:
              10 RETURN_VALUE
 `;
 
-export const steps = [
+export const classDis = { steps: [
   {
     title: '查看 class A 的字节码',
     body: [
-      '四行代码定义了一个 class `A`，用 `python -m dis` 把它的字节码打印出来，同时存进 `dis.txt`，接下来一段一段地看。',
+      '上面四行代码用 `python -m dis main.py` 打印出来的字节码就是这些，接下来一段一段地看。',
     ],
-    file: 'main.py',
-    files: {
-      'main.py': `class A:
-    name = "AAA"
-    def f(self):
-        print(1)
-`,
-      'dis.txt': DIS,
-    },
-    runs: [{ cmd: 'python -m dis main.py | tee dis.txt', exit: 0, output: DIS }],
+    file: 'dis.txt',
+    files: { 'dis.txt': DIS },
   },
   {
     title: 'f 函数的 code object',
@@ -109,6 +101,9 @@ export const steps = [
     file: 'dis.txt',
     lines: [[5, 7]],
   },
+] };
+
+export const steps = [
   {
     title: '打印 A 的 type',
     body: [
@@ -123,7 +118,6 @@ export const steps = [
         print(1)
 print(type(A))
 `,
-      'dis.txt': null,
     },
     runs: [{ cmd: 'python main.py', exit: 0, output: `<class 'type'>
 ` }],
