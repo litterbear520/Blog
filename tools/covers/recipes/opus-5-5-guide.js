@@ -1,10 +1,10 @@
-// 把整个任务交给它：张开的手在左下把任务放出去，墨线一跳一跳沿纸白长台阶往上，落到顶上的终点旗
+// 把整个任务交给它：墨线从最低一级起跳，一跳一跳沿纸白长台阶往上，落到顶上的终点旗
 module.exports = {
   swatch: 'heather',
   seed: 55,
   draw(d, m) {
     // 纸白长台阶（主物件）：四级，从左下铺到右上
-    const x0 = 270, x1 = 900, base = 900, n = 4;
+    const x0 = 80, x1 = 900, base = 900, n = 4;
     const sw = (x1 - x0) / n, rise = 165;
     const poly = [[x0, base]];
     for (let i = 0; i < n; i++) {
@@ -16,13 +16,12 @@ module.exports = {
     // 终点旗：纸白三角旗面离台阶足够远，不会粘连
     const fx = x1 - 40, top = base - 150 - rise * (n - 1);
     d.cut([[fx - 8, 50], [fx + 90, 95], [fx - 8, 150]], { amp: 3 });
-    // 手：张开，四指朝右上伸向台阶，刚把任务放出去
-    m.handAt(d, { to: [330, 575], pose: 'open', s: 1.0, rot: -8 });
     d.brush([[fx, top - 30], [fx + 2, 40]], { amp: 1 });
-    // 一跳一跳往上：从指尖上方起跳，依次落在第二、三、四级
+    // 一跳一跳往上：起点是最低一级上的墨点，依次落在第二、三、四级
     const land = (i) => [x0 + sw * i + sw * 0.3, base - 150 - rise * i];
-    // 起跳点在指尖 (330, 575) 上方，留一个线宽以上
-    let from = [345, 525];
+    const start = land(0);
+    d.dot(start[0], start[1] - 50, 26);
+    let from = [start[0] + 30, start[1] - 90];
     [1, 2, 3].forEach((i) => {
       const to = land(i);
       const peak = Math.min(from[1], to[1]) - 150;

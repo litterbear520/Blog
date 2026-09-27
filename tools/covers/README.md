@@ -25,7 +25,7 @@ npm run cover -- --sheet            # 所有配方拼成一张 → .preview/shee
 | ---- | ---- |
 | `render.js` | 命令行入口 |
 | `lib/doodle.js` | 绘图原语：cut / disc / brush / link / arrow / dot / ring / dashed / at |
-| `lib/motifs.js` | 母题库（17 个，手有三种姿势）；局部坐标以 (0,0) 为中心，标称尺寸 600–750 |
+| `lib/motifs.js` | 母题库（16 个）；局部坐标以 (0,0) 为中心，标称尺寸 600–750 |
 | `recipes/*.js` | 每篇文章一个配方：`{ swatch, seed, draw(d, m) }` |
 | `legacy/` | v1 浏览器截图流水线：只剩订阅文章头图 hero-subscribe-claude.png 的配方，仅供追溯 |
 | `.preview/` | 预览 PNG，已 gitignore |
@@ -48,23 +48,21 @@ npm run cover -- --sheet            # 所有配方拼成一张 → .preview/shee
 
 ## 母题（`m`）
 
-`hand`（`pose: open / point / grip`）`screen` `easel` `window` `terminal` `chart` `network` `shape`（`kind: square / tri / disc / diamond / hourglass`）`bubble` `stairs` `book` `magnifier` `lock` `doc` `cursor` `bigArrow` `scribble`。
+`screen` `easel` `window` `terminal` `chart` `network` `shape`（`kind: square / tri / disc / diamond / hourglass`）`bubble` `stairs` `book` `magnifier` `lock` `doc` `cursor` `bigArrow` `scribble`。
 用法 `d.at({ x: 500, y: 520, s: 1.1, rot: -6 }, () => m.screen(d))`；长相跑一次 `--motifs` 看图。
-`m.hand` 返回关键点的局部坐标：`tip` 指尖、`thumb` 拇指尖、`gap` 虎口（grip 夹东西的位置）。手臂默认很长，由 `trim: 36` 自动裁在画布内收尾；想要更短的手臂再给 `arm`（局部 y）。`m.magnifier({ lens: false })` 去掉纸白镜片。
-`m.handAt(d, { to: [x, y], key: 'tip', pose, s, rot, flip })` 让关键点直接落在画布点上，不用自己反推旋转后的原点。
-特殊手势可以自己拼：`m.hand.finger(bx, by, 角度, 长度, 宽, 弯曲, 指根宽)` 返回一根 U 形手指（`.pts` 轮廓点、`.tipAt` 指尖），`m.hand.row([...])` 把几根手指连成一排、指缝补圆弧，再拼进一条 `d.brush`。手的画法照参考站：四指并拢同向微弯、指缝细，拇指只是轮廓上鼓出的一道弧。
+`m.magnifier({ lens: false })` 去掉纸白镜片。
 
 ## 风格约定
 
 对着 claude.com/blog 的封面逐条数出来的，偏离任何一条都会和参考站分得出来：
 
 - 只有两色：墨黑 `#141413`、纸白 `#FAF9F5`；偶尔用底色深一档（`d.tint`）的色块代替纸白。SVG 透明，底色由 `swatch` 决定
-- 纸片不描边；墨线画的是另一件东西（手、折线、连线、框架），叠在纸片上面
+- 纸片不描边；墨线画的是另一件东西（折线、连线、框架、光标），叠在纸片上面
 - 纸片是剪刀剪的直边，圆是看得出棱的多边形；不要撕纸毛边
 - 墨线约 20 粗，全图一个粗细，平滑、圆头
-- 手是最常见的配角：U 形细缝手指、四指并拢，拇指是轮廓上的一道弧，不填色；`m.hand` 返回 `tip` / `thumb` / `gap` 关键点
+- 不画手：程序画出来的手显得僵、惊悚，动作改用光标、箭头、墨线表达
 - 没有星芒、文字、数字、界面细节（窗口圆点、代码符号、文字横线）
-- 一个主物件最长边 650 以上，其他东西叠在它上面；手是配角、和物件重叠，带手的封面不超过列表一半
+- 一个主物件最长边 650 以上，其他东西叠在它上面
 - 画面撑满（长边 85–95%），但线条和纸片都在画布内收尾，`render` 会报告越界点数；一张图至多两组东西
 - 相邻纸片之间留 30 以上的底色缝，否则会糊成一块
 - 列表卡片 180px 高、`object-fit: contain`，插图整体可见
