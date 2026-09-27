@@ -1,0 +1,306 @@
+# class 背后的原理
+
+这篇文章我们来聊一下 class。在我们平时写 Python 的过程中，肯定是会经常写 class 的。但是你有没有想过，在你定义一个 class 的时候，Python 的内部实际上发生了什么事情呢？
+
+## class 定义的字节码
+
+我们看左边，我定义了一个非常简单的 class，它的名字是 `A`，它里面有一个 member variable 叫 `name`，我还定义了个 method 叫 `f`。那我们老规矩，我们看一下这段代码的[字节码](./虚拟机.mdx#字节码与栈)是什么。那可以看到呢，短短的四行代码，它产生的字节码还是比较复杂的。我们来一段一段地分析一下。
+
+<CodeWalkthrough variant="classDef" step={1} />
+
+首先是最后这个部分，这个部分是最简单的，它是我们第三行、第四行定义的这个 `f` 函数。我们在这可以看到，在 class 里面定义的 `f` 函数，它实际上和在 class 外面定义的函数没有任何区别，它也是一个 [code object](./CodeObject.mdx)。那如果你感兴趣的话，你在外面试一下定义一个 `f` 函数，take 一个 argument 的，print 1，它的字节码也是这样的。
+
+<CodeWalkthrough variant="classDef" step={2} />
+
+## class 内部代码的 code object
+
+那第二个部分呢，就是这个 code object `A`。它对于很多人来说呢，可能相对来说就没有那么容易理解了。它本质上相当于什么呢？你可以把它理解成 `class A:` 里面的内容，它单独拿出来变成了一小段程序。当然在这个程序之前，它还做了一些零七八碎的事儿。那我们可以先看这个 0、2、4、6，它呢相当于是做了一个 `__module__` 等于 `__name__`，然后又做了一个 `__qualname__` 等于 `A`，它翻译成代码就是这么两句话。
+
+<CodeWalkthrough variant="classDef" step={3} />
+
+然后 8 跟 10，实际上对应的就是我们第二行 `name = "AAA"`。
+
+<CodeWalkthrough variant="classDef" step={4} />
+
+那接下来 12 到 22，是我们做了一个函数，这个函数的名字叫 `A.f`，然后我们把这个函数保存在了 `f` 这个变量里。
+
+<CodeWalkthrough variant="classDef" step={5} />
+
+那从你的角度看呢，实际上你可以把这一个部分理解成一个小函数，这个函数有一个局部变量的空间。那这个函数运行的时候呢，实际上就是把这个函数里面的很多局部变量赋上了值。这些局部变量包括内置的 `__module__`、`__qualname__`，也包括你在这写的 `name` 和 `f`。
+
+## 最外层的 `__build_class__` 调用
+
+好，那接下来我们看在最外层运行的代码。这里有个 `LOAD_BUILD_CLASS`，那我们在 Python 的[官方文档](https://docs.python.org/3.10/library/dis.html#opcode-LOAD_BUILD_CLASS)可以找到，它实际上就是 push 了这个 builtins 里面的 `__build_class__` 函数，我们等会儿会进到这个函数里面去讲。
+
+> **LOAD_BUILD_CLASS**
+>
+> Pushes `builtins.__build_class__()` onto the stack. It is later called by `CALL_FUNCTION` to construct a class.
+
+<CodeWalkthrough variant="classDef" step={6} />
+
+那我们再来看下面的 2、4、6，是我们做了一个名字叫 `A` 的函数，使用的是刚才的 code object `A`，也就是对应源代码的 2、3、4 行，我们刚才说的做的那个小函数。
+
+<CodeWalkthrough variant="classDef" step={7} />
+
+接下来我们做了一个 `CALL_FUNCTION`，这个 function 就是我们刚才提到的那个 `__build_class__`，然后我们把这个 function 的返回值保存到了 `A` 这个变量里。那这么一通操作下来呢，实际上我们就是建立了一个新的名字叫做 `A` 的变量。这个变量里面保存的值是 `__build_class__` 这个 builtin 函数所返回的一个值。那这个值呢，可以提前剧透给大家，是一个 type。
+
+<CodeWalkthrough variant="classDef" step={8} />
+
+但是说到这儿呢，其实我们还有很多疑问没有解开。比如说刚才的那个函数运行的时候，它只是在函数内部的局部变量里面赋值了，那这些局部变量是怎么成为 `A` 这个 class 的一部分的呢？那我们带着这个问题去看一看这个 `__build_class__` 函数。
+
+## `__build_class__` 的参数与 metaclass
+
+好，我们看这就是我们这个 builtin 里面的 `__build_class__` 函数。那大家回忆一下，我们刚才传进这个 `__build_class__` 函数里面，有两个 argument。第一个是那个函数 `A`，就是 class 里面缩进的那一块做的那个函数。那第二个 argument 呢，实际上是一个字符串 `A`，是这个 class 的名字。我们看，在 114 行，它就把这个 function 给拿出来赋值到了 `func` 上，而 120 行把这个名字拿出来赋值到了 `name` 上。那这当然是相对比较简单的情况，如果还有继承关系的话，它会把你继承的 class 拿出来存到这个 `orig_bases` 里面。
+
+```c title="Python/bltinmodule.c" showLineNumbers=100 {114,120,126}
+/* AC: cannot convert yet, waiting for *args support */
+static PyObject *
+builtin___build_class__(PyObject *self, PyObject *const *args, Py_ssize_t nargs,
+                        PyObject *kwnames)
+{
+    PyObject *func, *name, *bases, *mkw, *meta, *winner, *prep, *ns, *orig_bases;
+    PyObject *cls = NULL, *cell = NULL;
+    int isclass = 0;   /* initialize to prevent gcc warning */
+
+    if (nargs < 2) {
+        PyErr_SetString(PyExc_TypeError,
+                        "__build_class__: not enough arguments");
+        return NULL;
+    }
+    func = args[0];   /* Better be callable */
+    if (!PyFunction_Check(func)) {
+        PyErr_SetString(PyExc_TypeError,
+                        "__build_class__: func must be a function");
+        return NULL;
+    }
+    name = args[1];
+    if (!PyUnicode_Check(name)) {
+        PyErr_SetString(PyExc_TypeError,
+                        "__build_class__: name is not a string");
+        return NULL;
+    }
+    orig_bases = _PyTuple_FromArray(args + 2, nargs - 2);
+```
+
+好，那我们跳过一些跟 metaclass 有关的代码，直接看到第 165 行。我们这次介绍呢，是一个比较简单的情况，有关 metaclass 的事呢，我们以后有机会再去聊。那这里呢，实际上就是判断了一下你有没有传进来一个 metaclass。那在没有 base 的情况下，这个 `meta` 就直接被赋值成了这个 `PyType_Type`。那它的源代码呢，就在这个 typeobject 里面。我们所有在 Python 里面直接通过 class 什么什么定义的这个 class，class 本身的 type 都叫 type。这句话听着有点绕啊，我们回到刚才的代码啊。我们定义了 class `A` 之后，我们打印一下 `A` 的 type。注意，我们打印的是这个 class 的 type，而不是这个 class 产生的 object 的 type。可以看到，这个 class 的 type 就是 type。
+
+```c title="Python/bltinmodule.c" showLineNumbers=165 {165,168}
+    if (meta == NULL) {
+        /* if there are no bases, use type: */
+        if (PyTuple_GET_SIZE(bases) == 0) {
+            meta = (PyObject *) (&PyType_Type);
+        }
+        /* else get the type of the first base */
+        else {
+            PyObject *base0 = PyTuple_GET_ITEM(bases, 0);
+            meta = (PyObject *)Py_TYPE(base0);
+        }
+        Py_INCREF(meta);
+        isclass = 1;  /* meta is really a class */
+    }
+```
+
+<CodeWalkthrough variant="classDef" step={9} />
+
+## namespace 与 class 内代码的执行
+
+那接下来呢，在这里我们注意一下，在我们这个最简单的 case 下，`ns` 这个变量是被直接赋值成了一个空的 dictionary。这个 `ns` 呢，就是 namespace 的意思。这个变量 `ns` 会被拿来保存 `A` 里面的局部变量。
+
+```c title="Python/bltinmodule.c" showLineNumbers=198 {202}
+    if (_PyObject_LookupAttrId(meta, &PyId___prepare__, &prep) < 0) {
+        ns = NULL;
+    }
+    else if (prep == NULL) {
+        ns = PyDict_New();
+    }
+    else {
+        PyObject *pargs[2] = {name, bases};
+        ns = PyObject_VectorcallDict(prep, pargs, 2, mkw);
+        Py_DECREF(prep);
+    }
+```
+
+接着往下看，第 222 到第 224 行，这里呢相当于做了一个 execute。那 execute 是什么呢？就是刚才 `A` 的那个 code object。然后注意第 222 行的最后，`ns`，也就是 namespace 这个 dictionary，被作为保存 local variable 的变量给传进去了。
+
+```c title="Python/bltinmodule.c" showLineNumbers=222 {222-224}
+    cell = PyEval_EvalCodeEx(PyFunction_GET_CODE(func), PyFunction_GET_GLOBALS(func), ns,
+                             NULL, 0, NULL, 0, NULL, 0, NULL,
+                             PyFunction_GET_CLOSURE(func));
+```
+
+那如果站到 Python 的角度说，实际上它就是新开了一个小环境，或者如果你知道什么是 [exec](https://docs.python.org/3/library/functions.html#exec) 的话，它实际上做了一个 exec。然后它运行了一下 `name = "AAA"`，运行了一些 `def f`，冒号，`print 1`。这个时候它的局部变量，有一个 `name`，还有一个 `f`。而这些局部变量被以 key-value pair 的形式，保存到了 `ns` 这个 dictionary 里。也就是在做完这个 execute 之后，`ns` 这个 dictionary 里面，有一个 key 是 `name`，value 是 `"AAA"` 这个 string，还有一个 key 是 `f`，value 就是 `f` 现在这个 function。
+
+## 调用 type 建立 class
+
+好，那我们接着往下看。重头戏，真正的产生这个 class，或者说这个 type 的代码，是在 231、232 行。首先我建立了一个 array，里面分别给了 `name`、`bases` 跟 `ns`。在我们这个 case 下，`bases` 里面没有东西。然后我做了一个 vectorcall，这个 vectorcall 你就可以把它理解为调用了 `meta` 函数，然后传进去了这个 `margs`。
+
+```c title="Python/bltinmodule.c" showLineNumbers=225 {231-232}
+    if (cell != NULL) {
+        if (bases != orig_bases) {
+            if (PyMapping_SetItemString(ns, "__orig_bases__", orig_bases) < 0) {
+                goto error;
+            }
+        }
+        PyObject *margs[3] = {name, bases, ns};
+        cls = PyObject_VectorcallDict(meta, margs, 3, mkw);
+```
+
+而这个 `meta`，我们之前说了，是一个 type。那 type 本身当然也是一个 Python object。当我们尝试去调用这个 Python object 的时候，它就会找这个 `tp_call`。那对于 type 来说，它的 `tp_call` 是 `type_call` 这个函数，也就是它会运行这个 `type_call`。
+
+```c title="Objects/typeobject.c" showLineNumbers=3785 {3787}
+    0,                                          /* tp_as_mapping */
+    0,                                          /* tp_hash */
+    (ternaryfunc)type_call,                     /* tp_call */
+    0,                                          /* tp_str */
+    (getattrofunc)type_getattro,                /* tp_getattro */
+    (setattrofunc)type_setattro,                /* tp_setattro */
+    0,                                          /* tp_as_buffer */
+```
+
+我们看，这里就是这个 `type_call` 函数。我们往下找，找到有趣的地方。那从第 1021 行开始，就是我们正式建立这个 class 的代码了。首先它做了一个 `type->tp_new`，那这个东西，以后我们会知道，实际上就是 `__new__`。当然在 1033 行，它还做了一个 `tp_init`，它就是 `__init__`。当然了，严格上来说，应该是 Python 的那个 magic method，对应到 C 语言里面是这个。因为最后运行的是 C 语言嘛，那我们就去看一下这个 type 的 `tp_new` 是什么。
+
+```c title="Objects/typeobject.c" showLineNumbers=1021 {1021,1033}
+    obj = type->tp_new(type, args, kwds);
+    obj = _Py_CheckFunctionResult(tstate, (PyObject*)type, obj, NULL);
+    if (obj == NULL)
+        return NULL;
+
+    /* If the returned object is not an instance of type,
+       it won't be initialized. */
+    if (!PyType_IsSubtype(Py_TYPE(obj), type))
+        return obj;
+
+    type = Py_TYPE(obj);
+    if (type->tp_init != NULL) {
+        int res = type->tp_init(obj, args, kwds);
+        if (res < 0) {
+            assert(_PyErr_Occurred(tstate));
+            Py_DECREF(obj);
+            obj = NULL;
+        }
+        else {
+            assert(!_PyErr_Occurred(tstate));
+        }
+    }
+    return obj;
+}
+```
+
+## type_new 与 `__dict__`
+
+我们可以看到，这里 type 的 `tp_new` 就是 `type_new` 这个函数。
+
+```c title="Objects/typeobject.c" showLineNumbers=3810 {3812}
+    type_init,                                  /* tp_init */
+    0,                                          /* tp_alloc */
+    type_new,                                   /* tp_new */
+    PyObject_GC_Del,                            /* tp_free */
+    (inquiry)type_is_gc,                        /* tp_is_gc */
+};
+```
+
+在 `type_new` 这个函数里，它首先把这个 arguments 给读出来了。我们说过 `bases` 是空的，对吧？它把 name 读到了 `name` 里，然后把 dict 读到了 `orig_dict` 里。这是 argument 的准备工作。然后这块有一个旁支细节，就是如果你没有 bases，也就是你不继承任何东西的话，它会认为你继承了这个 `PyBaseObject_Type`，也就是默认你继承了这个 object type。
+
+```c title="Objects/typeobject.c" showLineNumbers=2382 {2400-2402,2406-2412}
+static PyObject *
+type_new(PyTypeObject *metatype, PyObject *args, PyObject *kwds)
+{
+    PyObject *name, *bases = NULL, *orig_dict, *dict = NULL;
+    PyObject *qualname, *slots = NULL, *tmp, *newslots, *cell;
+    PyTypeObject *type = NULL, *base, *tmptype, *winner;
+    PyHeapTypeObject *et;
+    PyMemberDef *mp;
+    Py_ssize_t i, nbases, nslots, slotoffset, name_size;
+    int j, may_add_dict, may_add_weak, add_dict, add_weak;
+    _Py_IDENTIFIER(__qualname__);
+    _Py_IDENTIFIER(__slots__);
+    _Py_IDENTIFIER(__classcell__);
+
+    assert(args != NULL && PyTuple_Check(args));
+    assert(kwds == NULL || PyDict_Check(kwds));
+
+    /* Check arguments: (name, bases, dict) */
+    if (!PyArg_ParseTuple(args, "UO!O!:type.__new__", &name, &PyTuple_Type,
+                          &bases, &PyDict_Type, &orig_dict))
+        return NULL;
+
+    /* Adjust for empty tuple bases */
+    nbases = PyTuple_GET_SIZE(bases);
+    if (nbases == 0) {
+        base = &PyBaseObject_Type;
+        bases = PyTuple_Pack(1, base);
+        if (bases == NULL)
+            return NULL;
+        nbases = 1;
+    }
+```
+
+当然刚才那个知识呢，对今天来说不是必要的啊。那必要的呢，在这里，在 2454 行，它把这个 `orig_dict` copy 了一份，赋值到了 `dict` 里。那这个 `dict`，大家可能已经猜到了，就是未来这个 `class.__dict__` 里面保存的内容。
+
+```c title="Objects/typeobject.c" showLineNumbers=2454 {2454}
+    dict = PyDict_Copy(orig_dict);
+    if (dict == NULL)
+        goto error;
+```
+
+好，我们跳过一些暂时无关的代码，未来我们有机会讲。在 2643 行呢，它就把这个 `dict` 给赋值给了 `type->tp_dict`，而 `tp_dict` 就是它的 `__dict__`。当你在做 `A.f` 的时候，它就会在这个 dict 里面寻找名字是 `f` 对应的那个东西。也就是现在 `A.__dict__` 已经被赋值成了刚才我们的那个局部变量的 dictionary。
+
+然后下面这段代码呢，就是如果这个 dict 里面没有 `__module__` 的话，它在想办法把这个 `__module__` 给赋值上。那当然其实我们前面说过，它这个局部变量里呢，除了我们显式写的 `name` 跟 `f` 之外，它实际上也写了这个 `__module__` 跟 `__qualname__`。
+
+```c title="Objects/typeobject.c" showLineNumbers=2641 {2643,2645-2662}
+    /* Initialize tp_dict from passed-in dict */
+    Py_INCREF(dict);
+    type->tp_dict = dict;
+
+    /* Set __module__ in the dict */
+    if (_PyDict_GetItemIdWithError(dict, &PyId___module__) == NULL) {
+        if (PyErr_Occurred()) {
+            goto error;
+        }
+        tmp = PyEval_GetGlobals();
+        if (tmp != NULL) {
+            tmp = _PyDict_GetItemIdWithError(tmp, &PyId___name__);
+            if (tmp != NULL) {
+                if (_PyDict_SetItemId(dict, &PyId___module__,
+                                      tmp) < 0)
+                    goto error;
+            }
+            else if (PyErr_Occurred()) {
+                goto error;
+            }
+        }
+    }
+```
+
+当然在这段代码之后呢，后面还有很多的代码，我给大家看一下。那这些代码呢，很多是跟 magic method 有关的，比如说如果你重载了 `__new__` 会怎么样。那这些东西呢，到未来我们再一点一点讲。我们先把这个最简单的情况下搞明白。
+
+那到最后当然就是把这个 type object 给返回回去。那如果我们回到 Python 代码呢，就是在这个 `CALL_FUNCTION` 之后，得到的这个 type object 被保存到了 `A` 这个变量里。那我们可以打印一下 `A.__dict__`，就可以看到它的 `__module__` 是 `__main__`，对吧？然后这里有一个 `name` 叫做 `"AAA"`，然后 `f` 对应的是一个函数，这个函数的名字就叫 `A.f`。这也是我们刚才在 bytecode 里面看到的。
+
+```c title="Objects/typeobject.c" showLineNumbers=2870 {2871}
+    Py_DECREF(dict);
+    return (PyObject *)type;
+
+error:
+    Py_XDECREF(dict);
+    Py_XDECREF(bases);
+    Py_XDECREF(slots);
+    Py_XDECREF(type);
+    return NULL;
+}
+```
+
+<CodeWalkthrough variant="classDef" step={10} />
+
+## 定义 class 的完整过程
+
+简单总结一下，当我们定义一个新的 class 的时候，首先相当于运行了所有在这个 class 里面的代码，然后把产生的所有局部变量的名字和它们对应的值都保存到了这个 class 的点 `__dict__` 里面。接着我们建立了一个 type，做了很多我们今天没有讲的事情，然后把这个 type 赋值给了这个 class 的名字的变量。
+
+## 用 type 动态建立类
+
+那实际上除了我们像平时这么正常地静态地定义一个类之外，我们是可以动态地建立一个类的，而这个过程就是我们刚才说的那个完整的过程。建立一个类需要三个东西，第一，这个类的名字，第二，它的父类，第三，就是这个 dictionary。而有了这三个东西，我们就可以用 [type](https://docs.python.org/3/library/functions.html#type) 这个函数动态地去建立一个类。那我们看，我们左边现在这个代码，跟我们刚才写的那个 class 是等价的，它们甚至调用的都是同一个函数。
+
+<CodeWalkthrough variant="classDef" step={11} nav />
+
+那这里呢，你可能会发现 type 这个东西，它在 take 一个 argument 的时候，返回的是这个东西的 type，而在 take 三个 argument 的时候，它返回的是一个新的 type。那这件事呢，其实是一个 Python 的历史包袱啊，在这里给大家说明一下。那包括这个用法本身，其实也不是那么常见，大家就当做拓展知识，学习一下。
+
+好，那这篇文章就到这里。
