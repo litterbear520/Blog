@@ -1,28 +1,10 @@
 // The first Commerce Agents lesson uses the same guided reader as MCP sampling.
 // Read the synced Python snapshot; do not maintain a second copy of agent.py.
 import SNAP from './codeWalkthroughs/commerce.files.js';
+import { focusRange } from './focusRange.js';
 
-// Resolve semantic anchors instead of maintaining fragile, hard-coded line numbers.
-// A source change must fail loudly rather than highlight an unrelated code block.
-export function focusRange(source, start, end) {
-  const lines = source.split(/\r?\n/);
-  const locate = (marker) => {
-    const matches = lines.flatMap((line, index) =>
-      line.trimStart().startsWith(marker) ? [index] : [],
-    );
-    if (matches.length !== 1) {
-      throw new Error(`Commerce lesson: expected one anchor "${marker}", found ${matches.length}`);
-    }
-    return matches[0];
-  };
-  const first = locate(start);
-  let last = end === undefined ? lines.length : locate(end);
-  while (last > first && !lines[last - 1].trim()) last -= 1;
-  if (last <= first) {
-    throw new Error(`Commerce lesson: invalid range "${start}" → "${end || 'EOF'}"`);
-  }
-  return { line: first + 1, endLine: last };
-}
+// Semantic anchors live in ./focusRange.js; re-exported for the anchor tests.
+export { focusRange };
 
 const files = SNAP.s01;
 const source = files['agent.py'];

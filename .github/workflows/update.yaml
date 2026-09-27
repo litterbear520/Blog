@@ -41,7 +41,7 @@ jobs:
           "$BIN" --version
 
       - name: Run data tests
-        run: npm run test:commerce-lesson && npm run test:message-flow
+        run: npm run test:commerce-lesson && npm run test:agent-tools && npm run test:message-flow
 
       # 真实 Chromium 偶尔起不来（首条 CDP 命令无应答），重试两次再判失败；
       # 真实回归会连着三次都挂，不会被重试掩盖。

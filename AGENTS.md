@@ -21,7 +21,7 @@ npm run build                # 构建静态网站
 npm run serve                # 本地预览构建结果
 npm run build && npm run serve  # 构建后预览（模拟生产环境，提交前确认用这个）
 npm run clear                # 清理 Docusaurus 缓存
-npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照，生成 src/data/codeWalkthroughs/commerce.files.js
+npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照，生成 src/data/codeWalkthroughs/commerce.files.js；专题用 npm run roadmap-sync -- agent-tools
 ```
 
 ## 项目结构
@@ -33,7 +33,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   ├── 高效商务Agent架构指南/ # Anthropic 商务 Agent 架构指南中译（index.mdx + 原文配图同目录）
 │   │   ├── 构建高效的智能体/      # Anthropic《Building Effective Agents》中译（index.md + 8 张原图同目录），商务指南里的“标准 Agent 循环”链到这里
 │   │   └── 为Agent编写高效工具/  # Anthropic《Writing effective tools for agents》中译（index.md + 8 张原图同目录），商务指南“工程化 Agent 工具”一节链到这里
-│   └── commerce-agents/           # anthropics/commerce-agents 学习线，目录布局照 docs/MCP 课程：index.mdx（CourseHero + 总览图 + 学习目标 + 六条规则 + 前提条件 + DocCardList），一个 Stage 一个中文目录（index.md 分组页），一课一页 NN-english-slug.mdx
+│   └── commerce-agents/           # anthropics/commerce-agents 学习线，目录布局照 docs/MCP 课程：index.mdx（CourseHero + 总览图 + 学习目标 + 六条规则 + 前提条件 + DocCardList），一个 Stage 一个中文目录（index.md 分组页），一课一页 NN-english-slug.mdx；专题是排在各 Stage 之后的分组目录（如 工程化Agent工具/，目录名不带空格）
 ├── docs/                          # 笔记文档（15 个分类目录）
 │   ├── Agent/                     # 智能体
 │   ├── AIGC/                      # AI 生成内容
@@ -71,10 +71,10 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）；图表角色色 --th-dg-*（neutral 中性 / process 处理 / done 完成 / external 外部，加 body、stroke、loop，深浅两套，画图的组件都用它）；字体、代码块装饰
 │   ├── data/
 │   │   ├── agentRuns/             # AgentLoopViz 分镜：index.js 注册表；claudeCode.js 是《The Agent Loop》笔记的默认分镜，commerceLoop.js 目前没有页面引用
-│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出；commerce.js 是路线的步骤文案，commerce.files.js 是 roadmap-sync 生成的代码快照（不要手改）
+│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出；commerce.js 是路线的步骤文案，commerce.files.js 是 roadmap-sync 生成的代码快照（不要手改）；agentTools.files.js 是“工程化 Agent 工具”专题共用的快照（配方 agent-tools）
 │   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
 │   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）
-│   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）+ 路线第 01 课 commerceAgentLoop（数据在 ../commerceAgentLoopLesson.js，读 commerce.files.js 快照）
+│   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）+ 路线第 01 课 commerceAgentLoop（数据在 ../commerceAgentLoopLesson.js，读 commerce.files.js 快照）+ 专题课 agentToolBoundary（../agentToolBoundaryLesson.js，读 agentTools.files.js）；高亮行号都用 ../focusRange.js 的语义锚点算
 │   │   ├── messageFlows/          # MessageFlow 注册表：index.js 登记 variant，文件头注释写了数据形状；一张图一个文件，页面里 <MessageFlow variant="..." upTo={n} /> 可以只画前 n 项
 │   │   └── skills.js              # SkillHub 技能数据（SKILLS 数组）
 │   ├── pages/

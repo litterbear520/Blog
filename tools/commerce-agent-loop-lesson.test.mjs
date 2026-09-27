@@ -10,9 +10,10 @@ const snapshot = (await import(snapshotUrl)).default;
 // The repository intentionally has no package-wide type:module. Data URLs let
 // Node test these ESM data files without changing that package setting.
 const lessonSource = read('../src/data/commerceAgentLoopLesson.js');
-const lessonUrl = asModule(lessonSource.replace(
-  "'./codeWalkthroughs/commerce.files.js'", JSON.stringify(snapshotUrl),
-));
+const focusRangeUrl = asModule(read('../src/data/focusRange.js'));
+const lessonUrl = asModule(lessonSource
+  .replace("'./codeWalkthroughs/commerce.files.js'", JSON.stringify(snapshotUrl))
+  .replace("'./focusRange.js'", JSON.stringify(focusRangeUrl)));
 const { default: lesson, focusRange } = await import(lessonUrl);
 const article = read('../roadmap/commerce-agents/一个文件，一段对话/01-the-agent-loop.mdx');
 const registry = read('../src/data/mcpWalkthroughs/index.js');
@@ -90,7 +91,7 @@ test('the first page uses the actual MCP guide once, outside collapsed details',
 
 test('the new variant is registered without replacing existing MCP lessons', () => {
   assert.match(registry, /import commerceAgentLoop from '\.\.\/commerceAgentLoopLesson\.js'/);
-  assert.match(registry, /\{\s*sampling,\s*notifications,\s*roots,\s*commerceAgentLoop\s*\}/);
+  assert.match(registry, /\{\s*sampling,\s*notifications,\s*roots,\s*commerceAgentLoop\b/);
 });
 
 test('the note retains runnable setup and distinguishes demonstrations from live execution', () => {

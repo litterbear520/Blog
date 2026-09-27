@@ -11,4 +11,6 @@
 //   focal         整张图最多一项，画成陶土色结论框
 // 页面里写 <MessageFlow variant="名字" />，加 upTo={n} 只画前 n 项，同一张图可以在几处逐步展开。
 
-export default {};
+import toolBoundarySearch from './toolBoundarySearch';
+
+export default { toolBoundarySearch };
