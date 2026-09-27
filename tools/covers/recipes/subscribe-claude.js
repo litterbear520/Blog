@@ -1,14 +1,15 @@
-// 如何自己订阅 Claude：一只手举着一张银行卡（芯片 + 磁条）
+// 一只手捏着一张大银行卡递出去：自己拿卡去订阅
 module.exports = {
   swatch: 'peach',
-  seed: 3,
+  seed: 7,
   draw(d, m) {
-    d.at({ x: 500, y: 400, s: 1.05, rot: -10 }, () => {
-      d.paper(d.rect(-240, -150, 480, 300), { shift: [24, -20], w: 24, jag: 6 });
-      d.paper(d.rect(-170, -70, 90, 70), { shift: [10, -8], w: 18, jag: 3, overshoot: 6 });
-      d.brush([[-170, 70], [60, 70]], { w: 20, amp: 2 });
+    // 主物件：银行卡剪影，墨线画磁条和芯片（压在纸片上）
+    d.at({ x: 555, y: 420, s: 1.05, rot: -12 }, () => {
+      d.cut(d.rect(-370, -230, 740, 460), { amp: 5 });
+      d.brush([[-366, -110], [366, -110]], { w: 20, amp: 1.5 });
+      d.brush(d.rect(-250, -75, 130, 100), { w: 20, amp: 1, closed: true, smooth: false });
     });
-    d.at({ x: 520, y: 640, s: 1.15 }, () => m.hand(d));
-    d.sparkle(860, 170, 120, 22);
+    // 手捏住卡的左下角，虎口对准卡角
+    d.at({ x: 285, y: 700, s: 0.9, rot: 0 }, () => m.hand(d, { pose: 'grip' }));
   },
 };
