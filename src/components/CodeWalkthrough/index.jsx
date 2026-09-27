@@ -122,7 +122,7 @@ function Walkthrough({ data, initialStep, nav }) {
   // A single file with one command runs like a plain code block: the button
   // sits top-right and the output opens under the code, no terminal strip.
   const inlineRun = single && runs.length === 1
-    ? { output: runs[0].output, status: `exit:${runs[0].exit}` } : null;
+    ? { output: runs[0].output, status: runs[0].output === '' && runs[0].exit === 0 ? 'empty' : `exit:${runs[0].exit}` } : null;
   const goToStep = (index) => {
     if (!steps[index]) return;
     setCurrent(index);
