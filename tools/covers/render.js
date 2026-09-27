@@ -102,7 +102,7 @@ function renderOne(slug, preview) {
 
 // 母题总览：每个母题一格，按 motifs.js 的导出顺序排列；手额外展示三种姿势
 function renderMotifSheet() {
-  const items = Object.keys(motifs).flatMap((name) => name === 'hand'
+  const items = Object.keys(motifs).filter((name) => name !== 'handAt').flatMap((name) => name === 'hand'
     ? ['open', 'point', 'grip'].map((pose) => [name, { pose }, `m.hand(d, { pose: '${pose}' })`])
     : [[name, undefined, `m.${name}(d)`]]);
   const cols = 4, cell = 1000;

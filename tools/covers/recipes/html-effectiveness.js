@@ -14,11 +14,6 @@ module.exports = {
     });
     // 食指指尖停在第三个节点正下方，留一个线宽的空
     const [nx, ny] = nodes[2];
-    const target = [W.x + nx * W.s, W.y + ny * W.s + 26 + 34];
-    const s = 0.72, rot = -18, t = (rot * Math.PI) / 180;
-    const [tx, ty] = [-70 * s, -395 * s];
-    const ox = target[0] - (tx * Math.cos(t) - ty * Math.sin(t));
-    const oy = target[1] - (tx * Math.sin(t) + ty * Math.cos(t));
-    d.at({ x: ox, y: oy, s, rot }, () => m.hand(d, { pose: 'point' }));
+    m.handAt(d, { to: [W.x + nx * W.s, W.y + ny * W.s + 58], pose: 'point', s: 0.95, rot: -12 });
   },
 };

@@ -16,13 +16,13 @@ module.exports = {
     // 终点旗：纸白三角旗面离台阶足够远，不会粘连
     const fx = x1 - 40, top = base - 150 - rise * (n - 1);
     d.cut([[fx - 8, 50], [fx + 90, 95], [fx - 8, 150]], { amp: 3 });
-    // 手：张开，斜伸向台阶，掌根压在第一级上
-    d.at({ x: 220, y: 790, s: 0.68, rot: 35 }, () => m.hand(d, { pose: 'open' }));
+    // 手：张开，四指朝右上伸向台阶，刚把任务放出去
+    m.handAt(d, { to: [330, 575], pose: 'open', s: 1.0, rot: -8 });
     d.brush([[fx, top - 30], [fx + 2, 40]], { amp: 1 });
     // 一跳一跳往上：从指尖上方起跳，依次落在第二、三、四级
     const land = (i) => [x0 + sw * i + sw * 0.3, base - 150 - rise * i];
-    // 指尖 tip(-44,-345) 经 rot 35、s 0.68 落在画布约 (330, 581)，起跳点在它上方留一个线宽以上
-    let from = [335, 535];
+    // 起跳点在指尖 (330, 575) 上方，留一个线宽以上
+    let from = [345, 525];
     [1, 2, 3].forEach((i) => {
       const to = land(i);
       const peak = Math.min(from[1], to[1]) - 150;
