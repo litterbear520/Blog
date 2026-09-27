@@ -83,7 +83,7 @@ function Walkthrough({ data }) {
   return (
     <div className={styles.root} data-guided-walkthrough="">
       {tour !== null && (
-        <div className={styles.tour}>
+        <div className={styles.tour} data-walkthrough-tour="">
           <div className={styles.tourDots} aria-label={fmt(UI['tour.aria'], { n: tour + 1, total: TOUR.length })}>
             {TOUR.map((name, i) => <span key={name} aria-hidden="true" className={clsx(styles.dot, i === tour && styles.dotActive)} />)}
           </div>

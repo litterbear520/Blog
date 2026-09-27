@@ -41,6 +41,8 @@ const scenarios = [
   { name: 'phone-landscape', width: 844, height: 390, theme: 'dark', touch: true },
   { name: 'phone-large-text', width: 390, height: 844, theme: 'light', touch: true, fontSize: 20 },
 ];
+// --walkthrough-tour (#2a78d6), pinned here so the tour stays blue whatever the theme accent is.
+const TOUR_BLUE = 'rgb(42, 120, 214)';
 
 function startChrome() {
   const candidates = process.env.CHROMIUM_BIN ? [process.env.CHROMIUM_BIN]
@@ -250,6 +252,12 @@ try {
       await waitFor("document.readyState === 'complete' && !!document.querySelector('[data-walkthrough-nav]')");
       await evaluate('document.fonts.ready.then(() => true)');
       if (scenario.fontSize) await evaluate(`document.documentElement.style.fontSize='${scenario.fontSize}px'`);
+      // The tour rings the step list and lights its first dot in the fixed tour
+      // blue in both themes; the theme accent must not repaint them.
+      const tour = await evaluate("(() => { const root = document.querySelector('[data-guided-walkthrough]'); return { ring: getComputedStyle(root.querySelector('[data-walkthrough-steps]')).boxShadow, dots: [...root.querySelectorAll('[data-walkthrough-tour] span[aria-hidden]')].map((dot) => getComputedStyle(dot).backgroundColor) }; })()");
+      assert.ok(tour.ring.includes(`${TOUR_BLUE} 0px 0px 0px 2px`), `${label}: tour ring is ${tour.ring}`);
+      assert.deepEqual(tour.dots.map((colour) => colour === TOUR_BLUE), [true, false, false], `${label}: tour dots are ${tour.dots.join(', ')}`);
+      report.assertions += 2;
       await evaluate("[...document.querySelectorAll('[data-guided-walkthrough] button')].find(b=>b.textContent==='跳过').setAttribute('data-e2e-skip','')");
       await click('[data-e2e-skip]');
       await waitFor("!document.querySelector('[data-e2e-skip]')");
