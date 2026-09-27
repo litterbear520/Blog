@@ -16,13 +16,15 @@ mkdirSync(output, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const dataURL = (text) => `data:text/javascript;base64,${Buffer.from(text).toString('base64')}`;
 const read = (path) => readFileSync(join(repo, path), 'utf8');
-const snapshotURL = dataURL(read('src/data/codeWalkthroughs/commerce.files.js'));
-const commerceURL = dataURL(read('src/data/commerceAgentLoopLesson.js').replace(
-  "'./codeWalkthroughs/commerce.files.js'", JSON.stringify(snapshotURL),
-));
+// Lesson data modules import their snapshot and ./focusRange.js; data URLs cannot resolve relative paths.
+const focusRangeURL = dataURL(read('src/data/focusRange.js'));
+const lessonURL = (lesson, snapshot) => dataURL(read(`src/data/${lesson}`)
+  .replace(`'./codeWalkthroughs/${snapshot}'`, JSON.stringify(dataURL(read(`src/data/codeWalkthroughs/${snapshot}`))))
+  .replace("'./focusRange.js'", JSON.stringify(focusRangeURL)));
 const mcpPath = '/docs/MCP/Model Context Protocol：高级主题/核心 MCP 功能/';
 const lessons = [
-  { name: 'commerce', path: '/roadmap/commerce-agents/一个文件，一段对话/the-agent-loop', data: (await import(commerceURL)).default },
+  { name: 'commerce', roadmap: true, path: '/roadmap/commerce-agents/一个文件，一段对话/the-agent-loop', data: (await import(lessonURL('commerceAgentLoopLesson.js', 'commerce.files.js'))).default },
+  { name: 'agentToolBoundary', roadmap: true, path: '/roadmap/commerce-agents/工程化Agent工具/tool-boundaries', data: (await import(lessonURL('agentToolBoundaryLesson.js', 'agentTools.files.js'))).default },
   ...await Promise.all(['notifications', 'roots', 'sampling'].map(async (name) => ({
     name, path: `${mcpPath}${name}-walkthrough/`,
     data: (await import(dataURL(read(`src/data/mcpWalkthroughs/${name}.js`)))).default,
@@ -251,7 +253,7 @@ try {
       await click('[data-e2e-skip]');
       await waitFor("!document.querySelector('[data-e2e-skip]')");
       assert.equal(await evaluate('document.documentElement.dataset.theme'), scenario.theme, `${label}: theme`);
-      if (lesson.name === 'commerce') {
+      if (lesson.roadmap) {
         assert.equal(await evaluate("!!document.querySelector('article a[href*=\"academy.claude.com\"], article a[href*=\"platform.claude.com\"]')"), false, 'reference links removed');
       }
       let height;
@@ -263,7 +265,7 @@ try {
         assert.deepEqual(result.failures, [], `${label} step ${index + 1}`);
         if (height === undefined) height = result.viewerHeight;
         assert.ok(Math.abs(result.viewerHeight - height) < 1, `${label}: stable code viewport`);
-        if (before && lesson.name === 'commerce') assert.ok(Math.abs(result.pageY - before.pageY) < 2, `${label} step ${index + 1}: navigation moved article from ${before.pageY} to ${result.pageY}`);
+        if (before && lesson.roadmap) assert.ok(Math.abs(result.pageY - before.pageY) < 2, `${label} step ${index + 1}: navigation moved article from ${before.pageY} to ${result.pageY}`);
         report.assertions += result.checks + 1;
         if (index === 1) await capture('step-2');
       }
