@@ -1810,7 +1810,7 @@ sys.exit(0)
 
 sys.exit(1)
 `},runs:[{cmd:"python main.py; echo $?",exit:0,output:`1
-`}]}]},classDef:{steps:[{title:"\u67E5\u770B class A \u7684\u5B57\u8282\u7801",body:["\u56DB\u884C\u4EE3\u7801\u5B9A\u4E49\u4E86\u4E00\u4E2A class `A`\uFF0C\u7528 `python -m dis` \u628A\u5B83\u7684\u5B57\u8282\u7801\u6253\u5370\u51FA\u6765\uFF0C\u540C\u65F6\u5B58\u8FDB `dis.txt`\uFF0C\u63A5\u4E0B\u6765\u4E00\u6BB5\u4E00\u6BB5\u5730\u770B\u3002","\u8FD9\u91CC\u7684\u5B57\u8282\u7801\u662F\u5728 Python 3.10 \u4E0B\u5F55\u7684\uFF0C3.11 \u8D77 class \u7684\u5B57\u8282\u7801\u6709\u53D8\u5316\uFF0C\u6BD4\u5982 `CALL_FUNCTION` \u6362\u6210\u4E86 `CALL`\u3002"],file:"main.py",files:{"main.py":`class A:
+`}]}]},classDef:{steps:[{title:"\u67E5\u770B class A \u7684\u5B57\u8282\u7801",body:["\u56DB\u884C\u4EE3\u7801\u5B9A\u4E49\u4E86\u4E00\u4E2A class `A`\uFF0C\u7528 `python -m dis` \u628A\u5B83\u7684\u5B57\u8282\u7801\u6253\u5370\u51FA\u6765\uFF0C\u540C\u65F6\u5B58\u8FDB `dis.txt`\uFF0C\u63A5\u4E0B\u6765\u4E00\u6BB5\u4E00\u6BB5\u5730\u770B\u3002"],file:"main.py",files:{"main.py":`class A:
     name = "AAA"
     def f(self):
         print(1)
