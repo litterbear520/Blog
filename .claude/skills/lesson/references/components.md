@@ -8,7 +8,7 @@
 | 同一份代码一步步改（看演进和 diff） | `CodeWalkthrough` | `<CodeWalkthrough variant="名字" step={n} />`，最后一个实例加 `nav`。数据 `src/data/codeWalkthroughs/<名字>.js`，登记到同目录 `index.js` 和 `src/components/ProjectCodeViewer/actions.test.mjs` 的 `supported` 白名单。 |
 | 消息在几方之间怎样往返（工具调用、协议交互、门控拦截） | `MessageFlow` | `<MessageFlow variant="名字" upTo={n} />`。数据 `src/data/messageFlows/<名字>.js`，形状写在同目录 `index.js` 的注释里，登记到 `index.js`。`summary` 必填；结论框每张图至多一个。同一张图可以在正文几处用 `upTo` 逐步展开。 |
 | 一次运行随时间怎样推进（循环、逐帧高亮） | `AgentLoopViz` | `<AgentLoopViz variant="名字" />`，数据 `src/data/agentRuns/<名字>.js`，登记到同目录 `index.js`。对话内容示意即可，工具名、字段、`stop_reason` 必须和代码一致。 |
-| 结构、分层、边界（静态的架构图、流程图） | 自己画的 SVG 组件 | 见 [出图规范](diagrams.md)。 |
+| 结构、分层、边界、流水线、层级（静态的架构图、流程图、图表） | `Diagram` | 用 diagram-design 技能画，`<Diagram variant="名字" />`；数据在 `src/data/diagrams/`，入库和配色约定见 [出图规范](diagrams.md)。 |
 | 并排的几个选项、“有 / 没有”对照 | `CardGrid` + `Card` | `import { CardGrid, Card } from '@site/src/components/InfoCards'`；`<CardGrid columns={2}>`，`numbered` 给有顺序的卡片编号；`tone="accent"` 至多给一张。 |
 | 读者可能卡住的术语 | `Term` | `<Term tip="解释">术语</Term>`，全局注册，不用 import。 |
 | 主线之外的提醒 | 提示块 | `:::tip` / `:::warning` / `:::important` / `:::info` / `:::note` / `:::danger`，按含义选；标题写成 `:::tip[标题]`。 |

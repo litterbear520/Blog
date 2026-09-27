@@ -1124,5 +1124,406 @@ class StorefrontBackend(ABC):
         模型看不到也不需要传递。默认返回空列表，调用方用自己的结账流程。"""
         return []
 `,
+    "commerce_common/streaming.py": `"""agent 轮次产出的事件流，以及每个工具调用的结果类型。
+
+调用方按类型渲染事件，忽略不认识的类型。
+"""
+# 项目中对应 commerce-common/commerce_common/streaming.py
+# 展示层的 run_presentation() 返回 ToolOutcome，里面带一个 ui 事件
+
+from __future__ import annotations
+
+import json
+from dataclasses import dataclass, field
+from typing import Any, Literal
+
+from pydantic import BaseModel, Field
+
+EventType = Literal[
+    "text_delta",
+    "tool_call",
+    "tool_result",
+    "ui",
+    "ui_partial",
+    "cart_update",
+    "change_update",
+    "progress",
+    "turn_complete",
+    "error",
+]
+
+
+class AgentEvent(BaseModel):
+    type: EventType
+    data: dict[str, Any] = Field(default_factory=dict)
+
+    @classmethod
+    def text_delta(cls, text: str) -> AgentEvent:
+        return cls(type="text_delta", data={"text": text})
+
+    @classmethod
+    def tool_call(
+        cls,
+        tool: str,
+        tool_use_id: str,
+        input_data: dict[str, Any],
+        label: str | None = None,
+    ) -> AgentEvent:
+        data: dict[str, Any] = {"tool": tool, "id": tool_use_id, "input": input_data}
+        if label:
+            data["label"] = label
+        return cls(type="tool_call", data=data)
+
+    @classmethod
+    def tool_result(
+        cls,
+        tool: str,
+        tool_use_id: str,
+        summary: str,
+        is_error: bool = False,
+        status: str | None = None,
+        reason: str | None = None,
+        excerpt: str | None = None,
+    ) -> AgentEvent:
+        data: dict[str, Any] = {
+            "tool": tool,
+            "id": tool_use_id,
+            "summary": summary,
+            "is_error": is_error,
+            "status": status or ("error" if is_error else "ok"),
+        }
+        if reason:
+            data["reason"] = reason
+        if excerpt is not None:
+            data["excerpt"] = excerpt
+        return cls(type="tool_result", data=data)
+
+    @classmethod
+    def ui(cls, component: str, payload: dict[str, Any]) -> AgentEvent:
+        return cls(type="ui", data={"component": component, "payload": payload})
+
+    @classmethod
+    def ui_partial(cls, component: str, payload: dict[str, Any], stream_id: str) -> AgentEvent:
+        return cls(
+            type="ui_partial",
+            data={"component": component, "payload": payload, "stream_id": stream_id},
+        )
+
+    @classmethod
+    def cart_update(cls, cart: dict[str, Any]) -> AgentEvent:
+        return cls(type="cart_update", data={"cart": cart})
+
+    @classmethod
+    def change_update(cls, change: dict[str, Any]) -> AgentEvent:
+        return cls(type="change_update", data={"change": change})
+
+    @classmethod
+    def progress(cls, message: str, tool: str | None = None, step: int | None = None) -> AgentEvent:
+        data: dict[str, Any] = {"message": message}
+        if tool:
+            data["tool"] = tool
+        if step is not None:
+            data["step"] = step
+        return cls(type="progress", data=data)
+
+    @classmethod
+    def turn_complete(
+        cls,
+        stop_reason: str | None,
+        usage: dict[str, int],
+        elapsed_ms: int,
+        results_cleared: int,
+    ) -> AgentEvent:
+        return cls(
+            type="turn_complete",
+            data={
+                "stop_reason": stop_reason,
+                "usage": usage,
+                "elapsed_ms": elapsed_ms,
+                "results_cleared": results_cleared,
+            },
+        )
+
+    @classmethod
+    def error(cls, message: str) -> AgentEvent:
+        return cls(type="error", data={"message": message})
+
+
+@dataclass
+class ToolOutcome:
+    """一个工具调用的产出：\`\`result_text\`\` 给模型看，\`\`events\`\` 给调用方渲染。
+    \`\`blocked\`\` 记录拦截门控的名称；\`\`is_error\`\` 标记失败。"""
+
+    result_text: str
+    events: list[AgentEvent] = field(default_factory=list)
+    is_error: bool = False
+    blocked: str | None = None
+
+    @classmethod
+    def error(cls, text: str) -> ToolOutcome:
+        return cls(text, is_error=True)
+
+    @classmethod
+    def held(cls, gate: str, text: str) -> ToolOutcome:
+        return cls(text, blocked=gate)
+
+    @property
+    def refused(self) -> bool:
+        return self.is_error or self.blocked is not None
+
+
+def to_sse(event: AgentEvent) -> str:
+    """一帧 Server-Sent Events：\`\`event:\`\` 是类型，\`\`data:\`\` 是 JSON 载荷。"""
+    return f"event: {event.type}\\ndata: {json.dumps(event.data, ensure_ascii=False)}\\n\\n"
+
+
+# ── 流式工具输入的不完整 JSON 解析 ──────────────────────────────
+
+
+def _before_open_string(text: str, opened: int) -> str:
+    """把文本回退到 \`\`opened\`\` 处未闭合字符串出现之前：
+    连同它的 key 和冒号一起删掉（如果它是一个 value），再去掉前面的逗号。"""
+    head = text[:opened].rstrip()
+    # 如果这个字符串是某个 key 的 value，结尾会是冒号
+    if head.endswith(":"):
+        head = head[:-1].rstrip()
+        # 冒号前面是 key 的闭合引号，往前找 key 的开始引号
+        if head.endswith('"'):
+            index = len(head) - 2
+            while index > 0 and not (head[index] == '"' and head[index - 1] != "\\\\"):
+                index -= 1
+            head = head[:index].rstrip()
+    # 去掉引入这个字段的逗号
+    if head.endswith(","):
+        head = head[:-1]
+    return head
+
+
+def parse_partial_json(buffer: str, *, settle_strings: bool = True) -> dict[str, Any] | None:
+    """把还在传输中的工具输入补全为可解析的对象，或返回 None。
+
+    未闭合的数组和对象会被补上闭合括号；悬挂的逗号和冒号会被去掉后重试。
+    正在写入的字符串连同其 key（或数组槽位）一起删掉，
+    标题、标签、ID 这类字段只在写完后才出现；
+    \`\`settle_strings=False\`\` 时就地闭合字符串，让文本随流式输出逐渐变长。"""
+    text = buffer.strip()
+    if not text.startswith("{"):
+        return None
+    try:
+        return json.loads(text)
+    except (ValueError, TypeError):
+        pass
+
+    def closers_for(source: str) -> tuple[str, bool, int]:
+        stack: list[str] = []
+        in_string = escape = False
+        opened = -1
+        for index, char in enumerate(source):
+            if escape:
+                escape = False
+                continue
+            if in_string:
+                if char == "\\\\":
+                    escape = True
+                elif char == '"':
+                    in_string = False
+                continue
+            if char == '"':
+                in_string = True
+                opened = index
+            elif char in "{[":
+                stack.append(char)
+            elif char in "}]" and stack:
+                stack.pop()
+        closing = "".join("}" if open_ != "[" else "]" for open_ in reversed(stack))
+        return closing, in_string, opened
+
+    candidates: list[str] = []
+    closing, in_string, opened = closers_for(text)
+    if in_string and settle_strings:
+        text = _before_open_string(text, opened)
+        closing, in_string, opened = closers_for(text)
+    candidates.append(text + ('"' if in_string else "") + closing)
+    trimmed = text.rstrip()
+    while trimmed and trimmed[-1] in ",:":
+        trimmed = trimmed[:-1].rstrip()
+    if trimmed != text:
+        closing, in_string, opened = closers_for(trimmed)
+        candidates.append(trimmed + ('"' if in_string else "") + closing)
+    for candidate in candidates:
+        try:
+            parsed = json.loads(candidate)
+        except (ValueError, TypeError):
+            continue
+        if isinstance(parsed, dict):
+            return parsed
+    return None
+`,
+    "shopping_agent/serialization.py": `"""读取类工具返回给模型的数据格式，统一构建以确保每条路径返回相同的字节。
+搜索结果的头部是围栏外唯一由运行时生成的一行：结果数量和一句固定的说明，
+告诉模型如何理解这些结果是文本匹配（零结果时额外说明 id 要通过
+get_product_details 解析）。只有数量会变。
+"""
+# 项目中对应 shopping-agent/core/shopping_agent/serialization.py
+
+from __future__ import annotations
+
+from collections.abc import Sequence
+from typing import Any
+
+from commerce_common.fencing import MAX_FENCED_CHARS
+
+from .fencing import STOREFRONT_FENCE
+from .types import Cart, CartItem, FulfillmentOption, Order, Policy, Product, ProductDetails
+
+
+def compact_product(product: Product) -> dict[str, Any]:
+    # 搜索结果中一条商品的精简表示：去掉值为 None 或空的字段
+    data = {
+        "product_id": product.product_id,
+        "title": product.title,
+        "brand": product.brand,
+        "price": product.price,
+        "currency": product.currency,
+        "rating": product.rating,
+        "review_count": product.review_count,
+        "in_stock": product.in_stock,
+        "labels": product.labels or None,
+        "attributes": product.attributes or None,
+        "options": product.options or None,
+        "option_values": product.option_values or None,
+        "variant_of": product.variant_of,
+        "short_description": product.short_description,
+    }
+    return {k: v for k, v in data.items() if v is not None}
+
+
+_VARIANT_ALWAYS = ("product_id", "option_values", "price", "in_stock")
+
+
+def variant_row(variant: Product, family: dict[str, Any]) -> dict[str, Any]:
+    """family 记录中的一个变体：id、选项值、价格、库存，
+    以及与 family 不同的字段，让一长串尺码变体保持简短。"""
+    row = compact_product(variant)
+    row.pop("variant_of", None)
+    attributes = {
+        k: v for k, v in variant.attributes.items() if (family.get("attributes") or {}).get(k) != v
+    }
+    kept = {
+        k: v
+        for k, v in row.items()
+        if k in _VARIANT_ALWAYS or (k != "attributes" and family.get(k) != v)
+    }
+    # 一行以 id 和选项值开头；模型扫的就是这两样。
+    lead = {
+        "product_id": kept.pop("product_id"),
+        "option_values": kept.pop("option_values", {}),
+    }
+    return lead | kept | ({"attributes": attributes} if attributes else {})
+
+
+def product_details_payload(details: ProductDetails) -> dict[str, Any]:
+    # 商品详情的完整数据，变体用 variant_row 精简
+    family = compact_product(details)
+    payload = family | {
+        "long_description": details.long_description,
+        "specs": details.specs or None,
+        "review_highlights": details.review_highlights or None,
+        "variants": [variant_row(v, family) for v in details.variants] or None,
+    }
+    return {k: v for k, v in payload.items() if v is not None}
+
+
+# ── 搜索结果 ─────────────────────────────────────────────────────────
+
+SEARCH_EMPTY_HEADER = (
+    "搜索返回 0 条结果：目录中没有匹配此查询的商品。"
+    "在告知顾客没有该商品之前，先用更宽泛的关键词重试一次，"
+    "不要把其他商品当作顾客要找的那个。"
+    "搜索匹配的是商品文本而非 id；要解析商品 id 请用 get_product_details。"
+)
+
+
+def search_result_header(count: int) -> str:
+    # 搜索结果头部：围栏外的一行说明
+    if count == 0:
+        return SEARCH_EMPTY_HEADER
+    return (
+        f"搜索返回 {count} 条结果：目录中最接近的文本匹配，"
+        "可能包含相关商品而非顾客要找的那个。"
+        "只有标题和属性都匹配时才算是顾客要的商品；"
+        "如果都不匹配则说明没找到，推荐的替代品要明确说明是替代。"
+    )
+
+
+def search_result_text(
+    query: str, products: Sequence[Product], max_chars: int = MAX_FENCED_CHARS
+) -> str:
+    """完整的 search_products 返回结果：头部说明 + 围栏包裹的数据。"""
+    payload = {
+        "query": query,
+        "result_count": len(products),
+        "results": [compact_product(p) for p in products],
+    }
+    fenced = STOREFRONT_FENCE.fence_payload(payload, max_chars)
+    return search_result_header(len(products)) + "\\n" + fenced
+
+
+# ── 购物车 ───────────────────────────────────────────────────────────
+
+
+def cart_summary(cart: Cart) -> str:
+    # 门控确认文本中的购物车摘要
+    return f"{cart.item_count} 件商品，小计 {cart.subtotal:.2f} {cart.currency}"
+
+
+def cart_line_payload(item: CartItem) -> dict[str, Any]:
+    # 购物车单行，附加 line_total，去掉空的 option_values/variant_of
+    line = item.model_dump() | {"line_total": item.line_total}
+    for key in ("option_values", "variant_of"):
+        if not line[key]:
+            del line[key]
+    return line
+
+
+def cart_payload(cart: Cart) -> dict[str, Any]:
+    # 购物车的完整数据
+    return {
+        "items": [cart_line_payload(item) for item in cart.items],
+        "item_count": cart.item_count,
+        "subtotal": cart.subtotal,
+        "currency": cart.currency,
+    }
+
+
+# ── 订单 ───────────────────────────────────────────────────────────
+
+
+def order_payload(order: Order) -> dict[str, Any]:
+    # 一张订单的数据，去掉空的 option_values
+    payload = order.model_dump(mode="json", exclude_none=True)
+    for item in payload["items"]:
+        if not item["option_values"]:
+            del item["option_values"]
+    return payload
+
+
+def orders_payload(orders: Sequence[Order]) -> Any:
+    return [order_payload(order) for order in orders] or {"note": "没有找到订单。"}
+
+
+# ── 政策 ───────────────────────────────────────────────────────────
+
+
+def policies_payload(policies: Sequence[Policy]) -> Any:
+    return [p.model_dump(exclude_none=True) for p in policies] or {"note": "没有匹配的政策内容。"}
+
+
+# ── 履约选项 ───────────────────────────────────────────────────────
+
+
+def fulfillment_payload(options: Sequence[FulfillmentOption]) -> Any:
+    return [o.model_dump(exclude_none=True) for o in options] or {"note": "没有可用的配送选项。"}
+`,
   },
 };

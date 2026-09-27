@@ -1,0 +1,61 @@
+/* 结构图：SVG 只写类名，颜色和字体都在这里映射到 --th-* 令牌，深浅模式跟着令牌切换。
+   类名清单见 src/data/diagrams/index.js。卡片外观和 MessageFlow 一致。 */
+
+.figure {
+  margin: 1.25rem 0 1.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--th-line);
+  border-radius: 12px;
+  background: var(--th-surface-1);
+}
+
+/* 桌面按列宽缩放；窄屏不再缩小，改为横向滚动，保证字不小于约 11px */
+.scroller {
+  overflow-x: auto;
+}
+
+.scroller :global(svg) {
+  display: block;
+  width: 100%;
+  min-width: 720px;
+  height: auto;
+}
+
+/* ── 形状 ── */
+.figure :global(.mask) { fill: var(--th-surface-1); }
+.figure :global(.zone) { fill: none; stroke: var(--th-dg-stroke); stroke-width: 1; }
+.figure :global(.band) { fill: var(--th-dg-neutral); stroke: var(--th-dg-stroke); stroke-width: 1; }
+.figure :global(.n-neutral),
+.figure :global(.n-process),
+.figure :global(.n-done),
+.figure :global(.n-external) { stroke: var(--th-dg-stroke); stroke-width: 1; }
+.figure :global(.n-neutral) { fill: var(--th-dg-neutral); }
+.figure :global(.n-process) { fill: var(--th-dg-process); }
+.figure :global(.n-done) { fill: var(--th-dg-done); }
+.figure :global(.n-external) { fill: var(--th-dg-external); }
+.figure :global(.n-focal) { fill: var(--th-accent-tint); stroke: var(--th-accent-border); stroke-width: 1.5; }
+.figure :global(.divider) { stroke: var(--th-dg-stroke); stroke-width: 1; opacity: 0.4; }
+.figure :global(.boundary) { fill: none; stroke: var(--th-accent-fill); stroke-width: 1.5; stroke-dasharray: 5 5; }
+
+/* ── 连线：开口 V 形箭头，回路换回路色 ── */
+.figure :global(.arrow) { fill: none; stroke: var(--th-dg-stroke); stroke-width: 1.5; }
+.figure :global(.arrow.loop) { stroke: var(--th-dg-loop); }
+.figure :global(.mk),
+.figure :global(.mk-loop) { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.figure :global(.mk) { stroke: var(--th-dg-stroke); }
+.figure :global(.mk-loop) { stroke: var(--th-dg-loop); }
+
+/* ── 文字：名称 16px，标题带 14px，其余 12px；代码名用等宽 ── */
+.figure :global(text) { fill: var(--th-dg-text); font-family: var(--ifm-font-family-base); }
+.figure :global(.t-name) { font-size: 16px; font-weight: 600; }
+.figure :global(.t-band) { font-size: 14px; font-weight: 600; }
+.figure :global(.t-sub),
+.figure :global(.t-note),
+.figure :global(.t-label) { font-size: 12px; }
+.figure :global(.t-label) { font-weight: 500; }
+/* 旁注常引用真实输出（如 “x1”），关掉连字替换，照原样显示 */
+.figure :global(.t-note) { font-feature-settings: "calt" 0; }
+.figure :global(.t-mono),
+.figure :global(.t-mono-strong),
+.figure :global(.t-code) { font-family: var(--ifm-font-family-monospace); font-size: 12px; }
+.figure :global(.t-mono-strong) { font-weight: 600; }

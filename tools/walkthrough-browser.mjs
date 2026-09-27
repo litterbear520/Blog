@@ -25,6 +25,7 @@ const mcpPath = '/docs/MCP/Model Context Protocol：高级主题/核心 MCP 功�
 const lessons = [
   { name: 'commerce', roadmap: true, path: '/roadmap/commerce-agents/一个文件，一段对话/the-agent-loop', data: (await import(lessonURL('commerceAgentLoopLesson.js', 'commerce.files.js'))).default },
   { name: 'agentToolBoundary', roadmap: true, path: '/roadmap/commerce-agents/工程化Agent工具/tool-boundaries', data: (await import(lessonURL('agentToolBoundaryLesson.js', 'agentTools.files.js'))).default },
+  { name: 'agentToolResults', roadmap: true, path: '/roadmap/commerce-agents/工程化Agent工具/tool-results', data: (await import(lessonURL('agentToolResultsLesson.js', 'agentTools.files.js'))).default },
   ...await Promise.all(['notifications', 'roots', 'sampling'].map(async (name) => ({
     name, path: `${mcpPath}${name}-walkthrough/`,
     data: (await import(dataURL(read(`src/data/mcpWalkthroughs/${name}.js`)))).default,
