@@ -60,11 +60,35 @@ export default function ProjectCodeViewer({
 
   useEffect(() => {
     const container = scrollRef.current;
-    if (!container) return;
-    const target = container.querySelector('[data-change]') || container.querySelector('[data-focus]');
-    const top = target ? Math.max(0, target.offsetTop - container.clientHeight / 2 + target.offsetHeight / 2) : 0;
+    if (!container) return undefined;
+    const centre = () => {
+      const target = container.querySelector('[data-change]') || container.querySelector('[data-focus]');
+      return { target, top: target ? Math.max(0, target.offsetTop - container.clientHeight / 2 + target.offsetHeight / 2) : 0 };
+    };
+    const { target, top } = centre();
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     container.scrollTo({ top, behavior: target && !reduceMotion ? 'smooth' : 'auto' });
+    if (!target || typeof ResizeObserver === 'undefined') return undefined;
+    // Text size, late fonts or rotation move the lines after centring: keep the
+    // target centred until the reader scrolls the code themselves.
+    let last = top;
+    let readerScrolled = false;
+    const stop = () => { readerScrolled = true; };
+    const inputs = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
+    inputs.forEach((type) => container.addEventListener(type, stop, { passive: true }));
+    const observer = new ResizeObserver(() => {
+      if (readerScrolled) return;
+      const next = centre().top;
+      if (Math.abs(next - last) < 2) return;
+      last = next;
+      container.scrollTo({ top: next, behavior: 'auto' });
+    });
+    observer.observe(container);
+    if (container.firstElementChild) observer.observe(container.firstElementChild);
+    return () => {
+      observer.disconnect();
+      inputs.forEach((type) => container.removeEventListener(type, stop));
+    };
   }, [stepKey, activeFile, showDiff, source, focusFile, focusRanges]);
 
   const selectFile = (path) => {
