@@ -1,0 +1,302 @@
+/* 消息流（泳道）图。配色全部走 --th-dg-* 图表角色色，深浅模式跟着令牌切换。 */
+
+.figure {
+  margin: 1.25rem 0 1.5rem;
+  padding: 1rem 1rem 0.5rem;
+  border: 1px solid var(--th-line);
+  border-radius: 12px;
+  background: var(--th-surface-1);
+}
+
+.title {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--th-text-3);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 窄屏横向滚动：每列至少 150px，字号不跟着屏幕缩小 */
+.scroller {
+  overflow-x: auto;
+}
+
+.flow {
+  min-width: calc(var(--cols) * 150px);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  align-items: center;
+}
+
+/* 同一行里的生命线和消息叠在同一条网格轨道上 */
+.row > * {
+  grid-row: 1;
+}
+
+.tail {
+  height: 0.75rem;
+}
+
+.lane {
+  align-self: stretch;
+  justify-self: center;
+  width: 0;
+  border-left: 1px dashed var(--th-dg-stroke);
+  opacity: 0.55;
+}
+
+/* ── 参与者 ── */
+.actor {
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  max-width: calc(100% - 0.75rem);
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--th-dg-stroke);
+  border-radius: 8px;
+  color: var(--th-dg-text);
+  text-align: center;
+}
+
+.actor[data-role='neutral'] { background: var(--th-dg-neutral); }
+.actor[data-role='process'] { background: var(--th-dg-process); }
+.actor[data-role='done'] { background: var(--th-dg-done); }
+.actor[data-role='external'] { background: var(--th-dg-external); }
+
+.actorName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.actorSub {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* ── 消息：从起点生命线画到终点生命线，左右各缩进半列 ── */
+.message {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+  margin: 0.6rem calc(100% / (2 * var(--span)));
+  /* 消息小表按这条消息的实际宽度排版，见文件末尾的 @container */
+  container-type: inline-size;
+}
+
+/* 标签底色和卡片相同，跨过中间的生命线时盖住虚线 */
+.body {
+  max-width: 100%;
+  padding: 0 0.35rem;
+  border-radius: 4px;
+  background: var(--th-surface-1);
+  color: var(--th-dg-text);
+  text-align: center;
+}
+
+.label {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.secondary .label,
+.collapsed .label {
+  color: var(--th-text-3);
+}
+
+.collapsed .label {
+  font-style: italic;
+}
+
+.arrow {
+  position: relative;
+  align-self: stretch;
+  height: 12px;
+  color: var(--th-dg-stroke);
+}
+
+.arrow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 1px;
+  border-top: 2px solid currentColor;
+  transform: translateY(-50%);
+}
+
+.toLeft::before {
+  left: 1px;
+  right: 0;
+}
+
+/* 开口 V 形箭头 */
+.head {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 12px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.toLeft .head {
+  right: auto;
+  left: 0;
+  transform: scaleX(-1);
+}
+
+.secondary .arrow {
+  color: var(--th-dg-loop);
+}
+
+.secondary .arrow::before,
+.collapsed .arrow::before {
+  border-top-width: 1.5px;
+}
+
+.secondary .head,
+.collapsed .head {
+  stroke-width: 1.5;
+}
+
+.collapsed .arrow {
+  opacity: 0.6;
+}
+
+.collapsed .arrow::before {
+  border-top-style: dashed;
+}
+
+/* ── 生命线上的注释：门控、判断这类发生在一方内部的事 ── */
+.note {
+  z-index: 1;
+  justify-self: center;
+  max-width: calc(100% - 0.75rem);
+  margin: 0.6rem 0;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--th-dg-stroke);
+  border-radius: 8px;
+  background: var(--th-dg-body);
+  color: var(--th-dg-text);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* 结论框：每张图最多一个。淡陶土色叠在不透明底上，生命线不会透出来 */
+.focal,
+.note.focal {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--th-accent-border);
+  border-radius: 8px;
+  background: linear-gradient(var(--th-accent-tint), var(--th-accent-tint)), var(--th-surface-1);
+}
+
+/* ── 消息小表：角色 │ 块类型 │ 内容 ── */
+.rows {
+  display: table;
+  margin: 0.15rem auto 0;
+  border-collapse: collapse;
+  background: var(--th-dg-body);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.rows tr {
+  border: 0;
+  background: transparent;
+}
+
+.rows th,
+.rows td {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--th-line-strong);
+}
+
+.rowRole {
+  color: var(--th-dg-text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rowRole[data-tone='neutral'] { background: var(--th-dg-neutral); }
+.rowRole[data-tone='process'] { background: var(--th-dg-process); }
+.rowRole[data-tone='external'] { background: var(--th-dg-external); }
+
+.rowBlock {
+  font-family: var(--ifm-font-family-monospace);
+  white-space: nowrap;
+}
+
+.rowContent {
+  overflow-wrap: anywhere;
+}
+
+/* 相邻两条生命线之间放不下三列：改成“角色 + 块类型”一行、内容另起一行 */
+@container (max-width: 320px) {
+  .rows,
+  .rows tbody {
+    display: block;
+  }
+
+  .rows tr {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    border: 1px solid var(--th-line-strong);
+  }
+
+  .rows tr + tr {
+    border-top: 0;
+  }
+
+  .rows th,
+  .rows td {
+    border: 0;
+  }
+
+  .rows .rowBlock {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .rows .rowContent {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--th-line-strong);
+  }
+}
+
+.figure code {
+  padding: 0.05em 0.3em;
+  border: 0;
+  border-radius: 4px;
+  background: var(--th-fill-2);
+  font-size: max(12px, 0.92em);
+  vertical-align: baseline;
+}

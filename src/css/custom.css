@@ -122,6 +122,17 @@
   --th-admonition-important: #8250df;
   --th-admonition-warning: #9a6700;
   --th-admonition-danger: #cf222e;
+
+  /* 图表角色色：节点按角色上淡色，不按“当前 / 非当前”；描边和连线共用一个中灰，
+     回路 / 次要路径用浅一档的蓝。结论框（每张图最多一个）用 --th-accent-* 陶土色。 */
+  --th-dg-neutral: #efefe5;    /* 中性：输入、上下文、容器标题带 */
+  --th-dg-process: #bad7f5;    /* 处理：模型、执行器、循环里的步骤 */
+  --th-dg-done: #d0e7b1;       /* 完成：成功、放行、结束 */
+  --th-dg-external: #fae1b9;   /* 外部：用户、人工介入、第三方系统 */
+  --th-dg-body: #ffffff;       /* 容器主体 */
+  --th-dg-stroke: #73726d;     /* 节点描边、主连线 */
+  --th-dg-loop: #5e95d2;       /* 回路、次要路径 */
+  --th-dg-text: var(--th-text-2);
 }
 
 /* ═══════════════════════════════════════════
@@ -202,6 +213,15 @@ html[data-theme='dark'] {
   --th-admonition-important: #ab7df8;
   --th-admonition-warning: #d29922;
   --th-admonition-danger: #f85149;
+
+  /* 图表角色色：同色相降明度，文字对比度都在 6:1 以上 */
+  --th-dg-neutral: #2a2a27;
+  --th-dg-process: #233a53;
+  --th-dg-done: #2c4222;
+  --th-dg-external: #4a3a21;
+  --th-dg-body: #1c1c1b;
+  --th-dg-stroke: #8d8b84;
+  --th-dg-loop: #4d7299;
 }
 
 /* ═══════════════════════════════════════════

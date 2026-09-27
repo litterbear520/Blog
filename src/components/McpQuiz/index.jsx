@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
 
@@ -6,8 +6,49 @@ import styles from './styles.module.css';
  * 单选测验：一次只显示一道题，答完点"下一题"，最后一题点"提交"；
  * 有未作答的题会先确认，交卷后显示是否通过、答对题数和得分条，可重新参加。
  * 每道题的选项顺序在首次进入和每次重新参加时都随机打乱（在挂载后打乱，避免 SSR 水合不一致）。
- * questions: [{ text, options: string[], answer: number }]，answer 为原始选项下标。
+ * questions: [{ text, options: string[], answer: number, explain?: string }]，answer 为原始选项下标。
+ * 题库里只要有一题写了 explain，交卷后就在得分卡下面逐题列出对错、正确答案和解析。
+ * 题干、选项、解析里的 `反引号` 渲染成行内代码。
  */
+
+function InlineCode({ text }) {
+  return String(text).split(/(`[^`]+`)/g).map((part, i) =>
+    part.length > 2 && part.startsWith('`') && part.endsWith('`') ? (
+      <code key={i} className={styles.inlineCode}>{part.slice(1, -1)}</code>
+    ) : <React.Fragment key={i}>{part}</React.Fragment>,
+  );
+}
+
+const REVIEW_TAG = { right: '答对', wrong: '答错', skipped: '未作答' };
+
+function Review({ questions, answers }) {
+  const titleId = useId();
+  return (
+    <section className={styles.review} aria-labelledby={titleId}>
+      <h3 id={titleId} className={styles.reviewTitle}>逐题解析</h3>
+      <ol className={styles.reviewList}>
+        {questions.map((q, i) => {
+          const picked = answers[i];
+          const status = picked === undefined ? 'skipped' : picked === q.answer ? 'right' : 'wrong';
+          return (
+            <li key={i} className={styles.reviewItem}>
+              <div className={styles.reviewHead}>
+                <span className={styles.muted}>第 {i + 1} 题</span>
+                <span className={clsx(styles.reviewTag, styles[`tag_${status}`])}>{REVIEW_TAG[status]}</span>
+              </div>
+              <p className={styles.reviewQuestion}><InlineCode text={q.text} /></p>
+              {status === 'wrong' && (
+                <p className={styles.reviewLine}>您的答案：<InlineCode text={q.options[picked]} /></p>
+              )}
+              <p className={styles.reviewLine}>正确答案：<InlineCode text={q.options[q.answer]} /></p>
+              {q.explain && <p className={styles.reviewExplain}><InlineCode text={q.explain} /></p>}
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+}
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i -= 1) {
@@ -58,27 +99,30 @@ export default function McpQuiz({ questions, passingPercentage = 70 }) {
     const score = total === 0 ? 0 : Math.round((correctCount / total) * 100);
     const passed = score >= passingPercentage;
     return (
-      <div className={clsx(styles.card, styles.result)} role="status">
-        <h2 className={styles.resultTitle}>{passed ? '您已通过' : '未能通过'}</h2>
-        <p className={styles.resultBody}>
-          {passed
-            ? `您答对了 ${total} 题中的 ${correctCount} 题。`
-            : `您答对了 ${total} 题中的 ${correctCount} 题。请复习课程材料，准备好后再重试。尝试次数不限。`}
-        </p>
-        <div className={styles.scoreBox}>
-          <div className={styles.scoreLabel}>
-            您的得分 <b className={styles.scoreValue}>{score}%</b>
+      <div className={styles.root}>
+        <div className={clsx(styles.card, styles.result)} role="status">
+          <h2 className={styles.resultTitle}>{passed ? '您已通过' : '未能通过'}</h2>
+          <p className={styles.resultBody}>
+            {passed
+              ? `您答对了 ${total} 题中的 ${correctCount} 题。`
+              : `您答对了 ${total} 题中的 ${correctCount} 题。请复习课程材料，准备好后再重试。尝试次数不限。`}
+          </p>
+          <div className={styles.scoreBox}>
+            <div className={styles.scoreLabel}>
+              您的得分 <b className={styles.scoreValue}>{score}%</b>
+            </div>
+            <div aria-hidden="true" className={styles.scoreTrack}>
+              <span className={styles.scoreFill} style={{ width: `${score}%` }} />
+              {!passed && <span className={styles.scoreTick} style={{ left: `${passingPercentage}%` }} />}
+            </div>
           </div>
-          <div aria-hidden="true" className={styles.scoreTrack}>
-            <span className={styles.scoreFill} style={{ width: `${score}%` }} />
-            {!passed && <span className={styles.scoreTick} style={{ left: `${passingPercentage}%` }} />}
+          <div className={styles.resultActions}>
+            <button type="button" onClick={retake} className={clsx(styles.btn, styles.btnSecondary)}>
+              重新参加测验
+            </button>
           </div>
         </div>
-        <div className={styles.resultActions}>
-          <button type="button" onClick={retake} className={clsx(styles.btn, styles.btnSecondary)}>
-            重新参加测验
-          </button>
-        </div>
+        {questions.some((q) => q.explain) && <Review questions={questions} answers={answers} />}
       </div>
     );
   }
@@ -128,7 +172,7 @@ export default function McpQuiz({ questions, passingPercentage = 70 }) {
 
         <fieldset className={styles.body}>
           <legend id={legendId} className={styles.questionText}>
-            {question.text}
+            <InlineCode text={question.text} />
           </legend>
           <div className={styles.options} role="radiogroup" aria-labelledby={legendId}>
             {orders[current].map((oi) => {
@@ -143,7 +187,7 @@ export default function McpQuiz({ questions, passingPercentage = 70 }) {
                     onChange={() => setAnswers((prev) => ({ ...prev, [current]: oi }))}
                     className={styles.radio}
                   />
-                  <span>{opt}</span>
+                  <span><InlineCode text={opt} /></span>
                 </label>
               );
             })}

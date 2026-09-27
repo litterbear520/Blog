@@ -60,20 +60,22 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   ├── HomepageFeatures/      # 首页特性卡片
 │   │   ├── InfoCards/             # 文章内横排信息卡：CardGrid（可编号 01/02/03）+ Card（title/sub/tone）+ SkillList（中文名 + 英文 id 对照的技能清单）+ LinkCallout（带按钮链接的提示框）
 │   │   ├── McpCourse/             # 课程索引页顶部信息卡（CourseHero：难度/课数、来源链接）
-│   │   ├── McpQuiz/               # 单选测验（一次一题、选项每次随机打乱，最后提交，显示是否通过与得分条）
+│   │   ├── McpQuiz/               # 单选测验（一次一题、选项每次随机打乱，最后提交，显示是否通过与得分条）；题目带 explain 字段时，交卷后在得分卡下逐题列出对错、正确答案和解析；题干、选项、解析里的 `反引号` 渲染成行内代码
 │   │   ├── McpWalkthrough/        # 代码演练：分步说明 + 迷你代码查看器（文件树/标签/按步高亮定位）
+│   │   ├── MessageFlow/           # 消息流（泳道）图：参与者 + 虚线生命线 + 消息箭头，消息可带“角色 │ 块类型 │ 内容”小表，生命线上可放注释框；HTML 网格排版（中文自动换行，窄屏横向滚动），配色走 --th-dg-*；数据校验在 model.mjs（带单测），数据在 src/data/messageFlows/
 │   │   ├── ProjectCodeViewer/     # 共用项目代码查看器（文件树 / 标签 / 代码区 / diff / 聚焦行 / 复制）的唯一实现，McpWalkthrough 和 CodeWalkthrough 都用它，新课程别另写一份；界面文案在 src/data/projectViewerUI.js
 │   │   ├── RoadmapOverview/       # commerce-agents 路线总览：八个 Stage 两行排的 SVG，当前 Stage 用强调色，STAGES / CURRENT 直接改
 │   │   ├── SkillCard/             # SkillHub 技能卡片（展开显示安装命令）
 │   │   └── Term/                  # 术语悬停解释：虚线下划线，悬停 / 聚焦弹出 tip
 │   ├── css/
-│   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）、字体、代码块装饰
+│   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）；图表角色色 --th-dg-*（neutral 中性 / process 处理 / done 完成 / external 外部，加 body、stroke、loop，深浅两套，画图的组件都用它）；字体、代码块装饰
 │   ├── data/
 │   │   ├── agentRuns/             # AgentLoopViz 分镜：index.js 注册表；claudeCode.js 是《The Agent Loop》笔记的默认分镜，commerceLoop.js 目前没有页面引用
 │   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出；commerce.js 是路线的步骤文案，commerce.files.js 是 roadmap-sync 生成的代码快照（不要手改）
 │   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
 │   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）
 │   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）+ 路线第 01 课 commerceAgentLoop（数据在 ../commerceAgentLoopLesson.js，读 commerce.files.js 快照）
+│   │   ├── messageFlows/          # MessageFlow 注册表：index.js 登记 variant，文件头注释写了数据形状；一张图一个文件，页面里 <MessageFlow variant="..." upTo={n} /> 可以只画前 n 项
 │   │   └── skills.js              # SkillHub 技能数据（SKILLS 数组）
 │   ├── pages/
 │   │   ├── index.js               # 首页（Canvas 雨滴动画）
