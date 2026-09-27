@@ -4,7 +4,7 @@
 
 | 要表达的 | 组件 | 写法与数据 |
 | ---- | ---- | ---- |
-| 在真实项目里逐步看代码：这一步看哪几行、为什么 | `McpWalkthrough` | `<McpWalkthrough variant="名字" />`。数据文件 `src/data/<课文>Lesson.js`：`{ files, steps: [{ title, file, line, endLine, body: [{ type: 'p', text }] }] }`；`files` 直接用 roadmap-sync 生成的快照，不另抄一份。行号用语义锚点 `focusRange(source, 起始行开头, 结束行开头)` 算（`src/data/focusRange.js`），代码一改就报错，不会高亮错行；结束锚点前的空行、单独的左括号和装饰器归到下一段。专题课几课共用一个快照时，每课只挑自己要看的文件，参照 `agentToolBoundaryLesson.js`。登记到 `src/data/mcpWalkthroughs/index.js`。 |
+| 在真实项目里逐步看代码：这一步看哪几行、为什么 | `McpWalkthrough` | `<McpWalkthrough variant="名字" />`。数据文件 `src/data/<课文>Lesson.js`：`{ files, steps: [{ title, file, line, endLine, body: [{ type: 'p', text }] }] }`；`files` 直接用 roadmap-sync 生成的快照，不另抄一份。行号用语义锚点 `focusRange(source, 起始行开头, 结束行开头)` 算（`src/data/focusRange.js`），代码一改就报错，不会高亮错行；结束锚点前的空行、单独的左括号和装饰器归到下一段。专题课几课共用一个快照时，每课只挑自己要看的文件，参照 `agentToolBoundaryLesson.js`。登记到 `src/data/mcpWalkthroughs/index.js`，并把 variant 加进 `src/components/ProjectCodeViewer/actions.test.mjs` 的 `supported` 白名单。 |
 | 同一份代码一步步改（看演进和 diff） | `CodeWalkthrough` | `<CodeWalkthrough variant="名字" step={n} />`，最后一个实例加 `nav`。数据 `src/data/codeWalkthroughs/<名字>.js`，登记到同目录 `index.js` 和 `src/components/ProjectCodeViewer/actions.test.mjs` 的 `supported` 白名单。 |
 | 消息在几方之间怎样往返（工具调用、协议交互、门控拦截） | `MessageFlow` | `<MessageFlow variant="名字" upTo={n} />`。数据 `src/data/messageFlows/<名字>.js`，形状写在同目录 `index.js` 的注释里，登记到 `index.js`。`summary` 必填；结论框每张图至多一个。同一张图可以在正文几处用 `upTo` 逐步展开。 |
 | 一次运行随时间怎样推进（循环、逐帧高亮） | `AgentLoopViz` | `<AgentLoopViz variant="名字" />`，数据 `src/data/agentRuns/<名字>.js`，登记到同目录 `index.js`。对话内容示意即可，工具名、字段、`stop_reason` 必须和代码一致。 |
