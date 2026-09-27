@@ -1,18 +1,33 @@
-// 在 Claude 和 Claude Code 中用好 Opus 5.5：一张检查清单，方框一格格打上勾，最后一格还空着等着收尾
+// 把整个任务交给它：张开的手在左下把任务放出去，墨线一跳一跳沿纸白长台阶往上，落到顶上的终点旗
 module.exports = {
   swatch: 'heather',
-  seed: 7,
+  seed: 55,
   draw(d, m) {
-    d.at({ x: 470, y: 500, s: 0.98, rot: -4 }, () => {
-      d.paper([[-250, -330], [150, -330], [250, -230], [250, 330], [-250, 330]], { shift: [24, -20], w: 22, jag: 6 });
-      d.brush([[150, -330], [150, -230]], { w: 20, amp: 2 });
-      d.brush([[150, -230], [250, -230]], { w: 20, amp: 2 });
-      [-150, 20, 190].forEach((y, i) => {
-        d.edges(d.rect(-180, y - 55, 110, 110), { w: 20, overshoot: 8 });
-        d.brush([[10, y], [i === 1 ? 110 : 170, y]], { w: 18, amp: 2 });
-        if (i < 2) d.brush([[-160, y - 5], [-120, y + 35], [-30, y - 110]], { w: 22, amp: 3 });
-      });
+    // 纸白长台阶（主物件）：四级，从左下铺到右上
+    const x0 = 270, x1 = 900, base = 900, n = 4;
+    const sw = (x1 - x0) / n, rise = 165;
+    const poly = [[x0, base]];
+    for (let i = 0; i < n; i++) {
+      const y = base - 150 - rise * i + (i === 0 ? 0 : 0);
+      poly.push([x0 + sw * i, y], [x0 + sw * (i + 1), y]);
+    }
+    poly.push([x1, base]);
+    d.cut(poly, { amp: 5 });
+    // 终点旗：纸白三角旗面离台阶足够远，不会粘连
+    const fx = x1 - 40, top = base - 150 - rise * (n - 1);
+    d.cut([[fx - 8, 50], [fx + 90, 95], [fx - 8, 150]], { amp: 3 });
+    // 手：张开，斜伸向台阶，掌根压在第一级上
+    d.at({ x: 220, y: 790, s: 0.68, rot: 35 }, () => m.hand(d, { pose: 'open' }));
+    d.brush([[fx, top - 30], [fx + 2, 40]], { amp: 1 });
+    // 一跳一跳往上：从指尖上方起跳，依次落在第二、三、四级
+    const land = (i) => [x0 + sw * i + sw * 0.3, base - 150 - rise * i];
+    // 指尖 tip(-44,-345) 经 rot 35、s 0.68 落在画布约 (330, 581)，起跳点在它上方留一个线宽以上
+    let from = [335, 535];
+    [1, 2, 3].forEach((i) => {
+      const to = land(i);
+      const peak = Math.min(from[1], to[1]) - 150;
+      d.brush([from, [from[0] + 20, peak + 30], [(from[0] + to[0]) / 2 + 20, peak], [to[0] - 10, peak + 50], [to[0], to[1] - 30]], { amp: 1.5, taper: 0.05 });
+      from = [to[0], to[1] - 30];
     });
-    d.sparkle(850, 840, 110, 22);
   },
 };
