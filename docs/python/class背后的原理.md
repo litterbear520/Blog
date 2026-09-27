@@ -6,25 +6,32 @@
 
 我们看左边，我定义了一个非常简单的 class，它的名字是 `A`，它里面有一个 member variable 叫 `name`，我还定义了个 method 叫 `f`。那我们老规矩，我们看一下这段代码的[字节码](./虚拟机.mdx#字节码与栈)是什么。那可以看到呢，短短的四行代码，它产生的字节码还是比较复杂的。我们来一段一段地分析一下。
 
-<CodeWalkthrough variant="classDef" step={1} />
+```python title="main.py" showLineNumbers
+class A:
+    name = "AAA"
+    def f(self):
+        print(1)
+```
+
+<CodeWalkthrough variant="classDis" step={1} />
 
 首先是最后这个部分，这个部分是最简单的，它是我们第三行、第四行定义的这个 `f` 函数。我们在这可以看到，在 class 里面定义的 `f` 函数，它实际上和在 class 外面定义的函数没有任何区别，它也是一个 [code object](./CodeObject.mdx)。那如果你感兴趣的话，你在外面试一下定义一个 `f` 函数，take 一个 argument 的，print 1，它的字节码也是这样的。
 
-<CodeWalkthrough variant="classDef" step={2} />
+<CodeWalkthrough variant="classDis" step={2} />
 
 ## class 内部代码的 code object
 
 那第二个部分呢，就是这个 code object `A`。它对于很多人来说呢，可能相对来说就没有那么容易理解了。它本质上相当于什么呢？你可以把它理解成 `class A:` 里面的内容，它单独拿出来变成了一小段程序。当然在这个程序之前，它还做了一些零七八碎的事儿。那我们可以先看这个 0、2、4、6，它呢相当于是做了一个 `__module__` 等于 `__name__`，然后又做了一个 `__qualname__` 等于 `A`，它翻译成代码就是这么两句话。
 
-<CodeWalkthrough variant="classDef" step={3} />
+<CodeWalkthrough variant="classDis" step={3} />
 
 然后 8 跟 10，实际上对应的就是我们第二行 `name = "AAA"`。
 
-<CodeWalkthrough variant="classDef" step={4} />
+<CodeWalkthrough variant="classDis" step={4} />
 
 那接下来 12 到 22，是我们做了一个函数，这个函数的名字叫 `A.f`，然后我们把这个函数保存在了 `f` 这个变量里。
 
-<CodeWalkthrough variant="classDef" step={5} />
+<CodeWalkthrough variant="classDis" step={5} />
 
 那从你的角度看呢，实际上你可以把这一个部分理解成一个小函数，这个函数有一个局部变量的空间。那这个函数运行的时候呢，实际上就是把这个函数里面的很多局部变量赋上了值。这些局部变量包括内置的 `__module__`、`__qualname__`，也包括你在这写的 `name` 和 `f`。
 
@@ -36,15 +43,15 @@
 >
 > Pushes `builtins.__build_class__()` onto the stack. It is later called by `CALL_FUNCTION` to construct a class.
 
-<CodeWalkthrough variant="classDef" step={6} />
+<CodeWalkthrough variant="classDis" step={6} />
 
 那我们再来看下面的 2、4、6，是我们做了一个名字叫 `A` 的函数，使用的是刚才的 code object `A`，也就是对应源代码的 2、3、4 行，我们刚才说的做的那个小函数。
 
-<CodeWalkthrough variant="classDef" step={7} />
+<CodeWalkthrough variant="classDis" step={7} />
 
 接下来我们做了一个 `CALL_FUNCTION`，这个 function 就是我们刚才提到的那个 `__build_class__`，然后我们把这个 function 的返回值保存到了 `A` 这个变量里。那这么一通操作下来呢，实际上我们就是建立了一个新的名字叫做 `A` 的变量。这个变量里面保存的值是 `__build_class__` 这个 builtin 函数所返回的一个值。那这个值呢，可以提前剧透给大家，是一个 type。
 
-<CodeWalkthrough variant="classDef" step={8} />
+<CodeWalkthrough variant="classDis" step={8} nav />
 
 但是说到这儿呢，其实我们还有很多疑问没有解开。比如说刚才的那个函数运行的时候，它只是在函数内部的局部变量里面赋值了，那这些局部变量是怎么成为 `A` 这个 class 的一部分的呢？那我们带着这个问题去看一看这个 `__build_class__` 函数。
 
@@ -100,7 +107,7 @@ builtin___build_class__(PyObject *self, PyObject *const *args, Py_ssize_t nargs,
     }
 ```
 
-<CodeWalkthrough variant="classDef" step={9} />
+<CodeWalkthrough variant="classDef" step={1} />
 
 ## namespace 与 class 内代码的执行
 
@@ -289,7 +296,7 @@ error:
 }
 ```
 
-<CodeWalkthrough variant="classDef" step={10} />
+<CodeWalkthrough variant="classDef" step={2} />
 
 ## 定义 class 的完整过程
 
@@ -299,7 +306,7 @@ error:
 
 那实际上除了我们像平时这么正常地静态地定义一个类之外，我们是可以动态地建立一个类的，而这个过程就是我们刚才说的那个完整的过程。建立一个类需要三个东西，第一，这个类的名字，第二，它的父类，第三，就是这个 dictionary。而有了这三个东西，我们就可以用 [type](https://docs.python.org/3/library/functions.html#type) 这个函数动态地去建立一个类。那我们看，我们左边现在这个代码，跟我们刚才写的那个 class 是等价的，它们甚至调用的都是同一个函数。
 
-<CodeWalkthrough variant="classDef" step={11} nav />
+<CodeWalkthrough variant="classDef" step={3} nav />
 
 那这里呢，你可能会发现 type 这个东西，它在 take 一个 argument 的时候，返回的是这个东西的 type，而在 take 三个 argument 的时候，它返回的是一个新的 type。那这件事呢，其实是一个 Python 的历史包袱啊，在这里给大家说明一下。那包括这个用法本身，其实也不是那么常见，大家就当做拓展知识，学习一下。
 
