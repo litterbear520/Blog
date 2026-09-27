@@ -3,107 +3,6 @@
 // 用 d.at({ x, y, s, rot }, () => m.xxx(d)) 摆到画布上。线宽按画布像素给，缩放不影响粗细。
 // 画法约定见 tools/covers/README.md「风格约定」：纸片不描边，墨线画另一件东西叠在上面。
 
-// ---- 手 ----
-// 照参考站的手：手指是粗墨线弯成的 U、中间只留一道细缝，四指并拢、同向微弯，指缝是圆弧；
-// 拇指单独一道大弧；手臂两条线微微收拢。整只手宽约 350，局部坐标以掌心附近为原点、手臂朝下（+y）。
-
-// 一根手指：沿中轴（可弯）两侧各一条线，指尖半圆。a 指根朝向（0 朝上、正值向右），bend 指尖再弯的角度（正值向右勾）；
-// fb 是指根宽度（默认同 fw），拇指用宽指根、往指尖收窄，才不像又一根手指
-function finger(bx, by, a, len, fw = 40, bend = 0, fb = fw) {
-  const rad = (g) => (g * Math.PI) / 180;
-  const n = 5, spine = [[bx, by]];
-  for (let k = 1; k <= n; k++) {
-    const r = rad(a + bend * ((k - 0.5) / n));
-    const [x, y] = spine[k - 1];
-    spine.push([x + Math.sin(r) * len / n, y - Math.cos(r) * len / n]);
-  }
-  const side = (k, sg) => {
-    const r = rad(a + bend * (k / n));
-    const wk = fb + (fw - fb) * Math.min(1, k / (n - 1));
-    return [spine[k][0] + sg * Math.cos(r) * wk / 2, spine[k][1] + sg * Math.sin(r) * wk / 2];
-  };
-  const left = spine.map((_, k) => side(k, -1)), right = spine.map((_, k) => side(k, 1)).reverse();
-  const r = rad(a + bend), [cx, cy] = spine[n];
-  const tip = [150, 115, 90, 65, 30].map((t) => {
-    const th = rad(t);
-    return [cx + Math.cos(r) * Math.cos(th) * fw / 2 + Math.sin(r) * Math.sin(th) * fw / 2,
-      cy + Math.sin(r) * Math.cos(th) * fw / 2 - Math.cos(r) * Math.sin(th) * fw / 2];
-  });
-  return { pts: [...left, ...tip, ...right], a, tipAt: [cx + Math.sin(r) * fw / 2, cy - Math.cos(r) * fw / 2] };
-}
-
-// 一排并拢的手指：相邻两指之间补一个圆弧指缝（不补的话 Catmull-Rom 会连成尖锐的 V）
-function fingerRow(fs) {
-  const out = [];
-  fs.forEach((f, i) => {
-    if (i > 0) {
-      const p = out[out.length - 1], q = f.pts[0];
-      const a = ((fs[i - 1].a + f.a) / 2) * Math.PI / 180;
-      const depth = Math.hypot(q[0] - p[0], q[1] - p[1]) * 0.45;
-      out.push([(p[0] + q[0]) / 2 - Math.sin(a) * depth, (p[1] + q[1]) / 2 + Math.cos(a) * depth]);
-    }
-    out.push(...f.pts);
-  });
-  return out;
-}
-
-// 手的轮廓（一笔）和关键点：tip 指尖、thumb 拇指尖、gap 虎口 / 夹口
-// pose：open 四指并拢朝右上勾、拇指张开（托、够、展示）/ point 食指指着、三指蜷起 / grip 四指朝上、拇指弯成钩合成夹口（捏、握）
-function handShape(pose = 'open') {
-  if (pose === 'point') {
-    const idx = finger(60, -40, 2, 260, 36, 0);
-    const curl = [0, 1, 2].map((i) => finger(-150 + i * 64, 40 - i * 18, -6, [60, 72, 82][i], 36, 0));
-    return {
-      body: [[-150, 1600], [-150, 700], [-156, 420], [-166, 200], [-168, 110], ...fingerRow([...curl, idx]),
-        [120, 10], [185, 0], [238, 20], [255, 60], [230, 110], [170, 170], [140, 260], [128, 420], [126, 700], [126, 1600]],
-      keys: { tip: idx.tipAt, thumb: [255, 60], gap: [110, 60] },
-    };
-  }
-  if (pose === 'grip') {
-    // 四指朝上、指尖略向右勾；拇指和参考站一样只是手掌外轮廓上鼓出的一道弧（不画成闭合的环），
-    // 圆头朝左上指向小指尖，两者之间就是夹口
-    const fs = [
-      finger(-140, 40, 6, 190, 40, 30),
-      finger(-62, 12, 12, 210, 40, 30),
-      finger(12, 30, 18, 190, 40, 28),
-      finger(82, 70, 26, 150, 38, 26),
-    ];
-    return {
-      body: [[-178, 1600], [-180, 700], [-186, 420], [-172, 200], [-162, 90], ...fingerRow(fs),
-        [116, 128], [146, 100], [164, 52], [182, 26], [208, 26], [228, 50], [244, 104], [254, 176], [248, 256],
-        [232, 344], [218, 470], [210, 700], [208, 1600]],
-      keys: { tip: fs[1].tipAt, thumb: [190, 24], gap: [196, -18] },
-    };
-  }
-  const fs = [0, 1, 2, 3].map((i) => finger([-44, 34, 104, 172][i], -10 + [0, -16, -8, 20][i], 4 + i * 4, [150, 172, 162, 128][i], 36, 26));
-  const th = finger(-104, 96, -50, 112, 46, 30);
-  return {
-    body: [[-66, 1600], [-70, 700], [-80, 420], [-100, 250], [-116, 170], ...th.pts, [-70, 44], ...fingerRow(fs),
-      [262, 110], [220, 240], [170, 420], [150, 700], [146, 1600]],
-    keys: { tip: fs[1].tipAt, thumb: th.tipAt, gap: [-80, -20] },
-  };
-}
-
-// 手：一笔连到底，手不填纸白（底下的纸片和底色都透出来）。手臂画得很长，由 brush 的 trim 自动裁到
-// 离画布边 36 处收尾，所以旋转、缩放、镜像（d.at 的 flip）之后都不用管手臂。返回关键点（局部坐标）。
-function hand(d, { pose = 'open', w = 20, trim = 36 } = {}) {
-  const { body, keys } = handShape(pose);
-  d.brush(body, { w, amp: 1.2, taper: 0.03, trim });
-  return keys;
-}
-
-// 按关键点摆手：让手的 key（tip / thumb / gap）正好落在画布点 to 上，省得自己反推旋转后的原点。
-// 用法 m.handAt(d, { to: [620, 480], pose: 'point', s: 0.9, rot: -20 })，其余参数同 d.at 和 m.hand
-function handAt(d, { to, key = 'tip', s = 1, rot = 0, flip = false, ...opts } = {}) {
-  const [kx, ky] = handShape(opts.pose).keys[key];
-  const a = (rot * Math.PI) / 180, fx = flip ? -kx : kx;
-  const ox = to[0] - (fx * Math.cos(a) - ky * Math.sin(a)) * s;
-  const oy = to[1] - (fx * Math.sin(a) + ky * Math.cos(a)) * s;
-  let keys;
-  d.at({ x: ox, y: oy, s, rot, flip }, () => { keys = hand(d, opts); });
-  return keys;
-}
-
 // ---- 板面类：投影幕 / 画架 / 窗口，纸片是“内容区”，食谱在上面叠折线、涂鸦 ----
 
 // 投影幕：墨线横杆 + 纸白幕布 + 底边墨线 + 立杆；幕布内容区约 x -320…320, y -210…160
@@ -252,8 +151,4 @@ function scribble(d, { w = 20 } = {}) {
   d.brush([...pts, [80, 60], [200, 160]], { w, amp: 2, taper: 0.05 });
 }
 
-hand.finger = finger; // 食谱要画特殊手势时可以直接拼手指、用 hand.row 连成一排
-hand.row = fingerRow;
-hand.row = fingerRow;
-
-module.exports = { hand, handAt, screen, easel, window, terminal, chart, network, shape, bubble, stairs, book, magnifier, lock, doc, cursor, bigArrow, scribble };
+module.exports = { screen, easel, window, terminal, chart, network, shape, bubble, stairs, book, magnifier, lock, doc, cursor, bigArrow, scribble };
