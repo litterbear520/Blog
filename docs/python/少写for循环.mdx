@@ -1,0 +1,123 @@
+import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
+
+# 少写 for 循环
+
+这篇文章我们要讲的内容跟 `for` 有关。大家知道，在 Python 里面，for loop 是一个非常非常重要而且常用的结构。但是我们今天要给大家讲的是如何少写 for loop。当然，我不是说写 for loop 就是错的，或者你能少写就少写，而是说在有一些情况下，我们可以用 Python 的一些 feature，或者 [built-in functions](https://docs.python.org/3/library/functions.html)，让你的代码在不使用 for loop 的情况下，实现同样的效果，并且更快、更整洁。
+
+## list comprehension 的写法
+
+好，我们看左边第一个例子。这个例子很多朋友可能已经很熟悉了，我们拿它作为开头。这个例子包含了一大类情况，就是我们要从一个 iterable 建立一个 list 的过程。我们看，如果你是初学 Python，或者你是从 C 转过来的，你很有可能就会这么写：建立一个空的 list，然后做一个 for 循环，逐渐地往 list 里面 append 东西。这是一个正确的写法，但是在 Python 里，这不是一个足够好的写法。更好的写法是第 10 行这行代码。这种写法的术语叫做 [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions)。
+
+<CodeWalkthrough variant="lessFor" step={1} />
+
+这个 list comprehension 分为三个部分。后面这一块是一个 for-in 结构，很明显，最后一个部分是一个 iterable，对应上面那个 `range(100)`。那中间这个 `i` 和 for loop 里面这个 `i` 意思是一样的，都是循环变量。而前面这个 `i` 是我想组成列表的元素。那如果这两个 `i` 看起来不清楚的话，我们把代码改一下。
+
+<CodeWalkthrough variant="lessFor" step={2} />
+
+大家可以看，这两段代码是等价的。那如果你比较熟悉 list comprehension 这个写法的话呢，你就会发现它是比上面的写法要简洁不少的。
+
+## list comprehension 的速度
+
+而实际上，它不光更简洁，而且更快。我们看，我们用 `timeit` 来测试一下这两个函数的运行速度。可以看到，list comprehension 比我们传统的 for loop 要快了非常多。
+
+:::info
+这篇文章里的运行结果都是 Python 3.10 的行为。
+:::
+
+那如果我们把这个乘法给拿掉的话，list comprehension 的速度快了会将近一倍。
+
+<CodeWalkthrough variant="lessFor" step={3} />
+
+那这里面最大的影响因素，实际上是这个 `append` 函数。当你在做 `lst.append` 的时候，Python 没有办法直接判断你使用的就是 list 的 `append` 函数，所以它需要从这个 `lst` 里面先找到 `append` 的这个函数，再拿出来，再调用它。而当你使用 list comprehension 的时候，Python 就可以直接去调用那个 list 的 `append` 函数了。
+
+## generator 表达式
+
+那有的时候我们会见到这样的表达式，就是刚才的 list comprehension 把中括号变成了圆括号。
+
+<CodeWalkthrough variant="lessFor" step={4} />
+
+那这样我们实际上是生成了一个 generator，生成器。不知道 generator 是什么的，去看我[之前的文章](./生成器.mdx)。那由于我压根就没有建立这个 list，而是建立了一个 generator，这个操作比刚才的 list comprehension 还要快非常多。大家可以看一下，这就差数量级了。大家要记住这个 generator 的形式，我们等会儿用得到。
+
+## built-in 的 max 与 min
+
+接下来我们要介绍的是两个非常简单的 built-in 函数，`max` 和 `min`。这两个函数非常容易理解，分别是求 iterable 里面的最大值和最小值。为什么要聊这么简单的函数？是想让大家知道一下，built-in 函数的速度和你自己写的 Python 速度差多少。我们知道，求最大值是一个非常简单的事情，它也没有任何 fancy 的算法，它只能一个一个拿出来比大小。也就是说，算法层面上，我们这里已经写的是最简单的算法了。而我们运行一下就会发现，Python 自带的 built-in 的 `max` 比我们自己实现的 `max` 要快了一倍。
+
+<CodeWalkthrough variant="lessFor" step={5} />
+
+那这个速度的差距，主要是因为我们在运行 Python 代码的时候，这些[字节码](./虚拟机.mdx#字节码与栈)带来的 overhead。比如说，当我们把变量保存进一个 local 的临时变量的时候，再比如说，我们判断然后 branch 的时候，当我们运行这些 Python 的 bytecode 的时候，我们实际上花费了很多不必要的时间。而在 CPython 用 C 实现的 `max` 里，尽管我也需要从这个 Python object 里面一个一个往外拿东西，但是在保存、循环、判断的时候，我都可以在 C 层面进行，因此就抢出了很多的速度。那这个也是 Python 优化的第一个技巧，就是能用 built-in 函数完成的代码，不要用 Python 写。
+
+## 用 any 查找满足条件的值
+
+好，那接下来我们介绍两个稍微不那么常见的函数，一个叫做 `any`，一个叫做 `all`。我们看这段 Python 代码，这也是我们很常见的一个 pattern，就是我们找遍一个 list，然后如果发现一个什么样的东西，直接 `return True`，否则的话 `return False`。比如说，我想找找这个 list 里面有没有一个大于 50 的数。对于这种在一个 iterable 里面寻找有没有一个这样的东西的任务，我们可以用 `any` 来完成。
+
+<CodeWalkthrough variant="lessFor" step={6} />
+
+大家注意这个 `any` 里面，我直接写了一个非常像 list comprehension 的东西，它实际上是我们刚刚提到的 generator。你可能说不对呀，这个括号对不上，对吧？这个 generator 应该是长成下面这个样子的，对吧？
+
+```python
+any((num > 50 for num in lst))
+```
+
+这个里面 generator 本身有一个括号，然后外面函数调用再有一个括号，它应该是两层括号。那这里就是 Python 的一个小小的[语法糖](https://docs.python.org/3/reference/expressions.html#generator-expressions)。当你把这个 generator 本身当做一个 argument 传进函数里的时候，generator 的那个括号就会不用写了，这样让你的代码会看起来更整洁一些。
+
+## any 的可读性与速度
+
+好，我们看这两种写法的对比，明显是用 built-in 函数的写法在语义上更清晰，用人话来说就是可读性更好。但是这里注意一下，如果你运行一下 benchmark，你会发现，使用 `any` 会比直接写 Python 还要慢一些。这里的原因是我们这个 generator 本身，还是运行在 Python 层面的，所以这个不用 `any` 的代码要做的东西，我们基本上都做了。而 generator 的建立和调用本身，它是有代价的，所以使用 `any` 的时候反而更慢了。事实上，如果我们没有这个 generator，而是直接在一个 list 里面找 `True` 的话，`any` 是比 Python 的写法要快的。那我个人还是会更喜欢用 built-in 函数这个写法，因为它的可读性是更好的。
+
+<CodeWalkthrough variant="lessFor" step={7} />
+
+## 用 all 判断全部满足
+
+和 `any` 相对的，当我们判断一个 iterable 里面是不是全都是 `True` 的时候，我们可以使用 `all`。
+
+<CodeWalkthrough variant="lessFor" step={8} />
+
+观察一下可以发现，`any` 和 `all` 对应的 Python 代码实际上是非常相似的。这里就体现了我前面提到的语义的重要性，当你使用 `any` 和 `all` 的时候，读代码的人可以在更短的时间内意识到你要干什么。
+
+## any 与 all 里用 generator 而不是 list
+
+这里我们注意一下，如果我们在使用 `any` 的时候，传进去的是一个列表表达式，那它的速度又会明显地更慢一些。
+
+<CodeWalkthrough variant="lessFor" step={9} />
+
+为什么呢？因为对于 `any` 来说，它只要看到一个满足题意的就可以返回了。也就是如果你使用 generator 的话，它不需要把 list 里面每一个东西都拿到。而如果你用 list comprehension，它就需要先把整个 list 过一遍，然后再把这个 list 传给 `any`，那这样就显然慢了。所以当我们在使用 `any` 或者 `all` 的时候，一定要记得使用 generator，而不用 list comprehension。
+
+## 用 filter 筛选
+
+好，那我们接下来介绍一些稍微有一点难度的用法。假如说我有一个 list，同时我还有一个判断函数，来判断一个值我想不想要，然后我想找到这个 list 里面所有满足我这个判断函数的值。比如说在现在这个程序里面，我想找到这个 list 里面所有大于等于 60 的数。那传统的写法非常直观，过一遍 list，如果这个判断成立的话，我加进去，最后把这个返回的 list 给返回。那实际上你完全可以用 list comprehension 来实现这个事情。你只需要在我们之前讲的 list comprehension 后面加一个 condition，加一个 `if`，也就是只有 `good(num)` 的时候，才把这个 `num` 放到这个 list 里。
+
+<CodeWalkthrough variant="lessFor" step={10} />
+
+但是呢，在这里我们也介绍一个使用 built-in function 的方法。我们可以使用一个 `filter` 函数。`filter` 函数的第一个 argument 是一个判断函数，第二个 argument 是一个 iterable。它会从这个 iterable 里面把所有的值拿出来，然后拿这个判断函数判断一下，和我们刚才说的是同一个功能。
+
+<CodeWalkthrough variant="lessFor" step={11} />
+
+这里要注意一下，`filter` 这个函数返回的并不是一个 list，而是一个 generator。也就是说，它并不等价于我们刚才的 list comprehension，它基本等价于把刚才的那个 list comprehension 里面的方括号变成圆括号，也就是 generator。唯一一个小小的不同是，如果它的第一个 argument 传进去的是 `None` 的话，它就会把这个 list 里面所有 evaluate 成 `False` 的东西给剔除。那你是更喜欢写 list comprehension 或者 generator，还是更喜欢用这个 built-in function，就要看你自己觉得哪一种语义对你来说更可读了。
+
+## 用 map 映射
+
+与之相似的还有 `map` 函数。刚才的 `filter` 是用第一个函数来判断这个值要不要，而 `map` 函数相当于是做了一个映射。比如我们这里把所有的 number 都变成了 number 乘以 2。
+
+<CodeWalkthrough variant="lessFor" step={12} />
+
+当然，它就等价于这个 generator，对吧？`change(num) for num in lst`。
+
+<CodeWalkthrough variant="lessFor" step={13} />
+
+我们看，在你熟悉这种用法的情况下，它使用的代码的数量是更少的，在语义上也稍稍清晰一点。当然对于 `map` 来说，它还有另外一个优势，就是它可以接受多个 argument。我们看，假如这个 `change` 函数需要两个 input，`map` 可以从两个不同的 iterable 里面取出这个值，然后放到这个函数里，并且拿到返回值。当 argument 多的时候，你就会发现上面这个 generator 的表达式会变得有一些冗长了。
+
+<CodeWalkthrough variant="lessFor" step={14} />
+
+## 用 zip 合并多个 iterable
+
+好，那我们最后介绍一个函数叫做 `zip`。我们有的时候会想把两个 iterable 像拉拉链那样，把它们给揉在一起。我们看传统的实现方式，我们通过 index 来把 `lst` 和 `lst2` 里面 index 相同的变量放到一个 tuple 里面，然后把这一串给返回。也就是说，原来两个 list 分别是 0 到 99，0 到 99，而我新的 list 是 `(0, 0)`，`(1, 1)`、`(2, 2)`、`(3, 3)`，这样一直到 `(99, 99)`。而使用 `zip` 函数可以等价地实现这样的功能。
+
+<CodeWalkthrough variant="lessFor" step={15} />
+
+当然它返回的也是一个 generator，而不是一个 list。我们可以看到，在这个例子下，`zip` 明显就比上面的传统的实现方式要简洁得多。
+
+那关于 `zip`，我们这里给一个例子，让大家感受一下。我们看，假如说我们 somehow 拿到了一个数据是这样的，它有三个人，但是它的名字，它的年龄，它们的分数都是分别以一个 list 形式传进来的，同一个 index 是同一个人的数据。我们怎么拿到属于同一个人的数据呢？我们可以通过一个传统的 for 循环，去对这个 index 做循环，然后把这些数值都拿到。我们这里也可以使用 `zip` 函数，由于 `zip` 函数返回的是一个 generator，而这个 generator 每次产生的是一个 tuple，我们可以直接把它 unpack，存到 `name`、`age` 跟 `score` 里。这两个函数在功能上是等价的。
+
+<CodeWalkthrough variant="lessFor" step={16} nav />
+
+好，那这篇文章就到这里。希望大家有所帮助。
