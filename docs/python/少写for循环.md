@@ -92,6 +92,10 @@ any((num > 50 for num in lst))
 
 这里要注意一下，`filter` 这个函数返回的并不是一个 list，而是一个 generator。也就是说，它并不等价于我们刚才的 list comprehension，它基本等价于把刚才的那个 list comprehension 里面的方括号变成圆括号，也就是 generator。唯一一个小小的不同是，如果它的第一个 argument 传进去的是 `None` 的话，它就会把这个 list 里面所有 evaluate 成 `False` 的东西给剔除。那你是更喜欢写 list comprehension 或者 generator，还是更喜欢用这个 built-in function，就要看你自己觉得哪一种语义对你来说更可读了。
 
+:::info
+严格来说，`filter`、`map`、`zip` 返回的是[迭代器](./迭代器.mdx)，`type` 分别是 `filter`、`map`、`zip`，并不是 generator 对象。不过用起来和 generator 一样，都是每次 `next()` 才算出一个值，而且只能遍历一次：`m = map(str, lst)` 之后，第一次 `list(m)` 得到 `['1', '2', '3']`，第二次就是 `[]` 了。要反复使用结果，可以先用 `list(...)` 存下来，或者重新调用一次 `map(str, lst)`。
+:::
+
 ## 用 map 映射
 
 与之相似的还有 `map` 函数。刚才的 `filter` 是用第一个函数来判断这个值要不要，而 `map` 函数相当于是做了一个映射。比如我们这里把所有的 number 都变成了 number 乘以 2。
