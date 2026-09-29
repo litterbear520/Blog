@@ -1,6 +1,6 @@
 // try-finally 示例：每一步都在 /home/claude-user/tryfinally_example 下用 `python3 main.py` 实跑录入（Python 3.12.3，Linux）。
 // 第 7～10 步在伪终端里跑（和读者在终端里看到的一样）：第 7 步向终端发 Ctrl+C，第 8、9 步运行 1 秒后分别发 SIGINT、SIGTERM；
-// 被信号结束的进程按 shell 的惯例记成 128 + 信号编号。
+// 被信号结束的进程按 shell 的惯例记成 128 + 信号编号。第 8、9 步输出里的 `$ kill ...` 一行是另一个终端里发信号的命令，按发生的时间插在中间。
 
 const RESOURCE_LOOP = `import time
 try:
@@ -167,6 +167,7 @@ KeyboardInterrupt
     ],
     file: 'main.py',
     runs: [{ cmd: 'python main.py', exit: 130, output: `Resource acquire
+$ kill -2 <pid>
 Resource release
 Traceback (most recent call last):
   File "/home/claude-user/tryfinally_example/main.py", line 5, in <module>
@@ -182,6 +183,7 @@ KeyboardInterrupt
     file: 'main.py',
     lines: [[6, 7]],
     runs: [{ cmd: 'python main.py', exit: 143, output: `Resource acquire
+$ kill -15 <pid>
 ` }],
   },
   {
