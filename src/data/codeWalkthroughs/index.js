@@ -11,6 +11,7 @@ import decoratorInClass from './decoratorInClass';
 import pythonExit from './pythonExit';
 import classDef, { classDis } from './classDef';
 import lessFor from './lessFor';
+import tryFinally from './tryFinally';
 
 export const UI = {
   'step.heading': '第 {n} 步 · {title}',
@@ -27,4 +28,4 @@ export const UI = {
   'terminal.exit': '进程退出，退出码 {code}',
 };
 
-export default { unittest, codeObject, frame, commerce, iterator, iteratorLoop, generator, generatorNode, timerClass, addStr, decoratorInClass, pythonExit, classDef, classDis, lessFor };
+export default { unittest, codeObject, frame, commerce, iterator, iteratorLoop, generator, generatorNode, timerClass, addStr, decoratorInClass, pythonExit, classDef, classDis, lessFor, tryFinally };
