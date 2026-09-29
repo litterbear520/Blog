@@ -2205,12 +2205,14 @@ Traceback (most recent call last):
     time.sleep(1)
 KeyboardInterrupt
 `}]},{title:"\u7528 SIGINT \u505C\u6B62\u8FDB\u7A0B",body:["\u4EE3\u7801\u4E0D\u53D8\uFF0C\u7A0B\u5E8F\u8FD0\u884C\u540E\u5728\u53E6\u4E00\u4E2A\u7EC8\u7AEF\u7528 `kill -2 <pid>` \u7ED9\u5B83\u53D1 `SIGINT`\u3002\u7ED3\u679C\u548C\u6309 Ctrl+C \u4E00\u6837\uFF0C`Resource release` \u88AB\u6253\u5370\u51FA\u6765\u3002"],file:"main.py",runs:[{cmd:"python main.py",exit:130,output:`Resource acquire
+$ kill -2 <pid>
 Resource release
 Traceback (most recent call last):
   File "/home/claude-user/tryfinally_example/main.py", line 5, in <module>
     time.sleep(1)
 KeyboardInterrupt
 `}]},{title:"\u7528 SIGTERM \u505C\u6B62\u8FDB\u7A0B",body:["\u6362\u6210 `kill -15 <pid>` \u53D1 `SIGTERM`\uFF0C\u8FDB\u7A0B\u88AB\u76F4\u63A5 terminate\uFF0C\u53EA\u6253\u5370\u4E86 `Resource acquire`\uFF0C`finally` \u91CC\u7684\u4EE3\u7801\u6CA1\u6709\u8FD0\u884C\u3002"],file:"main.py",lines:[[6,7]],runs:[{cmd:"python main.py",exit:143,output:`Resource acquire
+$ kill -15 <pid>
 `}]},{title:"os._exit \u8DF3\u8FC7 finally",body:["`os._exit(0)` \u76F4\u63A5\u505A system call \u9000\u51FA\u8FDB\u7A0B\uFF0C`finally` \u8FD9\u4E2A\u4EE3\u7801\u5757\u4E0D\u4F1A\u8FD0\u884C\uFF0C\u53EA\u6709 `Resource acquire` \u88AB\u6253\u5370\u51FA\u6765\u3002"],file:"main.py",lines:[[4,4]],files:{"main.py":`import os
 try:
     print("Resource acquire")
