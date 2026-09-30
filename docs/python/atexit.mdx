@@ -1,0 +1,174 @@
+import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
+
+# atexit
+
+这篇文章给大家介绍一个 Python 内置的 module，叫做 `atexit`。这个 module 很神奇的地方，在于我发现 B 站竟然没有一个视频是讲它的。不知道是因为这个 module 太简单了呀，还是太不常见了。`atexit` 这个 module 确实是 Python 所有的内置的 module 里面几乎最简单的一个。它只有两个函数，分别是 `register` 跟 `unregister`，而且它的功能很好理解。但是我们在使用的过程中，也确实有一些不容易察觉的小细节。我们这次争取一篇文章让你把这个 module 完全搞明白。
+
+## register 的用法
+
+`atexit` 这个 module，顾名思义，就是可以让你在 Python 退出的时候去运行一些代码。举个例子，我们定义了一个函数 `f`，然后这个 `f` 就是 `print` 了一个 `exiting`。我们用 `atexit.register` 把这个函数注册到 `atexit` 里。当我们想在这个 Python 程序结束的时候，也就是这个进程退出的时候，运行某一些函数，我们就用 `atexit.register`，然后把这个函数给放进去。我们运行一下，可以看到它打印了这个 `exiting`。
+
+<CodeWalkthrough variant="atexitModule" step={1} />
+
+那如果这个函数需要一些参数的话，比如说现在 `f` 需要一个 `s` 这个参数，那么我们就需要在 `register` 里面把这个参数也传进去。比如像现在这样，我们传进去了一个函数名 `f`，还传进去一个参数 `exiting`。我们再跑一下这个程序，可以看到结果跟之前是一样的。
+
+<CodeWalkthrough variant="atexitModule" step={2} />
+
+## 把 register 当作 decorator
+
+那 `atexit.register` 也可以当做一个 decorator 来用，把它放在 `f` definition 前面是一样的效果。我们尝试一下，可以看到结果是一样的。
+
+<CodeWalkthrough variant="atexitModule" step={3} />
+
+为什么呢？我们之前学过 decorator 的[等价形式](./装饰器/函数装饰器.md#装饰器语法)，对不对？所以你可以知道，第三行这个 decorator 就相当于这段代码。我们看，这样是不是就很好理解了？这个写法是不是跟刚才的写法是一样的？只不过你现在知道了，`atexit.register` 它还会返回它拿到的这个参数函数。
+
+<CodeWalkthrough variant="atexitModule" step={4} />
+
+## register 的 C 实现
+
+那我们看一下这个[源码](https://github.com/python/cpython/blob/v3.10.0a1/Modules/atexitmodule.c#L132-L182)。`atexit` 这个 module 是用 C 写的，那么 `register` 这个函数就在这。它其实也并不复杂，它就是把每一个你传去的 callback 都存起来了。大家看，在这就是把函数和它的 argument 都保存起来，然后未来就可以用。在最后 181 行这里，它把这个函数返回了回来，这样 decorator 就可以正常工作了。
+
+```c title="Modules/atexitmodule.c" showLineNumbers=132 {173-178,181}
+static PyObject *
+atexit_register(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    atexitmodule_state *modstate;
+    atexit_callback *new_callback;
+    PyObject *func = NULL;
+
+    modstate = get_atexit_state(self);
+
+    if (modstate->ncallbacks >= modstate->callback_len) {
+        atexit_callback **r;
+        modstate->callback_len += 16;
+        r = (atexit_callback**)PyMem_Realloc(modstate->atexit_callbacks,
+                                      sizeof(atexit_callback*) * modstate->callback_len);
+        if (r == NULL)
+            return PyErr_NoMemory();
+        modstate->atexit_callbacks = r;
+    }
+
+    if (PyTuple_GET_SIZE(args) == 0) {
+        PyErr_SetString(PyExc_TypeError,
+                "register() takes at least 1 argument (0 given)");
+        return NULL;
+    }
+
+    func = PyTuple_GET_ITEM(args, 0);
+    if (!PyCallable_Check(func)) {
+        PyErr_SetString(PyExc_TypeError,
+                "the first argument must be callable");
+        return NULL;
+    }
+
+    new_callback = PyMem_Malloc(sizeof(atexit_callback));
+    if (new_callback == NULL)
+        return PyErr_NoMemory();
+
+    new_callback->args = PyTuple_GetSlice(args, 1, PyTuple_GET_SIZE(args));
+    if (new_callback->args == NULL) {
+        PyMem_Free(new_callback);
+        return NULL;
+    }
+    new_callback->func = func;
+    new_callback->kwargs = kwargs;
+    Py_INCREF(func);
+    Py_XINCREF(kwargs);
+
+    modstate->atexit_callbacks[modstate->ncallbacks++] = new_callback;
+
+    Py_INCREF(func);
+    return func;
+}
+```
+
+## unregister 的用法
+
+好，如果我们程序运行到一半，我不想在程序结束的时候再跑这个函数了，我们就用 `unregister`。我们看，在左边第 7 行，我们把这个 `f` 函数给做了一个 `unregister`。我们再运行一下这段代码，可以看到它就没有 `print` 任何东西了。
+
+<CodeWalkthrough variant="atexitModule" step={5} />
+
+好，到目前为止，我们讲的东西都很容易，对吧？而且看起来我们已经把 `atexit` 这个 module 里面所有东西都讲完了。你可能会觉得，这一点都不符合我这个硬核 UP 主的身份，对吧？首先，我也做很多这个面向初学者的内容，其次，我们这篇文章还没有结束。
+
+## unregister 的匹配规则
+
+我们先聊聊这个 `unregister`。这个 `unregister` 是怎么工作的呢？如果我们注册了多个函数，它怎么 `unregister` 呢？我们可以试一下。我们看左边，我们注册了三次 `f` 函数，然后我们只做了一次 `unregister`。你猜猜它会打印出来东西吗？结果是不会啊。
+
+<CodeWalkthrough variant="atexitModule" step={6} />
+
+我们来 Python 的[官网](https://docs.python.org/3/library/atexit.html#atexit.unregister)看一下 `unregister` 这个函数的说明。
+
+> **atexit.unregister(func)**
+>
+> Remove *func* from the list of functions to be run at interpreter shutdown. `unregister()` silently does nothing if *func* was not previously registered. If *func* has been registered more than once, every occurrence of that function in the `atexit` call stack will be removed. Equality comparisons (`==`) are used internally during unregistration, so function references do not need to have matching identities.
+
+第一，它说如果这个 function 没有 register，它就什么都不做，这是防止一些无谓的报错，也就是你可以尽情地做 `unregister`。第二，如果 function 被 register 了不止一次，那么所有的 function 都会被移除，这就是我们刚才举的例子。
+
+第三，这件事也很有趣啊，当它比较两个函数是否一致的时候，它用的是 `==`，而不是 `is`。这是什么意思呢？我们看一下这个例子啊。当你直接定义函数的时候呢，那件事不重要。但是如果我注册的是一个 object，是一个 callable，比如说像我定义的这个 `MyFunc` 一样，我定义了一个它的 `__call__` method，它就是 callable 了。然后我还定义了一下它的 `__eq__` method，就是如果另外一个也是 `MyFunc` instance 的话，我就认为它们俩是相等的。好，我们建立一个 callable object `f0`，然后我们 register `f0`。看一下结果，可以看到这段代码，跟我们刚才那段代码，效果是一样的，我们 register 的是一个 callable object 了。
+
+<CodeWalkthrough variant="atexitModule" step={7} />
+
+接下来有趣的事儿要来了啊，我们建立了一个新的 `MyFunc` object，叫 `f1`。那 `f1` 跟 `f0` 是两个 object，它们相等，但不是同一个东西。我现在 `unregister` `f1`，我们运行一下程序，可以看到这个 `f0`，实际上是被 `unregister` 掉了。这就是 Python 官方文档上说的，用 `==` 来比较，而不是 `is` 所造成的结果。那这件事儿呢，当然就是你用对了是 feature，用错了是 bug，对吧？这里呢，就是尽量深入地跟大家聊一下，让你以后留个心眼儿。
+
+<CodeWalkthrough variant="atexitModule" step={8} />
+
+## 没有写进文档的函数
+
+好，那如果你以为我这次终于讲完了，那你就又错了。在 Python 的官方文档上，虽然只介绍了两个函数，但是 `atexit` 实际上还有一些暴露了接口，但是没有 document 的函数。那对于这类的函数呢，肯定是能不用就不用。然而有的时候我们确实要用，比如说 [VizTracer](https://github.com/gaogaotiantian/viztracer) 里面，由于它要处理一些程序结束时候的事儿，所以它就要用到这几个函数。那 Python 的内置库里实际上也用到了它这些函数，我们在未来可能有机会会讲到啊。
+
+好，我们看，在右边一共有三个新的内容啊。一个是 `_clear`，一个是 `_ncallbacks`，还有一个是 `_run_exitfuncs`。这三个东西呢，从名字你基本上就可以知道它们是干嘛的。`_ncallbacks` 就是有几个已经注册的函数，`_clear` 呢，就是把这些东西都清空，`_run_exitfuncs` 呢，就是把这些函数现在就运行。
+
+<CodeWalkthrough variant="atexitModule" step={9} />
+
+好，我们看左边的例子。第 14 行呢，我们打印这个 `_ncallbacks`，然后第 15 行呢，我们把它 `_clear` 掉。之前的这个函数是可以打出来 `exiting` 的，对不对？我们现在运行一下这段程序，可以看到它打印出来了一个 1，这是第 14 行的这个 `_ncallbacks`。然后它就没有运行这个 `exiting` 了，说明第 15 行我们把这个东西 `_clear` 掉了。
+
+<CodeWalkthrough variant="atexitModule" step={10} />
+
+好，我们把它稍微变换一下。第 15 行我们做一个 `_run_exitfuncs`，然后第 16 行我们 `print` 一个东西。在我们没有做 `_run_exitfuncs` 的时候，应该是先 `print` 这个 `Before exit`，然后再靠这个 hook `print` `exiting`。那这段程序呢，我们运行一下，可以看到它先打了这个 `exiting`，然后才打 `Before exit`。就是这个 `_run_exitfuncs`，会把它 register 的函数运行一遍，然后 clear 掉。
+
+<CodeWalkthrough variant="atexitModule" step={11} />
+
+## atexit 的运行保证
+
+好，那如果你以为这篇文章就到这里了，那你就又错了。我们还要讲一个很重要的东西，就是这个 `atexit`，它永远好使吗？就是这个是不是能保证，每一次你的 Python 程序退出的时候，它都可以把你 register 这个函数给运行了？这个对于很多人来说是一个非常重要的 feature，对不对？我们在这里直接告诉大家结论，当你的 Python 程序 life cycle 完成了的时候，它永远会运行。什么意思呢？就是不管你的程序正常结束了，还是 raise 了一个 exception，那这些都是在 Python 的控制范围之内，所以 Python 都可以调用这个 `atexit` 里面注册的函数。
+
+那有没有它不好使的时候呢？当然有。还记不记得[上篇文章](./退出方式.mdx#os_exit-的系统调用)我们聊过一个 `os._exit`？我们看左边，在 register 了 `f0` 之后，我们运行了 `os._exit(0)`。可以看到，这个程序运行的时候，就没有成功地打印出 `exiting` 了。原因我们之前也说过，`os._exit` 是一个 system call，它会导致 Python 没有办法正常地按照它自己的节奏退出。
+
+<CodeWalkthrough variant="atexitModule" step={12} />
+
+## multiprocessing 子进程里的 atexit
+
+好，那如果你以为这篇文章到这里就结束的话，那就又错了。我们看左边的代码，我定义了一个函数，这个函数呢，会 register 一个 print `exiting`，然后我把这个函数放到 `multiprocessing` 的 `Process` 里面执行。请问，结果是什么？为什么？
+
+<CodeWalkthrough variant="atexitModule" step={13} />
+
+## 子进程跳过 atexit 的原因
+
+答案是：在 Linux 上运行，什么都不会打印。程序正常结束，退出码是 0，但是 `exiting` 没有出现。
+
+原因在于子进程是怎么退出的。在 Linux 上，Python 3.13 及以前的 `multiprocessing` 默认用 fork 启动子进程。fork 出来的子进程跑完 `target`，也就是我们的 `t` 之后，并不是像普通的 Python 程序那样按自己的节奏退出，而是在 `finally` 里直接调用了 `os._exit`，这是 `multiprocessing` 里 fork 子进程的[启动代码](https://github.com/python/cpython/blob/v3.12.3/Lib/multiprocessing/popen_fork.py#L62-L73)：
+
+```python title="Lib/multiprocessing/popen_fork.py" showLineNumbers=62 {71,73}
+    def _launch(self, process_obj):
+        code = 1
+        parent_r, child_w = os.pipe()
+        child_r, parent_w = os.pipe()
+        self.pid = os.fork()
+        if self.pid == 0:
+            try:
+                os.close(parent_r)
+                os.close(parent_w)
+                code = process_obj._bootstrap(parent_sentinel=child_r)
+            finally:
+                os._exit(code)
+```
+
+第 71 行的 `_bootstrap` 里调用了 `t`，第 73 行用 `os._exit` 退出。上一节我们刚看到，`os._exit` 退出时 Python 没有机会运行 `atexit` 里注册的函数。所以 `t` 在子进程里注册的 `f` 确实注册上了，却等不到运行的那一刻。
+
+这样退出也有它的好处。fork 出来的子进程会复制父进程的全部状态，其中也包括父进程已经注册的 `atexit` 函数。如果子进程正常退出，父进程注册的这些函数就会在子进程里再跑一遍，比如同一份资源被释放两次。用 `os._exit` 退出，就把这些函数一并跳过了。`multiprocessing` 自己在子进程结束时要做的清理，放在 `_bootstrap` 里调用的 `util._exit_function()` 中，不依赖 `atexit`。
+
+换一种启动方式，结果就不一样了。spawn 启动的子进程是一个全新的 Python 解释器，跑完 `t` 之后用 `sys.exit` 正常退出（见 `spawn.py` 的[这两行](https://github.com/python/cpython/blob/v3.12.3/Lib/multiprocessing/spawn.py#L122-L123)），这时注册的 `f` 就会运行，打印出 `exiting`。Windows 和 macOS 默认用的就是 spawn。不过 spawn 会在子进程里重新 import 主模块，题目里的代码没有 `if __name__ == "__main__":` 保护，直接在 Windows 或 macOS 上运行会报 `RuntimeError`，要改成下面这样：
+
+<CodeWalkthrough variant="atexitModule" step={14} nav />
+
+另外，从 Python 3.14 开始，Linux 上的默认启动方式改成了 forkserver。forkserver 的子进程同样用 `os._exit` 退出，注册的函数也不会运行；它和 spawn 一样会重新 import 主模块，题目里的代码同样要加上 `if __name__ == "__main__":` 才能运行。

@@ -30,7 +30,7 @@ import CodeWalkthrough from '@site/src/components/CodeWalkthrough';
 
 ## try-finally 与 atexit 的取舍
 
-好，那有人可能会问了，说你在之前的文章里面提到过一个 [module](https://docs.python.org/3/library/atexit.html)，叫做 `atexit`。`atexit` 这个 module 也经常被用来释放资源，那么 try-finally 跟 `atexit` 相比，在释放资源这个领域，孰优孰劣呢？那这种问题的答案必然是，它们各有优劣，对吧？`atexit` module，顾名思义，它的释放资源只能在程序结束的时候运行，而 try-finally 可以在任意的 scope 下运行。比如说，我每接到一个请求需要做一件事情，而这个事情会新建一个子进程，我需要确认这个子进程在完成这个请求之后被 kill 掉了，无论在完成请求的过程中出现了什么幺蛾子。这个时候明显用 try-finally 就会更好，它可以保证在一段代码运行之后，你的这个资源释放函数就一定会被运行，这个事情 `atexit` 就做不到。
+好，那有人可能会问了，说你在之前的文章里面提到过一个 [module](./atexit.mdx)，叫做 `atexit`。`atexit` 这个 module 也经常被用来释放资源，那么 try-finally 跟 `atexit` 相比，在释放资源这个领域，孰优孰劣呢？那这种问题的答案必然是，它们各有优劣，对吧？`atexit` module，顾名思义，它的释放资源只能在程序结束的时候运行，而 try-finally 可以在任意的 scope 下运行。比如说，我每接到一个请求需要做一件事情，而这个事情会新建一个子进程，我需要确认这个子进程在完成这个请求之后被 kill 掉了，无论在完成请求的过程中出现了什么幺蛾子。这个时候明显用 try-finally 就会更好，它可以保证在一段代码运行之后，你的这个资源释放函数就一定会被运行，这个事情 `atexit` 就做不到。
 
 <CodeWalkthrough variant="tryFinally" step={5} />
 
