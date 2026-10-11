@@ -1,4 +1,4 @@
-/* 课文配图：照 Academy 的图版——占满正文列宽、浅纸面底、无边框，四周留白由 SVG 自己的 40px 边距给。
+/* 课文配图的图版：占满正文列宽、浅纸面底、无边框，四周留白由 SVG 自己的 40px 边距给。
    SVG 只写类名，颜色和字体都在这里映射到 --th-* 令牌，深浅模式跟着切换。类名清单见 src/data/diagrams/index.js。 */
 
 .figure {
@@ -9,7 +9,7 @@
   overflow: hidden;
 }
 
-/* 放大查看：弹层里按 1.5 倍列宽画同一张图；手机上至少 600px，弹层里横向滚动 */
+/* 放大查看：弹层里按 1.5 倍列宽画同一张图；手机上至少 600px，在弹层里横向滚动 */
 .zoomed {
   width: max(600px, min(92vw, 1152px));
   margin: 0;
@@ -21,21 +21,11 @@
   height: auto;
 }
 
-/* 桌面按列宽缩放；手机上不再缩小，改为横向滚动，保证字不小于约 10px */
-.scroller {
-  overflow-x: auto;
-}
-
+/* 整张图按列宽缩放，手机上也先看全貌；细节点右上角放大看 */
 .scroller :global(svg) {
   display: block;
   width: 100%;
   height: auto;
-}
-
-@media (max-width: 640px) {
-  .scroller :global(svg) {
-    min-width: 600px;
-  }
 }
 
 /* ── 形状 ── */
@@ -51,7 +41,7 @@
 .figure :global(.n-done) { fill: var(--th-dg-done); }
 .figure :global(.n-external) { fill: var(--th-dg-external); }
 .figure :global(.n-focal) { fill: var(--th-accent-tint); stroke: var(--th-accent-border); stroke-width: 1.5; }
-/* 选项标签照 Academy 的选项框：实心陶土底、墨色衬线字，深浅模式相同；紧跟在它后面的 <text> 就是标签文字 */
+/* 选项标签：实心陶土底、墨色衬线字，深浅模式相同；紧跟在它后面的 <text> 就是标签文字 */
 .figure :global(.n-option) { fill: var(--th-dg-focal); stroke: none; }
 .figure :global(.n-option + text) { fill: var(--th-dg-focal-ink); font-family: var(--ifm-heading-font-family); font-weight: 600; }
 .figure :global(.divider) { stroke: var(--th-dg-stroke); stroke-width: 1; opacity: 0.4; }
@@ -86,7 +76,7 @@
 .figure :global(.s-bar) { fill: var(--th-dg-neutral); stroke: none; }
 .figure :global(.s-bubble-user) { fill: var(--th-dg-external); stroke: none; }
 .figure :global(.s-bubble-agent) { fill: var(--th-dg-process); stroke: none; }
-/* 代码 / 终端面板照 Academy 用墨色实底，深浅模式相同；深色模式下加一圈细边和画布分开 */
+/* 代码 / 终端面板用墨色实底，深浅模式相同；深色模式下加一圈细边和画布分开 */
 .figure :global(.s-panel) { fill: #0b0b0b; stroke: none; }
 :global([data-theme='dark']) .figure :global(.s-panel) { stroke: var(--th-line-strong); stroke-width: 1; }
 .figure :global(.s-hl) { fill: none; stroke: var(--th-accent-fill); stroke-width: 1.5; }
