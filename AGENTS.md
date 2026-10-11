@@ -65,6 +65,8 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   ├── McpWalkthrough/        # 代码演练：分步说明 + 迷你代码查看器（文件树/标签/按步高亮定位）
 │   │   ├── MessageFlow/           # 消息流（泳道）图：参与者 + 虚线生命线 + 消息箭头，消息可带“角色 │ 块类型 │ 内容”小表，生命线上可放注释框；HTML 网格排版（中文自动换行，窄屏横向滚动），配色走 --th-dg-*；数据校验在 model.mjs（带单测），数据在 src/data/messageFlows/
 │   │   ├── ProjectCodeViewer/     # 共用项目代码查看器（文件树 / 标签 / 代码区 / diff / 聚焦行 / 复制）的唯一实现，McpWalkthrough 和 CodeWalkthrough 都用它，新课程别另写一份；界面文案在 src/data/projectViewerUI.js
+│   │   ├── QuickCheck/            # 快速检查：课文里一道当场判对错的单选（每个选项带解释、可改选、不计分），<QuickCheck question options /> 全局注册；数据校验在 model.mjs（带单测）
+│   │   ├── ReadMore/              # 阅读更多：折叠卡，标题写成读者会问的问题，<ReadMore title="..."> 全局注册
 │   │   ├── RoadmapOverview/       # commerce-agents 路线总览：八个 Stage 两行排的 SVG，当前 Stage 用强调色，STAGES / CURRENT 直接改
 │   │   ├── SkillCard/             # SkillHub 技能卡片（展开显示安装命令）
 │   │   └── Term/                  # 术语悬停解释：虚线下划线，悬停 / 聚焦弹出 tip
@@ -85,7 +87,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   └── skills.js              # SkillHub 页面（/skills 路由）
 │   └── theme/
 │       ├── Root.js                # 主题根组件（注入 CopyMarkdown 按钮）
-│       ├── MDXComponents/index.js # 注册全局 MDX 组件（Term 术语悬停解释，正文直接用无需 import）
+│       ├── MDXComponents/index.js # 注册全局 MDX 组件（Term 术语悬停解释、QuickCheck 快速检查、ReadMore 阅读更多，正文直接用无需 import）
 │       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图
 │       ├── DocCard/Heading/Icon/  # 覆盖为空组件：去掉 DocCardList 卡片标题前的 🗃️/📄️ emoji
 │       ├── Admonition/            # 提示块：index.js 包装层补中文默认标签；Icon/ 是 GitHub alerts 同款 Octicons；Types.js 注册自定义的 important 类型；配色与卡片样式在 custom.css「提示块」一节

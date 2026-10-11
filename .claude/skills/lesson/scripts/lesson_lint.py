@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""课文读感检查：拿 docs/MCP 课文（Academy 中译）的篇幅和密度当基线，检查 /lesson 写出的页面。
+"""课文读感检查：拿 academy.claude.com 课文的篇幅和密度当基线，检查 /lesson 写出的页面。
 
 用法（在仓库根目录）：
     python3 .claude/skills/lesson/scripts/lesson_lint.py <课文.md|mdx> [...]
@@ -12,8 +12,10 @@
 - 课程索引页、分组页、概念评估页：跳过。
 
 FAIL 必须改；WARN 是提醒，确认是有意为之可以保留。退出码：有 FAIL 为 1，否则为 0。
-阈值来自 MCP 课文的实测（正文多在 520–840 字、最长 1070 字，段落平均 30–58 字、最长 101 字，
-零表格、零交叉引用）：MCP 课文全部不出 FAIL，偏离原文常态的地方才出 WARN。
+阈值来自 Academy 五类课文的实测：MCP 两门课（docs/MCP 中译）、《使用 Claude API 构建》工具与智能体两章、
+Claude Code 101 与子代理 / 技能课、AI 能力与局限。正文 500–1600 字（多数 600–1100），段落平均 30–75 字、
+最长 124 字，没有一张 Markdown 表格，没有“规则 N”“指南里说过”这类要读者去别处查的引用；
+提到下一课、别的课只出现在收尾那一节。这些课文不出 FAIL（纯视频文字稿页除外），偏离常态才出 WARN。
 """
 import json
 import re
@@ -25,10 +27,10 @@ from pathlib import Path
 ROOT = Path.cwd()
 CJK = re.compile(r'[一-鿿]')
 
-# 正文里不提别的课、规则编号和资料来源：读者不必跳出这一页。
-CROSS_REF = re.compile(
-    r'下一课|上一课|下一节|上一节|后面几课|前面几课|后面的课|下一篇|上一篇|本专题|这个专题'
-    r'|规则 ?\d|第[一二三四五六七八九]条规则|《[^》]+》|商务指南|Stage [A-Z]|路线到')
+# 要读者跳出这一页去查的引用：Academy 全站都没有，哪里都不写。
+LOOKUP = re.compile(r'规则 ?\d|第[一二三四五六七八九]条规则|商务指南|指南(?:里|中)(?:说|写|提到)|Stage [A-Z]|路线到|本专题|这个专题')
+# 指向别的课：Academy 只在收尾一节（回顾 / 接下来 / 想深入了解）点一次，导语里至多半句承接。
+POINTER = re.compile(r'下一课|上一课|下一节|上一节|后面几课|前面几课|后面的课|下一篇|上一篇|《[^》]+》')
 # 讲“它怎么工作”，不讲“我从哪里看出来的”：核对代码是写之前的事，不写进正文。
 EVIDENCE = re.compile(
     r'代码注释|注释(?:说|写|里)|文档字符串|docstring|测试(?:里|中)|断言了|参考实现'
@@ -36,6 +38,8 @@ EVIDENCE = re.compile(
 OBJECTIVES = re.compile(r'读完这一[节课篇]|您将能够|这一[节课]我们|本课将|本节将')
 TEMPLATE = re.compile(r'显著的权衡|不过，有一个好处')
 FIGURE = re.compile(r'<(?:Diagram|MessageFlow|AgentLoopViz)\b|!\[')
+# 打断大段文字的东西：图、交互组件、代码块
+BREAK = re.compile(r'<(?:Diagram|MessageFlow|AgentLoopViz|QuickCheck|ReadMore)\b|!\[|^```', re.M)
 WALKTHROUGH = re.compile(r'<(McpWalkthrough|CodeWalkthrough)\b[^>]*variant="(\w+)"')
 
 results = []  # (level, file, message)
@@ -74,12 +78,12 @@ def lint_lesson(path, raw):
     total = cjk_len(re.sub(r'<[^>]+>', '', body))
     h2 = re.findall(r'^## .+$', body, flags=re.M)
 
-    if total > 1150:
-        report('FAIL', where, f'正文 {total} 字，超过 1150（基线 520–1070）：一课只讲一个概念，细节挪进演练或删掉')
-    elif total > 950 or total < 450:
-        report('WARN', where, f'正文 {total} 字，目标 500–900')
-    if not 3 <= len(h2) <= 6:
-        report('WARN', where, f'{len(h2)} 个二级标题，基线 3–6 个')
+    if total > 1700:
+        report('FAIL', where, f'正文 {total} 字，超过 1700（Academy 最长的课约 1600 字）：一课只讲一个概念，细节挪进演练或删掉')
+    elif total > 1100 or total < 450:
+        report('WARN', where, f'正文 {total} 字，Academy 多数课在 600–1100 字')
+    if not 3 <= len(h2) <= 9:
+        report('WARN', where, f'{len(h2)} 个二级标题，Academy 多在 3–9 个')
 
     intro_part = re.split(r'^## ', body, maxsplit=1, flags=re.M)[0]
     intro = [b for b in blocks(intro_part) if is_prose(b)]
@@ -87,17 +91,20 @@ def lint_lesson(path, raw):
     if len(intro) > 3 or intro_len > 230:
         report('FAIL', where, f'导语 {len(intro)} 段 {intro_len} 字：H1 下一段话、两三句，直接进第一个二级标题')
     elif len(intro) > 1 or intro_len > 120:
-        report('WARN', where, f'导语 {len(intro)} 段 {intro_len} 字，Sampling、Roots 都只有一段')
-    for m in OBJECTIVES.finditer(body):
-        report('FAIL', where, f'课文里不写本课目标：“{m.group(0)}”（学习目标只放在课程索引页）')
+        report('WARN', where, f'导语 {len(intro)} 段 {intro_len} 字，Academy 的导语多是一段，至多三个短段')
 
     paras = [b for b in blocks(body) if is_prose(b)]
+    for p in paras:
+        for m in OBJECTIVES.finditer(p):
+            report('FAIL', where, f'本课目标写进了正文段落：“{m.group(0)}”。要写就照 Academy 做成开头的“学完后，您将能够”清单卡')
     lengths = [cjk_len(p) for p in paras]
     for p, n in zip(paras, lengths):
-        if n > 110:
-            report('FAIL', where, f'段落 {n} 字（基线最长 101）：一段只讲一个意思 →「{p[:24]}…」')
-    if lengths and sum(lengths) / len(lengths) > 60:
-        report('WARN', where, f'段落平均 {sum(lengths) / len(lengths):.0f} 字，基线 30–58')
+        if n > 130:
+            report('FAIL', where, f'段落 {n} 字（Academy 原文最长 124）：一段只讲一个意思 →「{p[:24]}…」')
+        elif n > 110:
+            report('WARN', where, f'段落 {n} 字，偏长 →「{p[:24]}…」')
+    if lengths and sum(lengths) / len(lengths) > 70:
+        report('WARN', where, f'段落平均 {sum(lengths) / len(lengths):.0f} 字，Academy 多在 30–75')
 
     per_k = lambda n: n * 1000 / max(total, 1)
     code = len(re.findall(r'`[^`\n]+`', body))
@@ -112,26 +119,38 @@ def lint_lesson(path, raw):
         report('WARN', where, f'数字每千字 {per_k(numbers):.1f} 个，偏密')
 
     if re.search(r'^\|\s*-{3,}', body, flags=re.M):
-        report('FAIL', where, '概念课里有表格（基线 0 张）：改成“**标签：** 一句解释”的列表，或画成图')
+        report('FAIL', where, '课文里有表格（Academy 课文一张都没有）：改成“**标签：** 一句解释”的列表、成对小节，或画成图')
     admonitions = len(re.findall(r'^:::(note|info|tip|important|warning|danger)', body, flags=re.M))
-    if admonitions > 1:
-        report('WARN', where, f'{admonitions} 个提示块，基线 0 个')
+    if admonitions > 2:
+        report('WARN', where, f'{admonitions} 个提示块，Academy 一课至多一两个（小提示、关键要点）')
     if WALKTHROUGH.search(raw):
         report('FAIL', where, '概念课里嵌了演练：演练单独一页，排在概念课后面')
 
-    for m in CROSS_REF.finditer(body):
-        report('FAIL', where, f'正文提到了别的课 / 规则 / 资料：“{m.group(0)}”，删掉，或改成不依赖它也能懂的说法')
+    for m in LOOKUP.finditer(body):
+        report('FAIL', where, f'要读者去别处查的引用：“{m.group(0)}”，直接把要用的那句话说出来')
+    sections = re.split(r'^## ', body, flags=re.M)
+    closing = sections[-1] if len(sections) > 1 else ''
+    middle = '## '.join(sections[1:-1]) if len(sections) > 2 else ''
+    in_middle = [m.group(0) for m in POINTER.finditer(middle)]
+    if len(in_middle) >= 2:
+        report('FAIL', where, f'正文中段提到别的课 {len(in_middle)} 次（{"、".join(in_middle)}）：Academy 只在收尾一节点一次下一课，导语里至多半句承接')
+    elif in_middle:
+        report('WARN', where, f'正文中段提到了别的课：“{in_middle[0]}”，确认读者不回去翻也能懂')
+    pointers = len(POINTER.findall(intro_part)) + len(POINTER.findall(closing))
+    if pointers > 2:
+        report('WARN', where, f'导语和收尾一共提到别的课 {pointers} 次，Academy 通常只有一处')
     for m in EVIDENCE.finditer(body):
         report('FAIL', where, f'引证口吻：“{m.group(0)}”，直接讲它怎么工作')
     for m in TEMPLATE.finditer(body):
         report('WARN', where, f'套用句式“{m.group(0)}”：只有真有这样一组得失时才用，否则用平常话说')
 
     figures = len(FIGURE.findall(body))
-    if figures < 2:
-        report('WARN', where, f'{figures} 张图，概念课通常 2–4 张')
-    longest = max((cjk_len(re.sub(r'<[^>]+>', '', run)) for run in FIGURE.split(body)), default=0)
+    interactive = len(re.findall(r'<QuickCheck\b', body))
+    if figures + interactive == 0 and total > 400:
+        report('WARN', where, '没有图也没有交互：Academy 课文每课 1–4 张图，或一个让读者动手的组件')
+    longest = max((cjk_len(re.sub(r'<[^>]+>', '', run)) for run in BREAK.split(body)), default=0)
     if longest > 700:
-        report('WARN', where, f'连续 {longest} 字没有图：问题和机制两节里，每一两段配一张图')
+        report('WARN', where, f'连续 {longest} 字没有图、代码或交互：讲问题和机制时，每一两段配一张图')
 
     for variant in re.findall(r'<Diagram\s+variant="(\w+)"', raw):
         lint_svg(variant)
@@ -267,7 +286,7 @@ def lint_walkthrough_page(path, raw, found):
                 report('WARN', data, f'{label}高亮 {lines} 行，偏多')
             if cjk_len(step.get('title', '')) > 10:
                 report('WARN', data, f'{label}标题偏长，照“启动采样”“采样回调”写成短语')
-            for pattern, what in ((CROSS_REF, '提到了别的课 / 规则 / 资料'), (EVIDENCE, '引证口吻')):
+            for pattern, what in ((LOOKUP, '要读者去别处查的引用'), (POINTER, '提到了别的课'), (EVIDENCE, '引证口吻')):
                 for m in pattern.finditer(joined):
                     report('FAIL', data, f'{label}{what}：“{m.group(0)}”')
 
