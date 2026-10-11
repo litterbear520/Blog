@@ -218,6 +218,12 @@
   font-weight: 600;
 }
 
+/* 结论框里的消息小表照常用正文色：表格底色不跟着结论框变，深色模式下墨色字会看不见 */
+.focal .rows {
+  color: var(--th-dg-text);
+  font-weight: 400;
+}
+
 /* ── 消息小表：角色 │ 块类型 │ 内容 ── */
 .rows {
   display: table;
