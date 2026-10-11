@@ -103,6 +103,6 @@ test('language fallback is safe', () => {
 test('tree width follows the widest row, including indentation', () => {
   assert.ok(treeWidth(buildTree(['server.py', 'client.py'])) < 160);
   const deep = treeWidth(buildTree(['shopping_agent/tools/registry.py', 'commerce_common/execution.py']));
-  assert.equal(deep, Math.ceil(60 + 'commerce_common'.length * 7.2));
+  assert.equal(deep, Math.ceil(72 + 14 * 2 + 'registry.py'.length * 7.2));
   assert.ok(treeWidth(buildTree(['a/b/c/registry.py'])) > treeWidth(buildTree(['registry.py'])));
 });
