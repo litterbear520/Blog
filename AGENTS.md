@@ -56,7 +56,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   ├── CodeWalkthrough/       # 代码演进演练：示例项目按步骤快照演进，文件树 / 标签 / 代码区按行标出相对上一步的增删（diff.js 行级 LCS），下方终端点击逐行打印预录输出
 │   │   ├── CopyMarkdownButton/    # 文档页"复制 Markdown"按钮
 │   │   ├── CsvTable.jsx           # CSV 表格渲染组件
-│   │   ├── Diagram/               # 结构图：diagram-design 技能画的 SVG 原样嵌入（<Diagram variant="..." />），SVG 里只写类名，styles.module.css 按角色映射到 --th-dg-* / --th-accent-*，深浅色跟着令牌切换；数据在 src/data/diagrams/
+│   │   ├── Diagram/               # 结构图与场景图：diagram-design 技能画的 SVG 原样嵌入（<Diagram variant="..." />），另有手写场景图用的 s-* 零件（窗口、气泡、商品卡、代码面板、强调曲线）；SVG 里只写类名，styles.module.css 按角色映射到 --th-dg-* / --th-accent-*，深浅色跟着令牌切换；数据在 src/data/diagrams/
 │   │   ├── GitWorkflowViz/        # Git 工作流分步演示：Remote / Local / Disk 三区域，逐步高亮变化的提交与传输箭头，步骤数据在 steps.js
 │   │   ├── HomepageFeatures/      # 首页特性卡片
 │   │   ├── InfoCards/             # 文章内横排信息卡：CardGrid（可编号 01/02/03）+ Card（title/sub/tone）+ SkillList（中文名 + 英文 id 对照的技能清单）+ LinkCallout（带按钮链接的提示框）
@@ -102,7 +102,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   └── roadmap-sync/              # 路线代码同步：sync.mjs + <配方>.config.mjs（dev 仓库里每步的文件 → 演练里展示的路径），生成物提交进仓库
 ├── .claude/skills/
 │   ├── blog-cover/                # /blog-cover <slug>：读文章 → 视觉隐喻 → 配方 → 渲染 → 登记
-│   ├── lesson/                    # /lesson <位置/主题> + 想法：读代码找讲点 → 大纲表等确认 → 抽代码快照 → 按讲法骨架写课文、演练、配图 → 课末概念评估 → 推 main 看 CI 和线上；讲法骨架、课程结构、组件选择、出图规范在 references/
+│   ├── lesson/                    # /lesson <位置/主题> + 想法：照 Academy 读感写一门课（一课一个概念、短段落配大图、演练单独成页、课末概念评估），只在调用时生效；读感、课型骨架、课程结构、组件、出图规范在 references/，scripts/lesson_lint.py 按 MCP 课文基线检查篇幅和密度
 │   └── note/                      # /note <位置/标题> + 文稿 + 代码：视频讲稿 → 最小替换转写 → 小标题 → 自然的站内外链接 → 推 main 看 CI
 ├── static/
 │   ├── CNAME                      # 自定义域名 huangsitao.fun
