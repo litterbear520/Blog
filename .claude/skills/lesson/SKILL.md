@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 把用户的一个想法写成博客里的一门**课**，读起来要像在 academy.claude.com 上课。Academy 各门课的讲法和版面各不相同：MCP 课用两个选项对照，API 课从贯穿项目的缺口推出工具，Claude Code 课先讲骨架再讲部件，AI 能力课先让读者下注，教程页让读者先预测再揭晓。所以每一课都要按内容从 Academy 的整套讲法里挑一种；读感是共同的：每课只讲一个概念，几分钟读完，段落短，图和课内检查把机制摆到眼前，代码放在紧随其后的演练页里，整门课最后一篇概念评估。读者是用户自己。
 
-这套写法只在用户调用 `/lesson` 时使用。目标位置在 AGENTS.md 里的硬约束照守：路线页面不提 Step 编号和 dev 仓库路径、不用 `run` 输出面板、引号用 “”。AGENTS.md 对课文结构和结尾过渡另有写法规则（比如路线页面的“一段话带到下一课”），在 `/lesson` 里以本技能为准。
+这套写法只在用户调用 `/lesson` 时使用。目标位置在 AGENTS.md 里的硬约束照守：路线页面不提 Step 编号和 dev 仓库路径、不用 `run` 输出面板、引号用 “”。AGENTS.md「路线页面」另有几条写法规则，在 `/lesson` 里由本技能代替：课文结构（“上一课留下的问题 → 机制 → 演练 → 设计取舍 → 在本地运行”）照 [讲法目录](references/skeletons.md) 选；演练单独成页，不放进课文；设计取舍不引用六条规则的编号；结尾照讲法目录的“收尾”选，不固定写成“一段话带到下一课”。
 
 ## 输入
 
@@ -35,11 +35,12 @@ disable-model-invocation: true
    完成标准：用户确认了大纲表，提出的改动都已改进表里。
 4. **抽代码快照。** 演练里的代码不手抄：在 `tools/roadmap-sync/<配方>.config.mjs` 登记要展示的文件（没有配方就照 `commerce.config.mjs` 新建一个），跑 `npm run roadmap-sync -- <配方>`，生成的 `*.files.js` 一起提交，因为 CI 里没有源仓库。
 5. **写概念课和配图。** 照大纲表写，读感照 [读感](references/style.md)：先合上代码，按第 2 步写下的平常话把课写完；再逐句对照代码核对事实，错了就改那句话，核对的过程不写进正文。图照 [出图规范](references/diagrams.md)，组件（快速检查、阅读更多等）照 [组件怎么选](references/components.md)，文件结构照 [课程结构](references/course.md)。
+   画完的图用 `scripts/preview_diagrams.py <variant> ... --shot` 渲染出来看一眼。
    完成标准：`python3 .claude/skills/lesson/scripts/lesson_lint.py <课文>` 没有 FAIL；每个 WARN 要么改掉，要么能说出保留的理由。
 6. **写演练页。** 页面照 [讲法目录](references/skeletons.md) 的“演练页”，步骤数据照 [组件怎么选](references/components.md) 的 `McpWalkthrough` 一行：每步一两句话，只框住这一步讲的那几行。
    完成标准：对演练页跑同一个 lint 没有 FAIL。
-7. **补测试。** 新演练照 `tools/agent-tool-lessons.test.mjs` 写语义锚点测试（课文路径、演练、图都登记进去），并加进 `tools/walkthrough-browser.mjs` 的 `lessons`；新 variant 加进 `src/components/ProjectCodeViewer/actions.test.mjs` 的 `supported` 白名单；新图由 `npm run test:diagrams` 校验，新消息流图由 `npm run test:message-flow` 校验。本机内存跑不动构建和浏览器测试，只跑这几个纯 Node 的测试：`npm run test:diagrams && npm run test:message-flow && npm run test:agent-tools && npm run test:quick-check && node --test src/components/ProjectCodeViewer/actions.test.mjs`；其余交给 CI。
-8. **通读对照。** 先重读第 1 步挑的 Academy 原文，再从头读自己的课：段落的长短、图和检查出现的频率、读到哪里需要停下来查别处，都和原文比一比。哪一段读着比原文吃力，就把那段拆短，或者把细节挪进演练、收进“阅读更多”。
+7. **补测试。** 新演练照 `tools/agent-tool-lessons.test.mjs` 的 `LESSONS` 登记：演练页路径 `walkthrough`、它讲的概念课 `pages[]`（每页列出嵌的图和消息流）、快照文件和每一步的语义锚点，并加进 `tools/walkthrough-browser.mjs` 的 `lessons`；新 variant 加进 `src/components/ProjectCodeViewer/actions.test.mjs` 的 `supported` 白名单；新图由 `npm run test:diagrams` 校验，新消息流图由 `npm run test:message-flow` 校验。本机内存跑不动构建和浏览器测试，只跑这几个纯 Node 的测试：`npm run test:diagrams && npm run test:message-flow && npm run test:agent-tools && npm run test:quick-check && node --test src/components/ProjectCodeViewer/actions.test.mjs`；其余交给 CI。
+8. **通读对照。** 先跑 `python3 .claude/skills/lesson/scripts/lesson_lint.py --stats <自己的课> <第 1 步挑的 Academy 抓取稿 .txt>`，把字数、段落、图和密度并排看；再重读那几篇原文，从头读自己的课：段落的长短、图和检查出现的频率、读到哪里需要停下来查别处，都和原文比一比。哪一段读着比原文吃力，就把那段拆短，或者把细节挪进演练、收进“阅读更多”。
 9. **提交、看 CI、给链接。** 提交信息用中文，按 `feat:` / `docs:` 前缀写改了什么，只描述改动本身；直接推 `main`，`gh run watch <id> --exit-status` 等 CI。CI 通过后把线上链接交给用户，并附上每课照的 Academy 原文链接（`https://academy.claude.com/zh-CN/courses/<课程>/<课>`，抓取稿第一行就是），方便用户对照着读；由用户自己看页面，不截图。
 
 ## 报告

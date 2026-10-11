@@ -3,6 +3,10 @@
 
 用法（在仓库根目录）：
     python3 .claude/skills/lesson/scripts/lesson_lint.py <课文.md|mdx> [...]
+    python3 .claude/skills/lesson/scripts/lesson_lint.py --stats <课文.mdx> ~/workspace/academy-research/api-tool-schemas.txt [...]
+
+--stats 不判对错，只把几篇课文的字数、段落、图和密度并排列成表，用来和选好的 Academy 原文对照；
+Academy 的抓取稿（*.txt，每行开头是元素类型）会先转成 Markdown 再量。
 
 按页面自动分类：
 - 概念课：正文篇幅、导语、段落长度、行内代码和数字密度、表格、提示块、配图数量，
@@ -60,6 +64,11 @@ def strip_page(raw):
     return text
 
 
+def untag(text):
+    # 段落里的 <Term tip="…">词</Term> 只留词：提示文字不算正文
+    return re.sub(r'<[^>]+>', '', text)
+
+
 def blocks(text):
     return [b.strip() for b in re.split(r'\n\s*\n', text) if b.strip()]
 
@@ -86,14 +95,14 @@ def lint_lesson(path, raw):
         report('WARN', where, f'{len(h2)} 个二级标题，Academy 多在 3–9 个')
 
     intro_part = re.split(r'^## ', body, maxsplit=1, flags=re.M)[0]
-    intro = [b for b in blocks(intro_part) if is_prose(b)]
+    intro = [untag(b) for b in blocks(intro_part) if is_prose(b)]
     intro_len = cjk_len(' '.join(intro))
     if len(intro) > 3 or intro_len > 230:
         report('FAIL', where, f'导语 {len(intro)} 段 {intro_len} 字：H1 下一段话、两三句，直接进第一个二级标题')
     elif len(intro) > 1 or intro_len > 120:
         report('WARN', where, f'导语 {len(intro)} 段 {intro_len} 字，Academy 的导语多是一段，至多三个短段')
 
-    paras = [b for b in blocks(body) if is_prose(b)]
+    paras = [untag(b) for b in blocks(body) if is_prose(b)]
     for p in paras:
         for m in OBJECTIVES.finditer(p):
             report('FAIL', where, f'本课目标写进了正文段落：“{m.group(0)}”。要写就照 Academy 做成开头的“学完后，您将能够”清单卡')
@@ -108,7 +117,7 @@ def lint_lesson(path, raw):
 
     per_k = lambda n: n * 1000 / max(total, 1)
     code = len(re.findall(r'`[^`\n]+`', body))
-    numbers = len(re.findall(r'(?<![\w.-])\d+(?:\.\d+)?', no_code))
+    numbers = len(re.findall(r'(?<![A-Za-z0-9_.-])\d+(?:\.\d+)?', no_code))
     if per_k(code) > 12:
         report('FAIL', where, f'行内代码每千字 {per_k(code):.1f} 个（基线中位数约 4）：正文讲道理，代码名留给演练')
     elif per_k(code) > 8:
@@ -291,10 +300,71 @@ def lint_walkthrough_page(path, raw, found):
                     report('FAIL', data, f'{label}{what}：“{m.group(0)}”')
 
 
+# ── --stats：并排对照 ─────────────────────────────────────────────────────
+
+def academy_txt_to_md(text):
+    # 抓取稿里正文段落和列表项带 leading-relaxed 类；图、视频记成一张图，代码块记成一个空代码块
+    out = []
+    for line in text.splitlines():
+        if line.startswith('== ') and out and 'INVENTORY' not in line:
+            break
+        if re.match(r'^(IMG|IFRAME)', line):
+            out.append('![](x.png)\n')
+            continue
+        if line.startswith('PRE'):
+            out.append('```text\ncode\n```\n')
+            continue
+        m = re.match(r'^(P|LI|H1|H2|H3) (\S*) :: (.*)$', line)
+        if not m or not m.group(3).strip():
+            continue
+        tag, cls, content = m.groups()
+        if tag in ('P', 'LI') and 'leading-relaxed' not in cls:
+            continue
+        prefix = {'H1': '# ', 'H2': '## ', 'H3': '### ', 'LI': '- '}.get(tag, '')
+        out.append(prefix + content.strip() + ('' if tag == 'LI' else '\n'))
+    return re.sub(r'(\n- [^\n]*)\n\n(?=- )', r'\1\n', '\n'.join(out))
+
+
+def measure(raw):
+    body = strip_page(raw)
+    total = cjk_len(re.sub(r'<[^>]+>', '', body))
+    paras = [cjk_len(untag(b)) for b in blocks(body) if is_prose(b)]
+    no_code = re.sub(r'`[^`\n]+`|!\[[^\]]*\]\([^)]*\)|<[^>]+>|^\s*\d+\.\s', '', body, flags=re.M)
+    per_k = lambda n: round(n * 1000 / max(total, 1), 1)
+    return {
+        '字数': total,
+        'H2': len(re.findall(r'^## ', body, flags=re.M)),
+        '段落': len(paras),
+        '段均': round(sum(paras) / len(paras)) if paras else 0,
+        '最长段': max(paras, default=0),
+        '图': len(FIGURE.findall(body)),
+        '交互': len(re.findall(r'<(?:QuickCheck|ReadMore)\b', body)),
+        '代码/千字': per_k(len(re.findall(r'`[^`\n]+`', body))),
+        '数字/千字': per_k(len(re.findall(r'(?<![A-Za-z0-9_.-])\d+(?:\.\d+)?', no_code))),
+    }
+
+
+def stats(paths):
+    rows = []
+    for name in paths:
+        raw = Path(name).expanduser().read_text()
+        if name.endswith('.txt'):
+            raw = academy_txt_to_md(raw)
+        rows.append((Path(name).name, measure(raw)))
+    cols = list(rows[0][1]) if rows else []
+    width = max([len(n) for n, _ in rows] + [4])
+    print('文件'.ljust(width), *[c.rjust(8) for c in cols])
+    for n, m in rows:
+        print(n.ljust(width), *[str(m[c]).rjust(8) for c in cols])
+    return 0
+
+
 def main(paths):
     if not paths:
         print(__doc__)
         return 2
+    if paths[0] == '--stats':
+        return stats(paths[1:])
     for name in paths:
         path = Path(name)
         raw = path.read_text()
