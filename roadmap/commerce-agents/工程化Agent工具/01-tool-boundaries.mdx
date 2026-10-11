@@ -7,6 +7,8 @@ import MessageFlow from '@site/src/components/MessageFlow';
 
 # 工具边界
 
+<LessonMeta lesson={1} minutes={5} />
+
 工具把商店已有的系统接给模型。模型只决定搜什么，检索、排序和校验都留在系统一侧。这条分工线就是工具边界。
 
 ## 工具边界解决的问题
@@ -36,6 +38,15 @@ import MessageFlow from '@site/src/components/MessageFlow';
 <MessageFlow variant="toolBoundarySearch" />
 
 模型只出现在这次往返的两端：它决定搜什么，也读取搜到了什么。中间的检查、检索和记录，都发生在工具边界的另一侧。
+
+<QuickCheck
+  question="顾客问：“有没有 200 美元以内的双人帐篷？”下面哪件事交给商店的搜索系统？"
+  options={[
+    { text: '决定这次搜“帐篷”', explain: '这是模型的事：它读懂顾客的话，决定搜什么。' },
+    { text: '按价格筛出帐篷，再按相关度排好', correct: true, explain: '检索、过滤和排序用的是商店自己的逻辑和信号，模型只读交回的结果。' },
+    { text: '决定向顾客推荐哪一顶', explain: '这是模型的事：读完搜索结果，它决定推荐什么、怎么说。' },
+  ]}
+/>
 
 ## 工具边界的优势
 

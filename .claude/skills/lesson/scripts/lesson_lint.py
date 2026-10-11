@@ -22,6 +22,7 @@ Claude Code 101 与子代理 / 技能课、AI 能力与局限。正文 500–160
 提到下一课、别的课只出现在收尾那一节。这些课文不出 FAIL（纯视频文字稿页除外），偏离常态才出 WARN。
 """
 import json
+import math
 import re
 import subprocess
 import sys
@@ -47,6 +48,29 @@ BREAK = re.compile(r'<(?:Diagram|MessageFlow|AgentLoopViz|QuickCheck|ReadMore)\b
 WALKTHROUGH = re.compile(r'<(McpWalkthrough|CodeWalkthrough)\b[^>]*variant="(\w+)"')
 
 results = []  # (level, file, message)
+
+# 标题下的课序和时长：<LessonMeta lesson={N} minutes={M} />，数字由这里算，课文照抄
+META = re.compile(r'<LessonMeta\s+lesson=\{(\d+)\}\s+minutes=\{(\d+)\}\s*/>')
+
+
+def lesson_number(path):
+    # 第几课：同一目录里带两位编号的课文和演练页按文件名排序，从 1 数起
+    names = sorted(p.name for p in Path(path).parent.iterdir() if re.match(r'\d\d-.+\.mdx?$', p.name))
+    return names.index(Path(path).name) + 1
+
+
+def check_meta(path, raw, minutes):
+    where = str(path)
+    expect = f'<LessonMeta lesson={{{lesson_number(path)}}} minutes={{{minutes}}} />'
+    body = strip_page(raw)
+    after_h1 = re.search(r'^# .+\n+(.*)$', body, flags=re.M)
+    m = META.search(raw)
+    if not m:
+        report('FAIL', where, f'标题下缺课序和时长：H1 下一行写 {expect}')
+    elif (int(m.group(1)), int(m.group(2))) != (lesson_number(path), minutes):
+        report('FAIL', where, f'课序或时长和篇幅对不上：改成 {expect}')
+    elif not after_h1 or not META.match(after_h1.group(1)):
+        report('FAIL', where, f'{expect} 要紧跟在 H1 下一行')
 
 
 def report(level, where, message):
@@ -161,6 +185,9 @@ def lint_lesson(path, raw):
     if longest > 700:
         report('WARN', where, f'连续 {longest} 字没有图、代码或交互：讲问题和机制时，每一两段配一张图')
 
+    # 大约几分钟：每分钟读 300 字，一张图或一道快速检查各加半分钟，至少 2 分钟
+    check_meta(path, raw, max(2, math.ceil(total / 300 + 0.5 * figures + 0.5 * interactive)))
+
     for variant in re.findall(r'<Diagram\s+variant="(\w+)"', raw):
         lint_svg(variant)
 
@@ -270,6 +297,7 @@ def lint_walkthrough_page(path, raw, found):
             continue
         target, steps = loaded
         data = str(target.relative_to(ROOT))
+        check_meta(path, raw, max(5, math.ceil(len(steps) * 1.5)))
         if not 3 <= len(steps) <= 9:
             report('WARN', data, f'{len(steps)} 步，基线 6–7 步')
         for i, step in enumerate(steps, 1):

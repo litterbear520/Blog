@@ -2,10 +2,23 @@
    SVG 只写类名，颜色和字体都在这里映射到 --th-* 令牌，深浅模式跟着切换。类名清单见 src/data/diagrams/index.js。 */
 
 .figure {
+  position: relative;
   margin: 2rem 0;
   border-radius: 8px;
   background: var(--th-dg-canvas);
   overflow: hidden;
+}
+
+/* 放大查看：弹层里按 1.5 倍列宽画同一张图；手机上至少 600px，弹层里横向滚动 */
+.zoomed {
+  width: max(600px, min(92vw, 1152px));
+  margin: 0;
+}
+
+.zoomed :global(svg) {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* 桌面按列宽缩放；手机上不再缩小，改为横向滚动，保证字不小于约 10px */
