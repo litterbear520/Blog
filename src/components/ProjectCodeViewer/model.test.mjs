@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { buildTree, closeFile, fileStatus, hasFile, isFocused, languageOf, openFile, syncSelection } from './model.mjs';
+import { buildTree, closeFile, fileStatus, hasFile, isFocused, languageOf, openFile, syncSelection, treeWidth } from './model.mjs';
 // data URL also works with Node 18/20 when the repository is not type: module.
 const diffURL = `data:text/javascript;base64,${Buffer.from(readFileSync(new URL('./diff.js', import.meta.url), 'utf8')).toString('base64')}`;
 const { diffLines, plainRows } = await import(diffURL);
@@ -98,4 +98,11 @@ test('language fallback is safe', () => {
   assert.equal(languageOf('test.PY'), 'python');
   assert.equal(languageOf('data.json'), 'json');
   assert.equal(languageOf('unknown.foo'), 'text');
+});
+
+test('tree width follows the widest row, including indentation', () => {
+  assert.ok(treeWidth(buildTree(['server.py', 'client.py'])) < 160);
+  const deep = treeWidth(buildTree(['shopping_agent/tools/registry.py', 'commerce_common/execution.py']));
+  assert.equal(deep, Math.ceil(60 + 'commerce_common'.length * 7.2));
+  assert.ok(treeWidth(buildTree(['a/b/c/registry.py'])) > treeWidth(buildTree(['registry.py'])));
 });

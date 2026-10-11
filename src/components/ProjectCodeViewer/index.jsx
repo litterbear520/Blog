@@ -7,7 +7,7 @@ import { UI } from '@site/src/data/projectViewerUI';
 import { RunOutputProvider } from '@site/src/theme/CodeBlock/RunOutput/context';
 import RunOutputPanel from '@site/src/theme/CodeBlock/RunOutput/Panel';
 import { diffLines, plainRows } from './diff';
-import { buildTree, closeFile, fileStatus, hasFile, isFocused, languageOf, openFile, syncSelection } from './model.mjs';
+import { buildTree, closeFile, fileStatus, hasFile, isFocused, languageOf, openFile, syncSelection, treeWidth } from './model.mjs';
 import CopyCodeButton from './CopyCodeButton';
 import SymbolsIcon from './SymbolsIcon';
 import styles from './styles.module.css';
@@ -132,7 +132,7 @@ export default function ProjectCodeViewer({
     <RunOutputProvider output={run?.output} status={run?.status} open={runOpen} onToggle={toggleRun}>
       <div className={clsx(styles.editor, single && styles.single, className)} data-project-code-viewer="">
         {!single && (
-          <aside className={styles.fileTree} aria-label={UI['files.heading']}>
+          <aside className={styles.fileTree} aria-label={UI['files.heading']} style={{ '--tree-width': `${treeWidth(tree)}px` }}>
             <h4 className={styles.fileTreeHeading}>{UI['files.heading']}</h4>
             <div className={styles.treeScroll}>{renderTree(tree, 0)}</div>
           </aside>

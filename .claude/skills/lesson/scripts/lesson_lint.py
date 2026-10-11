@@ -59,6 +59,19 @@ def lesson_number(path):
     return names.index(Path(path).name) + 1
 
 
+def opens_with_options(raw):
+    # 第一个二级标题那一节用“两个选项”对照图开头（variant 名以 Option1 结尾）
+    sections = re.split(r'^## ', strip_page(raw), flags=re.M)
+    return len(sections) > 1 and bool(re.search(r'<Diagram\s+variant="\w+Option1"', sections[1]))
+
+
+def previous_lesson(path):
+    names = sorted(p.name for p in Path(path).parent.iterdir()
+                   if re.match(r'\d\d-.+\.mdx?$', p.name) and not p.name.endswith('-walkthrough.mdx'))
+    i = names.index(Path(path).name)
+    return Path(path).parent / names[i - 1] if i > 0 else None
+
+
 def check_meta(path, raw, minutes):
     where = str(path)
     expect = f'<LessonMeta lesson={{{lesson_number(path)}}} minutes={{{minutes}}} />'
@@ -184,6 +197,10 @@ def lint_lesson(path, raw):
     longest = max((cjk_len(re.sub(r'<[^>]+>', '', run)) for run in BREAK.split(body)), default=0)
     if longest > 700:
         report('WARN', where, f'连续 {longest} 字没有图、代码或交互：讲问题和机制时，每一两段配一张图')
+
+    prev = previous_lesson(path)
+    if prev and opens_with_options(raw) and opens_with_options(prev.read_text()):
+        report('WARN', where, f'和上一课 {prev.name} 一样用“两个选项”开头：相邻两课换一种讲法，见讲法目录')
 
     # 大约几分钟：每分钟读 300 字，一张图或一道快速检查各加半分钟，至少 2 分钟
     check_meta(path, raw, max(2, math.ceil(total / 300 + 0.5 * figures + 0.5 * interactive)))

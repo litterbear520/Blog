@@ -105,7 +105,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-height: 20rem;
+  /* 八步加一段展开的说明都能一眼看全，再多才滚动 */
+  max-height: 30rem;
   overflow-y: auto;
   overscroll-behavior-y: contain;
   /* Explicit step navigation owns list position; do not anchor the article here. */

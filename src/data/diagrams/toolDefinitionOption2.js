@@ -1,8 +1,8 @@
-// 《写给模型的工具定义》选项 2：把用法写进定义。场景图，和 toolDefinitionOption1 布局完全相同：
+// 《写给模型的工具定义》“把用法写进参数说明”一节的第二张：把用法写进定义。场景图，和 toolDefinitionOption1 布局完全相同：
 // 定义多了描述和字段说明，搜索里不再有猜出来的条件，帐篷搜得出来。类名见 ./index.js。
 export default `<svg viewBox="0 0 768 432" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tool-definition-option-2-title tool-definition-option-2-desc">
-  <title id="tool-definition-option-2-title">选项 2：把用法写进定义</title>
-  <desc id="tool-definition-option-2-desc">这张图说明第二个选项：工具定义写明返回什么，并说明筛选条件只放顾客明确提出的条件，模型的搜索里于是只有关键词“帐篷”和价格上限 200 美元，那顶双人徒步帐篷被搜了出来。</desc>
+  <title id="tool-definition-option-2-title">写明用法：只放顾客说的条件</title>
+  <desc id="tool-definition-option-2-desc">这张图说明写明用法时：工具定义写明返回什么，并说明筛选条件只放顾客明确提出的条件，模型的搜索里于是只有关键词“帐篷”和价格上限 200 美元，那顶双人徒步帐篷被搜了出来。</desc>
   <defs>
     <marker id="tool-definition-option-2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk-accent" d="M1,1 L9,5 L1,9"/></marker>
   </defs>
@@ -41,7 +41,7 @@ export default `<svg viewBox="0 0 768 432" xmlns="http://www.w3.org/2000/svg" ro
   <rect class="s-hl" x="68" y="256" width="280" height="48" rx="4"/>
   <rect class="s-hl" x="452" y="196" width="264" height="28" rx="4"/>
   <path class="s-leader" d="M348,280 C396,280 400,210 444,210" marker-end="url(#tool-definition-option-2-arrow)"/>
-  <rect class="n-option" x="184" y="364" width="400" height="40" rx="8"/>
-  <text class="t-name" x="384" y="390" text-anchor="middle">选项 2：把用法写进定义</text>
+  <rect class="n-option" x="304" y="364" width="160" height="40" rx="8"/>
+  <text class="t-name" x="384" y="390" text-anchor="middle">写明用法</text>
 </svg>
 `;
