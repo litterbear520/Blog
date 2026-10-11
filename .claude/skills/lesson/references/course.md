@@ -15,7 +15,12 @@
     └── 01-concept-assessment.mdx
 ```
 
-- **文件名**：两位编号 + 英文 slug。编号只管侧边栏顺序，URL 里会去掉（`01-tool-boundaries.mdx` → `/tool-boundaries`）；演练页的 slug 以 `-walkthrough` 结尾。重写已上线的课时，概念不变的那一课保留原来的 slug，链接不会断。
+- **文件名**：两位编号 + 英文 slug。编号只管侧边栏顺序，URL 里会去掉（`01-tool-boundaries.mdx` → `/tool-boundaries`）；演练页的 slug 以 `-walkthrough` 结尾。
+- **重写已上线的课**：
+  - 概念不变的那一课保留原来的 slug，旧链接不断；
+  - 演练 variant 能沿用就沿用，白名单和浏览器测试不用动；
+  - 只被旧课用的图和数据文件删掉，注册表一起改；
+  - 专题或课程的索引页里，学习目标和 `lessonCount` 跟着新结构更新。
 - **frontmatter** 只写 `description`：一句话，读者在目录卡片上看到。H1 是中文课名，不带编号。
 - **分组页**：frontmatter 写 `sidebar_position`、`description`，正文是 H1、一句话介绍、`<DocCardList />`，照 `docs/MCP/Model Context Protocol：高级主题/核心 MCP 功能/index.md`。
 - **路线里的专题**：就是项目目录下的一个分组，`sidebar_position` 排在各 Stage 之后；它的 `index.md` 可以多写一段“这个专题讲什么”和学习目标。
