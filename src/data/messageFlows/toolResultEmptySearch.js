@@ -1,6 +1,6 @@
 // 《写给模型的工具结果》“工具结果里的一句说明”：搜索零条时，结果开头那一行说明让模型先换个关键词再搜。
-// 和《工具边界》的 toolBoundarySearch 用同样的三条泳道。调用参数是示意；工具名、参数字段和结果开头那行说明
-// 与代码一致（serialization.py 的搜索结果头部）。
+// 和《工具边界》的 toolBoundarySearch 用同样的三条泳道。调用参数只写关键词（价格上限和这里讲的事无关）；
+// 工具名、参数字段和结果开头那行说明与代码一致（serialization.py 的搜索结果头部）。
 export default {
   title: '零条结果时，模型怎么知道下一步？',
   summary:
@@ -15,7 +15,7 @@ export default {
       from: 'model',
       to: 'executor',
       label: '调用 `search_products`',
-      rows: [['assistant', 'tool_use', '`{"query": "双人帐篷", "filters": {"max_price": 200}}`']],
+      rows: [['assistant', 'tool_use', '`{"query": "双人帐篷"}`']],
     },
     { from: 'executor', to: 'backend', label: '按关键词搜索' },
     { from: 'backend', to: 'executor', label: '没有匹配的商品', kind: 'secondary' },
@@ -31,7 +31,7 @@ export default {
       from: 'model',
       to: 'executor',
       label: '再调用一次',
-      rows: [['assistant', 'tool_use', '`{"query": "帐篷", "filters": {"max_price": 200}}`']],
+      rows: [['assistant', 'tool_use', '`{"query": "帐篷"}`']],
     },
     { note: ['executor', 'backend'], text: '再搜一次，找到那顶双人徒步帐篷' },
     {
