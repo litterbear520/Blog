@@ -19,6 +19,8 @@ import toolDefinitionOption1 from './toolDefinitionOption1';
 import toolDefinitionOption2 from './toolDefinitionOption2';
 import toolDefinitionParts from './toolDefinitionParts';
 import toolListRounds from './toolListRounds';
-import toolOutcomeReaders from './toolOutcomeReaders';
+import toolResultReaders from './toolResultReaders';
+import toolResultFields from './toolResultFields';
+import toolErrorBare from './toolErrorBare';
 
-export default { toolBoundaryOption1, toolBoundaryOption2, toolDefinitionOption1, toolDefinitionOption2, toolDefinitionParts, toolListRounds, toolOutcomeReaders };
+export default { toolBoundaryOption1, toolBoundaryOption2, toolDefinitionOption1, toolDefinitionOption2, toolDefinitionParts, toolListRounds, toolResultReaders, toolResultFields, toolErrorBare };
