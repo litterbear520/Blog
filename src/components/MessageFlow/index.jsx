@@ -51,9 +51,8 @@ export default function MessageFlow({ variant, flow: inline, upTo }) {
   const span = (item) => ({ gridColumn: `${item.start + 1} / ${item.end + 2}`, '--span': item.end - item.start + 1 });
 
   return (
-    <figure className={styles.figure} aria-describedby={summaryId}>
+    <figure className={styles.figure} aria-label={flow.title ?? undefined} aria-describedby={summaryId}>
       <p id={summaryId} className={styles.srOnly}>{flow.summary}</p>
-      {flow.title && <div className={styles.title}>{flow.title}</div>}
       <div className={styles.scroller}>
         <div className={styles.flow} style={{ '--cols': count }}>
           <div className={styles.row}>

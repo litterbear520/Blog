@@ -35,14 +35,13 @@ export default `<svg viewBox="0 0 768 432" xmlns="http://www.w3.org/2000/svg" ro
 
   <text class="t-who" x="440" y="292">搜到的商品</text>
   <rect class="s-card" x="440" y="300" width="288" height="40" rx="8"/>
-  <rect class="s-thumb" x="452" y="308" width="24" height="24" rx="4"/>
-  <text class="t-sub" x="488" y="324">双人徒步帐篷 · 4.6 分</text>
+  <text class="t-sub" x="456" y="324">双人徒步帐篷 · 4.6 分</text>
 
   <!-- 唯一的强调：filters 的说明连到顾客明确说的那一条 -->
   <rect class="s-hl" x="68" y="256" width="280" height="48" rx="4"/>
   <rect class="s-hl" x="452" y="196" width="264" height="28" rx="4"/>
   <path class="s-leader" d="M348,280 C396,280 400,210 444,210" marker-end="url(#tool-definition-option-2-arrow)"/>
-  <rect class="n-focal" x="184" y="364" width="400" height="40" rx="8"/>
+  <rect class="n-option" x="184" y="364" width="400" height="40" rx="8"/>
   <text class="t-name" x="384" y="390" text-anchor="middle">选项 2：把用法写进定义</text>
 </svg>
 `;

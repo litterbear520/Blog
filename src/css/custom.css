@@ -133,6 +133,9 @@
   --th-dg-stroke: #73726d;     /* 节点描边、主连线 */
   --th-dg-loop: #5e95d2;       /* 回路、次要路径 */
   --th-dg-text: var(--th-text-2);
+  --th-dg-canvas: #f4f7f2;     /* 课文配图的画布底（Diagram / MessageFlow） */
+  --th-dg-focal: #c98e67;      /* 配图里唯一的焦点标签：实心陶土底，深浅模式相同 */
+  --th-dg-focal-ink: #141413;  /* 焦点标签上的字 */
 }
 
 /* ═══════════════════════════════════════════
@@ -222,6 +225,7 @@ html[data-theme='dark'] {
   --th-dg-body: #1c1c1b;
   --th-dg-stroke: #8d8b84;
   --th-dg-loop: #4d7299;
+  --th-dg-canvas: #20201f;
 }
 
 /* ═══════════════════════════════════════════
