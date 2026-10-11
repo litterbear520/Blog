@@ -12,7 +12,11 @@
 //         s-hl 强调框（框住一个词或一行）· s-leader 强调色曲线标注 · s-dim 淡化的元素（被禁用、没发生的路径）
 //         mk-accent 强调色箭头 · t-msg 气泡里的话（14px）· t-who 说话人 · t-panel 面板里的代码
 // <svg> 要带 role="img" 和 aria-labelledby，id 统一用这张图的文件名作前缀，<desc> 写成“这张图说明……”一整句。
-import toolBoundary from './toolBoundary';
+import toolBoundaryOption1 from './toolBoundaryOption1';
+import toolBoundaryOption2 from './toolBoundaryOption2';
+import toolDefinitionOption1 from './toolDefinitionOption1';
+import toolDefinitionOption2 from './toolDefinitionOption2';
+import toolListRounds from './toolListRounds';
 import toolOutcomeReaders from './toolOutcomeReaders';
 
-export default { toolBoundary, toolOutcomeReaders };
+export default { toolBoundaryOption1, toolBoundaryOption2, toolDefinitionOption1, toolDefinitionOption2, toolListRounds, toolOutcomeReaders };
