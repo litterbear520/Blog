@@ -113,10 +113,10 @@ for (const spec of LESSONS) {
   test(`${spec.variant}: every step highlights its intended, nonempty range`, () => {
     assert.equal(lesson.steps.length, spec.anchors.length);
     lesson.steps.forEach((step, index) => {
-      const [file, start, end] = spec.anchors[index];
+      const [file, start, end, options] = spec.anchors[index];
       const lines = lesson.files[file].split('\n');
       assert.equal(step.file, file);
-      assert.deepEqual({ line: step.line, endLine: step.endLine }, focusRange(lesson.files[file], start, end));
+      assert.deepEqual({ line: step.line, endLine: step.endLine }, focusRange(lesson.files[file], start, end, options));
       assert.ok(lines[step.line - 1].trimStart().startsWith(start));
       const highlighted = lines.slice(step.line - 1, step.endLine);
       assert.ok(highlighted.join('\n').trim());

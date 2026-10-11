@@ -45,6 +45,8 @@ const [out, theme, urls] = [%(out)s, %(theme)s, %(urls)s];
     for (let y = 0, k = 0; y < height; y += 1100, k++) {
       await page.screenshot({ path: `${out}/${i}-${theme}-${k}.png`, clip: { x: 0, y, width: 1280, height: Math.min(1100, height - y) }, fullPage: true });
     }
+    // 单张配图比视口高时，固定的导航栏会盖住图的顶部；截配图前让导航栏回到文档流里
+    await page.addStyleTag({ content: '.navbar { position: static !important; }' });
     const figures = await page.$$('article figure');
     for (const [k, figure] of figures.entries()) await figure.screenshot({ path: `${out}/fig-${i}-${k}.png` });
     console.log(`${url}  ${Math.ceil(height / 1100)} 段，${figures.length} 张配图`);

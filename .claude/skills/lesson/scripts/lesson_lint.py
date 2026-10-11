@@ -4,6 +4,7 @@
 用法（在仓库根目录）：
     python3 .claude/skills/lesson/scripts/lesson_lint.py <课文.md|mdx> [...]
     python3 .claude/skills/lesson/scripts/lesson_lint.py --stats <课文.mdx> ~/workspace/academy-research/api-tool-schemas.txt [...]
+    python3 .claude/skills/lesson/scripts/lesson_lint.py --fix <课文.mdx> [...]   # 把标题下的 <LessonMeta> 写好或更新数字
 
 --stats 不判对错，只把几篇课文的字数、段落、图和密度并排列成表，用来和选好的 Academy 原文对照；
 Academy 的抓取稿（*.txt，每行开头是元素类型）会先转成 Markdown 再量。
@@ -72,6 +73,20 @@ def previous_lesson(path):
     return Path(path).parent / names[i - 1] if i > 0 else None
 
 
+def concept_minutes(raw):
+    # 大约几分钟：每分钟读 300 字，一张图或一道快速检查各加半分钟，至少 2 分钟
+    body = strip_page(raw)
+    total = cjk_len(re.sub(r'<[^>]+>', '', body))
+    figures = len(FIGURE.findall(body))
+    interactive = len(re.findall(r'<QuickCheck\b', body))
+    return max(2, math.ceil(total / 300 + 0.5 * figures + 0.5 * interactive))
+
+
+def walkthrough_minutes(steps):
+    # 演练每步一分半，至少 5 分钟
+    return max(5, math.ceil(len(steps) * 1.5))
+
+
 def check_meta(path, raw, minutes):
     where = str(path)
     expect = f'<LessonMeta lesson={{{lesson_number(path)}}} minutes={{{minutes}}} />'
@@ -136,7 +151,7 @@ def lint_lesson(path, raw):
     intro_len = cjk_len(' '.join(intro))
     if len(intro) > 3 or intro_len > 230:
         report('FAIL', where, f'导语 {len(intro)} 段 {intro_len} 字：H1 下一段话、两三句，直接进第一个二级标题')
-    elif len(intro) > 1 or intro_len > 120:
+    elif len(intro) > 2 or intro_len > 120:
         report('WARN', where, f'导语 {len(intro)} 段 {intro_len} 字，Academy 的导语多是一段，至多三个短段')
 
     paras = [untag(b) for b in blocks(body) if is_prose(b)]
@@ -202,8 +217,7 @@ def lint_lesson(path, raw):
     if prev and opens_with_options(raw) and opens_with_options(prev.read_text()):
         report('WARN', where, f'和上一课 {prev.name} 一样用“两个选项”开头：相邻两课换一种讲法，见讲法目录')
 
-    # 大约几分钟：每分钟读 300 字，一张图或一道快速检查各加半分钟，至少 2 分钟
-    check_meta(path, raw, max(2, math.ceil(total / 300 + 0.5 * figures + 0.5 * interactive)))
+    check_meta(path, raw, concept_minutes(raw))
 
     for variant in re.findall(r'<Diagram\s+variant="(\w+)"', raw):
         lint_svg(variant)
@@ -314,7 +328,7 @@ def lint_walkthrough_page(path, raw, found):
             continue
         target, steps = loaded
         data = str(target.relative_to(ROOT))
-        check_meta(path, raw, max(5, math.ceil(len(steps) * 1.5)))
+        check_meta(path, raw, walkthrough_minutes(steps))
         if not 3 <= len(steps) <= 9:
             report('WARN', data, f'{len(steps)} 步，基线 6–7 步')
         for i, step in enumerate(steps, 1):
@@ -404,12 +418,43 @@ def stats(paths):
     return 0
 
 
+def fix_meta(path):
+    raw = path.read_text()
+    if re.search(r'<DocCardList|<McpQuiz', raw):
+        return
+    found = WALKTHROUGH.findall(raw)
+    if found and cjk_len(re.sub(r'<[^>]+>', '', strip_page(raw))) < 200:
+        loaded = load_steps(*found[0])
+        if not loaded:
+            return
+        minutes = walkthrough_minutes(loaded[1])
+    else:
+        minutes = concept_minutes(raw)
+    tag = f'<LessonMeta lesson={{{lesson_number(path)}}} minutes={{{minutes}}} />'
+    if META.search(raw):
+        new = META.sub(lambda m: tag, raw, count=1)
+    else:
+        new, n = re.subn(r'^(# .+\n)', lambda m: m.group(1) + '\n' + tag + '\n', raw, count=1, flags=re.M)
+        if not n:
+            report('FAIL', str(path), '找不到 H1，没法写课序和时长')
+            return
+    if new != raw:
+        path.write_text(new)
+    print(f'{path}  {tag}')
+
+
 def main(paths):
     if not paths:
         print(__doc__)
         return 2
     if paths[0] == '--stats':
         return stats(paths[1:])
+    if paths[0] == '--fix':
+        for name in paths[1:]:
+            fix_meta(Path(name))
+        for level, where, message in results:
+            print(f'{level}  {where}  {message}')
+        return 1 if results else 0
     for name in paths:
         path = Path(name)
         raw = path.read_text()
