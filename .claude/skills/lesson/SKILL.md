@@ -41,7 +41,9 @@ disable-model-invocation: true
    完成标准：对演练页跑同一个 lint 没有 FAIL。
 7. **补测试。** 新演练照 `tools/agent-tool-lessons.test.mjs` 的 `LESSONS` 登记：演练页路径 `walkthrough`、它讲的概念课 `pages[]`（每页列出嵌的图和消息流）、快照文件和每一步的语义锚点，并加进 `tools/walkthrough-browser.mjs` 的 `lessons`；新 variant 加进 `src/components/ProjectCodeViewer/actions.test.mjs` 的 `supported` 白名单；新图由 `npm run test:diagrams` 校验，新消息流图由 `npm run test:message-flow` 校验。本机内存跑不动构建和浏览器测试，只跑这几个纯 Node 的测试：`npm run test:diagrams && npm run test:message-flow && npm run test:agent-tools && npm run test:quick-check && node --test src/components/ProjectCodeViewer/actions.test.mjs`；其余交给 CI。
 8. **通读对照。** 先跑 `python3 .claude/skills/lesson/scripts/lesson_lint.py --stats <自己的课> <第 1 步挑的 Academy 抓取稿 .txt>`，把字数、段落、图和密度并排看；再重读那几篇原文，从头读自己的课：段落的长短、图和检查出现的频率、读到哪里需要停下来查别处，都和原文比一比。哪一段读着比原文吃力，就把那段拆短，或者把细节挪进演练、收进“阅读更多”。
-9. **提交、看 CI、给链接。** 提交信息用中文，按 `feat:` / `docs:` 前缀写改了什么，只描述改动本身；直接推 `main`，`gh run watch <id> --exit-status` 等 CI。CI 通过后把线上链接交给用户，并附上每课照的 Academy 原文链接（`https://academy.claude.com/zh-CN/courses/<课程>/<课>`，抓取稿第一行就是），方便用户对照着读；由用户自己看页面，不截图。
+9. **提交、看 CI、截图对照。** 提交信息用中文，按 `feat:` / `docs:` 前缀写改了什么，只描述改动本身；直接推 `main`，`gh run watch <id> --exit-status` 等 CI。CI 通过后用 `python3 .claude/skills/lesson/scripts/page_shots.py <线上链接> ...` 截线上页面（浅色；内存够时加 `--theme dark` 再截一遍），和 `~/workspace/academy-research/shots/` 里同课型的 Academy 截图（同样 1280 宽）并排看：图有没有被裁、图里的字是不是太小、段落和图的节奏、标题下的标签、快速检查和演练能不能用。哪里不如原文，改了再推，再截。
+   完成标准：截图里每一页都说得出和对应 Academy 截图的差别，剩下的差别都是有意的（比如深色模式、可放大的图）。
+10. **给链接。** 把线上链接交给用户，并附上每课照的 Academy 原文链接（`https://academy.claude.com/zh-CN/courses/<课程>/<课>`，抓取稿第一行就是），方便用户对照着读。截图只给自己核对用，不交给用户。
 
 ## 报告
 
