@@ -12,5 +12,7 @@
 // 页面里写 <MessageFlow variant="名字" />，加 upTo={n} 只画前 n 项，同一张图可以在几处逐步展开。
 
 import toolBoundarySearch from './toolBoundarySearch';
+import toolResultEmptySearch from './toolResultEmptySearch';
+import toolErrorSoldOut from './toolErrorSoldOut';
 
-export default { toolBoundarySearch };
+export default { toolBoundarySearch, toolResultEmptySearch, toolErrorSoldOut };

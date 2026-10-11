@@ -13,6 +13,7 @@ export default {
         'shopping_agent/backend.py': 'shopping-agent/core/shopping_agent/backend.py',
         'commerce_common/streaming.py': 'commerce-common/commerce_common/streaming.py',
         'shopping_agent/serialization.py': 'shopping-agent/core/shopping_agent/serialization.py',
+        'shopping_agent/gates.py': 'shopping-agent/core/shopping_agent/gates.py',
       },
     },
   ],

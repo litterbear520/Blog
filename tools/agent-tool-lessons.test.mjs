@@ -62,24 +62,36 @@ const LESSONS = [
   {
     data: 'agentToolResultsLesson.js',
     variant: 'agentToolResults',
-    // 这一课还是旧写法：演练嵌在课文里，同一页既是演练页也是要检查配图的课文。
-    walkthrough: `${TOPIC}/04-tool-results.mdx`,
-    pages: [{ page: `${TOPIC}/04-tool-results.mdx`, flows: [], diagrams: ['toolOutcomeReaders'] }],
+    // 《写给模型的工具结果》《失败也写成指令》共用一页演练；两篇概念课只放图，不嵌演练。
+    walkthrough: `${TOPIC}/06-tool-results-walkthrough.mdx`,
+    pages: [
+      {
+        page: `${TOPIC}/04-tool-results.mdx`,
+        flows: ['toolResultEmptySearch'],
+        diagrams: ['toolResultReaders', 'toolResultFields'],
+      },
+      {
+        page: `${TOPIC}/05-errors-as-instructions.mdx`,
+        flows: ['toolErrorSoldOut'],
+        diagrams: ['toolErrorBare'],
+      },
+    ],
     files: [
       'commerce_common/streaming.py',
+      'shopping_agent/gates.py',
       'shopping_agent/serialization.py',
       'commerce_common/execution.py',
       'shopping_agent/executor.py',
     ],
     anchors: [
-      ['commerce_common/streaming.py', 'class ToolOutcome:', 'def to_sse('],
+      ['commerce_common/streaming.py', 'class ToolOutcome:', 'def error(cls, text'],
+      ['shopping_agent/gates.py', 'def _written(', 'async def gated_add_to_cart('],
       ['shopping_agent/serialization.py', 'def compact_product(', '_VARIANT_ALWAYS = ('],
-      ['shopping_agent/serialization.py', '_VARIANT_ALWAYS = (', 'def product_details_payload('],
-      ['shopping_agent/serialization.py', 'SEARCH_EMPTY_HEADER = (', '# ── 购物车'],
+      ['shopping_agent/serialization.py', 'SEARCH_EMPTY_HEADER = (', 'def search_result_text('],
       ['commerce_common/execution.py', 'async def execute(', 'async def dispatch('],
-      ['commerce_common/execution.py', 'def invalid_arguments_text(', 'class BaseToolExecutor:'],
-      ['shopping_agent/executor.py', 'fence = STOREFRONT_FENCE', 'def __init__('],
+      ['shopping_agent/executor.py', 'unavailable_text = ', 'def __init__('],
       ['shopping_agent/executor.py', 'def domain_error(', 'def handlers('],
+      ['shopping_agent/gates.py', 'def provenance_error(', 'def options_error('],
     ],
   },
 ];
