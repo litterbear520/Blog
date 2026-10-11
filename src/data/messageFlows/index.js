@@ -1,7 +1,7 @@
 // MessageFlow 的数据注册表：variant 名 → 一张消息流（泳道）图。每张图一个文件，写完在这里登记。
 // 数据形状（校验规则见 src/components/MessageFlow/model.mjs）：
 //   summary       必填。读屏软件读的一段话：这张图说明了什么
-//   title         可选。写成这张图要回答的问题，显示在图的左上角
+//   title         可选。写成这张图要回答的问题，作为图的无障碍名称，不显示（课文配图不写图题）
 //   participants  [{ id, name, sub?, role? }]，从左到右排列；role 取 neutral / process / done / external
 //   items         从上到下，两种：
 //     消息 { from, to, label?, rows?, kind?, collapsed?, focal? }

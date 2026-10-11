@@ -2,7 +2,9 @@
 """按博客的真实令牌和 Diagram 样式，把 src/data/diagrams/ 里的图渲染成深浅两张预览，画完图自己看一眼。
 
 用法（在仓库根目录）：
-    python3 .claude/skills/lesson/scripts/preview_diagrams.py <variant> [...] [--out 目录] [--shot]
+    python3 .claude/skills/lesson/scripts/preview_diagrams.py <variant> [...] [--out 目录] [--width 702] [--shot]
+
+- --width 是正文列宽：1280 宽的屏幕上左侧栏和目录都在，正文列约 702px，图按这个宽度缩放后才是读者看到的字号。
 
 - 不加 --shot：只生成 preview-light.html / preview-dark.html，任何浏览器都能打开。
 - 加 --shot：再用无头 Chrome 截成 preview-light.png / preview-dark.png（用 Read 直接看图）。
@@ -26,7 +28,7 @@ def svg_of(variant):
     return source[source.index('`') + 1:source.rindex('`')]
 
 
-def page(theme, svgs):
+def page(theme, svgs, width):
     css = (ROOT / 'src/css/custom.css').read_text()
     diagram = re.sub(r':global\(([^)]*)\)', r'\1',
                      (ROOT / 'src/components/Diagram/styles.module.css').read_text())
@@ -38,7 +40,7 @@ def page(theme, svgs):
     return f"""<!doctype html><html data-theme="{theme}"><head><meta charset="utf-8">{font_link}
 <style>{css}</style><style>{diagram}</style>
 <style>body{{margin:0;padding:24px;background:var(--th-page);font-family:var(--ifm-font-family-base)}}
-.wrap{{width:794px}} .name{{margin:16px 0 4px;color:var(--th-text-3);font:12px monospace}}</style></head>
+.wrap{{width:{width}px}} .name{{margin:16px 0 4px;color:var(--th-text-3);font:12px monospace}}</style></head>
 <body><div class="wrap">{figures}</div></body></html>"""
 
 
@@ -65,7 +67,7 @@ def shoot(htmls):
 const {{ chromium }} = require({json.dumps(core[-1])});
 (async () => {{
   const browser = await chromium.launch({{ executablePath: {json.dumps(chrome)}, args: ['--no-proxy-server', '--disable-gpu'] }});
-  const page = await browser.newPage({{ viewport: {{ width: 842, height: 600 }} }});
+  const page = await browser.newPage({{ viewport: {{ width: 900, height: 600 }} }});
   for (const html of {json.dumps([str(h) for h in htmls])}) {{
     await page.goto('file://' + html);
     await page.screenshot({{ path: html.replace(/\\.html$/, '.png'), fullPage: true }});
@@ -87,6 +89,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('variants', nargs='+')
     parser.add_argument('--out', default=os.path.join(tempfile.gettempdir(), 'lesson-preview'))
+    parser.add_argument('--width', type=int, default=702)
     parser.add_argument('--shot', action='store_true')
     args = parser.parse_args()
     out = Path(args.out)
@@ -95,7 +98,7 @@ def main():
     htmls = []
     for theme in ('light', 'dark'):
         html = out / f'preview-{theme}.html'
-        html.write_text(page(theme, svgs))
+        html.write_text(page(theme, svgs, args.width))
         htmls.append(html)
         print(html)
     if args.shot:

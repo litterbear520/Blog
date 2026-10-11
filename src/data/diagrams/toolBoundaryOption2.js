@@ -33,28 +33,28 @@ export default `<svg viewBox="0 0 768 432" xmlns="http://www.w3.org/2000/svg" ro
   <text class="t-who" x="456" y="61">商品目录</text>
 
   <rect class="s-card" x="456" y="88" width="120" height="64" rx="8"/>
-  <rect class="s-thumb" x="464" y="96" width="48" height="48" rx="4"/>
-  <text class="t-sub" x="524" y="124">帐篷</text>
+  <text class="t-who" x="468" y="114">双人徒步帐篷</text>
+  <text class="t-sub" x="468" y="134">149 美元</text>
   <g class="s-dim">
     <rect class="s-card" x="592" y="88" width="120" height="64" rx="8"/>
-    <rect class="s-thumb" x="600" y="96" width="48" height="48" rx="4"/>
-    <text class="t-sub" x="660" y="124">炉子</text>
+    <text class="t-who" x="604" y="114">双灶头露营炉</text>
+    <text class="t-sub" x="604" y="134">64.5 美元</text>
     <rect class="s-card" x="456" y="168" width="120" height="64" rx="8"/>
-    <rect class="s-thumb" x="464" y="176" width="48" height="48" rx="4"/>
-    <text class="t-sub" x="524" y="204">睡袋</text>
+    <text class="t-who" x="468" y="194">保暖睡袋</text>
+    <text class="t-sub" x="468" y="214">89 美元</text>
     <rect class="s-card" x="592" y="168" width="120" height="64" rx="8"/>
-    <rect class="s-thumb" x="600" y="176" width="48" height="48" rx="4"/>
-    <text class="t-sub" x="660" y="204">睡垫</text>
+    <text class="t-who" x="604" y="194">自充气睡垫</text>
+    <text class="t-sub" x="604" y="214">59 美元</text>
     <rect class="s-card" x="456" y="248" width="120" height="64" rx="8"/>
-    <rect class="s-thumb" x="464" y="256" width="48" height="48" rx="4"/>
-    <text class="t-sub" x="524" y="284">杯子</text>
+    <text class="t-who" x="468" y="274">露营杯</text>
+    <text class="t-sub" x="468" y="294">9 美元</text>
   </g>
   <rect class="s-card s-dim" x="592" y="248" width="120" height="64" rx="8"/>
   <text class="t-sub" x="652" y="284" text-anchor="middle">还有很多…</text>
 
   <!-- 唯一的强调：Agent 的搜索只连到帐篷，底部标签写这是哪个选项 -->
   <path class="s-leader" d="M288,206 C368,206 376,120 448,120" marker-end="url(#tool-boundary-option-2-arrow)"/>
-  <rect class="n-focal" x="184" y="364" width="400" height="40" rx="8"/>
+  <rect class="n-option" x="184" y="364" width="400" height="40" rx="8"/>
   <text class="t-name" x="384" y="390" text-anchor="middle">选项 2：给模型一个搜索工具</text>
 </svg>
 `;

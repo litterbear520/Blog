@@ -1,18 +1,11 @@
-/* 消息流（泳道）图。配色全部走 --th-dg-* 图表角色色，深浅模式跟着令牌切换。 */
+/* 消息流（泳道）图。版面和 Diagram 的课文配图一致（画布底、无边框、四周留白），
+   配色全部走 --th-dg-* 图表角色色，深浅模式跟着令牌切换。 */
 
 .figure {
-  margin: 1.25rem 0 1.5rem;
-  padding: 1rem 1rem 0.5rem;
-  border: 1px solid var(--th-line);
-  border-radius: 12px;
-  background: var(--th-surface-1);
-}
-
-.title {
-  margin: 0 0 0.75rem;
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--th-text-3);
+  margin: 2rem 0;
+  padding: 2rem 1.5rem 1.25rem;
+  border-radius: 8px;
+  background: var(--th-dg-canvas);
 }
 
 .srOnly {
@@ -80,7 +73,8 @@
 .actor[data-role='external'] { background: var(--th-dg-external); }
 
 .actorName {
-  font-size: 0.875rem;
+  font-family: var(--ifm-heading-font-family);
+  font-size: 0.9375rem;
   font-weight: 600;
   line-height: 1.4;
 }
@@ -104,12 +98,12 @@
   container-type: inline-size;
 }
 
-/* 标签底色和卡片相同，跨过中间的生命线时盖住虚线 */
+/* 标签底色和画布相同，跨过中间的生命线时盖住虚线 */
 .body {
   max-width: 100%;
   padding: 0 0.35rem;
   border-radius: 4px;
-  background: var(--th-surface-1);
+  background: var(--th-dg-canvas);
   color: var(--th-dg-text);
   text-align: center;
 }
@@ -209,13 +203,19 @@
   text-align: center;
 }
 
-/* 结论框：每张图最多一个。淡陶土色叠在不透明底上，生命线不会透出来 */
+/* 结论框：每张图最多一个，和 Diagram 的焦点标签同一个实心陶土底 */
 .focal,
 .note.focal {
   padding: 0.35rem 0.75rem;
-  border: 1px solid var(--th-accent-border);
+  border: 0;
   border-radius: 8px;
-  background: linear-gradient(var(--th-accent-tint), var(--th-accent-tint)), var(--th-surface-1);
+  background: var(--th-dg-focal);
+}
+
+.focal,
+.focal .label {
+  color: var(--th-dg-focal-ink);
+  font-weight: 600;
 }
 
 /* ── 消息小表：角色 │ 块类型 │ 内容 ── */

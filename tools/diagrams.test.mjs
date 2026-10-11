@@ -12,10 +12,10 @@ const css = read('../src/components/Diagram/styles.module.css');
 
 const VOCABULARY = [
   'mask', 'zone', 'band', 'divider', 'boundary',
-  'n-neutral', 'n-process', 'n-done', 'n-external', 'n-focal',
+  'n-neutral', 'n-process', 'n-done', 'n-external', 'n-focal', 'n-option',
   'arrow', 'loop', 'mk', 'mk-loop',
   't-name', 't-band', 't-sub', 't-note', 't-label', 't-mono', 't-mono-strong', 't-code',
-  's-window', 's-bar', 's-bubble-user', 's-bubble-agent', 's-card', 's-thumb', 's-panel',
+  's-window', 's-bar', 's-bubble-user', 's-bubble-agent', 's-card', 's-panel',
   's-hl', 's-leader', 's-dim', 'mk-accent', 't-msg', 't-who', 't-panel',
 ];
 
@@ -55,6 +55,7 @@ for (const { variant, svg } of diagrams) {
     const classes = [...svg.matchAll(/\bclass="([^"]+)"/g)].flatMap(([, list]) => list.split(/\s+/));
     for (const name of classes) assert.ok(VOCABULARY.includes(name), `unknown class ${name}`);
     assert.ok((svg.match(/class="n-focal"/g) || []).length <= 1, 'at most one focal box');
+    assert.ok((svg.match(/class="n-option"/g) || []).length <= 1, 'at most one option label');
   });
 }
 
