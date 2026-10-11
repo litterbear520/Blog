@@ -18,7 +18,7 @@
 - **文件名**：两位编号 + 英文 slug。编号只管侧边栏顺序，URL 里会去掉（`01-tool-boundaries.mdx` → `/tool-boundaries`）；演练页的 slug 以 `-walkthrough` 结尾。
 - **重写已上线的课**：
   - 概念不变的那一课保留原来的 slug，旧链接不断；
-  - 演练 variant 能沿用就沿用，白名单和浏览器测试不用动；
+  - 演练 variant 能沿用就沿用，白名单不用动；演练换了页面（比如从概念课挪到单独的演练页），`tools/walkthrough-browser.mjs` 里的页面路径要跟着改，不然 CI 的真实页面测试会挂；
   - 只被旧课用的图和数据文件删掉，注册表一起改；
   - 专题或课程的索引页里，学习目标和 `lessonCount` 跟着新结构更新。
 - **frontmatter** 只写 `description`：一句话，读者在目录卡片上看到。H1 是中文课名，不带编号。
