@@ -119,7 +119,7 @@ test('docs and roadmap entrypoints all use the supported adapters', { skip: !com
   });
   const pages = ['docs/', 'roadmap/', 'blog/'].flatMap((dir) => walk(new URL(dir, repo)));
   const supported = {
-    CodeWalkthrough: ['unittest', 'codeObject', 'frame', 'commerce', 'iterator', 'iteratorLoop', 'generator', 'generatorNode', 'timerClass', 'addStr', 'decoratorInClass', 'pythonExit', 'classDef', 'classDis', 'lessFor', 'tryFinally', 'atexitModule'],
+    CodeWalkthrough: ['unittest', 'codeObject', 'frame', 'commerce', 'iterator', 'iteratorLoop', 'generator', 'generatorNode', 'timerClass', 'addStr', 'decoratorInClass', 'pythonExit', 'classDef', 'classDis', 'lessFor', 'tryFinally', 'atexitModule', 'descriptor'],
     McpWalkthrough: ['sampling', 'notifications', 'roots', 'commerceAgentLoop', 'agentToolBoundary', 'agentToolResults'],
   };
   const found = [];
