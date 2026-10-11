@@ -39,7 +39,7 @@ const LESSONS = [
       {
         page: `${TOPIC}/02-tool-definitions.mdx`,
         flows: [],
-        diagrams: ['toolDefinitionOption1', 'toolDefinitionOption2', 'toolListRounds'],
+        diagrams: ['toolDefinitionParts', 'toolDefinitionOption1', 'toolDefinitionOption2', 'toolListRounds'],
       },
     ],
     files: [

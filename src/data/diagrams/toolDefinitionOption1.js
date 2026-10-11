@@ -1,8 +1,8 @@
-// 《写给模型的工具定义》选项 1：定义只写名字和参数类型。场景图，从 lesson 技能的 scene-template.svg 改起。
+// 《写给模型的工具定义》“把用法写进参数说明”一节的第一张：定义只写名字和参数类型。场景图，从 lesson 技能的 scene-template.svg 改起。
 // 和 toolDefinitionOption2 布局完全相同：左边是模型读到的定义，右边是它发出的搜索和搜到的商品。类名见 ./index.js。
 export default `<svg viewBox="0 0 768 432" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="tool-definition-option-1-title tool-definition-option-1-desc">
-  <title id="tool-definition-option-1-title">选项 1：定义只写名字和类型</title>
-  <desc id="tool-definition-option-1-desc">这张图说明第一个选项：工具定义里只有名字和参数类型，模型只好猜筛选条件怎么用，把顾客没提的“评分 4.8 以上”也写进了筛选，那顶评分 4.6 的双人徒步帐篷因此被筛掉。</desc>
+  <title id="tool-definition-option-1-title">只写类型：模型自己猜筛选条件</title>
+  <desc id="tool-definition-option-1-desc">这张图说明筛选参数只写类型时：工具定义里只有名字和参数类型，模型只好猜筛选条件怎么用，把顾客没提的“评分 4.8 以上”也写进了筛选，那顶评分 4.6 的双人徒步帐篷因此被筛掉。</desc>
   <defs>
     <marker id="tool-definition-option-1-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk-accent" d="M1,1 L9,5 L1,9"/></marker>
   </defs>
@@ -44,7 +44,7 @@ export default `<svg viewBox="0 0 768 432" xmlns="http://www.w3.org/2000/svg" ro
   <rect class="s-hl" x="68" y="256" width="136" height="24" rx="4"/>
   <rect class="s-hl" x="452" y="224" width="264" height="28" rx="4"/>
   <path class="s-leader" d="M204,268 C300,268 372,238 444,238" marker-end="url(#tool-definition-option-1-arrow)"/>
-  <rect class="n-option" x="184" y="364" width="400" height="40" rx="8"/>
-  <text class="t-name" x="384" y="390" text-anchor="middle">选项 1：定义只写名字和类型</text>
+  <rect class="n-option" x="304" y="364" width="160" height="40" rx="8"/>
+  <text class="t-name" x="384" y="390" text-anchor="middle">只写类型</text>
 </svg>
 `;

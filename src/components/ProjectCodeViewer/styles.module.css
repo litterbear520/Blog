@@ -17,7 +17,8 @@
 
 .fileTree {
   display: flex;
-  width: 10rem;
+  /* --tree-width is the widest row (model.mjs treeWidth); short trees stay 10rem */
+  width: clamp(10rem, var(--tree-width, 10rem), 15rem);
   min-height: 0;
   overflow: hidden;
   flex-shrink: 0;

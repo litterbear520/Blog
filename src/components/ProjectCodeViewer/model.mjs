@@ -26,6 +26,17 @@ export function buildTree(paths) {
   return sort(root.children);
 }
 
+// The tree is as wide as its widest row (clamped in CSS), so deep package paths are not cut off:
+// row padding 8 + 14 per level, 32 for chevron and icon, 7.2 per monospace character at 12px,
+// and 20 on the right for padding and the scrollbar gutter.
+export function treeWidth(nodes, depth = 0) {
+  return nodes.reduce((widest, node) => Math.max(
+    widest,
+    Math.ceil(60 + depth * 14 + node.name.length * 7.2),
+    node.type === 'folder' ? treeWidth(node.children, depth + 1) : 0,
+  ), 0);
+}
+
 // A new step reveals its preferred files, retaining other still-existing tabs.
 // A refreshed files object in the SAME step must not undo a user's selection.
 export function syncSelection(previous, files, preferredFiles, stepKey) {
