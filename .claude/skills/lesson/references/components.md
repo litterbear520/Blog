@@ -11,6 +11,7 @@
 | 一次运行随时间怎样推进（循环、逐帧高亮） | `AgentLoopViz` | `<AgentLoopViz variant="名字" />`，数据 `src/data/agentRuns/<名字>.js`，登记到同目录 `index.js`。对话内容示意即可，工具名、字段、`stop_reason` 必须和代码一致。 |
 | 先让读者下注，或讲完一个机制后当场检查 | `QuickCheck` | 全局注册，不用 import：`<QuickCheck question="题干" options={[{ text: '选项', explain: '为什么不对' }, { text: '选项', correct: true, explain: '为什么对' }]} />`。2–5 个选项，正好一个 `correct: true`，每个选项都写 `explain`（错的说清错在哪，对的说清为什么），读者点完当场看到；可以改选，不计分。题干写成场景，考判断不考背名词。一课至多两道。 |
 | 边缘情况、支线、“您可能会问” | `ReadMore` | 全局注册：`<ReadMore title="读者会问的问题">`，标签和正文之间各空一行，里面照常写 Markdown。收起时页内查找也能搜到。 |
+| 课文标题下的课序和时长 | `LessonMeta` | 全局注册：H1 下一行 `<LessonMeta lesson={N} minutes={M} />`，概念课和演练页都放；N、M 照 `lesson_lint.py` 的提示写，lint 会核对。 |
 | 读者可能卡住的术语 | `Term` | `<Term tip="解释">术语</Term>`，全局注册，不用 import；一课一两处。 |
 | 小提示、关键要点 | 提示块 | 只用 Academy 用过的两种：一节末尾 `:::tip[小提示]`，收尾 `:::important[关键要点]`；一课至多一两个。 |
 | 学完后能做什么 | 提示块 | 照技能课、AI 能力课，导语后放 `:::note[学完后，您将能够]` 加三四条动词开头的清单；一门课里要么每课都放，要么都不放。 |

@@ -56,10 +56,12 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   ├── CodeWalkthrough/       # 代码演进演练：示例项目按步骤快照演进，文件树 / 标签 / 代码区按行标出相对上一步的增删（diff.js 行级 LCS），下方终端点击逐行打印预录输出
 │   │   ├── CopyMarkdownButton/    # 文档页"复制 Markdown"按钮
 │   │   ├── CsvTable.jsx           # CSV 表格渲染组件
-│   │   ├── Diagram/               # 结构图与场景图：diagram-design 技能画的 SVG 原样嵌入（<Diagram variant="..." />），另有手写场景图用的 s-* 零件（窗口、气泡、商品卡、代码面板、强调曲线）；SVG 里只写类名，styles.module.css 按角色映射到 --th-dg-* / --th-accent-*，深浅色跟着令牌切换；数据在 src/data/diagrams/
+│   │   ├── Diagram/               # 结构图与场景图：diagram-design 技能画的 SVG 原样嵌入（<Diagram variant="..." />），另有手写场景图用的 s-* 零件（窗口、气泡、商品卡、代码面板、强调曲线）；右上角可放大查看；SVG 里只写类名，styles.module.css 按角色映射到 --th-dg-* / --th-accent-*，深浅色跟着令牌切换；数据在 src/data/diagrams/
 │   │   ├── GitWorkflowViz/        # Git 工作流分步演示：Remote / Local / Disk 三区域，逐步高亮变化的提交与传输箭头，步骤数据在 steps.js
 │   │   ├── HomepageFeatures/      # 首页特性卡片
 │   │   ├── InfoCards/             # 文章内横排信息卡：CardGrid（可编号 01/02/03）+ Card（title/sub/tone）+ SkillList（中文名 + 英文 id 对照的技能清单）+ LinkCallout（带按钮链接的提示框）
+│   │   ├── LessonMeta/            # 课文标题下的课序和时长标签（第 N 课 · M 分钟），<LessonMeta lesson minutes /> 全局注册；数字由 /lesson 的 lesson_lint.py 算出并核对
+│   │   ├── Lightbox/              # 放大查看的按钮和弹层：markdown 图片（theme/MDXComponents/Img）和课文配图 Diagram 共用
 │   │   ├── McpCourse/             # 课程索引页顶部信息卡（CourseHero：难度/课数、来源链接）
 │   │   ├── McpQuiz/               # 单选测验（一次一题、选项每次随机打乱，最后提交，显示是否通过与得分条）；题目带 explain 字段时，交卷后在得分卡下逐题列出对错、正确答案和解析；题干、选项、解析里的 `反引号` 渲染成行内代码
 │   │   ├── McpWalkthrough/        # 代码演练：分步说明 + 迷你代码查看器（文件树/标签/按步高亮定位）
@@ -87,8 +89,8 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   └── skills.js              # SkillHub 页面（/skills 路由）
 │   └── theme/
 │       ├── Root.js                # 主题根组件（注入 CopyMarkdown 按钮）
-│       ├── MDXComponents/index.js # 注册全局 MDX 组件（Term 术语悬停解释、QuickCheck 快速检查、ReadMore 阅读更多，正文直接用无需 import）
-│       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图
+│       ├── MDXComponents/index.js # 注册全局 MDX 组件（Term 术语悬停解释、QuickCheck 快速检查、ReadMore 阅读更多、LessonMeta 课序和时长，正文直接用无需 import）
+│       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图（按钮和弹层在 components/Lightbox）
 │       ├── DocCard/Heading/Icon/  # 覆盖为空组件：去掉 DocCardList 卡片标题前的 🗃️/📄️ emoji
 │       ├── Admonition/            # 提示块：index.js 包装层补中文默认标签；Icon/ 是 GitHub alerts 同款 Octicons；Types.js 注册自定义的 important 类型；配色与卡片样式在 custom.css「提示块」一节
 │       ├── Icon/LightMode|DarkMode|SystemColorMode/  # 深浅切换按钮图标换成 Lucide 线条版（sun / moon / monitor），与导航栏 GitHub 图标同规格

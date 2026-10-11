@@ -1,67 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import MDXImg from '@theme-original/MDXComponents/Img';
+import Lightbox, { ZoomButton } from '@site/src/components/Lightbox';
 import styles from './styles.module.css';
 
 /**
  * 包装 Docusaurus 默认的 markdown 图片组件：
- * 图片被缩小显示时，左上角出现放大按钮，点击后用原生 dialog 弹层显示原图，长图可滚动。
- * 弹层用 portal 挂到 body，避免 dialog 出现在 <p> 里造成 SSR/水合不一致。
+ * 图片被缩小显示时，右上角出现放大按钮，点击后用原生 dialog 弹层显示原图，长图可滚动。
+ * 按钮和弹层在 src/components/Lightbox，课文配图 Diagram 也用它。
  */
-
-function ZoomIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <polyline points="15 3 21 3 21 9" />
-      <line x1="21" y1="3" x2="14" y2="10" />
-      <polyline points="9 21 3 21 3 15" />
-      <line x1="3" y1="21" x2="10" y2="14" />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <line x1="18" y1="6" x2="6" y2="18" />
-      <line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-  );
-}
-
-function Lightbox({ src, alt, onClose }) {
-  const dialogRef = useRef(null);
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return undefined;
-    if (!dialog.open) dialog.showModal();
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      if (dialog.open) dialog.close();
-    };
-  }, []);
-
-  // 点图片以外的区域关闭；Esc 由浏览器触发 onClose
-  const handleClick = (e) => {
-    if (e.target.tagName !== 'IMG') onClose();
-  };
-
-  return createPortal(
-    <dialog ref={dialogRef} className={styles.dialog} onClose={onClose} onClick={handleClick} aria-label={alt ? `放大查看：${alt}` : '放大查看图片'}>
-      <button type="button" className={styles.close} onClick={onClose} aria-label="关闭">
-        <CloseIcon />
-      </button>
-      <div className={styles.scroller}>
-        <img src={src} alt={alt || ''} className={styles.full} />
-      </div>
-    </dialog>,
-    document.body,
-  );
-}
-
 export default function Img(props) {
   const wrapRef = useRef(null);
   const [zoomable, setZoomable] = useState(false);
@@ -92,12 +38,12 @@ export default function Img(props) {
   return (
     <span ref={wrapRef} className={styles.wrap}>
       <MDXImg {...props} />
-      {zoomable && (
-        <button type="button" className={styles.zoom} onClick={() => setOpen(true)} aria-label="放大图片" title="放大图片">
-          <ZoomIcon />
-        </button>
+      {zoomable && <ZoomButton label="放大图片" onClick={() => setOpen(true)} />}
+      {open && (
+        <Lightbox label={props.alt ? `放大查看：${props.alt}` : '放大查看图片'} onClose={close}>
+          <img src={props.src} alt={props.alt || ''} />
+        </Lightbox>
       )}
-      {open && <Lightbox src={props.src} alt={props.alt} onClose={close} />}
     </span>
   );
 }
