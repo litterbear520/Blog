@@ -59,3 +59,20 @@
 .figure :global(.t-mono-strong),
 .figure :global(.t-code) { font-family: var(--ifm-font-family-monospace); font-size: 12px; }
 .figure :global(.t-mono-strong) { font-weight: 600; }
+
+/* ── 场景零件：画界面和终端的场景图（聊天窗口、商品卡、代码面板、曲线标注），角色色和上面一致 ── */
+.figure :global(.s-window),
+.figure :global(.s-card) { fill: var(--th-dg-body); stroke: var(--th-dg-stroke); stroke-width: 1; }
+.figure :global(.s-bar),
+.figure :global(.s-thumb) { fill: var(--th-dg-neutral); stroke: none; }
+.figure :global(.s-bubble-user) { fill: var(--th-dg-external); stroke: none; }
+.figure :global(.s-bubble-agent) { fill: var(--th-dg-process); stroke: none; }
+/* 代码 / 终端面板用墨色实底，深色模式下随令牌反相，两种模式下都是全图最重的一块 */
+.figure :global(.s-panel) { fill: var(--th-text); stroke: none; }
+.figure :global(.s-hl) { fill: none; stroke: var(--th-accent-fill); stroke-width: 1.5; }
+.figure :global(.s-leader) { fill: none; stroke: var(--th-accent-fill); stroke-width: 1.5; }
+.figure :global(.s-dim) { opacity: 0.4; stroke-dasharray: 4 4; }
+.figure :global(.mk-accent) { fill: none; stroke: var(--th-accent-fill); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.figure :global(.t-msg) { font-size: 14px; fill: var(--th-text); }
+.figure :global(.t-who) { font-size: 12px; font-weight: 600; }
+.figure :global(.t-panel) { font-family: var(--ifm-font-family-monospace); font-size: 12px; fill: var(--th-surface-1); }

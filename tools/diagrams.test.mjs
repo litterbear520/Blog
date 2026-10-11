@@ -15,6 +15,8 @@ const VOCABULARY = [
   'n-neutral', 'n-process', 'n-done', 'n-external', 'n-focal',
   'arrow', 'loop', 'mk', 'mk-loop',
   't-name', 't-band', 't-sub', 't-note', 't-label', 't-mono', 't-mono-strong', 't-code',
+  's-window', 's-bar', 's-bubble-user', 's-bubble-agent', 's-card', 's-thumb', 's-panel',
+  's-hl', 's-leader', 's-dim', 'mk-accent', 't-msg', 't-who', 't-panel',
 ];
 
 const diagrams = await Promise.all(files.map(async (file) => ({

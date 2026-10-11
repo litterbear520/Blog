@@ -1,25 +1,37 @@
 # 出图规范
 
-## 什么时候画、用什么画
+Academy 课文里，机制主要靠图讲：Sampling 用两张同布局的时序图对照两个选项，Roots 用一张聊天界面加文件树的场景图让读者“看到”问题。一课 2–4 张图，集中在“问题”和“原理”两节。
 
-- 谁把什么交给谁、按什么顺序：`MessageFlow`（见 [组件怎么选](components.md)）。
-- 一次运行随时间推进：`AgentLoopViz`。
-- 结构、分层、边界、流水线、层级、折线和柱状这类图表：用 **diagram-design** 技能画，放进 `Diagram` 组件。选类型、布局、连线、间距、复杂度上限和自检都以那个技能为准；这里只写它不管的三件事：博客里的尺寸、配色和嵌入方式。
-- 文字一句话就能说清的，不画。
-- 技能画不了的几类图：标注截图、界面线框（聊天气泡、商品卡片）、可交互的探索图、插画和图标、渐变谱系条、单位格子图、跨课的流程进度条。需要时照 [组件怎么选](components.md) 的“缺组件时”停下来问用户。
+## Academy 的图长什么样
 
-## 结构图进博客
+- **画布宽 768，高 432（16:9）或 480（8:5）。** 宽度就是正文列宽，图里的字号就是页面上的实际大小。
+- **元素少，留白多。** 四周至少留 40px，主要元素不超过八个，图里每个标签不超过十个字；要解释的话写进正文。
+- **一个焦点。** 全图只有一处强调色：一个 `n-focal` 标签，或一条 `s-leader` 曲线加它两端的 `s-hl` 框。
+- **先场景，后结构。** “问题”一节优先画场景图，让读者看到顾客说了什么、系统那边是什么样；“原理”一节再画结构图或时序图。
 
-1. **出稿。** 按 diagram-design 画，viewBox 宽 768（正文列宽，字号就是上页面后的实际大小），中文字号不小于 12px。先生成它的独立 HTML 草稿，跑技能自带的 `scripts/self_check.py` 和插件仓库 `scripts/` 下的 `verify-geometry.py`（本机在 `~/.claude/plugins/marketplaces/diagram-design/`），两个都通过再往下。
-2. **入库。** 把 `<svg>` 放进 `src/data/diagrams/<名字>.js`（`export default` 一个模板字符串），登记到同目录 `index.js`。SVG 里只写类名，不写颜色、字号和字体：
-   - 节点按角色：`n-neutral` 中性（输入、上下文）、`n-process` 处理（模型、执行器、步骤）、`n-done` 完成、`n-external` 外部（后端、用户、第三方）；`n-focal` 是结论框，每张图至多一个。
-   - 容器用 `zone`，顶上一条标题带 `band`；回路用 `arrow loop`；箭头是开口 V 形，marker 里写 `mk` / `mk-loop`。
-   - 完整类名清单在 `index.js` 的注释里，配色映射在 `src/components/Diagram/styles.module.css`，深浅色跟着博客令牌切换。
-3. **无障碍。** `<svg>` 带 `role="img"` 和 `aria-labelledby`，所有 id 用这张图的文件名作前缀；`<desc>` 写成“这张图说明……”一整句。
-4. **嵌入。** 课文里写 `<Diagram variant="名字" />`。`npm run test:diagrams` 检查第 2、3 条。
+## 五种图
+
+| 图 | 用在哪 | 怎么画 |
+| ---- | ---- | ---- |
+| 选项对照（Sampling） | “X 解决的问题”里摆两个选项 | 两个 variant（`名字-option-1`、`名字-option-2`），布局和参与者位置完全相同，只改变化的那一处；底部一个 `n-focal` 标签写“选项 1：……”。每张图后跟一段“**选项 N：**”说明。 |
+| 场景图（Roots） | 让读者看到问题发生在哪 | 左边是界面（`s-window` 加气泡），右边是系统那一侧（商品目录、后端、`s-panel` 终端）；一条 `s-leader` 把对话里的关键词连到右边那样东西。起点是 [`assets/scene-template.svg`](../assets/scene-template.svg)。 |
+| 递进图组（状态与 StreamableHTTP） | 一个结构逐步变复杂 | 几个 variant（`名字-1`、`名字-2`……），每张只比上一张多一个元素，正文里每张前一句冒号引导、后一句说明多了什么。 |
+| 时序图（深入 StreamableHTTP） | 消息在几方之间往返 | 只看往返时用 `MessageFlow`；要和结构画在一起时用 diagram-design 的 sequence 类型。 |
+| 代码标注图（状态课第 6 张） | 一段代码里只有两三行是要点 | `s-panel` 里放几行代码（`t-panel`），`s-hl` 框住要点那一行，旁边的说明用 `s-leader` 连过去。 |
+
+## 画法
+
+- **结构图、流程图、时序图**用 diagram-design 技能画：选类型、布局、连线、间距、复杂度上限和自检都以那个技能为准。先生成它的独立 HTML 草稿，跑技能自带的 `scripts/self_check.py` 和插件仓库 `scripts/` 下的 `verify-geometry.py`（本机在 `~/.claude/plugins/marketplaces/diagram-design/`），两个都通过再往下。尺寸用上面的 768 宽。
+- **场景图、代码标注图**diagram-design 不画，从 `assets/scene-template.svg` 改起，手写 SVG：坐标落在 4px 网格上，气泡、卡片的内边距至少 16px，中文按每字 1em 估宽（气泡里 14px，其余 12px）。
+- **画完都跑一遍 lint**，它会检查每段文字有没有超出它所在的框。
+
+## 进博客
+
+1. **入库。** 把 `<svg>` 放进 `src/data/diagrams/<名字>.js`（`export default` 一个模板字符串），登记到同目录 `index.js`。SVG 里只写类名，不写颜色、字号和字体；类名清单（结构图的 `n-*`、`t-*`，场景零件 `s-*`）在 `index.js` 的注释里，配色映射在 `src/components/Diagram/styles.module.css`，深浅色跟着博客令牌切换。
+2. **无障碍。** `<svg>` 带 `role="img"` 和 `aria-labelledby`，所有 id 用这张图的文件名作前缀；`<desc>` 写成“这张图说明……”一整句。
+3. **嵌入。** 课文里写 `<Diagram variant="名字" />`。`npm run test:diagrams` 检查第 1、2 条。
 
 ## 图和正文
 
-- 先文后图：图前一句以冒号结尾的引导句，图里每个元素都能在前文找到对应的一句。
-- 复杂机制拆成几张递进图，每张只比上一张多一个元素；消息流用 `upTo` 做同样的事。
-- 图下不写图注，要解释的写进正文。
+- 图前一句以冒号结尾的引导句；图里的每个元素，正文里都有对应的一句。
+- 图下不写图注，要解释的写进图后那一两句。
