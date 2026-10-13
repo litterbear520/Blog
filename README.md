@@ -48,7 +48,7 @@
 
 按项目组织的深入学习记录，一个项目一条线：[/roadmap](https://huangsitao.fun/roadmap)
 
-- [高效商务 Agent 架构指南](https://huangsitao.fun/roadmap/高效商务Agent架构指南)：商务场景下 Agent 的架构、性能与生产环境实践
+- [高效商务 Agent 架构指南](https://huangsitao.fun/roadmap/前言/高效商务Agent架构指南)：商务场景下 Agent 的架构、性能与生产环境实践
 
 ## Skills
 
