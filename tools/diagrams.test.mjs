@@ -29,7 +29,8 @@ test('every diagram file is registered, and the registry has no strays', () => {
   const imported = [...registry.matchAll(/^import (\w+) from '\.\/(\w+)';$/gm)];
   assert.deepEqual(imported.map(([, name]) => name).sort(), diagrams.map((d) => d.variant).sort());
   for (const [, name, path] of imported) assert.equal(name, path);
-  assert.match(registry, new RegExp(`export default \\{ ${imported.map(([, name]) => name).join(', ')} \\};`));
+  const names = imported.map(([, name]) => name).join(', ');
+  assert.match(registry, new RegExp(names ? `export default \\{ ${names} \\};` : 'export default \\{\\};'));
 });
 
 test('every class in the vocabulary has a rule in the Diagram stylesheet', () => {

@@ -21,7 +21,6 @@ npm run build                # 构建静态网站
 npm run serve                # 本地预览构建结果
 npm run build && npm run serve  # 构建后预览（模拟生产环境，提交前确认用这个）
 npm run clear                # 清理 Docusaurus 缓存
-npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照，生成 src/data/codeWalkthroughs/commerce.files.js；专题用 npm run roadmap-sync -- agent-tools
 ```
 
 ## 项目结构
@@ -73,12 +72,12 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   ├── css/
 │   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）；图表角色色 --th-dg-*（neutral 中性 / process 处理 / done 完成 / external 外部，加 body、stroke、loop，深浅两套，画图的组件都用它）；字体、代码块装饰
 │   ├── data/
-│   │   ├── agentRuns/             # AgentLoopViz 分镜：index.js 注册表；claudeCode.js 是《The Agent Loop》笔记的默认分镜，commerceLoop.js 目前没有页面引用
-│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出；commerce.files.js / agentTools.files.js 是 roadmap-sync 生成的代码快照（不要手改），目前没有页面引用，tools/focus-range.test.mjs 拿 agentTools.files.js 当样本
+│   │   ├── agentRuns/             # AgentLoopViz 分镜：index.js 注册表；claudeCode.js 是《The Agent Loop》笔记的默认分镜
+│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出
 │   │   ├── diagrams/              # Diagram 注册表：index.js 登记 variant，注释里是类名清单；一张图一个文件（export default SVG 字符串）
 │   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
 │   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）
-│   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）；读 roadmap-sync 快照的课文数据，高亮行号用 ../focusRange.js 的语义锚点算（单测在 tools/focus-range.test.mjs）
+│   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）；课文数据的高亮行号可以用 ../focusRange.js 的语义锚点算（单测在 tools/focus-range.test.mjs）
 │   │   ├── messageFlows/          # MessageFlow 注册表：index.js 登记 variant，文件头注释写了数据形状；一张图一个文件，页面里 <MessageFlow variant="..." upTo={n} /> 可以只画前 n 项
 │   │   └── skills.js              # SkillHub 技能数据（SKILLS 数组）
 │   ├── pages/
@@ -100,8 +99,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   └── remark-run-output.js       # remark 插件：把 ```lang run 与紧随的 ```output 围栏合并成带预录输出的代码块
 ├── plans/ + specs/                # 功能规划与设计文档（SkillHub 等）
 ├── tools/
-│   ├── covers/                    # 博客封面生成：配方 → 涂鸦 SVG（Node 渲染，无需浏览器），详见其 README
-│   └── roadmap-sync/              # 路线代码同步：sync.mjs + <配方>.config.mjs（dev 仓库里每步的文件 → 演练里展示的路径），生成物提交进仓库
+│   └── covers/                    # 博客封面生成：配方 → 涂鸦 SVG（Node 渲染，无需浏览器），详见其 README
 ├── .claude/skills/
 │   ├── blog-cover/                # /blog-cover <slug>：读文章 → 视觉隐喻 → 配方 → 渲染 → 登记
 │   ├── lesson/                    # /lesson <位置/主题> + 想法：照 Academy 读感写一门课（一课一个概念、短段落配大图、演练单独成页、课末概念评估），只在调用时生效；读感、课型骨架、课程结构、组件、出图规范在 references/，scripts/lesson_lint.py 按 MCP 课文基线检查篇幅和密度
@@ -121,7 +119,7 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 - **复制 Markdown 源码**：自定义插件 `copy-markdown-source` 构建时生成清洗后 `.md`，按钮由 `Root.js` 注入
 - **自定义博客列表**：`/bloglist` 路由，支持分类筛选，不使用 Docusaurus 默认博客列表
 - **SkillHub**：`/skills` 路由，技能卡片墙；数据在 `src/data/skills.js`，描述须工具中立、取材自技能仓库 README
-- **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成）。一个开源项目一个文件夹，按步不按天，一步一页；`前言/` 放前言和前置阅读。代码不手抄，从同级 dev 仓库用 `npm run roadmap-sync` 抽成快照，演练里相邻步骤按行 diff
+- **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成）。一个开源项目一个文件夹，按步不按天，一步一页；`前言/` 放前言和前置阅读
 - **交互式可视化**：`AgentLoopViz` 组件（Agent 循环分镜动画，数据驱动：节点图、连线、逐帧高亮与消息都在 `src/data/agentRuns/<variant>.js`，静止在第 0 帧就是结构图，播放就是一次运行示例；对话内容示意即可，但工具名、字段、stop_reason 必须和代码一致）、`GitWorkflowViz` 组件（Git 工作流 15 步状态演示，在 `docs/Git工作流/index.mdx` 里通过 `BrowserOnly` 挂载）
 - **课程笔记**：一个主题写成一门课用 `/lesson`：课程索引页（`CourseHero` + 学习目标 + `DocCardList`）→ 课文（一课一个概念，标题下有课序和时长，课内一道快速检查）和演练页（演练单独成页，排在它讲的课后面）→ 整门课最后一篇概念评估（`McpQuiz` + 题库里的 `explain` 解析），每课不单独出题。结构图用 diagram-design 技能画，`<Diagram>` 嵌入；消息往返用 `MessageFlow`。跨项目通用的讲解技能 `/explain` 在全局 `~/.claude/skills/`，不在仓库里
 - **代码演进演练**：`CodeWalkthrough` 组件，用于“一步步改代码”的笔记（如 `docs/python/unittest.mdx`）。数据在 `src/data/codeWalkthroughs/<variant>.js`，每一步只写本步改动的文件（`null` 表示删除）、说明段落和可运行命令；不改文件、只写 `file` + `lines: [[起, 止]]` 的步骤会把这些行标成聚焦行（强调色淡底）并滚过去，用来在同一份代码里逐段讲；组件切到某步时自动打开改动的文件，相对上一步新增行绿底、删除行红底幽灵行，右上角可切「只看当前」；整个演练只有一个文件时不显示文件树和标签栏，只留一条文件名顶栏，代码卡片按行数撑开（照普通代码块），这一步只有一条命令时运行按钮放在代码右上角、输出在代码下方展开（和 `run` 代码块同一个面板），不显示终端栏；终端里的输出必须是本地实跑录下来的。文章里每一节写 `<CodeWalkthrough variant="unittest" step={3} />` 让演练停在对应步骤；上一步/下一步默认不显示，只给最后一个实例加 `nav` 让读者回翻。终端面板不写字，终端图标排在输出第一行的行首、文字紧随其后（照 Claude Cookbook 输出块的布局）
@@ -157,9 +155,7 @@ sidebar_position: 1
 
 docs 形态（非 blog），目录布局和文风都照 `docs/MCP` 课程章节。每个项目在 `roadmap/<项目>/` 下：`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + 六条规则表 + 前提条件 + `DocCardList`），一个 Stage 一个中文目录（不带编号，`index.md` 写 `sidebar_position`、`description`、H1、一句话、`DocCardList`），一课一页 `NN-english-slug.mdx`（frontmatter 只写 `description`，H1 是中文课名不带编号）。文风：课程讲解口吻，用“我们”“您”，句子完整不省主语，每段先给结论再举具体例子，段落之间有过渡句；动画每帧的说明、演练每步的说明同样口吻。内容取舍上仍是自己的学习线：没有 `run` 输出面板、没有“试一下”、没有对照源码，`BUILD_ROADMAP.md` 里的 checklist 和当时给自己看的话不搬，几个路线 Step 可以合成一课。博客单独看就要能懂：正文、演练说明、总览图、规则表里都**不提** `BUILD_ROADMAP.md` 的 Step 编号、dev 仓库的文件路径，引用位置一律用课名或 Stage 名。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
 
-小标题照 MCP 课文写成这一课内容的短语（“只会聊天还不够”“一次搜索怎样完成”“逐步查看代码”），不用“起点 / 方案”这类通用标签。一课依次讲：上一课留下的问题 → 这一课的机制（编号步骤或信号/动作表；需要动画时才用 `<AgentLoopViz variant="..." />`）→ 演练（`<McpWalkthrough variant="..." />`，代码取自 roadmap-sync 快照，步骤说明写在 `src/data/` 的课文数据里）→ 设计取舍（引用六条规则的编号）→ 在本地运行（可选）。结尾不加收尾标题，直接一段话带到下一课。
-
-代码从同级 `../commerce-agents-dev` 抽：在 `tools/roadmap-sync/commerce.config.mjs` 里登记每步的文件与展示路径，跑 `npm run roadmap-sync`，生成的 `commerce.files.js` 一起提交。Stage A 每步在 dev 里是独立文件，演练里统一显示成 `agent.py`，相邻步骤才能按行 diff。
+小标题照 MCP 课文写成这一课内容的短语（“只会聊天还不够”“一次搜索怎样完成”“逐步查看代码”），不用“起点 / 方案”这类通用标签。一课依次讲：上一课留下的问题 → 这一课的机制（编号步骤或信号/动作表；需要动画时才用 `<AgentLoopViz variant="..." />`）→ 演练（`<McpWalkthrough variant="..." />`，代码从源仓库原样复制成快照，步骤说明写在 `src/data/` 的课文数据里）→ 设计取舍（引用六条规则的编号）→ 在本地运行（可选）。结尾不加收尾标题，直接一段话带到下一课。
 
 ### 博客封面与头图
 

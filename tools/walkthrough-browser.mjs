@@ -16,11 +16,6 @@ mkdirSync(output, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const dataURL = (text) => `data:text/javascript;base64,${Buffer.from(text).toString('base64')}`;
 const read = (path) => readFileSync(join(repo, path), 'utf8');
-// Lesson data modules import their snapshot and ./focusRange.js; data URLs cannot resolve relative paths.
-const focusRangeURL = dataURL(read('src/data/focusRange.js'));
-const lessonURL = (lesson, snapshot) => dataURL(read(`src/data/${lesson}`)
-  .replace(`'./codeWalkthroughs/${snapshot}'`, JSON.stringify(dataURL(read(`src/data/codeWalkthroughs/${snapshot}`))))
-  .replace("'./focusRange.js'", JSON.stringify(focusRangeURL)));
 const mcpPath = '/docs/MCP/Model Context Protocol：高级主题/核心 MCP 功能/';
 const lessons = [
   ...await Promise.all(['notifications', 'roots', 'sampling'].map(async (name) => ({
