@@ -1,7 +1,7 @@
 ---
 name: lesson
 description: 把一个主题或一段代码的设计写成博客里的一门课（docs 或 roadmap），读起来像 academy.claude.com 的课文：一课一个概念，按内容从 Academy 各门课的讲法里挑，短段落配大图和课内快速检查，代码演练单独成页，课末概念评估。
-argument-hint: "[位置/主题，如 roadmap/commerce-agents/工程化Agent工具]"
+argument-hint: "[位置/主题，如 roadmap/<项目>/<专题>]"
 disable-model-invocation: true
 ---
 
@@ -14,7 +14,7 @@ disable-model-invocation: true
 ## 输入
 
 ```text
-/lesson roadmap/commerce-agents/工程化Agent工具
+/lesson roadmap/<项目>/<专题>
 想法：想讲清什么、为什么想学
 代码：../commerce-agents-dev（讲代码设计时给）
 ```
