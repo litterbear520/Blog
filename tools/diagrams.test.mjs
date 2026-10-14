@@ -14,7 +14,7 @@ const VOCABULARY = [
   'mask', 'zone', 'band', 'divider', 'boundary',
   'n-neutral', 'n-process', 'n-done', 'n-external', 'n-focal', 'n-option',
   'arrow', 'loop', 'mk', 'mk-loop',
-  't-name', 't-band', 't-sub', 't-note', 't-label', 't-mono', 't-mono-strong', 't-code',
+  't-name', 't-band', 't-sub', 't-note', 't-label', 't-mono', 't-mono-strong', 't-code', 't-accent',
   's-window', 's-bar', 's-bubble-user', 's-bubble-agent', 's-card', 's-panel',
   's-hl', 's-leader', 's-dim', 'mk-accent', 't-msg', 't-who', 't-panel',
 ];

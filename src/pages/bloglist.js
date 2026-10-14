@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: 'Claude Code mod 入门',
+    date: '2026-10-14',
+    slug: 'claude-code-mods-guide',
+    category: 'AI',
+    swatch: 'clay',
+    cover: '/img/blog/cover-claude-code-mods-guide.svg',
+  },
+  {
     title: '在 Claude 和 Claude Code 中用好 Opus 5.5',
     date: '2026-09-24',
     slug: 'opus-5-5-guide',
