@@ -16,7 +16,7 @@ disable-model-invocation: true
 ```text
 /lesson roadmap/<项目>/<专题>
 想法：想讲清什么、为什么想学
-代码：../commerce-agents-dev（讲代码设计时给）
+代码：<源仓库路径>（讲代码设计时给）
 ```
 
 - **位置**：`docs/<分类>/…` 或 `roadmap/<项目>/…`，斜杠后面是课程名；推断不出来时停下来问。
@@ -33,7 +33,7 @@ disable-model-invocation: true
    完成标准：每个概念的四样都齐，而且问题和原理都能用平常话说清；说不清的概念再拆。
 3. **出大纲表，等确认。** 一行一页：课名（中文；概念课就用概念名）、课型和照的 Academy 课（见 [讲法目录](references/skeletons.md)）、开头怎么切入、读者的问题、具名场景、小标题序列、每张图画什么（各一句）、课内检查（快速检查的题干）、收尾方式、演练页的步骤标题。同一门课里，各课按内容选不同的课型和收尾，别全用同一个骨架。演练页排在它讲的概念课后面；相邻两课读的是同一组代码时，共用一页演练。发给用户，确认后再往下写。
    完成标准：用户确认了大纲表，提出的改动都已改进表里。
-4. **抽代码快照。** 演练里的代码不手抄：在 `tools/roadmap-sync/<配方>.config.mjs` 登记要展示的文件（没有配方就照 `commerce.config.mjs` 新建一个），跑 `npm run roadmap-sync -- <配方>`，生成的 `*.files.js` 一起提交，因为 CI 里没有源仓库。
+4. **做代码快照。** 演练里的代码不手抄：把要展示的文件从源仓库原样复制进 `src/data/codeWalkthroughs/<名字>.files.js`（`export default { 展示路径: 文件内容 }`，文件头注释写明来源仓库和提交），用脚本生成、别手改，一起提交，因为 CI 里没有源仓库。
 5. **写概念课和配图。** 照大纲表写，读感照 [读感](references/style.md)：先合上代码，按第 2 步写下的平常话把课写完；再逐句对照代码核对事实，错了就改那句话，核对的过程不写进正文。图照 [出图规范](references/diagrams.md)，组件（快速检查、阅读更多等）照 [组件怎么选](references/components.md)，文件结构照 [课程结构](references/course.md)。
    画完的图用 `scripts/preview_diagrams.py <variant> ... --shot` 渲染出来看一眼。
    标题下的课序和时长由 lint 算：写完先跑 `python3 .claude/skills/lesson/scripts/lesson_lint.py --fix <课文>`，它把 `<LessonMeta>` 写到 H1 下一行（已有就更新数字），篇幅改了再跑一次。

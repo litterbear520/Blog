@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 /**
  * Agent 循环的分镜动画：左边是流程图（节点 + 连线），右边是 messages[] 随帧增长，下方是本帧说明与播放控件。
  * 静止在第 0 帧时就是这一步的架构图，按播放就是一次运行示例。
- * 数据驱动：<AgentLoopViz variant="commerceLoop" />，分镜在 src/data/agentRuns/，不传 variant 用笔记里的 claudeCode。
+ * 数据驱动：<AgentLoopViz variant="claudeCode" />，分镜在 src/data/agentRuns/，不传 variant 用笔记里的 claudeCode。
  * 配色全部引用 custom.css 的 --th-* 令牌，深浅模式自动跟随。
  */
 
