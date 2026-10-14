@@ -43,7 +43,7 @@ jobs:
           "$BIN" --version
 
       - name: Run data tests
-        run: npm run test:focus-range && npm run test:message-flow && npm run test:diagrams
+        run: npm run test:focus-range && npm run test:message-flow && npm run test:diagrams && npm run test:quick-check
 
       # 真实 Chromium 偶尔起不来（首条 CDP 命令无应答），重试两次再判失败；
       # 真实回归会连着三次都挂，不会被重试掩盖。
