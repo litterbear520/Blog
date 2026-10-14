@@ -3,7 +3,6 @@
 import unittest from './unittest';
 import codeObject from './codeObject';
 import frame from './frame';
-import commerce from './commerce';
 import iterator, { iteratorLoop } from './iterator';
 import generator, { generatorNode } from './generator';
 import timerClass, { addStr } from './classDecorator';
@@ -30,4 +29,4 @@ export const UI = {
   'terminal.exit': '进程退出，退出码 {code}',
 };
 
-export default { unittest, codeObject, frame, commerce, iterator, iteratorLoop, generator, generatorNode, timerClass, addStr, decoratorInClass, pythonExit, classDef, classDis, lessFor, tryFinally, atexitModule, descriptor };
+export default { unittest, codeObject, frame, iterator, iteratorLoop, generator, generatorNode, timerClass, addStr, decoratorInClass, pythonExit, classDef, classDis, lessFor, tryFinally, atexitModule, descriptor };

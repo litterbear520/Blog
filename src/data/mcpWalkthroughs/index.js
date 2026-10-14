@@ -1,10 +1,7 @@
-// Guided-reader data and UI copy shared by MCP courses and the first roadmap lesson.
+// Guided-reader data and UI copy shared by the MCP courses.
 import sampling from './sampling';
 import notifications from './notifications';
 import roots from './roots';
-import commerceAgentLoop from '../commerceAgentLoopLesson.js';
-import agentToolBoundary from '../agentToolBoundaryLesson.js';
-import agentToolResults from '../agentToolResultsLesson.js';
 
 export const UI = {
   "tour.aria": "第 {n} 步，共 {total} 步",
@@ -23,5 +20,5 @@ export const UI = {
   "btn.next": "下一步 →"
 };
 
-const WALKTHROUGHS = { sampling, notifications, roots, commerceAgentLoop, agentToolBoundary, agentToolResults };
+const WALKTHROUGHS = { sampling, notifications, roots };
 export default WALKTHROUGHS;

@@ -29,11 +29,10 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 ```
 ├── blog/                          # 博客文章（7 篇，一篇一个文件夹 <slug>/index.md，图片同目录）
 ├── roadmap/                       # 路线：一个开源项目一条学习线，按步不按天（第二个 docs 实例，/roadmap 路由）
-│   ├── 前言/                      # index.md 是 /roadmap 首页（slug: /），三篇前置阅读放在这个目录下
-│   │   ├── 高效商务Agent架构指南/ # Anthropic 商务 Agent 架构指南中译（index.mdx + 原文配图同目录）
-│   │   ├── 构建高效的智能体/      # Anthropic《Building Effective Agents》中译（index.md + 8 张原图同目录），商务指南里的“标准 Agent 循环”链到这里
-│   │   └── 为Agent编写高效工具/  # Anthropic《Writing effective tools for agents》中译（index.md + 8 张原图同目录），商务指南“工程化 Agent 工具”一节链到这里
-│   └── commerce-agents/           # anthropics/commerce-agents 学习线，目录布局照 docs/MCP 课程：index.mdx（CourseHero + 总览图 + 学习目标 + 六条规则 + 前提条件 + DocCardList），一个 Stage 一个中文目录（index.md 分组页），一课一页 NN-english-slug.mdx；专题是排在各 Stage 之后的分组目录（如 工程化Agent工具/，目录名不带空格）
+│   └── 前言/                      # index.md 是 /roadmap 首页（slug: /），三篇前置阅读放在这个目录下
+│       ├── 高效商务Agent架构指南/ # Anthropic 商务 Agent 架构指南中译（index.mdx + 原文配图同目录）
+│       ├── 构建高效的智能体/      # Anthropic《Building Effective Agents》中译（index.md + 8 张原图同目录），商务指南里的“标准 Agent 循环”链到这里
+│       └── 为Agent编写高效工具/  # Anthropic《Writing effective tools for agents》中译（index.md + 8 张原图同目录），商务指南“工程化 Agent 工具”一节链到这里
 ├── docs/                          # 笔记文档（15 个分类目录）
 │   ├── Agent/                     # 智能体
 │   ├── AIGC/                      # AI 生成内容
@@ -69,18 +68,17 @@ npm run roadmap-sync         # 从同级 ../commerce-agents-dev 抽代码快照�
 │   │   ├── ProjectCodeViewer/     # 共用项目代码查看器（文件树 / 标签 / 代码区 / diff / 聚焦行 / 复制）的唯一实现，McpWalkthrough 和 CodeWalkthrough 都用它，新课程别另写一份；界面文案在 src/data/projectViewerUI.js
 │   │   ├── QuickCheck/            # 快速检查：课文里一道当场判对错的单选（每个选项带解释、可改选、不计分），<QuickCheck question options /> 全局注册；数据校验在 model.mjs（带单测）
 │   │   ├── ReadMore/              # 阅读更多：折叠卡，标题写成读者会问的问题，<ReadMore title="..."> 全局注册
-│   │   ├── RoadmapOverview/       # commerce-agents 路线总览：八个 Stage 两行排的 SVG，当前 Stage 用强调色，STAGES / CURRENT 直接改
 │   │   ├── SkillCard/             # SkillHub 技能卡片（展开显示安装命令）
 │   │   └── Term/                  # 术语悬停解释：虚线下划线，悬停 / 聚焦弹出 tip
 │   ├── css/
 │   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）；图表角色色 --th-dg-*（neutral 中性 / process 处理 / done 完成 / external 外部，加 body、stroke、loop，深浅两套，画图的组件都用它）；字体、代码块装饰
 │   ├── data/
 │   │   ├── agentRuns/             # AgentLoopViz 分镜：index.js 注册表；claudeCode.js 是《The Agent Loop》笔记的默认分镜，commerceLoop.js 目前没有页面引用
-│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出；commerce.js 是路线的步骤文案，commerce.files.js 是 roadmap-sync 生成的代码快照（不要手改）；agentTools.files.js 是“工程化 Agent 工具”专题共用的快照（配方 agent-tools）
+│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出；commerce.files.js / agentTools.files.js 是 roadmap-sync 生成的代码快照（不要手改），目前没有页面引用，tools/focus-range.test.mjs 拿 agentTools.files.js 当样本
 │   │   ├── diagrams/              # Diagram 注册表：index.js 登记 variant，注释里是类名清单；一张图一个文件（export default SVG 字符串）
 │   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
 │   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）
-│   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）+ 路线第 01 课 commerceAgentLoop（数据在 ../commerceAgentLoopLesson.js，读 commerce.files.js 快照）+ 专题课 agentToolBoundary / agentToolResults（../agentTool*Lesson.js，读 agentTools.files.js）；高亮行号都用 ../focusRange.js 的语义锚点算
+│   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）；读 roadmap-sync 快照的课文数据，高亮行号用 ../focusRange.js 的语义锚点算（单测在 tools/focus-range.test.mjs）
 │   │   ├── messageFlows/          # MessageFlow 注册表：index.js 登记 variant，文件头注释写了数据形状；一张图一个文件，页面里 <MessageFlow variant="..." upTo={n} /> 可以只画前 n 项
 │   │   └── skills.js              # SkillHub 技能数据（SKILLS 数组）
 │   ├── pages/
@@ -157,9 +155,9 @@ sidebar_position: 1
 
 ### 路线页面
 
-docs 形态（非 blog），目录布局和文风都照 `docs/MCP` 课程章节。每个项目在 `roadmap/<项目>/` 下：`index.mdx` 是课程索引页（`CourseHero` + `RoadmapOverview` 总览图 + 学习目标 + 六条规则表 + 前提条件 + `DocCardList`），一个 Stage 一个中文目录（不带编号，`index.md` 写 `sidebar_position`、`description`、H1、一句话、`DocCardList`），一课一页 `NN-english-slug.mdx`（frontmatter 只写 `description`，H1 是中文课名不带编号）。文风：课程讲解口吻，用“我们”“您”，句子完整不省主语，每段先给结论再举具体例子，段落之间有过渡句；动画每帧的说明、演练每步的说明同样口吻。内容取舍上仍是自己的学习线：没有 `run` 输出面板、没有“试一下”、没有对照源码，`BUILD_ROADMAP.md` 里的 checklist 和当时给自己看的话不搬，几个路线 Step 可以合成一课。博客单独看就要能懂：正文、演练说明、总览图、规则表里都**不提** `BUILD_ROADMAP.md` 的 Step 编号、dev 仓库的文件路径，引用位置一律用课名或 Stage 名。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
+docs 形态（非 blog），目录布局和文风都照 `docs/MCP` 课程章节。每个项目在 `roadmap/<项目>/` 下：`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + 六条规则表 + 前提条件 + `DocCardList`），一个 Stage 一个中文目录（不带编号，`index.md` 写 `sidebar_position`、`description`、H1、一句话、`DocCardList`），一课一页 `NN-english-slug.mdx`（frontmatter 只写 `description`，H1 是中文课名不带编号）。文风：课程讲解口吻，用“我们”“您”，句子完整不省主语，每段先给结论再举具体例子，段落之间有过渡句；动画每帧的说明、演练每步的说明同样口吻。内容取舍上仍是自己的学习线：没有 `run` 输出面板、没有“试一下”、没有对照源码，`BUILD_ROADMAP.md` 里的 checklist 和当时给自己看的话不搬，几个路线 Step 可以合成一课。博客单独看就要能懂：正文、演练说明、总览图、规则表里都**不提** `BUILD_ROADMAP.md` 的 Step 编号、dev 仓库的文件路径，引用位置一律用课名或 Stage 名。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
 
-小标题照 MCP 课文写成这一课内容的短语（“只会聊天还不够”“一次搜索怎样完成”“逐步查看代码”），不用“起点 / 方案”这类通用标签。一课依次讲：上一课留下的问题 → 这一课的机制（编号步骤或信号/动作表；需要动画时才用 `<AgentLoopViz variant="..." />`）→ 演练（`<McpWalkthrough variant="..." />`，代码取自 roadmap-sync 快照，步骤说明写在 `src/data/` 的课文数据里，参照 `commerceAgentLoopLesson.js`）→ 设计取舍（引用六条规则的编号）→ 在本地运行（可选）。结尾不加收尾标题，直接一段话带到下一课。
+小标题照 MCP 课文写成这一课内容的短语（“只会聊天还不够”“一次搜索怎样完成”“逐步查看代码”），不用“起点 / 方案”这类通用标签。一课依次讲：上一课留下的问题 → 这一课的机制（编号步骤或信号/动作表；需要动画时才用 `<AgentLoopViz variant="..." />`）→ 演练（`<McpWalkthrough variant="..." />`，代码取自 roadmap-sync 快照，步骤说明写在 `src/data/` 的课文数据里）→ 设计取舍（引用六条规则的编号）→ 在本地运行（可选）。结尾不加收尾标题，直接一段话带到下一课。
 
 代码从同级 `../commerce-agents-dev` 抽：在 `tools/roadmap-sync/commerce.config.mjs` 里登记每步的文件与展示路径，跑 `npm run roadmap-sync`，生成的 `commerce.files.js` 一起提交。Stage A 每步在 dev 里是独立文件，演练里统一显示成 `agent.py`，相邻步骤才能按行 diff。
 
