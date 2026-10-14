@@ -8,14 +8,16 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    # 固定 24.04：ubuntu-latest 从 2026-10-19 起会切到 Ubuntu 26.04，
+    # 下面的 Chromium 测试对系统和字体敏感，换镜像要单独开一次改动验证后再升
+    runs-on: ubuntu-24.04
     # 浏览器步骤偶尔会卡住，别让它占满默认的 6 小时
     timeout-minutes: 25
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: npm
@@ -82,7 +84,7 @@ jobs:
 
       - name: Save walkthrough browser screenshots and results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: walkthrough-browser-${{ github.run_id }}-${{ github.run_attempt }}
           path: test-results/
