@@ -69,6 +69,7 @@
 .figure :global(.t-mono-strong),
 .figure :global(.t-code) { font-family: var(--ifm-font-family-monospace); font-size: 12px; }
 .figure :global(.t-mono-strong) { font-weight: 600; }
+.figure :global(.t-accent) { fill: var(--th-accent-fill); }
 
 /* ── 场景零件：画界面和终端的场景图（聊天窗口、商品卡、代码面板、曲线标注），角色色和上面一致 ── */
 .figure :global(.s-window),

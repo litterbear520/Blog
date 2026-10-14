@@ -7,11 +7,13 @@
 //         n-option 选项标签（选项对照图底部那条，实心陶土底；紧跟的 <text> 是标签文字）
 //   连线  arrow · arrow loop（回路）；箭头 marker 里用 mk / mk-loop（开口 V 形）
 //   文字  t-name 名称 · t-band 标题带 · t-sub 说明 · t-note 旁注 · t-label 连线标签
-//         t-mono / t-mono-strong 代码名 · t-code（t-note 里的行内代码）
+//         t-mono / t-mono-strong 代码名 · t-code（t-note 里的行内代码）· t-accent 强调色文字（和 s-leader 配对的标注）
 //   场景  s-window 窗口 · s-bar 窗口标题条 · s-bubble-user 顾客 / 用户气泡 · s-bubble-agent Agent 气泡
 //         s-card 商品卡（写真实的名字和一项关键数据，不画图片占位）· s-panel 代码 / 终端面板（墨色实底）
 //         s-hl 强调框（框住一个词或一行）· s-leader 强调色曲线标注 · s-dim 淡化的元素（被禁用、没发生的路径）
 //         mk-accent 强调色箭头 · t-msg 气泡里的话（14px）· t-who 说话人 · t-panel 面板里的代码
 // <svg> 要带 role="img" 和 aria-labelledby，id 统一用这张图的文件名作前缀，<desc> 写成“这张图说明……”一整句。
 
-export default {};
+import modsHookChain from './modsHookChain';
+
+export default { modsHookChain };
