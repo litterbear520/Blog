@@ -352,6 +352,11 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
   line-height: 1.6;
 }
 
+/* 列间只留一份 1rem：第二列起去掉左内边距，窄屏和含代码的列少折行 */
+.markdown .md-table table :is(th, td) + :is(th, td) {
+  padding-left: 0;
+}
+
 .markdown .md-table table th {
   border-bottom-color: var(--th-line);
   color: var(--th-text-3);
