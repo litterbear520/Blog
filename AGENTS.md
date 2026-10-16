@@ -129,7 +129,7 @@ npm run clear                # 清理 Docusaurus 缓存
 - **代码块预录输出**：代码围栏加 `run`，紧接一个 `output` 围栏写运行结果，构建时由 `plugins/remark-run-output.js` 合并；页面上代码块右上角出现 ▷ 按钮，点击后底部展开输出面板逐行打印，终端图标排在输出第一行的行首、文字紧随其后（悬停图标提示为预录），不单独占一行，再点收起。不是真跑代码，输出要先在本地跑一遍如实录入
 - **术语悬停解释**：正文里写 `<Term tip="解释">LOAD_FAST</Term>`，词下有虚线，鼠标悬停或 Tab 聚焦弹出解释；已注册进 MDX 全局，docs / roadmap / blog 通用，无需 import
 - **提示块样式**：`:::note / info / tip / important / warning / danger` 照 GitHub alerts 的图标（Octicons）和配色（note/info 蓝、tip 绿、important 紫、warning 黄、danger 红，令牌 `--th-admonition-*`），但不画左侧竖线，改成 8px 圆角卡片，靠类型色调淡的框底和框边区分；标题与图标同色、不大写、不缩小，中文长句标题可换行，图标直接放在框底上不另垫底；没写 `[标题]` 时显示中文默认标签（备注 / 信息 / 提示 / 重要 / 注意 / 危险）。`important` 是自定义类型：关键字在 `docusaurus.config.js` 三个内容插件的 `admonitions.keywords` 注册，组件在 `src/theme/Admonition/Types.js`。标题写“提示”就用 `:::tip`、写“注意”就用 `:::warning`，别用 `:::info[提示]`
-- **表格样式**：markdown 表格由 `src/theme/MDXComponents/Table` 套一层 `.md-table`，照原文 art-table 画成封闭的卡片：与代码块同一套外框（1px `--th-line`、8px 圆角、`--th-surface-1` 底），撑满正文宽度，表头淡底 + 小号次要色，行间细线、最后一行不画线，单元格顶对齐，窄屏在框内横向滚动；组件里手写的 `<table>`（CsvTable、MessageFlow）不经过这层
+- **表格样式**：markdown 表格由 `src/theme/MDXComponents/Table` 套一层 `.md-table`，照原文 art-table 画成封闭的卡片：与代码块同一套外框（1px `--th-line`、8px 圆角、`--th-surface-1` 底），撑满正文宽度，表头淡底 + 小号次要色，行间细线、最后一行不画线，列间只留 1rem（第二列起无左内边距），单元格顶对齐，窄屏在框内横向滚动；组件里手写的 `<table>`（CsvTable、MessageFlow）不经过这层
 - **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
 
 ## 内容编写规范
