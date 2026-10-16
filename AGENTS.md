@@ -1,140 +1,88 @@
 # AGENTS.md
 
-## 项目概述
+小熊的博客：Docusaurus 3.10（开启 `future.v4: true`）+ React 19 的中文个人技术博客，域名 huangsitao.fun，GitHub Pages 部署，默认暗色主题。
 
-基于 **Docusaurus 3（已开启 `future.v4` 模式）** 构建的个人技术博客（小熊的博客），部署在 GitHub Pages。
-
-| 项 | 值 |
-| ---- | ---- |
-| 框架 | Docusaurus 3.10.1（future.v4 模式）+ React 19 |
-| Node | >= 18 |
-| 自定义域名 | huangsitao.fun |
-| 部署 | GitHub Actions → `gh-pages` 分支 |
-| 默认主题 | 暗色模式 |
-| 语言 | 中文 |
-
-## 常用命令
+## 命令
 
 ```bash
 npm start                    # 开发服务器（端口 3003，热更新，日常写内容用这个）
-npm run build                # 构建静态网站
+npm run build                # 构建；prebuild 先跑全部单测，其中 test:code-viewer 会启动 Chromium
 npm run serve                # 本地预览构建结果
 npm run build && npm run serve  # 构建后预览（模拟生产环境，提交前确认用这个）
 npm run clear                # 清理 Docusaurus 缓存
+npm run test:<名>            # 单测：code-viewer / focus-range / message-flow / diagrams / quick-check
+npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers/README.md
 ```
 
-## 项目结构
+## 部署
 
-```
-├── blog/                          # 博客文章（8 篇，一篇一个文件夹 <slug>/index.md，图片同目录）
-├── roadmap/                       # 路线：一个开源项目一条学习线，按步不按天（第二个 docs 实例，/roadmap 路由）
-│   └── 前言/                      # index.md 是 /roadmap 首页（slug: /），三篇前置阅读放在这个目录下
-│       ├── 高效商务Agent架构指南/ # Anthropic 商务 Agent 架构指南中译（index.mdx + 原文配图同目录）
-│       ├── 构建高效的智能体/      # Anthropic《Building Effective Agents》中译（index.md + 8 张原图同目录），商务指南里的“标准 Agent 循环”链到这里
-│       └── 为Agent编写高效工具/  # Anthropic《Writing effective tools for agents》中译（index.md + 8 张原图同目录），商务指南“工程化 Agent 工具”一节链到这里
-├── docs/                          # 笔记文档（15 个分类目录）
-│   ├── Agent/                     # 智能体
-│   ├── AIGC/                      # AI 生成内容
-│   ├── AI编程/                    # AI 辅助编程
-│   ├── Claude Code/               # Claude Code 笔记
-│   ├── Docker/                    # Docker
-│   ├── Git工作流/                 # Git 功能分支工作流（index.mdx 内嵌 GitWorkflowViz 分步演示）
-│   ├── LangChain/                 # LangChain
-│   ├── MCP/                       # MCP 课程笔记：两门课各一个子目录（简介 / 高级主题：课程索引页 + 分组 + 课文）
-│   ├── Prompt/                    # 提示词工程
-│   ├── python/                    # Python（基础 / FastAPI）
-│   ├── 大模型应用/                # 大模型应用开发
-│   ├── 常用命令/                  # 常用命令速查
-│   ├── 深度学习/                  # 深度学习（PyTorch / Transformer）
-│   ├── 网络与服务器/              # 代理节点 / 服务器部署
-│   └── 项目/                      # 项目记录
-├── src/
-│   ├── components/
-│   │   ├── AgentLoopViz/          # Agent 循环分镜动画（数据驱动）：左流程图 + 右 messages[] + 本帧说明，<AgentLoopViz variant="..." />，分镜数据在 src/data/agentRuns/，配色走 --th-* 令牌
-│   │   ├── CodeWalkthrough/       # 代码演进演练：示例项目按步骤快照演进，文件树 / 标签 / 代码区按行标出相对上一步的增删（diff.js 行级 LCS），下方终端点击逐行打印预录输出
-│   │   ├── CopyMarkdownButton/    # 文档页"复制 Markdown"按钮
-│   │   ├── CsvTable.jsx           # CSV 表格渲染组件
-│   │   ├── Diagram/               # 结构图与场景图：diagram-design 技能画的 SVG 原样嵌入（<Diagram variant="..." />），另有手写场景图用的 s-* 零件（窗口、气泡、商品卡、代码面板、强调曲线）；右上角可放大查看；SVG 里只写类名，styles.module.css 按角色映射到 --th-dg-* / --th-accent-*，深浅色跟着令牌切换；数据在 src/data/diagrams/
-│   │   ├── GitWorkflowViz/        # Git 工作流分步演示：Remote / Local / Disk 三区域，逐步高亮变化的提交与传输箭头，步骤数据在 steps.js
-│   │   ├── HomepageFeatures/      # 首页特性卡片
-│   │   ├── InfoCards/             # 文章内横排信息卡：CardGrid（可编号 01/02/03）+ Card（title/sub/tone）+ SkillList（中文名 + 英文 id 对照的技能清单）+ LinkCallout（带按钮链接的提示框）
-│   │   ├── LessonMeta/            # 课文标题下的课序和时长标签（第 N 课 · M 分钟），<LessonMeta lesson minutes /> 全局注册；数字由 /lesson 的 lesson_lint.py 算出并核对
-│   │   ├── Lightbox/              # 放大查看的按钮和弹层：markdown 图片（theme/MDXComponents/Img）和课文配图 Diagram 共用
-│   │   ├── McpCourse/             # 课程索引页顶部信息卡（CourseHero：难度/课数、来源链接）
-│   │   ├── McpQuiz/               # 单选测验（一次一题、选项每次随机打乱，最后提交，显示是否通过与得分条）；题目带 explain 字段时，交卷后在得分卡下逐题列出对错、正确答案和解析；题干、选项、解析里的 `反引号` 渲染成行内代码
-│   │   ├── McpWalkthrough/        # 代码演练：分步说明 + 迷你代码查看器（文件树/标签/按步高亮定位）
-│   │   ├── MessageFlow/           # 消息流（泳道）图：参与者 + 虚线生命线 + 消息箭头，消息可带“角色 │ 块类型 │ 内容”小表，生命线上可放注释框；HTML 网格排版（中文自动换行，窄屏横向滚动），配色走 --th-dg-*；数据校验在 model.mjs（带单测），数据在 src/data/messageFlows/
-│   │   ├── ProjectCodeViewer/     # 共用项目代码查看器（文件树 / 标签 / 代码区 / diff / 聚焦行 / 复制）的唯一实现，McpWalkthrough 和 CodeWalkthrough 都用它，新课程别另写一份；界面文案在 src/data/projectViewerUI.js
-│   │   ├── QuickCheck/            # 快速检查：课文里一道当场判对错的单选（每个选项带解释、可改选、不计分），<QuickCheck question options /> 全局注册；数据校验在 model.mjs（带单测）
-│   │   ├── ReadMore/              # 阅读更多：折叠卡，标题写成读者会问的问题，<ReadMore title="..."> 全局注册
-│   │   ├── SkillCard/             # SkillHub 技能卡片（展开显示安装命令）
-│   │   └── Term/                  # 术语悬停解释：虚线下划线，悬停 / 聚焦弹出 tip
-│   ├── css/
-│   │   └── custom.css             # 全局样式：主题令牌 --th-*（底色 / 文字 / 强调色 --th-accent（陶土）、-fill、-border、-tint，组件配色应引用这些变量）；图表角色色 --th-dg-*（neutral 中性 / process 处理 / done 完成 / external 外部，加 body、stroke、loop，深浅两套，画图的组件都用它）；字体、代码块装饰
-│   ├── data/
-│   │   ├── agentRuns/             # AgentLoopViz 分镜：index.js 注册表；claudeCode.js 是《The Agent Loop》笔记的默认分镜
-│   │   ├── codeWalkthroughs/      # CodeWalkthrough 数据：index.js 注册表 + UI 文案，unittest.js 是 unittest 笔记的 10 步快照与实录输出
-│   │   ├── diagrams/              # Diagram 注册表：index.js 登记 variant，注释里是类名清单；一张图一个文件（export default SVG 字符串）
-│   │   ├── mcpAdvancedQuiz.js     # MCP 高级主题测验题（含答案下标）
-│   │   ├── mcpIntroQuiz.js        # MCP 简介课最终评估题（含答案下标）
-│   │   ├── mcpWalkthroughs/       # McpWalkthrough 注册表：MCP 三个演练（sampling / notifications / roots）；课文数据的高亮行号可以用 ../focusRange.js 的语义锚点算（单测在 tools/focus-range.test.mjs）
-│   │   ├── messageFlows/          # MessageFlow 注册表：index.js 登记 variant，文件头注释写了数据形状；一张图一个文件，页面里 <MessageFlow variant="..." upTo={n} /> 可以只画前 n 项
-│   │   └── skills.js              # SkillHub 技能数据（SKILLS 数组）
-│   ├── pages/
-│   │   ├── index.js               # 首页（Canvas 雨滴动画）
-│   │   ├── bloglist.js            # 自定义博客列表页（分类筛选 + 卡片布局）
-│   │   └── skills.js              # SkillHub 页面（/skills 路由）
-│   └── theme/
-│       ├── Root.js                # 主题根组件（注入 CopyMarkdown 按钮）
-│       ├── MDXComponents/index.js # 注册全局 MDX 组件（Term 术语悬停解释、QuickCheck 快速检查、ReadMore 阅读更多、LessonMeta 课序和时长，正文直接用无需 import）
-│       ├── MDXComponents/Table/   # 包装 markdown 表格：外套 div.md-table（外框 / 圆角 / 窄屏横向滚动），样式在 custom.css「表格」一节
-│       ├── MDXComponents/Img/     # 包装 markdown 图片：右上角放大按钮 + dialog 弹层看原图（按钮和弹层在 components/Lightbox）
-│       ├── DocCard/Heading/Icon/  # 覆盖为空组件：去掉 DocCardList 卡片标题前的 🗃️/📄️ emoji
-│       ├── Admonition/            # 提示块：index.js 包装层补中文默认标签；Icon/ 是 GitHub alerts 同款 Octicons；Types.js 注册自定义的 important 类型；配色与卡片样式在 custom.css「提示块」一节
-│       ├── Icon/LightMode|DarkMode|SystemColorMode/  # 深浅切换按钮图标换成 Lucide 线条版（sun / moon / monitor），与导航栏 GitHub 图标同规格
-│       ├── CodeBlock/             # 代码块「运行」按钮 + 预录输出面板：Buttons/RunButton、Layout（挂面板）、Content/String（读 data-output）、RunOutput/（context + Panel 逐行打印）
-│       ├── prism-cursor-theme.js  # Cursor 暗色代码高亮主题
-│       └── prism-cursor-light-theme.js
-├── plugins/
-│   ├── copy-markdown-source/      # 构建时生成清洗后的 .md 文件供复制
-│   └── remark-run-output.js       # remark 插件：把 ```lang run 与紧随的 ```output 围栏合并成带预录输出的代码块
-├── plans/ + specs/                # 功能规划与设计文档（SkillHub 等）
-├── tools/
-│   └── covers/                    # 博客封面生成：配方 → 涂鸦 SVG（Node 渲染，无需浏览器），详见其 README
-├── .claude/skills/
-│   ├── blog-cover/                # /blog-cover <slug>：读文章 → 视觉隐喻 → 配方 → 渲染 → 登记
-│   ├── lesson/                    # /lesson <位置/主题> + 想法：照 Academy 读感写一门课（一课一个概念、短段落配大图、演练单独成页、课末概念评估），只在调用时生效；读感、课型骨架、课程结构、组件、出图规范在 references/，scripts/lesson_lint.py 按 MCP 课文基线检查篇幅和密度
-│   └── note/                      # /note <位置/标题> + 文稿 + 代码：视频讲稿 → 最小替换转写 → 小标题 → 自然的站内外链接 → 推 main 看 CI
-├── static/
-│   ├── CNAME                      # 自定义域名 huangsitao.fun
-│   └── img/                       # 图片资源
-├── docusaurus.config.js           # 主配置（ESM）
-├── sidebars.js                    # 侧边栏（autogenerated）
-└── .github/workflows/update.yaml  # CI：push → build，main 分支 → deploy
-```
+`.github/workflows/update.yaml`：任意分支 push → 数据单测 + Chromium 布局测试 → `npm run build --ignore-scripts` → `tools/walkthrough-browser.mjs` 在桌面和手机宽度验证演练页。只有 `main` 会部署到 `gh-pages`，部署后再验证一次线上页面。同一分支的新 push 会取消未完成的旧构建。
 
-## 关键特性
+## 框架注意事项
 
-- **KaTeX 数学公式**：通过 `remark-math` + `rehype-katex` 支持
-- **Cursor 代码主题**：自定义 Prism 主题，深浅两套
-- **复制 Markdown 源码**：自定义插件 `copy-markdown-source` 构建时生成清洗后 `.md`，按钮由 `Root.js` 注入
-- **自定义博客列表**：`/bloglist` 路由，支持分类筛选，不使用 Docusaurus 默认博客列表
-- **SkillHub**：`/skills` 路由，技能卡片墙；数据在 `src/data/skills.js`，描述须工具中立、取材自技能仓库 README
-- **路线**：`/roadmap` 路由，第二个 `plugin-content-docs` 实例（id: `roadmap`，侧边栏 `sidebarsRoadmap.js` 自动生成）。一个开源项目一个文件夹，按步不按天，一步一页；`前言/` 放前言和前置阅读
-- **交互式可视化**：`AgentLoopViz` 组件（Agent 循环分镜动画，数据驱动：节点图、连线、逐帧高亮与消息都在 `src/data/agentRuns/<variant>.js`，静止在第 0 帧就是结构图，播放就是一次运行示例；对话内容示意即可，但工具名、字段、stop_reason 必须和代码一致）、`GitWorkflowViz` 组件（Git 工作流 15 步状态演示，在 `docs/Git工作流/index.mdx` 里通过 `BrowserOnly` 挂载）
-- **课程笔记**：一个主题写成一门课用 `/lesson`：课程索引页（`CourseHero` + 学习目标 + `DocCardList`）→ 课文（一课一个概念，标题下有课序和时长，课内一道快速检查）和演练页（演练单独成页，排在它讲的课后面）→ 整门课最后一篇概念评估（`McpQuiz` + 题库里的 `explain` 解析），每课不单独出题。结构图用 diagram-design 技能画，`<Diagram>` 嵌入；消息往返用 `MessageFlow`。跨项目通用的讲解技能 `/explain` 在全局 `~/.claude/skills/`，不在仓库里
-- **代码演进演练**：`CodeWalkthrough` 组件，用于“一步步改代码”的笔记（如 `docs/python/unittest.mdx`）。数据在 `src/data/codeWalkthroughs/<variant>.js`，每一步只写本步改动的文件（`null` 表示删除）、说明段落和可运行命令；不改文件、只写 `file` + `lines: [[起, 止]]` 的步骤会把这些行标成聚焦行（强调色淡底）并滚过去，用来在同一份代码里逐段讲；组件切到某步时自动打开改动的文件，相对上一步新增行绿底、删除行红底幽灵行，右上角可切「只看当前」；整个演练只有一个文件时不显示文件树和标签栏，只留一条文件名顶栏，代码卡片按行数撑开（照普通代码块），这一步只有一条命令时运行按钮放在代码右上角、输出在代码下方展开（和 `run` 代码块同一个面板），不显示终端栏；终端里的输出必须是本地实跑录下来的。文章里每一节写 `<CodeWalkthrough variant="unittest" step={3} />` 让演练停在对应步骤；上一步/下一步默认不显示，只给最后一个实例加 `nav` 让读者回翻。终端面板不写字，终端图标排在输出第一行的行首、文字紧随其后（照 Claude Cookbook 输出块的布局）
-- **MCP 课程笔记**：`docs/MCP/<课程名>/` 一门课一个目录（目前有《Model Context Protocol 简介》和《高级主题》），`index.mdx` 是课程索引页（`CourseHero` + 学习目标 + `DocCardList`），课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只需 `<McpWalkthrough variant="..." />`，数据在 `src/data/mcpWalkthroughs/`；测验页用 `<McpQuiz questions={...} />`，题目数据在 `src/data/mcp*Quiz.js`；原站的 `CodeCommand` 组件对应 bash 代码块，`GenericPrompt`（用户提示卡）对应 `:::info[用户提示]`
-- **文档图片宽度**：`custom.css` 把 docs / roadmap 正文图片宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；博客不受影响
-- **代码块预录输出**：代码围栏加 `run`，紧接一个 `output` 围栏写运行结果，构建时由 `plugins/remark-run-output.js` 合并；页面上代码块右上角出现 ▷ 按钮，点击后底部展开输出面板逐行打印，终端图标排在输出第一行的行首、文字紧随其后（悬停图标提示为预录），不单独占一行，再点收起。不是真跑代码，输出要先在本地跑一遍如实录入
-- **术语悬停解释**：正文里写 `<Term tip="解释">LOAD_FAST</Term>`，词下有虚线，鼠标悬停或 Tab 聚焦弹出解释；已注册进 MDX 全局，docs / roadmap / blog 通用，无需 import
-- **提示块样式**：`:::note / info / tip / important / warning / danger` 照 GitHub alerts 的图标（Octicons）和配色（note/info 蓝、tip 绿、important 紫、warning 黄、danger 红，令牌 `--th-admonition-*`），但不画左侧竖线，改成 8px 圆角卡片，靠类型色调淡的框底和框边区分；标题与图标同色、不大写、不缩小，中文长句标题可换行，图标直接放在框底上不另垫底；没写 `[标题]` 时显示中文默认标签（备注 / 信息 / 提示 / 重要 / 注意 / 危险）。`important` 是自定义类型：关键字在 `docusaurus.config.js` 三个内容插件的 `admonitions.keywords` 注册，组件在 `src/theme/Admonition/Types.js`。标题写“提示”就用 `:::tip`、写“注意”就用 `:::warning`，别用 `:::info[提示]`
-- **表格样式**：markdown 表格由 `src/theme/MDXComponents/Table` 套一层 `.md-table`，照原文 art-table 画成封闭的卡片：与代码块同一套外框（1px `--th-line`、8px 圆角、`--th-surface-1` 底），撑满正文宽度，表头淡底 + 小号次要色，行间细线、最后一行不画线，列间只留 1rem（第二列起无左内边距），单元格顶对齐，窄屏在框内横向滚动；组件里手写的 `<table>`（CsvTable、MessageFlow）不经过这层
-- **图片放大**：`src/theme/MDXComponents/Img` 包装了所有 markdown 图片（docs / roadmap / blog 通用），原图比显示尺寸大时右上角出现放大按钮，点击用原生 dialog 弹层显示原图，长图可滚动，Esc / 点空白关闭；正文里正常写 `![]()` 即可，无需额外语法
+- 站点运行在 Docusaurus v4 模式，部分 API 与 v3 不同：涉及框架 API、配置、插件用法时，先用 context7 查 Docusaurus 最新文档，再动手。
+- `docusaurus.config.js` 是 ESM（`import/export`）。
+- 三个内容插件：docs（`docs/`，`sidebars.js` 按目录自动生成）、roadmap（第二个 docs 实例，id `roadmap`，`/roadmap` 路由，`sidebarsRoadmap.js`）、blog（`blogSidebarCount: 0`，列表页是自定义的 `/bloglist`）。提示块关键字和 `remark-run-output` 在三个插件里各配一遍，改动时三处一起改；KaTeX（`remark-math` + `rehype-katex`）只配在 docs 和 roadmap。
+- 新增文档分类：在 `docs/` 下建目录并加 `index.md`。
+
+## 目录
+
+| 路径 | 内容 |
+| ---- | ---- |
+| `blog/<slug>/index.md(x)` | 一篇文章一个文件夹，正文图片放同目录 |
+| `docs/<分类>/` | 笔记；MCP 课程在 `docs/MCP/<课程名>/` |
+| `roadmap/前言/` | `index.md` 是 `/roadmap` 首页（`slug: /`），子目录是三篇 Anthropic 文章的中译，原图放同目录 |
+| `src/components/` | 组件，见下文“组件” |
+| `src/data/` | 组件数据：一个 variant 一个文件，在同目录 `index.js` 登记；另有 `skills.js`（SkillHub）、`swatches.json`（封面底色）、`mcp*Quiz.js`（题库） |
+| `src/theme/` | swizzle 覆盖，见下文“主题覆盖” |
+| `src/css/custom.css` | 全局样式和主题令牌 |
+| `src/pages/` | `index.js` 首页、`bloglist.js` 博客列表（`POSTS`）、`skills.js` SkillHub（`/skills`） |
+| `plugins/` | `copy-markdown-source/`（构建时生成清洗后的 `.md`，供“复制 Markdown”按钮用）、`remark-run-output.js` |
+| `tools/` | `covers/` 封面流水线；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证 |
+| `.claude/skills/` | `blog-cover`、`lesson`、`note`，用法见各自 `SKILL.md`；跨项目通用的 `/explain` 在全局 `~/.claude/skills/` |
+
+## 样式令牌
+
+组件配色引用 `custom.css` 里的变量，不写死颜色：
+
+- `--th-*`：底色、文字、线条，强调色 `--th-accent`（陶土）及其 `-fill` / `-border` / `-tint`。
+- `--th-dg-*`：图表角色色 neutral / process / done / external，加 body、stroke、loop，深浅两套，画图的组件都用它。
+- `--th-admonition-*`：提示块配色。
+
+docs / roadmap 正文图片宽度封顶 768px，大图靠放大按钮看原图；博客不受这条限制。
+
+## 组件
+
+`Term`、`QuickCheck`、`ReadMore`、`LessonMeta` 在 `src/theme/MDXComponents/index.js` 全局注册，docs / roadmap / blog 正文直接写，不用 import。
+
+| 组件 | 写法与约定 | 数据 |
+| ---- | ---- | ---- |
+| `Term` | `<Term tip="解释">LOAD_FAST</Term>`：术语悬停或聚焦时弹出解释 | |
+| `QuickCheck` | `<QuickCheck question options />`：课文里当场判对错的单选，每个选项带解释，可改选，不计分 | 校验在 `model.mjs`，带单测 |
+| `ReadMore` | `<ReadMore title="...">`：折叠卡，标题写成读者会问的问题 | |
+| `LessonMeta` | `<LessonMeta lesson minutes />`：课文标题下的课序和时长，数字由 `/lesson` 的 `lesson_lint.py` 算出并核对 | |
+| `AgentLoopViz` | `<AgentLoopViz variant="..." />`：Agent 循环分镜动画，第 0 帧就是结构图。对话内容示意即可，但工具名、字段、`stop_reason` 必须和代码一致 | `src/data/agentRuns/` |
+| `CodeWalkthrough` | “一步步改代码”的演练（如 `docs/python/unittest.mdx`）。每一步只写本步改动的文件（`null` 表示删除）、说明和可运行命令；只写 `file` + `lines: [[起, 止]]` 的步骤用来在同一份代码里逐段讲。文章每节写 `<CodeWalkthrough variant="..." step={3} />` 停在对应步骤，只给最后一个实例加 `nav`。终端输出必须是本地实跑录下来的 | `src/data/codeWalkthroughs/` |
+| `McpWalkthrough` | `<McpWalkthrough variant="..." />`：分步说明 + 代码查看器 | `src/data/mcpWalkthroughs/`；高亮行号可用 `src/data/focusRange.js` 的语义锚点算 |
+| `ProjectCodeViewer` | 上面两种演练共用的代码查看器，唯一实现，新演练别另写一份 | 界面文案在 `src/data/projectViewerUI.js` |
+| `Diagram` | `<Diagram variant="..." />`：diagram-design 技能画的 SVG 原样嵌入，另有手写场景图用的 `s-*` 零件。SVG 里只写类名，配色由 `styles.module.css` 映射到令牌 | `src/data/diagrams/`，`index.js` 注释里是类名清单 |
+| `MessageFlow` | `<MessageFlow variant="..." upTo={n} />`：消息流（泳道）图，`upTo` 只画前 n 项 | `src/data/messageFlows/`，数据形状写在 `index.js` 文件头；校验在 `model.mjs`，带单测 |
+| `McpQuiz` | `<McpQuiz questions={...} />`：单选测验，题目带 `explain` 时交卷后逐题显示解析 | `src/data/mcp*Quiz.js` |
+| `CourseHero` | 课程索引页顶部信息卡（在 `McpCourse/`） | |
+| `InfoCards` | `CardGrid`（可编号）+ `Card` + `SkillList` + `LinkCallout` | |
+| `GitWorkflowViz` | Git 工作流分步演示，在 `docs/Git工作流/index.mdx` 里用 `BrowserOnly` 挂载 | `steps.js` |
+| 其他 | `CsvTable`、`SkillCard`（SkillHub）、`HomepageFeatures`、`CopyMarkdownButton`（由 `Root.js` 注入）、`Lightbox`（markdown 图片和 `Diagram` 共用的放大弹层） | |
+
+## 主题覆盖
+
+- `MDXComponents/`：注册全局组件；`Table/` 给 markdown 表格套一层 `.md-table` 卡片（组件里手写的 `<table>` 不经过这层）；`Img/` 给 markdown 图片加放大按钮。样式在 `custom.css`「表格」一节。
+- `Admonition/`：补中文默认标签；`Types.js` 注册自定义的 `important` 类型（关键字在三个内容插件的 `admonitions.keywords`）。样式照 GitHub alerts 的图标和配色，但不画左侧竖线，改用 8px 圆角卡片，靠淡底和淡边区分类型。
+- `CodeBlock/`：代码块的 ▷ 运行按钮和预录输出面板，配合 `plugins/remark-run-output.js`。
+- `DocCard/Heading/Icon/` 覆盖成空组件，去掉卡片标题前的 emoji；`Icon/` 把深浅切换图标换成 Lucide 线条版；`prism-cursor-theme.js` / `prism-cursor-light-theme.js` 是深浅两套代码主题；`prism-include-languages.js` + `prism-grammar-tweaks.js` 加载语言并细化切分。
 
 ## 内容编写规范
 
-### 文档 frontmatter
+### 文档
 
 ```yaml
 ---
@@ -143,15 +91,24 @@ sidebar_position: 1
 # 页面标题
 ```
 
-### 博客 frontmatter
+### 博客
 
-一篇文章一个文件夹：`blog/<slug>/index.md`，正文图片放在同一文件夹里用 `![](./xxx.png)` 相对引用；URL 由 frontmatter 的 `slug` 决定。同时需要在 `src/pages/bloglist.js` 的 `POSTS` 数组中添加元数据：
+一篇文章一个文件夹 `blog/<slug>/index.md`，正文图片放同一文件夹，用 `![](./xxx.png)` 相对引用；URL 由 frontmatter 的 `slug` 决定。同时在 `src/pages/bloglist.js` 的 `POSTS` 数组里登记：
 
 ```javascript
 { title, date: 'YYYY-MM-DD', slug, category: '教程'|'AI'|'比赛', swatch, cover }
 ```
 
-卡片只显示日期、标题、分类，没有一句话介绍。`swatch`（底色名，见 `src/data/swatches.json`）是卡片纯色底，`cover` 是透明 SVG 封面，整图居中不裁切。
+卡片只显示日期、标题、分类，没有一句话介绍。`swatch` 是卡片纯色底（名称见 `src/data/swatches.json`），`cover` 是透明 SVG 封面，整图居中不裁切。
+
+**列表封面**统一用 `tools/covers/` 流水线生成（剪纸 + 毛笔线的透明 SVG），全站风格才统一：不手绘，不用 AI 生成图片，不从外部找图。新文章用 `/blog-cover <slug>`，手动流程见 `tools/covers/README.md`。
+
+**文章头图**（正文开头的大图）可以用编辑排版风或用户提供的图，放在 `static/img/blog/`，正文首行用 `![alt](/img/blog/xxx)` 引入。
+
+### 课程
+
+- 一个主题写成一门课用 `/lesson`：课程索引页（`CourseHero` + 学习目标 + `DocCardList`）→ 课文（一课一个概念，课内一道快速检查）和单独成页的演练 → 整门课最后一篇概念评估（`McpQuiz` + `explain` 解析），每课不单独出题。结构图用 diagram-design 技能画，消息往返用 `MessageFlow`。
+- MCP 课程：`docs/MCP/<课程名>/index.mdx` 是课程索引页，课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只放 `<McpWalkthrough>`，测验页只放 `<McpQuiz>`。原站的 `CodeCommand` 写成 bash 代码块，`GenericPrompt`（用户提示卡）写成 `:::info[用户提示]`。
 
 ### 路线页面
 
@@ -159,21 +116,9 @@ docs 形态（非 blog），目录布局和文风都照 `docs/MCP` 课程章节�
 
 小标题照 MCP 课文写成这一课内容的短语（“只会聊天还不够”“一次搜索怎样完成”“逐步查看代码”），不用“起点 / 方案”这类通用标签。一课依次讲：上一课留下的问题 → 这一课的机制（编号步骤或信号/动作表；需要动画时才用 `<AgentLoopViz variant="..." />`）→ 演练（`<McpWalkthrough variant="..." />`，代码从源仓库原样复制成快照，步骤说明写在 `src/data/` 的课文数据里）→ 设计取舍（引用六条规则的编号）→ 在本地运行（可选）。结尾不加收尾标题，直接一段话带到下一课。
 
-### 博客封面与头图
-
-**列表封面**（`cover` 字段，显示在 `/bloglist` 卡片顶部）统一用 `tools/covers/` 的涂鸦流水线生成，**不要手绘、不要用 AI 生成图片、不要外部找图**。新文章用 `/blog-cover <slug>` skill，或手动：
-
-1. 复制 `tools/covers/recipes/example.js` 为 `recipes/<slug>.js`，写 `swatch`（底色名）、`seed`、`draw(d, m)`（`lib/doodle.js` 原语 + `lib/motifs.js` 母题）
-2. `npm run cover -- <slug> --preview`，看 `tools/covers/.preview/<slug>.png`，不满意改配方重渲
-3. 产出 `static/img/blog/cover-<slug>.svg`（透明，1000×1000）；bloglist.js 加 `swatch` + `cover`
-4. 更新 `tools/covers/README.md` 封面清单
-5. 风格规则、原语与母题说明见 `tools/covers/README.md`
-
-**文章头图**（正文开头大图）可用编辑排版风或用户提供的图，直接放 `static/img/blog/`，正文首行用 `![alt](/img/blog/xxx)` 引入。
-
 ### 代码运行输出
 
-代码围栏加 `run`，紧接一个 `output` 围栏（两段之间空一行），`output` 的 meta 写进程状态：`exit=0`（默认）、`exit=1`、`hang`（不退出，需 Ctrl+C）、`empty`（无输出）；再加 `{3,7-9}` 可高亮输出里的第 3、7、8、9 行（1 起数），标出读者该看的位置。docs / roadmap / blog 通用。只给完整、能独立运行的示例加 `run`；用来示意的片段（如单独一段 `while` 循环、故意写错的反例）不加。围栏 meta 还可以写 `id=xxx` 给代码块加锚点，正文用 `[文字](#xxx)` 跳转，跳到后边框会用强调色闪一下；`run`、`id=`、高亮范围 `{1-3}` 可同时写。
+代码围栏加 `run`，紧接一个 `output` 围栏（两段之间空一行），构建时由 `plugins/remark-run-output.js` 合并成带 ▷ 按钮的代码块。`output` 的 meta 写进程状态：`exit=0`（默认）、`exit=1`、`hang`（不退出，需 Ctrl+C）、`empty`（无输出）；再加 `{3,7-9}` 可高亮输出里的第 3、7、8、9 行（1 起数），标出读者该看的位置。输出要先在本地实跑一遍再如实录入。只给完整、能独立运行的示例加 `run`；示意片段（如单独一段 `while` 循环、故意写错的反例）不加。围栏 meta 还可以写 `id=xxx` 给代码块加锚点，正文用 `[文字](#xxx)` 跳转；`run`、`id=`、高亮范围 `{1-3}` 可以同时写。docs / roadmap / blog 通用。
 
 ````markdown
 ```python run
@@ -185,52 +130,12 @@ hi
 ```
 ````
 
-### 数学公式
+### 其他写法
 
-```markdown
-行内: $E = mc^2$
-块级:
-$$
-\sum_{i=1}^{n} x_i
-$$
-```
-
-### 表格格式
-
-不对齐竖线（避免 markdownlint MD060）：
-
-```markdown
-| 列A | 列B |
-| ---- | ---- |
-| 值1 | 值2 |
-```
-
-### 文字高亮
-
-```markdown
-<span style={{color: 'red'}}>红色文字</span>
-<mark style={{backgroundColor: '#ff9900', padding: '0 4px', borderRadius: '3px'}}>橙色高亮</mark>
-<mark>默认黄色高亮</mark>
-:::warning[标题]
-块级警告（v4 语法，标题必须用 [] 包裹）
-:::
-```
-
-### 支持的代码语言
-
-bash, json, python, java, typescript, rust, go, cpp, c
-
-## 部署流程
-
-GitHub Actions（`.github/workflows/update.yaml`）：
-
-1. 任意分支 push → `npm ci`（setup-node 缓存 npm）+ `npm run build`；同一分支新 push 会取消未完成的旧构建
-2. 仅 `main` 分支 → 部署到 `gh-pages`（peaceiris/actions-gh-pages），GitHub 随后自动发布该分支
-
-## 注意事项
-
-- 本项目已启用 `future.v4: true`，运行在 Docusaurus v4 模式，部分 API 与 v3 有差异。涉及框架相关的 API、配置、插件用法时，务必先通过 context7 查阅 Docusaurus 最新文档，避免使用已废弃或变更的 API
-- `docusaurus.config.js` 使用 ESM（`import/export`），不是 CommonJS
-- 侧边栏为 `autogenerated` 模式，按 `docs/` 目录结构自动生成
-- `blogSidebarCount: 0`，博客侧边栏已禁用
-- 新增文档分类时只需在 `docs/` 下建目录并添加 `index.md`
+- **提示块**：`:::note / info / tip / important / warning / danger`，标题写成 `:::warning[标题]`（v4 语法，必须用 `[]`）；不写标题时显示中文默认标签。标题写“提示”就用 `:::tip`，写“注意”就用 `:::warning`，别用 `:::info[提示]`。
+- **表格**：竖线不对齐（避免 markdownlint MD060），分隔行写 `| ---- | ---- |`。
+- **数学公式**：KaTeX，行内 `$E = mc^2$`，块级 `$$ ... $$`；只在 docs / roadmap 生效，博客没配。
+- **文字高亮**：MDX 写法，`<span style={{color: 'red'}}>红色文字</span>`、`<mark>默认黄色高亮</mark>`。
+- **图片**：正常写 `![]()`，原图比显示尺寸大时自动出现放大按钮。
+- **代码高亮语言**：bash, json, python, java, typescript, rust, go, cpp, c, diff；其他语言没有高亮。
+- **SkillHub**：数据在 `src/data/skills.js`，描述保持工具中立，取材自技能仓库的 README。
