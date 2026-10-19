@@ -4,75 +4,122 @@ title: 如何更有雄心地使用 AI
 date: 2026-10-19
 ---
 
-{/* 开头一两段，写这篇文章要讲什么，会显示在博客列表的摘要里。写完上线前删掉 frontmatter 里的 draft: true */}
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+![戈雅《飞行之法》](/img/blog/hero-ambitious-with-ai.jpg)
+
+我的工作是开发 Claude。这是一种很有意思的体验：每天我都会听说又有人借助 Claude、或者由 Claude 自己完成了某件事，而这些事我要么没想到过，要么不觉得可能，要么只是缺乏好奇心和时间去尝试。就在这个月，它可能帮忙发现了一颗新行星；我看到了第一支真正让我喜欢的 AI 音乐视频；我们还在讨论数学的一个新时代。
 
 {/* truncate */}
 
+模型能力的增长并不均匀。正如陶哲轩所说，模型“在某些方向上令人惊叹，在另一些方向上却力有不逮”。
 
+有些人驾驭得了那些惊人的能力，仿佛已经飞上了天——看着人们用我做的产品达到难以置信的高度，实在让人上瘾。还有很多人仍在努力让自己的新翅膀扇动起来，琢磨着它们除了回答“法国的首都是哪里”或者“能不能让这封邮件听起来没那么生气”之外，还能干什么。
 
-I work on Claude. It’s an interesting experience: Every day I learn about yet another feat accomplished with or by Claude that I hadn’t considered, didn’t think possible, or simply lacked the curiosity and time to try. This month, it may have helped discover a new planet, I’ve seen the first AI music video that I really like, and we are discussing a new era of math.
+我经常（和其他从事 AI 工作的人一起）宣称，我们在使用 AI 时应该更有雄心。这已经成了一句口号：每当看到令人印象深刻的东西，我们就会转发并写上“我们还不够有雄心”。我明白这条建议有多难照做，所以这里有一份关于如何更有雄心的教程。
 
-Model capabilities don’t grow uniformly. Models are, as Terence Tao puts it, “astounding in some directions, while inadequate in others”. Some people manage to pilot the astounding capabilities and seem to be flying — it’s addicting to watch people reach incredible heights with the products I’ve built. Many others are still struggling to get their new wings to work, wondering what they’re good for beyond asking “What is the capital of France” or “Can you make this email sound less angry”.
+我把雄心分为四种：速度、高度、深度和广度。
 
-I frequently proclaim (together with other people working on AI) that we ought to be more ambitious when using it. It’s become a rallying cry. Whenever we see something impressive, we repost and write “we’re not ambitious enough”. I understand how tricky it is to follow that advice, so here’s a tutorial on being more ambitious.
+- **速度（Speed）**：用更少的时间完成同样的工作，这是 AI 经济价值的基本盘：如果你需要写点代码，我用 Claude 会写得更快。这一点已经很成熟，在怎样使用 AI 上也不太需要创造力，所以我会跳过它。
+- **高度（Altitude）**：提升抽象层次，考虑最终结果，而不是单个任务。
+- **深度（Depth）**：像领域顶尖专家那样看待任务。我们不停留在任务本身这一层，而是再往下深入一层，触及底层的数据、工具和问题。
+- **广度（Range）**：借鉴多个领域，而不只是任务表面上需要的那一个，运用你平时不会用到的知识、工具和技巧。
 
-I think of ambition in four types: Speed, Altitude, Depth, and Range.
+我主要用 Claude（废话），但我的建议并不局限于某个模型。
 
-Speed: The same work in less time, the bread and butter for AI’s economic value: If you need some code written, I’ll do it faster with Claude. Well established and requires little creativity in how you approach AI, so I’ll skip this one.
-Altitude: Going up in abstraction and considering the outcome rather than the individual task.
-Depth: Considering a task the way a field-leading expert would. Rather than operating at the task’s layer, we go one level deeper and touch the underlying data, tools, and problems.
-Range: Drawing on multiple fields rather than just the one the task might need at the surface, using knowledge, tools, and techniques you normally wouldn’t.
-I primarily use Claude (duh) but my advice is not model-specific.
+## 高度
 
-## Altitude
-We often flippantly call this “letting the model operate at a higher abstraction”. When you give the model a task, it’s executing your best guess at how to get the outcome you want. To be more ambitious in altitude, ask yourself — what do you want to happen next? What’s the goal beyond the goal? At the beginning of last year, I still asked Claude to fix individual crashes for me. Eventually I asked Claude to simply keep our apps crash-free.
+我们常常随口把这叫作“让模型在更高的抽象层次上工作”。当你给模型一个任务时，它执行的是你对“怎样得到想要的结果”的最佳猜测。
 
-Let’s consider an everyday (dare I say mundane?) office task. You’re at Acme Inc, an imagined company, where you need to put together a deck for the quarterly business review (QBR). Given a bunch of data, Claude will happily make you some slides. Maybe you even have a template and it just needs to fill it in. That’s hardly comparable to finding a new planet, so let’s look at some concrete steps to make our approach more ambitious. We’ll start basic and get a little bit more ambitious with each step:
+想在高度上更有雄心，就问问自己：你希望接下来发生什么？目标之外的目标是什么？去年年初，我还在让 Claude 帮我修一个个具体的崩溃。后来，我干脆让 Claude 保证我们的应用不再崩溃。
 
-As input, most reviews want to know what changed this quarter, why, and what should be done about it. Resist the urge to just update whatever numbers are in the template — give the model too as much data as you can get your hands on so it can understand your business: “Tell me what changed this quarter, why, and what we should do about it.”
-Meetings (the good kind, anyway) ideally end with some decisions. Ask Claude: “Work out which three decisions are most urgent in the face of everything you’ve learned, and start working on potential directions with for/against arguments.”
-QBRs are from a time when good reviews required humans to carefully sift through data, figure out what the data means, and if the business should adjust. Ask Claude: “The review exists so leadership catches problems early and moves money and people to the right places. Design a better way to do that than a quarterly deck, show from our own history that it would have caught things sooner, and run it beside the current one for a quarter.”
-The altitude approach works best if you really are after some ultimate outcome; it works less well for creative endeavors. A good tell-tale sign that ambition in altitude is a good idea is if you’re going to have meetings to discuss whatever you’re working on. There are currently limits (“Claude, go make money” doesn’t seem to work for most businesses by itself in 2026), but I generally see that models seem to be able to operate at higher levels of abstraction the more capable they become.
+我们来看一个日常（甚至可以说平淡无奇？）的办公任务。假设你在 Acme Inc（一家虚构的公司）工作，需要为季度业务回顾（QBR）准备一份演示文稿。给它一堆数据，Claude 会很乐意为你做几页幻灯片。也许你甚至有现成的模板，它只需要把内容填进去。
 
-Altitude is also where people find durable workflows that take the human out of the loop, making it less necessary for you to constantly update the model with task after task. Doing this well often involves changing your workflow — in order to let Claude make sure our app is crash-free, I first had to make sure it can easily fetch crash reports, understand which app version maps to what git commit, and give it access to Windows, macOS, and Linux computers so it can actually independently reproduce and verify fixes.
+这跟发现一颗新行星实在没法比，所以我们来看一些具体步骤，让我们的做法更有雄心。我们从基础开始，每一步都再多一点雄心：
 
-## Depth
-Sometimes, you just want a task executed really well. Being ambitious in depth means pushing the model to use the tools, techniques, media, and knowledge employed by the best professionals in the field — and to keep pushing until even those people might learn something new from your work.
+1. 在输入层面，大多数业务回顾都想知道这个季度发生了什么变化、为什么变，以及应该怎么应对。忍住只更新模板里那些数字的冲动——尽可能把你能拿到的数据都交给模型，让它理解你的业务：“告诉我这个季度发生了什么变化、为什么，以及我们应该怎么做。”
+2. 会议（至少是好的会议）最好以做出一些决定收尾。问 Claude：“根据你了解到的一切，找出最紧迫的三个决定，并开始为它们拟出可能的方向，附上支持和反对的理由。”
+3. QBR 诞生于这样一个时代：好的业务回顾需要人工仔细筛查数据，弄清数据意味着什么，再判断业务是否需要调整。问 Claude：“业务回顾的存在，是为了让管理层及早发现问题，把钱和人调配到正确的地方。设计一种比季度演示文稿更好的方法来做到这一点，用我们自己的历史数据证明它能更早发现问题，然后让它和现有方法并行运行一个季度。”
 
-Let’s continue with our Acme Inc example of a quarterly business review deck. Assume for a second that Acme Inc struggles with some user churn (customer loss over time). I’ve found a mix of the following techniques useful:
+高度这种方法最适合你确实在追求某个最终结果的情况；用在创造性的工作上，效果就差一些。一个很好的判断信号是：如果你要为手头的工作开会讨论，那么在高度上追求雄心多半是个好主意。
 
-Insist on the same instruments used by the best in the industry: When prompted to act like a professional, models often switch vocabulary without actually switching methods. To work on our problem with depth, we need to use the same tools as the best data scientists and statisticians. When Claude reaches for markdown tables, insist on the use of databases and statistical models. You don’t necessarily have to know what the experts use, Claude usually does.
-Pick unreasonable goals and tell the model that they’re very reasonable: You need your website to load in 5s instead of 10s? Ask for 200ms. Does something seem impossible to the model? Reiterate that it’s very much solvable, it just needs to keep going.
-Challenge what you know: Especially in business, a lot of things we believe to be true are rough approximations of reality. Give the model access to the raw information and data and ask it to adversarially check assumptions. “We believe churn is an onboarding problem. Try to reproduce that from the raw data.”
-Produce new knowledge: Easily tacked onto challenging what you know — once Claude is already deep inside the data, ask it to find blind spots. “Build a simulation of our customers that reproduces the last year from our logs. Then find the earliest signal of churn we don’t know about yet, and show it predicts on data it has not seen.”
-Use an outside judge: Do not ask the model to judge itself. I assume that this will eventually be solved with increasing model intelligence, but in October 2026, I implore you to insist on outside validation. Ideally that’s a tool the model can run to get feedback immediately.
-A simple prompt that often helps me:
+目前还存在一些限制（在 2026 年，“Claude，去赚钱吧”对大多数企业来说似乎还行不通），但我总体看到，模型能力越强，似乎就越能在更高的抽象层次上工作。
 
-I want a deeper version of this task, not a bigger one. Before rewriting it: (1) say what a top professional in this field would do here that I’m not asking for; (2) name the rawest material they would start from instead of what has already been digested for me; (3) name the specific methods and tools they would use; (4) say what, other than you or me, would show the result is right. Then rewrite my prompt to ask for exactly that.
+在高度上，人们还能找到可以长期运转、不需要人一直参与其中的工作流，让你不必一个接一个地给模型布置任务。要做好这一点，往往需要改变你的工作流程。为了让 Claude 确保我们的应用不再崩溃，我首先得让它能轻松获取崩溃报告，搞清楚哪个应用版本对应哪个 git 提交，还要让它能用上 Windows、macOS 和 Linux 电脑，这样它才能真正独立地复现和验证修复。
 
-## Range
-In short, being ambitious in range means that we consider our work from the perspective of different fields — more fields than would have been economical in the past. This isn’t a particularly unique insight, every single heist movie spends the first 30 minutes assembling a diverse cast of characters and talents. As AI products make it easier and easier to run multi-agent systems (with multiple threads, orchestrators, or simply subagents), I’ve seen really interesting results by imploring Claude to bring in additional fields.
+## 深度
 
-Putting this into practice isn’t easy; it requires you to be creative. Until I saw my colleague Alex Albert use Blender to render interior designs, I never considered using Claude for 3D environments for my homepage — even though I’ve previously made video games! However, this is easily where I see the most magic happen.
+有时候，你只是希望一个任务被执行得非常出色。在深度上追求雄心，意味着推动模型使用该领域顶尖专业人士所用的工具、技术、媒介和知识——并且不断推进，直到连这些人都可能从你的成果中学到新东西。
 
-So, how do we do this? I use the following techniques:
+我们继续用 Acme Inc 季度业务回顾演示文稿的例子。先假设 Acme Inc 正面临一些用户流失（churn，即客户随时间流失）的问题。我发现把下面这些技巧组合起来用很有效：
 
-Try to replace the nouns with verbs: An old trick from The Art of Innovation by Tom Kelley and Jonathan Littman. A quarterly review isn’t “a deck”. It’s “getting busy people to believe a story about cause and effect, and to decide under uncertainty, in 30 minutes”. Having the verbs makes it easier for both me and Claude to understand which fields might bring in a unique and useful perspective.
-Assemble the crew: The deck needs to be amazing, otherwise aliens will blow up Earth. What kind of team will humanity get together? For production quality, I’d bring in an analyst, a journalist, and an editor. If it has to be presented, probably a motion and audio designer, too. It might be useful to employ an adversarial “red team”, too, so let’s bring in a short seller and a forensic accountant.
+- **坚持使用业内顶尖人士用的工具**：当被要求像专业人士一样工作时，模型往往只是换了一套词汇，而没有真正换方法。要在深度上解决我们的问题，就需要使用和最优秀的数据科学家、统计学家一样的工具。当 Claude 想用 Markdown 表格时，坚持让它用数据库和统计模型。你不一定要知道专家们用什么，Claude 通常知道。
+- **定下不合理的目标，并告诉模型这些目标非常合理**：你需要网站加载时间从 10 秒降到 5 秒？那就要求 200 毫秒。模型觉得某件事不可能？反复告诉它这完全可以解决，它只需要继续做下去。
+- **挑战你已知的东西**：尤其在商业领域，很多我们信以为真的东西，只是对现实的粗略近似。让模型接触原始信息和数据，并让它以对抗的方式检验各种假设：“我们认为流失是新用户引导（onboarding）的问题。试着从原始数据中复现这个结论。”
+- **产出新知识**：这一步很容易接在“挑战你已知的东西”之后——既然 Claude 已经深入到数据里了，就让它去找盲点：“基于我们的日志构建一个客户模拟，复现过去一年的情况。然后找出我们还不知道的、最早的流失信号，并证明它在没见过的数据上也能做出预测。”
+- **引入外部评判**：不要让模型自己评判自己。我猜随着模型越来越聪明，这个问题终将被解决，但在 2026 年 10 月，我恳请你坚持要求外部验证。最理想的是一个模型能自己运行、立即获得反馈的工具。
 
-It is easy to accidentally engage in role play, which will make your transcript weirder without improving the actual outcome. Use this method to find fields and techniques. Don’t ask the model to write like a short seller, ask it to do what a short seller does to research their position.
-All the ways in which I describe ambition require the model to have a computer with the ability to install software and access to all kinds of relevant data (either using MCP connectors or other means). Plenty of tools make this possible and I recommend that you use one.
+一个经常对我有帮助的简单提示词：
 
-## We have been here before
-That’s my concrete advice for how to be more ambitious. If you’re willing to stick around for a minute, I’d like to tell you why I think this is even necessary in the first place.
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
 
-We humans have always been held back by what we believe possible — and what’s worse, we usually trust ourselves only in very narrow disciplines. Michelangelo famously didn’t want to paint the Sistine Chapel — you see, he was a sculptor, not a painter.
+```text
+I want a deeper version of this task, not a bigger one. Before rewriting it:
+(1) say what a top professional in this field would do here that I'm not asking for;
+(2) name the rawest material they would start from instead of what has already been digested for me;
+(3) name the specific methods and tools they would use;
+(4) say what, other than you or me, would show the result is right.
+Then rewrite my prompt to ask for exactly that.
+```
 
-While researching the problem of ambition, I learned that psychology has a name for this: self-efficacy. In short, people with high self-efficacy believe in their own abilities more, and in turn actually accomplish more. There’s evidence that self-efficacy can be hacked: Locke and Latham pored over 35 years of goal-setting research to confidently proclaim that humans who are given specific hard goals perform better than those who are simply told to try their best. Stripe founder Patrick Collison maintains a “Fast” list, chronicling the many things humans have accomplished when given both audacious goals and tight deadlines. Some hacks that are well documented:
+</TabItem>
+<TabItem value="zh" label="中文">
 
-Accomplish hard things by believing them to be possible: In 1939, George Dantzig showed up late to a statistics class at Berkeley, copied two problems off the blackboard, and handed in his solutions thinking they were homework. They were two unsolved problems in statistics.
-Accomplish hard things after watching somebody else do them: For decades, humans chased the four-minute mile. Roger Bannister broke it in May 1954 but remained the only human to do so for a mere 46 days. If you’re into running, we’re watching something similar happen to the two-hour marathon: Sabastian Sawe ran the first official sub-two-hour marathon in London this April. In the same race, the runner-up also broke the two-hour mark.
-Accomplish hard things by giving yourself permission to fail: Apparently everyone’s favorite business book is The Inner Game of Tennis, which I discovered just last week. The book’s core thesis is that you’re not playing your best game of tennis if you’re trying really, really hard. We engineers might remember Linux, announced as “just a hobby, won’t be big and professional like gnu”.
-Self-efficacy isn’t a new problem, but it is a more powerful one now. In a world where our abilities make leaps every couple of weeks, we need techniques that allow us to do things we didn’t really consider or believe possible. If you find more techniques that allow you to be more ambitious, please let me know!
+```text
+我想要这个任务更深入的版本，而不是更大的版本。在改写之前：
+(1) 说出这个领域的顶尖专业人士在这里会做、而我没有要求的事情；
+(2) 说出他们会从哪些最原始的材料入手，而不是用已经替我消化过的东西；
+(3) 说出他们会使用的具体方法和工具；
+(4) 说出除了你和我之外，还有什么能证明结果是对的。
+然后改写我的提示词，让它正好要求这些。
+```
 
-The image for this post is by Francisco Goya, “Modo de volar” (A Way of Flying)
+</TabItem>
+</Tabs>
+
+## 广度
+
+简单来说，在广度上追求雄心，意味着我们从不同领域的视角审视自己的工作——涉及的领域比过去在经济上划算的更多。
+
+这算不上多独到的见解，每一部劫案电影都会花前 30 分钟召集一群身怀各种绝技的角色。随着 AI 产品让运行多智能体系统（多个线程、编排器，或者干脆就是子智能体）变得越来越容易，我通过恳请 Claude 引入更多领域，看到了一些非常有意思的结果。
+
+把这一点付诸实践并不容易，它需要你有创造力。直到我看到同事 Alex Albert 用 Blender 渲染室内设计，我才想到可以用 Claude 为我的个人主页制作 3D 场景——尽管我以前还做过电子游戏！不过，这无疑是我见到最多奇迹发生的地方。
+
+那么，具体怎么做呢？我会用下面这些技巧：
+
+- **试着把名词换成动词**：这是 Tom Kelley 和 Jonathan Littman 在《创新的艺术》（The Art of Innovation）里提到的一个老技巧。季度业务回顾不是“一份演示文稿”，而是“在 30 分钟内，让忙碌的人相信一个关于因果的故事，并在不确定的情况下做出决定”。有了动词，我和 Claude 都更容易看出哪些领域可能带来独特而有用的视角。
+- **组建团队**：这份演示文稿必须惊艳，否则外星人就会炸掉地球。人类会召集一支什么样的团队？为了制作质量，我会请来一位分析师、一位记者和一位编辑。如果需要现场演示，大概还得有一位动效与音频设计师。安排一支对抗性的“红队”可能也有用，所以再请来一位做空者和一位法务会计师。
+
+这种方法很容易不小心变成角色扮演，让你的对话记录变得更古怪，却没有改善实际结果。用这个方法来找出领域和技巧。不要让模型像做空者那样写作，而要让它像做空者那样，为自己的空头立场去做调研。
+
+我描述的所有这些雄心，都要求模型拥有一台能安装软件的电脑，并能访问各种相关数据（通过 MCP 连接器或其他方式）。有很多工具能做到这一点，我建议你用上一个。
+
+## 我们早就经历过
+
+以上就是我关于如何更有雄心的具体建议。如果你愿意再多待一分钟，我想聊聊为什么我认为这件事从根本上就是必要的。
+
+我们人类一直被自己认为可能的事情所束缚——更糟的是，我们通常只在非常狭窄的领域里相信自己。众所周知，米开朗基罗起初并不想画西斯廷礼拜堂——你看，他是个雕塑家，不是画家。
+
+在研究雄心这个问题时，我了解到心理学对此有个名称：自我效能感（self-efficacy）。简单来说，自我效能感高的人更相信自己的能力，也确实因此取得了更多成就。
+
+有证据表明，自我效能感是可以被“破解”的：Locke 和 Latham 仔细梳理了 35 年的目标设定研究，自信地宣称：被赋予具体而困难目标的人，比只被告知“尽力而为”的人表现更好。Stripe 创始人 Patrick Collison 维护着一份 “Fast” 清单，记录了人类在被赋予大胆目标和紧迫期限时完成的许多事情。下面是一些有据可查的方法：
+
+- **相信能做到，就能完成难事**：1939 年，George Dantzig 在伯克利的一堂统计学课上迟到了，他把黑板上的两道题抄下来，以为是家庭作业，后来交上了自己的解答。那其实是统计学中两个尚未解决的问题。
+- **看到别人做到之后，就能完成难事**：几十年来，人类一直在追逐四分钟跑完一英里的目标。Roger Bannister 在 1954 年 5 月打破了这个纪录，但他作为唯一做到的人只维持了短短 46 天。如果你喜欢跑步，我们正在马拉松两小时大关上看到类似的事情发生：今年 4 月，Sabastian Sawe 在伦敦跑出了首个官方认证的两小时以内的马拉松成绩。在同一场比赛中，亚军也跑进了两小时。
+- **允许自己失败，就能完成难事**：显然，大家最喜欢的商业书是《网球的内心游戏》（The Inner Game of Tennis），我上周才发现这本书。这本书的核心论点是：如果你拼命地、拼命地努力，就打不出自己最好的网球。我们工程师可能还记得 Linux，它发布时被宣称“只是个爱好，不会像 gnu 那样大而专业”。
+
+自我效能感不是一个新问题，但如今它的分量更重了。在一个我们的能力每隔几周就会飞跃一次的世界里，我们需要一些技巧，让自己能做到那些从未真正考虑过、或不相信能做到的事情。如果你发现了更多能让你更有雄心的技巧，请告诉我！
+
+*本文配图是弗朗西斯科·戈雅（Francisco Goya）的《飞行之法》（Modo de volar / A Way of Flying）。*
