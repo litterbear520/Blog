@@ -14,66 +14,66 @@
         <updated>2026-10-19T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[戈雅《飞行之法》]]></summary>
         <content type="html"><![CDATA[<p><span class="wrap_IvEC"><img decoding="async" loading="lazy" alt="戈雅《飞行之法》" src="https://huangsitao.fun/assets/images/hero-ambitious-with-ai-7c9a10da8319af58256e900d4b58338e.jpg" width="1280" height="897" class="img_ev3q"></span></p>
-<p>Felix Rieseberg 的工作是开发 Claude。这是一种很有意思的体验：每天他都会听说又有人借助 Claude、或者由 Claude 自己完成了某件事，而这些事他要么没想到过，要么不觉得可能，要么只是缺乏好奇心和时间去尝试。就在这个月，它可能帮忙发现了一颗新行星；他看到了第一支真正让他喜欢的 AI 音乐视频；他们还在讨论数学的一个新时代。</p>
+<p>Felix Rieseberg 是 Claude 的开发者之一。这份工作带来一种很奇妙的体验：几乎每天，他都会听说又有人借助 Claude 做成了某件了不起的事，或者干脆是 Claude 自己做成的。这些事他要么从没想过，要么觉得不可能，要么只是缺少去尝试的好奇心和时间。光是这个月，Claude 可能帮忙发现了一颗新行星；他看到了第一支真正喜欢的 AI 音乐视频；大家也开始讨论数学的新时代。</p>
 <!-- -->
-<p>模型能力的增长并不均匀。正如陶哲轩所说，模型“在某些方向上令人惊叹，在另一些方向上却力有不逮”。</p>
-<p>有些人驾驭得了那些惊人的能力，仿佛已经飞上了天——看着人们用他做的产品达到难以置信的高度，实在让人上瘾。还有很多人仍在努力让自己的新翅膀扇动起来，琢磨着它们除了回答“法国的首都是哪里”或者“能不能让这封邮件听起来没那么生气”之外，还能干什么。</p>
-<p>Felix 经常（和其他从事 AI 工作的人一起）宣称，我们在使用 AI 时应该更有雄心。这已经成了一句口号：每当看到令人印象深刻的东西，他们就会转发并写上“我们还不够有雄心”。Felix 明白这条建议有多难照做，所以写了这份关于如何更有雄心的教程。</p>
-<p>Felix 把雄心分为四种：速度、高度、深度和广度。</p>
+<p>模型能力的增长并不均衡。用陶哲轩的话说，模型“在某些方向上令人惊叹，在另一些方向上却力不从心”。</p>
+<p>有些人已经学会驾驭那些惊人的能力，仿佛飞了起来——看着人们借助 Felix 做的产品攀上难以置信的高度，实在让人上瘾。还有很多人在跟自己的新翅膀较劲，想不明白这东西除了问问“法国的首都是哪里”，或者“能不能让这封邮件读起来别那么冲”，还能拿来干什么。</p>
+<p>Felix 经常和其他做 AI 的人一起呼吁：用 AI 的时候，我们应该更有雄心一些。这几乎成了一句口号——每次看到什么惊艳的成果，他们都会转发，再配上一句“我们还是不够有雄心”。Felix 也明白这条建议做起来没那么容易，所以写了这篇教程，讲讲怎样更有雄心。</p>
+<p>在 Felix 看来，雄心可以分为四种：速度、高度、深度和广度。</p>
 <ul>
-<li class=""><strong>速度（Speed）</strong>：用更少的时间完成同样的工作，这是 AI 经济价值的基本盘：如果需要写点代码，Felix 用 Claude 会写得更快。这一点已经很成熟，在怎样使用 AI 上也不太需要创造力，所以 Felix 跳过了这一种。</li>
-<li class=""><strong>高度（Altitude）</strong>：提升抽象层次，考虑最终结果，而不是单个任务。</li>
-<li class=""><strong>深度（Depth）</strong>：像领域顶尖专家那样看待任务。我们不停留在任务本身这一层，而是再往下深入一层，触及底层的数据、工具和问题。</li>
-<li class=""><strong>广度（Range）</strong>：借鉴多个领域，而不只是任务表面上需要的那一个，运用你平时不会用到的知识、工具和技巧。</li>
+<li class=""><strong>速度（Speed）</strong>：用更短的时间做完同样的工作，这是 AI 经济价值最基本的来源：需要写代码时，Felix 用 Claude 能写得更快。这一类已经很成熟，在怎么用 AI 上也不需要多少创意，所以这里略过不讲。</li>
+<li class=""><strong>高度（Altitude）</strong>：往更高的抽象层次走，着眼于最终结果，而不是单个任务。</li>
+<li class=""><strong>深度（Depth）</strong>：像领域里的顶尖专家那样看待任务。不停留在任务这一层，而是再往下钻一层，碰到底层的数据、工具和问题。</li>
+<li class=""><strong>广度（Range）</strong>：不只用上任务表面需要的那一个领域，而是借鉴多个领域，用上你平时不会用的知识、工具和技巧。</li>
 </ul>
-<p>Felix 主要用 Claude（这还用说），但他的建议并不局限于某个模型。</p>
+<p>Felix 主要用的是 Claude（这还用说），不过这些建议并不限于某个模型。</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="高度">高度<a href="https://huangsitao.fun/blog/ambitious-with-ai#%E9%AB%98%E5%BA%A6" class="hash-link" aria-label="Direct link to 高度" title="Direct link to 高度" translate="no">​</a></h2>
-<p>Felix 和同事们常常随口把这叫作“让模型在更高的抽象层次上工作”。当你给模型一个任务时，它执行的是你对“怎样得到想要的结果”的最佳猜测。</p>
-<p>想在高度上更有雄心，就问问自己：你希望接下来发生什么？目标之外的目标是什么？去年年初，Felix 还在让 Claude 帮他修一个个具体的崩溃。后来，他干脆让 Claude 保证他们的应用不再崩溃。</p>
-<p>我们来看一个日常（甚至可以说平淡无奇？）的办公任务。假设你在 Acme Inc（一家虚构的公司）工作，需要为季度业务回顾（QBR）准备一份演示文稿。给它一堆数据，Claude 会很乐意为你做几页幻灯片。也许你甚至有现成的模板，它只需要把内容填进去。</p>
-<p>这跟发现一颗新行星实在没法比，所以我们来看一些具体步骤，让我们的做法更有雄心。我们从基础开始，每一步都再多一点雄心：</p>
+<p>Felix 和同事们常把这个随口说成“让模型在更高的抽象层次上工作”。你交给模型一个任务时，它执行的其实是你对“怎样才能得到想要的结果”的最佳猜测。</p>
+<p>想在高度上更有雄心，就问问自己：你希望接下来发生什么？目标背后的目标是什么？去年年初，Felix 还在让 Claude 帮他一个个地修崩溃；后来，他干脆让 Claude 负责保证他们的应用零崩溃。</p>
+<p>我们来看一个日常的办公任务（甚至可以说有点乏味？）。假设你在一家虚构的公司 Acme Inc 上班，要为季度业务回顾（QBR）准备一份汇报幻灯片。丢给 Claude 一堆数据，它会很乐意帮你做几页幻灯片；也许你手上还有现成的模板，它只要往里填就行。</p>
+<p>这和发现一颗新行星可没法比。下面我们看几个具体步骤，从最基础的做法开始，一步比一步更有雄心：</p>
 <ol>
-<li class="">在输入层面，大多数业务回顾都想知道这个季度发生了什么变化、为什么变，以及应该怎么应对。忍住只更新模板里那些数字的冲动——尽可能把你能拿到的数据都交给模型，让它理解你的业务：“告诉我这个季度发生了什么变化、为什么，以及我们应该怎么做。”</li>
-<li class="">会议（至少是好的会议）最好以做出一些决定收尾。问 Claude：“根据你了解到的一切，找出最紧迫的三个决定，并开始为它们拟出可能的方向，附上支持和反对的理由。”</li>
-<li class="">QBR 诞生于这样一个时代：好的业务回顾需要人工仔细筛查数据，弄清数据意味着什么，再判断业务是否需要调整。问 Claude：“业务回顾的存在，是为了让管理层及早发现问题，把钱和人调配到正确的地方。设计一种比季度演示文稿更好的方法来做到这一点，用我们自己的历史数据证明它能更早发现问题，然后让它和现有方法并行运行一个季度。”</li>
+<li class="">先说输入：大多数业务回顾想知道的是，这个季度变了什么、为什么变、接下来该怎么办。别急着只更新模板里那几个数字，把你能拿到的数据尽量都交给模型，让它真正理解你的业务：“告诉我这个季度发生了什么变化、原因是什么，以及我们应该怎么做。”</li>
+<li class="">会议（至少是开得好的会议）最好能以几个决定收尾。问 Claude：“结合你了解到的所有情况，判断哪三个决定最紧迫，并开始为它们拟出可能的方向，列出支持和反对的理由。”</li>
+<li class="">QBR 诞生的年代，一份好的回顾需要人来仔细翻查数据，弄清这些数据意味着什么，再判断业务要不要调整。问 Claude：“做业务回顾，是为了让管理层及早发现问题，把钱和人投到对的地方。请设计一种比季度幻灯片更好的方式来做到这一点，用我们自己的历史数据证明它能更早发现问题，再让它和现有流程并行跑一个季度。”</li>
 </ol>
-<p>高度这种方法最适合你确实在追求某个最终结果的情况；用在创造性的工作上，效果就差一些。一个很好的判断信号是：如果你要为手头的工作开会讨论，那么在高度上追求雄心多半是个好主意。</p>
-<p>目前还存在一些限制（在 2026 年，“Claude，去赚钱吧”对大多数企业来说似乎还行不通），但 Felix 总体看到，模型能力越强，似乎就越能在更高的抽象层次上工作。</p>
-<p>在高度上，人们还能找到可以长期运转、不需要人一直参与其中的工作流，让你不必一个接一个地给模型布置任务。要做好这一点，往往需要改变你的工作流程。为了让 Claude 确保他们的应用不再崩溃，Felix 首先得让它能轻松获取崩溃报告，搞清楚哪个应用版本对应哪个 git 提交，还要让它能用上 Windows、macOS 和 Linux 电脑，这样它才能真正独立地复现和验证修复。</p>
+<p>如果你追求的确实是某个最终结果，高度这条路最好用；用在创作类的事情上，效果就差一些。有个很好的判断信号：如果你手头的工作要开会讨论，那在高度上追求雄心多半是对的。</p>
+<p>目前这条路也有局限（到了 2026 年，对大多数企业来说，光靠一句“Claude，去赚钱吧”似乎还行不通），但 Felix 总体观察到，模型越强，似乎就越能在更高的抽象层次上工作。</p>
+<p>人们也往往是在高度上，找到能长期运转、不再需要人盯着的工作流，不用一个接一个地给模型派任务。要做好这一点，往往得先改造你的工作流程。为了让 Claude 保证应用零崩溃，Felix 先得让它能方便地拉取崩溃报告，弄清每个应用版本对应哪个 git 提交，还要给它 Windows、macOS 和 Linux 电脑，这样它才能真正独立地复现问题、验证修复。</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="深度">深度<a href="https://huangsitao.fun/blog/ambitious-with-ai#%E6%B7%B1%E5%BA%A6" class="hash-link" aria-label="Direct link to 深度" title="Direct link to 深度" translate="no">​</a></h2>
-<p>有时候，你只是希望一个任务被执行得非常出色。在深度上追求雄心，意味着推动模型使用该领域顶尖专业人士所用的工具、技术、媒介和知识——并且不断推进，直到连这些人都可能从你的成果中学到新东西。</p>
-<p>我们继续用 Acme Inc 季度业务回顾演示文稿的例子。先假设 Acme Inc 正面临一些用户流失（churn，即客户随时间流失）的问题。Felix 发现把下面这些技巧组合起来用很有效：</p>
+<p>有时候，你只想把一件事做得特别好。在深度上有雄心，就是推着模型去用这个领域最顶尖的专业人士所用的工具、技术、媒介和知识，并且一直推下去，直到连这些人都可能从你的成果里学到新东西。</p>
+<p>我们接着用 Acme Inc 季度业务回顾的例子。假设 Acme Inc 正被用户流失（churn，也就是客户随时间不断流失）困扰。Felix 发现，把下面几种技巧搭配着用很有效：</p>
 <ul>
-<li class=""><strong>坚持使用业内顶尖人士用的工具</strong>：当被要求像专业人士一样工作时，模型往往只是换了一套词汇，而没有真正换方法。要在深度上解决我们的问题，就需要使用和最优秀的数据科学家、统计学家一样的工具。当 Claude 想用 Markdown 表格时，坚持让它用数据库和统计模型。你不一定要知道专家们用什么，Claude 通常知道。</li>
-<li class=""><strong>定下不合理的目标，并告诉模型这些目标非常合理</strong>：你需要网站加载时间从 10 秒降到 5 秒？那就要求 200 毫秒。模型觉得某件事不可能？反复告诉它这完全可以解决，它只需要继续做下去。</li>
-<li class=""><strong>挑战你已知的东西</strong>：尤其在商业领域，很多我们信以为真的东西，只是对现实的粗略近似。让模型接触原始信息和数据，并让它以对抗的方式检验各种假设：“我们认为流失是新用户引导（onboarding）的问题。试着从原始数据中复现这个结论。”</li>
-<li class=""><strong>产出新知识</strong>：这一步很容易接在“挑战你已知的东西”之后——既然 Claude 已经深入到数据里了，就让它去找盲点：“基于我们的日志构建一个客户模拟，复现过去一年的情况。然后找出我们还不知道的、最早的流失信号，并证明它在没见过的数据上也能做出预测。”</li>
-<li class=""><strong>引入外部评判</strong>：不要让模型自己评判自己。Felix 猜随着模型越来越聪明，这个问题终将被解决，但在 2026 年 10 月，他恳请你坚持要求外部验证。最理想的是一个模型能自己运行、立即获得反馈的工具。</li>
+<li class=""><strong>坚持用业内顶尖高手用的工具</strong>：让模型“像专业人士一样工作”时，它往往只是换了一套说法，方法却没变。要深入解决我们的问题，就得用上最优秀的数据科学家和统计学家用的工具。Claude 顺手就要做 Markdown 表格时，坚持让它上数据库和统计模型。你不必知道专家们用什么，Claude 通常知道。</li>
+<li class=""><strong>定下离谱的目标，再告诉模型这很合理</strong>：想把网站加载时间从 10 秒压到 5 秒？那就要 200 毫秒。模型觉得某件事做不到？反复告诉它这完全能解决，只要继续做下去就行。</li>
+<li class=""><strong>质疑你自以为知道的事</strong>：尤其在商业上，很多我们信以为真的东西，不过是对现实的粗略近似。把原始信息和数据交给模型，让它站在对立面检验这些假设：“我们认为流失是新用户引导（onboarding）环节的问题。试着从原始数据里复现这个结论。”</li>
+<li class=""><strong>产出新知识</strong>：这一步可以顺势接在上一步后面——既然 Claude 已经深入数据了，就让它去找盲点：“根据我们的日志，搭一个能复现过去一年情况的客户模拟。然后找出一个我们还不知道的、最早出现的流失信号，并证明它在没见过的数据上也能做出预测。”</li>
+<li class=""><strong>请外部裁判</strong>：别让模型自己评判自己。Felix 估计随着模型越来越聪明，这个问题迟早会解决；但在 2026 年 10 月这个时间点，他恳请你一定要坚持外部验证。最好是一个模型自己就能运行、马上拿到反馈的工具。</li>
 </ul>
-<p>一个经常对 Felix 有帮助的简单提示词：</p>
-<div class="theme-tabs-container tabs-container tabList__CuJ"><ul role="tablist" aria-orientation="horizontal" class="tabs"><li role="tab" tabindex="0" aria-selected="true" class="tabs__item tabItem_LNqP tabs__item--active">English</li><li role="tab" tabindex="-1" aria-selected="false" class="tabs__item tabItem_LNqP">中文</li></ul><div class="margin-top--md"><div role="tabpanel" class="tabItem_Ymn6"><div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#D6D6DD;--prism-background-color:#181818"><div class="codeBlockContent_bxn0"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#D6D6DD;background-color:#181818"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#D6D6DD"><span class="token plain">I want a deeper version of this task, not a bigger one. Before rewriting it:</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(1) say what a top professional in this field would do here that I'm not asking for;</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(2) name the rawest material they would start from instead of what has already been digested for me;</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(3) name the specific methods and tools they would use;</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(4) say what, other than you or me, would show the result is right.</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">Then rewrite my prompt to ask for exactly that.</span><br></div></code></pre></div></div></div><div role="tabpanel" class="tabItem_Ymn6" hidden=""><div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#D6D6DD;--prism-background-color:#181818"><div class="codeBlockContent_bxn0"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#D6D6DD;background-color:#181818"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#D6D6DD"><span class="token plain">我想要这个任务更深入的版本，而不是更大的版本。在改写之前：</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(1) 说出这个领域的顶尖专业人士在这里会做、而我没有要求的事情；</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(2) 说出他们会从哪些最原始的材料入手，而不是用已经替我消化过的东西；</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(3) 说出他们会使用的具体方法和工具；</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(4) 说出除了你和我之外，还有什么能证明结果是对的。</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">然后改写我的提示词，让它正好要求这些。</span><br></div></code></pre></div></div></div></div></div>
+<p>下面这条简单的提示词经常帮上 Felix 的忙：</p>
+<div class="theme-tabs-container tabs-container tabList__CuJ"><ul role="tablist" aria-orientation="horizontal" class="tabs"><li role="tab" tabindex="0" aria-selected="true" class="tabs__item tabItem_LNqP tabs__item--active">English</li><li role="tab" tabindex="-1" aria-selected="false" class="tabs__item tabItem_LNqP">中文</li></ul><div class="margin-top--md"><div role="tabpanel" class="tabItem_Ymn6"><div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#D6D6DD;--prism-background-color:#181818"><div class="codeBlockContent_bxn0"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#D6D6DD;background-color:#181818"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#D6D6DD"><span class="token plain">I want a deeper version of this task, not a bigger one. Before rewriting it:</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(1) say what a top professional in this field would do here that I'm not asking for;</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(2) name the rawest material they would start from instead of what has already been digested for me;</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(3) name the specific methods and tools they would use;</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(4) say what, other than you or me, would show the result is right.</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">Then rewrite my prompt to ask for exactly that.</span><br></div></code></pre></div></div></div><div role="tabpanel" class="tabItem_Ymn6" hidden=""><div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#D6D6DD;--prism-background-color:#181818"><div class="codeBlockContent_bxn0"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#D6D6DD;background-color:#181818"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#D6D6DD"><span class="token plain">我要的是这个任务更深入的版本，而不是更大的版本。在改写之前：</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(1) 说说这个领域的顶尖专业人士在这里会做哪些我没要求的事；</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(2) 指出他们会从哪些最原始的材料入手，而不是用别人已经替我消化过的东西；</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(3) 列出他们会用的具体方法和工具；</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">(4) 说说除了你我之外，还有什么能证明结果是对的。</span><br></div><div class="token-line" style="color:#D6D6DD"><span class="token plain">然后改写我的提示词，让它恰好要求这些。</span><br></div></code></pre></div></div></div></div></div>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="广度">广度<a href="https://huangsitao.fun/blog/ambitious-with-ai#%E5%B9%BF%E5%BA%A6" class="hash-link" aria-label="Direct link to 广度" title="Direct link to 广度" translate="no">​</a></h2>
-<p>简单来说，在广度上追求雄心，意味着我们从不同领域的视角审视自己的工作——涉及的领域比过去在经济上划算的更多。</p>
-<p>这算不上多独到的见解，每一部劫案电影都会花前 30 分钟召集一群身怀各种绝技的角色。随着 AI 产品让运行多智能体系统（多个线程、编排器，或者干脆就是子智能体）变得越来越容易，Felix 通过恳请 Claude 引入更多领域，看到了一些非常有意思的结果。</p>
-<p>把这一点付诸实践并不容易，它需要你有创造力。直到看到同事 Alex Albert 用 Blender 渲染室内设计，Felix 才想到可以用 Claude 为自己的个人主页制作 3D 场景——尽管他以前还做过电子游戏！不过，这无疑是他见到最多奇迹发生的地方。</p>
-<p>那么，具体怎么做呢？Felix 会用下面这些技巧：</p>
+<p>简单说，在广度上有雄心，就是从不同领域的视角审视自己的工作，涉及的领域多到放在过去根本不划算。</p>
+<p>这算不上什么独到的见解，每部劫案电影都要用前 30 分钟，把一群背景各异、各怀绝技的角色凑齐。随着 AI 产品让多智能体系统（多线程、编排器，或者干脆就是子智能体）越来越容易跑起来，Felix 恳请 Claude 多引入几个领域，得到了一些非常有意思的结果。</p>
+<p>真要做起来并不容易，这需要你有创造力。在看到同事 Alex Albert 用 Blender 渲染室内设计之前，Felix 从没想过可以用 Claude 给自己的个人主页做 3D 场景——尽管他以前还做过电子游戏！不过，广度无疑是他见到最多“魔法”发生的地方。</p>
+<p>那具体该怎么做？Felix 用的是下面几种技巧：</p>
 <ul>
-<li class=""><strong>试着把名词换成动词</strong>：这是 Tom Kelley 和 Jonathan Littman 在《创新的艺术》（The Art of Innovation）里提到的一个老技巧。季度业务回顾不是“一份演示文稿”，而是“在 30 分钟内，让忙碌的人相信一个关于因果的故事，并在不确定的情况下做出决定”。有了动词，Felix 和 Claude 都更容易看出哪些领域可能带来独特而有用的视角。</li>
-<li class=""><strong>组建团队</strong>：这份演示文稿必须惊艳，否则外星人就会炸掉地球。人类会召集一支什么样的团队？为了制作质量，Felix 会请来一位分析师、一位记者和一位编辑。如果需要现场演示，大概还得有一位动效与音频设计师。安排一支对抗性的“红队”可能也有用，所以再请来一位做空者和一位法务会计师。</li>
+<li class=""><strong>试着把名词换成动词</strong>：这是 Tom Kelley 和 Jonathan Littman 在《创新的艺术》（The Art of Innovation）里讲过的老办法。季度业务回顾不是“一份幻灯片”，而是“在 30 分钟里，让一群忙碌的人相信一个关于因果的故事，并在不确定中做出决定”。有了这些动词，Felix 和 Claude 都更容易看出，哪些领域能带来独特又有用的视角。</li>
+<li class=""><strong>组建团队</strong>：假设这份幻灯片要是不够惊艳，外星人就会炸掉地球。人类会凑出一支怎样的团队？为了保证制作水准，Felix 会请一位分析师、一位记者和一位编辑；如果还要上台讲，大概还得加一位动效和音频设计师。再配一支唱反调的“红队”可能也有用，那就请一位做空者和一位法务会计师。</li>
 </ul>
-<p>这种方法很容易不小心变成角色扮演，让你的对话记录变得更古怪，却没有改善实际结果。用这个方法来找出领域和技巧。不要让模型像做空者那样写作，而要让它像做空者那样，为自己的空头立场去做调研。</p>
-<p>Felix 描述的所有这些雄心，都要求模型拥有一台能安装软件的电脑，并能访问各种相关数据（通过 MCP 连接器或其他方式）。有很多工具能做到这一点，他建议你用上一个。</p>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="我们早就经历过">我们早就经历过<a href="https://huangsitao.fun/blog/ambitious-with-ai#%E6%88%91%E4%BB%AC%E6%97%A9%E5%B0%B1%E7%BB%8F%E5%8E%86%E8%BF%87" class="hash-link" aria-label="Direct link to 我们早就经历过" title="Direct link to 我们早就经历过" translate="no">​</a></h2>
-<p>以上就是 Felix 关于如何更有雄心的具体建议。如果你愿意再多待一分钟，他想聊聊为什么他认为这件事从根本上就是必要的。</p>
-<p>我们人类一直被自己认为可能的事情所束缚——更糟的是，我们通常只在非常狭窄的领域里相信自己。众所周知，米开朗基罗起初并不想画西斯廷礼拜堂——你看，他是个雕塑家，不是画家。</p>
-<p>在研究雄心这个问题时，Felix 了解到心理学对此有个名称：自我效能感（self-efficacy）。简单来说，自我效能感高的人更相信自己的能力，也确实因此取得了更多成就。</p>
-<p>有证据表明，自我效能感是可以被“破解”的：Locke 和 Latham 仔细梳理了 35 年的目标设定研究，自信地宣称：被赋予具体而困难目标的人，比只被告知“尽力而为”的人表现更好。Stripe 创始人 Patrick Collison 维护着一份 “Fast” 清单，记录了人类在被赋予大胆目标和紧迫期限时完成的许多事情。下面是一些有据可查的方法：</p>
+<p>这里很容易一不小心就变成角色扮演：对话记录越来越怪，实际结果却没有变好。这个方法是用来找领域和技巧的。别让模型模仿做空者的口吻写东西，而要让它像做空者那样，去做支撑空头立场的那些调研。</p>
+<p>上面讲的每一种雄心，都需要模型有一台能装软件的电脑，还要能访问各种相关数据（通过 MCP 连接器或别的方式）。能做到这一点的工具很多，Felix 建议你挑一个用起来。</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="我们以前也经历过">我们以前也经历过<a href="https://huangsitao.fun/blog/ambitious-with-ai#%E6%88%91%E4%BB%AC%E4%BB%A5%E5%89%8D%E4%B9%9F%E7%BB%8F%E5%8E%86%E8%BF%87" class="hash-link" aria-label="Direct link to 我们以前也经历过" title="Direct link to 我们以前也经历过" translate="no">​</a></h2>
+<p>以上就是 Felix 关于怎样更有雄心的具体建议。如果你愿意再多留一分钟，他想说说为什么他觉得这件事从根本上就有必要。</p>
+<p>我们人类一直被“自己觉得什么是可能的”所限制——更糟的是，我们通常只在很窄的领域里相信自己。众所周知，米开朗基罗当初并不想画西斯廷礼拜堂——要知道，他是雕塑家，不是画家。</p>
+<p>Felix 在研究雄心这个问题时发现，心理学里对此有个专门的说法：自我效能感（self-efficacy）。简单说，自我效能感高的人更相信自己的能力，也因此真的做成了更多事。</p>
+<p>有证据表明，自我效能感是可以“破解”的。Locke 和 Latham 翻遍了 35 年的目标设定研究，底气十足地得出结论：拿到具体而困难目标的人，比只被告知“尽力就好”的人表现更好。Stripe 创始人 Patrick Collison 维护着一份 “Fast” 清单，记录了人类在目标大胆、期限紧迫时完成的许多事情。下面几种“破解”方法都有据可查：</p>
 <ul>
-<li class=""><strong>相信能做到，就能完成难事</strong>：1939 年，George Dantzig 在伯克利的一堂统计学课上迟到了，他把黑板上的两道题抄下来，以为是家庭作业，后来交上了自己的解答。那其实是统计学中两个尚未解决的问题。</li>
-<li class=""><strong>看到别人做到之后，就能完成难事</strong>：几十年来，人类一直在追逐四分钟跑完一英里的目标。Roger Bannister 在 1954 年 5 月打破了这个纪录，但他作为唯一做到的人只维持了短短 46 天。如果你喜欢跑步，我们正在马拉松两小时大关上看到类似的事情发生：今年 4 月，Sabastian Sawe 在伦敦跑出了首个官方认证的两小时以内的马拉松成绩。在同一场比赛中，亚军也跑进了两小时。</li>
-<li class=""><strong>允许自己失败，就能完成难事</strong>：显然，大家最喜欢的商业书是《网球的内心游戏》（The Inner Game of Tennis），Felix 上周才发现这本书。这本书的核心论点是：如果你拼命地、拼命地努力，就打不出自己最好的网球。工程师们可能还记得 Linux，它发布时被宣称“只是个爱好，不会像 gnu 那样大而专业”。</li>
+<li class=""><strong>相信能做到，难事就能做成</strong>：1939 年，George Dantzig 在伯克利上统计课时迟到了。他把黑板上的两道题抄下来，以为是家庭作业，做完交了上去。那其实是统计学里两个悬而未决的难题。</li>
+<li class=""><strong>看过别人做到，难事也就能做成</strong>：几十年来，人们一直想在四分钟内跑完一英里。Roger Bannister 在 1954 年 5 月做到了，可他作为唯一做到的人，只保持了短短 46 天。如果你关注跑步，马拉松的两小时大关正在上演类似的一幕：今年 4 月，Sabastian Sawe 在伦敦跑出了首个官方认可的破二成绩，同一场比赛的亚军也跑进了两小时。</li>
+<li class=""><strong>允许自己失败，难事反而能做成</strong>：据说人人最爱的商业书是《网球的内心游戏》（The Inner Game of Tennis），Felix 上周才发现这本书。它的核心观点是：如果你拼了命地使劲，反而打不出自己最好的网球。工程师们也许还记得 Linux，它发布时的介绍是“只是个爱好，不会像 gnu 那样做得又大又专业”。</li>
 </ul>
-<p>自我效能感不是一个新问题，但如今它的分量更重了。在一个我们的能力每隔几周就会飞跃一次的世界里，我们需要一些技巧，让自己能做到那些从未真正考虑过、或不相信能做到的事情。如果你发现了更多能让你更有雄心的技巧，请告诉 Felix！</p>
+<p>自我效能感不是新问题，但它如今的影响更大了。在一个我们的能力每隔几周就跃升一次的世界里，我们需要一些方法，去做那些我们从没认真想过、或不相信能做到的事。如果你找到了更多让自己更有雄心的方法，欢迎告诉 Felix！</p>
 <p><em>本文配图是弗朗西斯科·戈雅（Francisco Goya）的《飞行之法》（Modo de volar / A Way of Flying）。</em></p>
 <hr>
 <p><em>参考文章：<a href="https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/" target="_blank" rel="noopener noreferrer" class="">How to be more ambitious: A tutorial for humans with models</a></em></p>]]></content>
