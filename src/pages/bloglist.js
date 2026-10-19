@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '如何更有雄心地使用 AI',
+    date: '2026-10-19',
+    slug: 'ambitious-with-ai',
+    category: 'AI',
+    swatch: 'coral',
+    cover: '/img/blog/cover-ambitious-with-ai.svg',
+  },
+  {
     title: 'Claude Code mod 入门',
     date: '2026-10-14',
     slug: 'claude-code-mods-guide',
