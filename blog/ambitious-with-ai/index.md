@@ -123,3 +123,7 @@ Then rewrite my prompt to ask for exactly that.
 自我效能感不是一个新问题，但如今它的分量更重了。在一个我们的能力每隔几周就会飞跃一次的世界里，我们需要一些技巧，让自己能做到那些从未真正考虑过、或不相信能做到的事情。如果你发现了更多能让你更有雄心的技巧，请告诉我！
 
 *本文配图是弗朗西斯科·戈雅（Francisco Goya）的《飞行之法》（Modo de volar / A Way of Flying）。*
+
+---
+
+*参考文章：[How to be more ambitious: A tutorial for humans with models](https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/)*
