@@ -29,7 +29,7 @@
 | [Git 工作流](https://huangsitao.fun/docs/Git工作流) | 功能分支工作流，Remote / Local / Disk 三区域分步演示 |
 | [Docker](https://huangsitao.fun/docs/Docker) | 安装与常用操作 |
 | [常用命令](https://huangsitao.fun/docs/常用命令) | 速查 |
-| [网络与服务器](https://huangsitao.fun/docs/网络与服务器) | 自建代理节点、服务私有部署 |
+| [服务器](https://huangsitao.fun/docs/服务器) | 自建代理节点、服务私有部署 |
 | [AI 编程](https://huangsitao.fun/docs/AI编程/模型选择) | 模型选择 |
 | [AIGC](https://huangsitao.fun/docs/AIGC/Nano-Banana) | Nano Banana |
 
