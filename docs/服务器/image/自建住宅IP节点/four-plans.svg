@@ -1,0 +1,37 @@
+<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <!-- 四种住宅代理方案：四张卡片，顺序同正文“四种住宅代理方案”一节 -->
+  <rect class="bg" width="1920" height="1080"/>
+  <text class="t-title" x="960" y="190" text-anchor="middle">四种住宅代理方案</text>
+
+  <rect class="f-tan" x="60" y="280" width="420" height="640" rx="40"/>
+  <text class="t-card" x="111" y="371">中转 VPS</text>
+  <text class="t-card" x="111" y="429">+ 住宅 VPS</text>
+  <text class="t-body" x="123" y="540">•</text><text class="t-body" x="161" y="540">速度最快、最稳定</text>
+  <text class="t-body" x="123" y="610">•</text><text class="t-body" x="161" y="610">IP 质量最高</text>
+  <text class="t-body" x="123" y="680">•</text><text class="t-body" x="161" y="680">跨境业务首选</text>
+  <text class="t-tag" x="111" y="860">月租约 50 美元</text>
+
+  <rect class="f-clay" x="520" y="280" width="420" height="640" rx="40"/>
+  <text class="t-card" x="571" y="371">中转 VPS</text>
+  <text class="t-card" x="571" y="429">+ 端口住宅 IP</text>
+  <text class="t-body" x="583" y="540">•</text><text class="t-body" x="621" y="540">大众最常用</text>
+  <text class="t-body" x="583" y="610">•</text><text class="t-body" x="621" y="610">伪住宅足够自用</text>
+  <text class="t-body" x="583" y="680">•</text><text class="t-body" x="621" y="680">价格性能最平衡</text>
+  <text class="t-tag" x="571" y="860">月租 8 到 16 美元</text>
+
+  <rect class="f-deep" x="980" y="280" width="420" height="640" rx="40"/>
+  <text class="t-card" x="1031" y="371">机场中转</text>
+  <text class="t-card" x="1031" y="429">+ 住宅 IP / VPS</text>
+  <text class="t-body" x="1043" y="540">•</text><text class="t-body" x="1081" y="540">中转不用自己搭</text>
+  <text class="t-body" x="1043" y="610">•</text><text class="t-body" x="1081" y="610">速度稳定看机场</text>
+  <text class="t-body" x="1043" y="680">•</text><text class="t-body" x="1081" y="680">好坏差别很大</text>
+  <text class="t-tag" x="1031" y="860">月租看机场价格</text>
+
+  <rect class="f-gray" x="1440" y="280" width="420" height="640" rx="40"/>
+  <text class="t-card" x="1491" y="371">直连</text>
+  <text class="t-card" x="1491" y="429">住宅 VPS</text>
+  <text class="t-body" x="1503" y="540">•</text><text class="t-body" x="1541" y="540">不用任何中转</text>
+  <text class="t-body" x="1503" y="610">•</text><text class="t-body" x="1541" y="610">完全看线路质量</text>
+  <text class="t-body" x="1503" y="680">•</text><text class="t-body" x="1541" y="680">线路差基本不可用</text>
+  <text class="t-tag" x="1491" y="860">只买一台住宅 VPS</text>
+</svg>
