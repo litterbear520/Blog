@@ -1,0 +1,22 @@
+<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <!-- 端口住宅 IP vs 住宅 VPS：两张卡片，要点按同一顺序对齐 -->
+  <rect class="bg" width="1920" height="1080"/>
+
+  <rect class="f-tan" x="120" y="200" width="810" height="680" rx="40"/>
+  <text class="t-card" x="171" y="291">端口住宅 IP</text>
+  <text class="t-body" x="183" y="401">•</text><text class="t-body" x="221" y="401">商家给 IP、端口、账号和密码</text>
+  <text class="t-body" x="183" y="481">•</text><text class="t-body" x="221" y="481">只能用 SOCKS5 / HTTP 连接，不能 SSH</text>
+  <text class="t-body" x="183" y="561">•</text><text class="t-body" x="221" y="561">通常是伪住宅</text>
+  <text class="t-body" x="183" y="641">•</text><text class="t-body" x="221" y="641">只放行特定端口</text>
+  <text class="t-body" x="183" y="721">•</text><text class="t-body" x="221" y="721">带宽多为 20 到 50 兆</text>
+  <text class="t-tag" x="171" y="831">月租通常 10 美元以内</text>
+
+  <rect class="f-clay" x="990" y="200" width="810" height="680" rx="40"/>
+  <text class="t-card" x="1041" y="291">住宅 VPS</text>
+  <text class="t-body" x="1053" y="401">•</text><text class="t-body" x="1091" y="401">一台完整的 VPS，附带住宅 IP</text>
+  <text class="t-body" x="1053" y="481">•</text><text class="t-body" x="1091" y="481">能 SSH 登录，用 3x-ui 搭节点</text>
+  <text class="t-body" x="1053" y="561">•</text><text class="t-body" x="1091" y="561">真住宅 IP，纯净度最高</text>
+  <text class="t-body" x="1053" y="641">•</text><text class="t-body" x="1091" y="641">整个 IP，所有端口都能用</text>
+  <text class="t-body" x="1053" y="721">•</text><text class="t-body" x="1091" y="721">带宽 50 到 300 兆可选</text>
+  <text class="t-tag" x="1041" y="831">月租通常 30 美元以上</text>
+</svg>

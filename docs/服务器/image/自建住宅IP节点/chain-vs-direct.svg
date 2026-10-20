@@ -1,0 +1,47 @@
+<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <!-- 普通自建节点 vs 链式代理：网站只看到最后一跳的 IP -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="1080"/>
+
+  <!-- 第一行：普通自建节点 -->
+  <text class="t-tag" x="80" y="155">普通自建节点</text>
+  <rect class="f-tan" x="80" y="220" width="260" height="130" rx="16"/>
+  <text class="t-name" x="210" y="299.8" text-anchor="middle">手机 / 电脑</text>
+  <text class="t-cap" x="414" y="265" text-anchor="middle">加密翻墙</text>
+  <line class="gray" x1="348" y1="285" x2="446" y2="285" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="480" y="220" width="260" height="130" rx="16"/>
+  <text class="t-name" x="610" y="299.8" text-anchor="middle">VPS</text>
+  <text class="t-cap" x="1160" y="180" text-anchor="middle">网站看到的出口 IP</text>
+  <rect class="tag" x="1050" y="200" width="220" height="85"/>
+  <text class="t-tag" x="1160" y="255.8" text-anchor="middle">机房 IP</text>
+  <line class="line" x1="748" y1="285" x2="1544" y2="285" marker-end="url(#head)"/>
+  <rect class="actor" x="1580" y="220" width="260" height="130" rx="16"/>
+  <text class="t-name" x="1710" y="299.8" text-anchor="middle">网站</text>
+
+  <!-- 第二行：链式代理 -->
+  <text class="t-tag" x="80" y="515">链式代理</text>
+  <rect class="f-tan" x="80" y="580" width="260" height="130" rx="16"/>
+  <text class="t-name" x="210" y="659.8" text-anchor="middle">手机 / 电脑</text>
+  <text class="t-cap" x="414" y="625" text-anchor="middle">加密翻墙</text>
+  <line class="gray" x1="348" y1="645" x2="446" y2="645" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="480" y="580" width="260" height="130" rx="16"/>
+  <text class="t-name" x="610" y="659.8" text-anchor="middle">中转 VPS</text>
+  <text class="t-cap" x="810" y="625" text-anchor="middle">转发</text>
+  <line class="gray" x1="748" y1="645" x2="846" y2="645" marker-end="url(#head-gray)"/>
+  <rect class="ring" x="880" y="580" width="260" height="130" rx="18"/>
+  <text class="t-name" x="1010" y="659.8" text-anchor="middle">住宅代理</text>
+  <text class="t-cap" x="1360" y="540" text-anchor="middle">网站看到的出口 IP</text>
+  <rect class="tag" x="1250" y="560" width="220" height="85"/>
+  <text class="t-tag" x="1360" y="615.8" text-anchor="middle">住宅 IP</text>
+  <line class="line" x1="1148" y1="645" x2="1544" y2="645" marker-end="url(#head)"/>
+  <rect class="actor" x="1580" y="580" width="260" height="130" rx="16"/>
+  <text class="t-name" x="1710" y="659.8" text-anchor="middle">网站</text>
+
+  <!-- 结论条 -->
+  <rect class="f-clay" x="460" y="790" width="1000" height="170" rx="40"/>
+  <text class="t-name b" x="960" y="865" text-anchor="middle">网站只看得到最后一跳的 IP</text>
+  <text class="t-name" x="960" y="914.5" text-anchor="middle">链式代理把最后一跳换成了住宅 IP</text>
+</svg>
