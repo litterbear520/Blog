@@ -39,7 +39,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | `src/pages/` | `index.js` 首页、`bloglist.js` 博客列表（`POSTS`）、`skills.js` SkillHub（`/skills`） |
 | `plugins/` | `copy-markdown-source/`（构建时生成清洗后的 `.md`，供“复制 Markdown”按钮用）、`remark-run-output.js` |
 | `tools/` | `covers/` 封面流水线；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证 |
-| `.claude/skills/` | `blog-cover`、`lesson`、`note`，用法见各自 `SKILL.md`；跨项目通用的 `/explain` 在全局 `~/.claude/skills/` |
+| `.claude/skills/` | `blog-cover`、`lesson`、`note`、`academy-diagram-design`（Academy 课件风配图），用法见各自 `SKILL.md`；跨项目通用的 `/explain` 在全局 `~/.claude/skills/` |
 
 ## 样式令牌
 
