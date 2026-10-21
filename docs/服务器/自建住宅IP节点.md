@@ -134,9 +134,9 @@ InfiCheesy无限芝士「长期责任推广」：\
 
 打开[搬瓦工官网](https://bandwagonhost.com/)。选择 e-commerce VPS，这个套餐。这是搬瓦工最便宜的带有 CN2 GIA 顶级线路的套餐。
 
-注意 如果你要搭建美国住宅代理，推荐使用美国洛杉矶 VPS 作为中转。如果要搭建东南亚住宅代理，推荐使用香港 VPS 作为中转。USCA6 和 USCA9 这两个套餐都可以用，都标记了 CN2 GIA。我以 USCA9 演示。
+注意，如果你要搭建美国住宅代理，推荐使用美国洛杉矶 VPS 作为中转。如果要搭建东南亚住宅代理，推荐使用香港 VPS 作为中转。USCA6 和 USCA9 这两个套餐都可以用，都标记了 CN2 GIA。我以 USCA9 演示。
 
-下面是 VPS 的 CPU，内存 流量配置，就买最便宜的，二核，1G，每月 1T 流量，2.5G 带宽这款。最低季付套餐，50 美元，平均每月 16.67 美元。
+下面是 VPS 的 CPU，内存，流量配置，就买最便宜的，二核，1G，每月 1T 流量，2.5G 带宽这款。最低季付套餐，50 美元，平均每月 16.67 美元。
 
 点击三个月，点击 order 下单。这里确认订单信息，往下滑，点击 add to cart，加入购物车。
 
@@ -168,7 +168,7 @@ apt update -y && apt upgrade -y && apt install sudo curl -y
 
 ### 安装 3x-ui 面板
 
-现在安装 [3x-ui](https://github.com/MHSanaei/3x-ui) 面板。输入这串代码。注意，这串代码结尾是 V3.4.2，也就是安装 3.4.2 版本的 3x-ui 面板。如果你想安装最新版，只需要去掉 V3.4.2 即可。
+现在安装 [3x-ui](https://github.com/MHSanaei/3x-ui) 面板。输入这串代码。注意，这串代码结尾是 `v3.4.2`，也就是安装 3.4.2 版本的 3x-ui 面板。如果你想安装最新版，只需要去掉 `v3.4.2` 即可。
 
 ```bash
 bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh) v3.4.2
@@ -232,9 +232,9 @@ bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.
 
 重启后回到手机这里，更新一下订阅信息。此时节点虽然表面没有任何变动，但实际已经指向了静态住宅 IP。打开 [IP2Location](https://www.ip2location.com/)，这是一家权威 IP 检测网站。可以看到，不再是搬瓦工 95 开头的 IP 地址，而是这个 161 端口住宅 IP 的地址。
 
-打开 Speedtest 的测速。提示连接失败，不给测速。这是 ProxySeller 屏蔽的 Speedtest，你买静态 IP 也可能遇到这种情况。没关系。主流的测速网站有三家，Speedtest，Fast，和 Cloudflare。我换 [Fast](https://fast.com/) 的测速。可以看到 420 兆。前面搬瓦工中转节点直连的速度是 699 兆，套了端口 IP 后是 420 兆。
+打开 Speedtest 的测速。提示连接失败，不给测速。这是 ProxySeller 屏蔽了 Speedtest，你买静态 IP 也可能遇到这种情况。没关系。主流的测速网站有三家，Speedtest，Fast，和 Cloudflare。我换 [Fast](https://fast.com/) 的测速。可以看到 420 兆。前面搬瓦工中转节点直连的速度是 699 兆，套了端口 IP 后是 420 兆。
 
-我再打开 TikTok 测试一下。以下是晚高峰 TikTok 无加速无剪辑实测。可以看到无论是视频还是直播，和国内刷抖音的体验都差不多，基本秒加载速度非常快。这就是带优化线路的 VPS，和大带宽端口 IP 组合的真实使用效果。第二天在非晚高峰时段重新测速，北京时间早上 9 点，可以跑满 1G 带宽。至此链式代理大功告成。
+我再打开 TikTok 测试一下。以下是晚高峰 TikTok 无加速无剪辑实测。可以看到无论是视频还是直播，和国内刷抖音的体验都差不多，基本秒加载，速度非常快。这就是带优化线路的 VPS，和大带宽端口 IP 组合的真实使用效果。第二天在非晚高峰时段重新测速，北京时间早上 9 点，可以跑满 1G 带宽。至此链式代理大功告成。
 
 ## 方案二：中转 VPS 加住宅 VPS
 
