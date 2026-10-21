@@ -280,6 +280,58 @@
 <p>如果脚本要求在终端输入CONFIRM，按Codex提示自己输入。核验完成后，按提示重新打开应用即可。</p>
 <p>我当时做了两轮处理：先清旧登录和缓存、重置部分本地ID，后来又用这个Skill把Claude桌面应用和5项桌面端数据移入废纸篓。Claude Code历史、Skills、共享CC Switch配置和一份旧身份副本保留。</p>
 <p>上面的提示词默认保留桌面端数据和应用。如果想连桌面端也一起清理，就在Codex列清单时明确说明，安全重新再来。</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="另一种清理方式手动清掉-claude-desktop-旧登录">另一种清理方式：手动清掉 Claude Desktop 旧登录<a href="https://huangsitao.fun/blog/tame-claude#%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%B8%85%E7%90%86%E6%96%B9%E5%BC%8F%E6%89%8B%E5%8A%A8%E6%B8%85%E6%8E%89-claude-desktop-%E6%97%A7%E7%99%BB%E5%BD%95" class="hash-link" aria-label="Direct link to 另一种清理方式：手动清掉 Claude Desktop 旧登录" title="Direct link to 另一种清理方式：手动清掉 Claude Desktop 旧登录" translate="no">​</a></h3>
+<p>Claude Desktop 被封后清掉旧登录、换新号的核心做法是：彻底退出应用 + 删除本地会话/登录数据，然后重新登录新账号。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="1完全退出-claude-desktop">1、完全退出 Claude Desktop<a href="https://huangsitao.fun/blog/tame-claude#1%E5%AE%8C%E5%85%A8%E9%80%80%E5%87%BA-claude-desktop" class="hash-link" aria-label="Direct link to 1、完全退出 Claude Desktop" title="Direct link to 1、完全退出 Claude Desktop" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p>Windows：右键系统托盘图标退出，再打开任务管理器结束所有 <code>Claude.exe</code> 相关进程。</p>
+</li>
+<li class="">
+<p>macOS：菜单栏 Claude → Quit，或强制退出。</p>
+</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="2删除本地会话登录数据">2、删除本地会话/登录数据<a href="https://huangsitao.fun/blog/tame-claude#2%E5%88%A0%E9%99%A4%E6%9C%AC%E5%9C%B0%E4%BC%9A%E8%AF%9D%E7%99%BB%E5%BD%95%E6%95%B0%E6%8D%AE" class="hash-link" aria-label="Direct link to 2、删除本地会话/登录数据" title="Direct link to 2、删除本地会话/登录数据" translate="no">​</a></h4>
+<p>Windows：</p>
+<ol>
+<li class="">
+<p>按 <code>Win + R</code>，输入以下路径并回车（按你的安装方式试）：</p>
+<ul>
+<li class=""><code>%APPDATA%\Claude</code></li>
+<li class=""><code>%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude</code>（Store / MSIX 常见）</li>
+</ul>
+</li>
+<li class="">
+<p>把整个 Claude 文件夹重命名（例如改成 <code>Claude_old</code>）或删除。</p>
+</li>
+<li class="">
+<p>再检查用户目录下的 <code>%USERPROFILE%\.claude</code>（Claude Code 相关），可按需清理缓存部分。</p>
+</li>
+</ol>
+<p>macOS：</p>
+<ol>
+<li class="">
+<p>打开 Finder → 按 <code>Cmd + Shift + G</code>，依次前往并处理：</p>
+<ul>
+<li class=""><code>~/Library/Application Support/Claude</code></li>
+<li class="">可选：<code>~/Library/Caches</code> 里 Claude 相关文件夹</li>
+<li class=""><code>~/Library/Preferences</code> 里 Claude 相关 <code>.plist</code></li>
+</ul>
+</li>
+<li class="">
+<p>同样建议先重命名备份，再删除。</p>
+</li>
+<li class="">
+<p>检查 <code>~/.claude</code>。</p>
+</li>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="3清理浏览器残留推荐">3、清理浏览器残留（推荐）<a href="https://huangsitao.fun/blog/tame-claude#3%E6%B8%85%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E6%AE%8B%E7%95%99%E6%8E%A8%E8%8D%90" class="hash-link" aria-label="Direct link to 3、清理浏览器残留（推荐）" title="Direct link to 3、清理浏览器残留（推荐）" translate="no">​</a></h4>
+<p>在浏览器里清除 <code>claude.ai</code> / <code>anthropic.com</code> 的 Cookie 和站点数据（只清这个域名即可）。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="4重新登录">4、重新登录<a href="https://huangsitao.fun/blog/tame-claude#4%E9%87%8D%E6%96%B0%E7%99%BB%E5%BD%95" class="hash-link" aria-label="Direct link to 4、重新登录" title="Direct link to 4、重新登录" translate="no">​</a></h4>
+<p>重新打开 Claude Desktop，登录即可。</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="进阶更干净的清理方式">进阶/更干净的清理方式<a href="https://huangsitao.fun/blog/tame-claude#%E8%BF%9B%E9%98%B6%E6%9B%B4%E5%B9%B2%E5%87%80%E7%9A%84%E6%B8%85%E7%90%86%E6%96%B9%E5%BC%8F" class="hash-link" aria-label="Direct link to 进阶/更干净的清理方式" title="Direct link to 进阶/更干净的清理方式" translate="no">​</a></h4>
+<p>有社区工具专门做“封号后清理”，例如 <a href="https://github.com/l2461090/claude-post-ban-cleanup" target="_blank" rel="noopener noreferrer" class="">claude-post-ban-cleanup</a>。</p>
+<p>手动删除数据文件夹通常已经足够切换账号。</p>
 <a id="system-timezone"></a>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="在-mac-和-iphone-上设置时区">在 Mac 和 iPhone 上设置时区<a href="https://huangsitao.fun/blog/tame-claude#%E5%9C%A8-mac-%E5%92%8C-iphone-%E4%B8%8A%E8%AE%BE%E7%BD%AE%E6%97%B6%E5%8C%BA" class="hash-link" aria-label="Direct link to 在 Mac 和 iPhone 上设置时区" title="Direct link to 在 Mac 和 iPhone 上设置时区" translate="no">​</a></h3>
 <p>Mac这样修改：</p>
