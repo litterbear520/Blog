@@ -4,6 +4,7 @@
   border: 1px solid var(--th-line);
   border-radius: 12px;
   background: var(--th-surface-1);
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 0.5rem);
 }
 
 .summary {

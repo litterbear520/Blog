@@ -1,0 +1,31 @@
+<svg viewBox="0 0 1920 520" xmlns="http://www.w3.org/2000/svg">
+  <!-- 自建节点六步：前四步在 VPS 上，后两步在国内设备上 -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="520"/>
+
+  <rect class="container" x="40" y="70" width="1216" height="380" rx="56"/>
+  <text class="t-tag" x="648" y="158" text-anchor="middle">在 VPS 上</text>
+  <rect class="container" x="1288" y="70" width="592" height="380" rx="56"/>
+  <text class="t-tag" x="1584" y="158" text-anchor="middle">在国内设备上</text>
+
+  <rect class="actor" x="60" y="230" width="240" height="130" rx="16"/>
+  <text class="t-name" x="180" y="309.8" text-anchor="middle">购买 VPS</text>
+  <line class="gray" x1="308" y1="295" x2="338" y2="295" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="372" y="230" width="240" height="130" rx="16"/>
+  <text class="t-name" x="492" y="309.8" text-anchor="middle">远程连接</text>
+  <line class="gray" x1="620" y1="295" x2="650" y2="295" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="684" y="230" width="240" height="130" rx="16"/>
+  <text class="t-name" x="804" y="309.8" text-anchor="middle">安装面板</text>
+  <line class="gray" x1="932" y1="295" x2="962" y2="295" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="996" y="230" width="240" height="130" rx="16"/>
+  <text class="t-name" x="1116" y="309.8" text-anchor="middle">建立节点</text>
+  <line class="gray" x1="1244" y1="295" x2="1294" y2="295" marker-end="url(#head-gray)"/>
+  <rect class="f-tan" x="1328" y="230" width="240" height="130" rx="16"/>
+  <text class="t-name" x="1448" y="309.8" text-anchor="middle">设备连接</text>
+  <line class="gray" x1="1576" y1="295" x2="1586" y2="295" marker-end="url(#head-gray)"/>
+  <rect class="f-tan" x="1620" y="230" width="240" height="130" rx="16"/>
+  <text class="t-name" x="1740" y="309.8" text-anchor="middle">测试有网</text>
+</svg>

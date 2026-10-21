@@ -1,0 +1,32 @@
+<svg viewBox="0 0 1920 680" xmlns="http://www.w3.org/2000/svg">
+  <!-- 自建节点原理：国内电脑经加密通道（节点）穿过防火墙连到 VPS，VPS 替我们访问谷歌油管 -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="680"/>
+
+  <rect class="f-tan" x="80" y="240" width="300" height="140" rx="16"/>
+  <text class="t-name" x="230" y="324.8" text-anchor="middle">国内电脑</text>
+
+  <rect class="f-gray" x="790" y="150" width="110" height="320" rx="16"/>
+  <text class="t-cap" x="845" y="128" text-anchor="middle">防火墙</text>
+
+  <text class="t-cap" x="580" y="198" text-anchor="middle">加密通道</text>
+  <rect class="tag" x="480" y="225" width="200" height="85"/>
+  <text class="t-tag" x="580" y="280.8" text-anchor="middle">节点</text>
+  <line class="line" x1="388" y1="310" x2="1066" y2="310" marker-end="url(#head)"/>
+
+  <rect class="actor" x="1100" y="240" width="320" height="140" rx="16"/>
+  <text class="t-name" x="1260" y="300.3" text-anchor="middle">VPS</text>
+  <text class="t-name" x="1260" y="349.3" text-anchor="middle">海外电脑</text>
+
+  <text class="t-cap" x="1500" y="292" text-anchor="middle">替我们访问</text>
+  <line class="gray" x1="1428" y1="310" x2="1546" y2="310" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="1580" y="240" width="280" height="140" rx="16"/>
+  <text class="t-name" x="1720" y="324.8" text-anchor="middle">谷歌 / 油管</text>
+
+  <rect class="f-light" x="160" y="440" width="560" height="160" rx="24"/>
+  <text class="t-note b" x="440" y="505.4" text-anchor="middle">加密协议给通道加密</text>
+  <text class="t-note" x="440" y="550.4" text-anchor="middle">Shadowsocks、VMess、Trojan</text>
+</svg>

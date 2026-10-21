@@ -5,6 +5,44 @@ description: 解析和托管分别是什么，A、AAAA、CNAME、MX、NS 记录�
 
 # Cloudflare 域名托管与解析
 
+<ReadMore id="简介" label="简介" title="如何把域名托管到Cloudflare | 享受大厂域名解析服务 | 获取Cloudflare免费CDN | Cloudflare绑定自己的域名 | 无限芝士">
+
+◉ Spaceship（顶级域名便宜）：\
+xyz最低0.67美元/年 | top最低1.05美元/年\
+[https://spaceship.sjv.io/esy](https://spaceship.sjv.io/esy)\
+◉ Namesilo：\
+1美金优惠码：ESY | 超低价域名\
+[https://www.namesilo.com/?rid=40a6952hi](https://www.namesilo.com/?rid=40a6952hi)\
+◉ Cloudflare官网：\
+[https://www.cloudflare.com/zh-cn/](https://www.cloudflare.com/zh-cn/)\
+◉ 免费与低价域名科普：\
+• [为什么不推荐免费域名？免费付费域名有什么区别？如何获取低价域名？| 7元顶级域名 | Cloudflare解析 | 域名科普 | 域名羊毛 | 无限芝士](https://www.youtube.com/watch?v=gKQTtY_YQnA)\
+—————————\
+本频道所有「软件」和「外部链接」均会发布在频道简介里的「Telegram资源发布群」，该群为本频道官方群聊，无 任 何 三 方 广 告！\
+Telegram资源发布群：[https://t.me/inficheesy](https://t.me/inficheesy)\
+Telegram问题交流群：[https://t.me/inficheesychat](https://t.me/inficheesychat)\
+—————————\
+InfiCheesy无限芝士「长期责任推广」：\
+◉ 快猫IPLC专线机场：\
+39元 | 600G/月 | 性价比大流量包 | 长期9折优惠券：ESY
+
+◉ 蓝通云机场：\
+全球60+地区节点 | 8折优惠专属链接\
+[https://link.inficheesy.com/lty](https://link.inficheesy.com/lty)\
+◉ Proxy Seller住宅代理：\
+1.27U/周 | 2.55U/月 | 85折优惠码：InfiCheesy\
+[https://link.inficheesy.com/proxyseller](https://link.inficheesy.com/proxyseller)\
+—————————\
+视频编号：75期\
+[0:00](https://www.youtube.com/watch?v=x_-76QVuC3c) 概念科普\
+[2:41](https://www.youtube.com/watch?v=x_-76QVuC3c&t=161s) 域名解析\
+[4:14](https://www.youtube.com/watch?v=x_-76QVuC3c&t=254s) 域名托管\
+—————————\
+福利资源、教程干货、科技咨询\
+这里是无限芝士，一个致力于提升您上网体验的信息分享频道
+
+</ReadMore>
+
 这篇文章教你如何把自己的域名托管到 Cloudflare 上并解析。首先给小白科普一下什么是解析和托管。如果对这个概念清楚的读者可以直接跳转到[后面教程](#在域名商添加解析)。
 
 ## DNS 解析的原理
