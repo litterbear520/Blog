@@ -449,6 +449,54 @@ Claude Code 跑在你的电脑上，读得到系统时区，能少暴露一点�
 上面的提示词默认保留桌面端数据和应用。如果想连桌面端也一起清理，就在Codex列清单时明确说明，安全重新再来。
 
 
+### 另一种清理方式：手动清掉 Claude Desktop 旧登录
+
+Claude Desktop 被封后清掉旧登录、换新号的核心做法是：彻底退出应用 + 删除本地会话/登录数据，然后重新登录新账号。
+
+#### 1、完全退出 Claude Desktop
+
+- Windows：右键系统托盘图标退出，再打开任务管理器结束所有 `Claude.exe` 相关进程。
+
+- macOS：菜单栏 Claude → Quit，或强制退出。
+
+#### 2、删除本地会话/登录数据
+
+Windows：
+
+1. 按 `Win + R`，输入以下路径并回车（按你的安装方式试）：
+   - `%APPDATA%\Claude`
+   - `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude`（Store / MSIX 常见）
+
+2. 把整个 Claude 文件夹重命名（例如改成 `Claude_old`）或删除。
+
+3. 再检查用户目录下的 `%USERPROFILE%\.claude`（Claude Code 相关），可按需清理缓存部分。
+
+macOS：
+
+1. 打开 Finder → 按 `Cmd + Shift + G`，依次前往并处理：
+   - `~/Library/Application Support/Claude`
+   - 可选：`~/Library/Caches` 里 Claude 相关文件夹
+   - `~/Library/Preferences` 里 Claude 相关 `.plist`
+
+2. 同样建议先重命名备份，再删除。
+
+3. 检查 `~/.claude`。
+
+#### 3、清理浏览器残留（推荐）
+
+在浏览器里清除 `claude.ai` / `anthropic.com` 的 Cookie 和站点数据（只清这个域名即可）。
+
+#### 4、重新登录
+
+重新打开 Claude Desktop，登录即可。
+
+#### 进阶/更干净的清理方式
+
+有社区工具专门做“封号后清理”，例如 [claude-post-ban-cleanup](https://github.com/l2461090/claude-post-ban-cleanup)。
+
+手动删除数据文件夹通常已经足够切换账号。
+
+
 <a id="system-timezone"></a>
 
 ### 在 Mac 和 iPhone 上设置时区
