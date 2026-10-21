@@ -9,7 +9,7 @@
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <item>
-            <title><![CDATA[如何驯服claude]]></title>
+            <title><![CDATA[如何驯服Claude]]></title>
             <link>https://huangsitao.fun/blog/tame-claude</link>
             <guid>https://huangsitao.fun/blog/tame-claude</guid>
             <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
@@ -28,7 +28,7 @@
 <p><strong>目录</strong></p>
 <p>一、Claude 封号底层逻辑</p>
 <p>二、提高注册时账号权重</p>
-<p>三、用指纹浏览器装成美国用户</p>
+<p>三、指纹浏览器</p>
 <p>四、清除设备指纹</p>
 <p>五、不暴露自己的 IP</p>
 <p>六、订阅 Claude 账号</p>
@@ -138,7 +138,7 @@
 <p><span class="wrap_IvEC"><img decoding="async" loading="lazy" alt="步骤图 04" src="https://huangsitao.fun/assets/images/04-HUF_fC9bIAA9zxa-504cf9bdff8f86fc89d4cd51c2ab0dbf.jpg" width="2360" height="1448" class="img_ev3q"></span></p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="将节点导入-shadowrocket">将节点导入 Shadowrocket<a href="https://huangsitao.fun/blog/tame-claude#%E5%B0%86%E8%8A%82%E7%82%B9%E5%AF%BC%E5%85%A5-shadowrocket" class="hash-link" aria-label="Direct link to 将节点导入 Shadowrocket" title="Direct link to 将节点导入 Shadowrocket" translate="no">​</a></h3>
 <p>购买/搭建相关服务之后，把得到的链接导入Shadowrocket，这一步点击右上角的+，再点击导入即可，实在不会，让Codex帮忙导入也行的。然后就能得到一个稳定的出口IP了。</p>
-<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="三用指纹浏览器装成美国用户">三、用指纹浏览器装成美国用户<a href="https://huangsitao.fun/blog/tame-claude#%E4%B8%89%E7%94%A8%E6%8C%87%E7%BA%B9%E6%B5%8F%E8%A7%88%E5%99%A8%E8%A3%85%E6%88%90%E7%BE%8E%E5%9B%BD%E7%94%A8%E6%88%B7" class="hash-link" aria-label="Direct link to 三、用指纹浏览器装成美国用户" title="Direct link to 三、用指纹浏览器装成美国用户" translate="no">​</a></h2>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="三指纹浏览器">三、指纹浏览器<a href="https://huangsitao.fun/blog/tame-claude#%E4%B8%89%E6%8C%87%E7%BA%B9%E6%B5%8F%E8%A7%88%E5%99%A8" class="hash-link" aria-label="Direct link to 三、指纹浏览器" title="Direct link to 三、指纹浏览器" translate="no">​</a></h2>
 <p>还是那个问题：一个正常的美国用户打开浏览器注册 Claude，他的环境长什么样？</p>
 <p>IP 在美国，时区是美国的，浏览器语言是英文的。</p>
 <p>比特浏览器这类指纹浏览器能把这些一次性配好，而且整个窗口的流量都强制走你填进去的代理。</p>
