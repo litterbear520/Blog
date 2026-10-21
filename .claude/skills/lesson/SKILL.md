@@ -35,7 +35,7 @@ disable-model-invocation: true
    完成标准：用户确认了大纲表，提出的改动都已改进表里。
 4. **做代码快照。** 演练里的代码不手抄：把要展示的文件从源仓库原样复制进 `src/data/codeWalkthroughs/<名字>.files.js`（`export default { 展示路径: 文件内容 }`，文件头注释写明来源仓库和提交），用脚本生成、别手改，一起提交，因为 CI 里没有源仓库。
 5. **写概念课和配图。** 照大纲表写，读感照 [读感](references/style.md)：先合上代码，按第 2 步写下的平常话把课写完；再逐句对照代码核对事实，错了就改那句话，核对的过程不写进正文。图照 [出图规范](references/diagrams.md)，组件（快速检查、阅读更多等）照 [组件怎么选](references/components.md)，文件结构照 [课程结构](references/course.md)。
-   画完的图用 `scripts/preview_diagrams.py <variant> ... --shot` 渲染出来看一眼。
+   配图用哪个技能听用户的，没说就先问（见出图规范“画法”）。diagram-design 画的图用 `scripts/preview_diagrams.py <variant> ... --shot` 渲染出来看一眼；academy 的图用它自己的 `render.mjs` 自检。
    标题下的课序和时长由 lint 算：写完先跑 `python3 .claude/skills/lesson/scripts/lesson_lint.py --fix <课文>`，它把 `<LessonMeta>` 写到 H1 下一行（已有就更新数字），篇幅改了再跑一次。
    完成标准：`python3 .claude/skills/lesson/scripts/lesson_lint.py <课文>` 没有 FAIL；每个 WARN 要么改掉，要么能说出保留的理由。
 6. **写演练页。** 页面照 [讲法目录](references/skeletons.md) 的“演练页”，步骤数据照 [组件怎么选](references/components.md) 的 `McpWalkthrough` 一行：每步一两句话，只框住这一步讲的那几行。
