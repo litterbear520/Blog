@@ -1,0 +1,35 @@
+<svg viewBox="0 0 1920 900" xmlns="http://www.w3.org/2000/svg">
+  <!-- 入站三个关键选项（协议、传输、安全）的三种推荐搭配；前两种不需要域名，第三种需要 -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="900"/>
+
+  <text class="t-tag" x="815" y="118" text-anchor="middle">不需要域名</text>
+  <path class="brace" d="M300,175 V145 H1330 V175"/>
+  <text class="t-tag" x="1610" y="118" text-anchor="middle">需要域名</text>
+  <path class="brace" d="M1360,175 V145 H1860 V175"/>
+
+  <text class="t-tag" x="170" y="375" text-anchor="middle">协议</text>
+  <text class="t-tag" x="170" y="515" text-anchor="middle">传输</text>
+  <text class="t-tag" x="170" y="655" text-anchor="middle">安全</text>
+  <rect class="f-tan" x="300" y="200" width="500" height="620" rx="40"/>
+  <text class="t-l" x="550" y="375" text-anchor="middle">VLESS</text>
+  <text class="t-l" x="550" y="515" text-anchor="middle">XHTTP</text>
+  <text class="t-l" x="550" y="655" text-anchor="middle">Reality</text>
+  <path class="brace" d="M360,710 H740"/>
+  <text class="t-note" x="550" y="775" text-anchor="middle">伪装成微软官网</text>
+  <rect class="f-clay" x="830" y="200" width="500" height="620" rx="40"/>
+  <text class="t-l" x="1080" y="375" text-anchor="middle">VLESS</text>
+  <text class="t-l" x="1080" y="515" text-anchor="middle">TCP</text>
+  <text class="t-l" x="1080" y="655" text-anchor="middle">Reality</text>
+  <path class="brace" d="M890,710 H1270"/>
+  <text class="t-note" x="1080" y="775" text-anchor="middle">伪装成微软官网</text>
+  <rect class="f-deep" x="1360" y="200" width="500" height="620" rx="40"/>
+  <text class="t-l" x="1610" y="375" text-anchor="middle">VMess</text>
+  <text class="t-l" x="1610" y="515" text-anchor="middle">WS</text>
+  <text class="t-l" x="1610" y="655" text-anchor="middle">TLS</text>
+  <path class="brace" d="M1420,710 H1800"/>
+  <text class="t-note" x="1610" y="775" text-anchor="middle">伪装成自己的网站</text>
+</svg>
