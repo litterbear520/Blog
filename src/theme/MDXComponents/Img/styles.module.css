@@ -1,5 +1,5 @@
 /* 图片外层：给放大按钮提供定位基准（按钮和弹层的样式在 src/components/Lightbox）。
-   宽度上限由外层通过 --md-img-max-width 决定（custom.css 给 docs 正文设了 768px），
+   宽度上限由外层通过 --md-img-max-width 决定（custom.css 给 docs 和博文正文设了 768px），
    限制必须加在这一层而不是 img 上：inline-block 按内容收缩时，img 自己的百分比 max-width
    会被当作无限制，外层就会撑满整行，放大按钮随之跑到图片右边界之外 */
 .wrap {
@@ -9,7 +9,11 @@
   vertical-align: middle;
 }
 
+/* 高度上限 --md-img-max-height 目前只有博文设置；img 带着原图的 width/height 属性，
+   width 要回到 auto，被高度卡住时宽度才会等比缩小，不然图会被压扁 */
 .wrap img {
+  width: auto;
   max-width: 100%;
   height: auto;
+  max-height: var(--md-img-max-height, none);
 }
