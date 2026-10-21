@@ -391,6 +391,18 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
   --md-img-max-width: min(100%, 768px);
 }
 
+/* 博文正文图片：同样封顶 768px，另加高度上限，手机长截图一屏看得全；
+   正文第一段是头图（见 AGENTS.md 博客约定），照旧铺满 */
+.blog-post-page .markdown {
+  --md-img-max-width: min(100%, 768px);
+  --md-img-max-height: 70vh;
+}
+
+.blog-post-page .markdown > p:first-child {
+  --md-img-max-width: 100%;
+  --md-img-max-height: none;
+}
+
 /* ═══════════════════════════════════════════
    提示块（:::note / info / tip / important / warning / danger）
    照 GitHub alerts 的图标（Octicons）和配色，但不画 GitHub 那条左侧竖线，
