@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '如何驯服claude',
+    date: '2026-10-21',
+    slug: 'tame-claude',
+    category: '教程',
+    swatch: 'clay',
+    cover: '',
+  },
+  {
     title: '如何更有雄心地使用 AI',
     date: '2026-10-19',
     slug: 'ambitious-with-ai',
@@ -146,7 +154,9 @@ export default function BlogListPage() {
                 className={styles.cardVisual}
                 style={{ background: SWATCHES[post.swatch] }}
               >
-                <CoverImage src={withBaseUrl(post.cover)} alt={post.title} />
+                {post.cover && (
+                  <CoverImage src={withBaseUrl(post.cover)} alt={post.title} />
+                )}
               </div>
               <div className={styles.cardContent}>
                 <time className={styles.cardDate}>
