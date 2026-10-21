@@ -35,3 +35,6 @@ docs/多模态探索/image/index/1755149583346.png
 /.playwright-mcp
 # 实际页面浏览器回归测试截图与结果
 /test-results/
+
+# Python 字节码（技能脚本被 import 测试时会生成）
+__pycache__/
