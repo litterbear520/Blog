@@ -1,0 +1,30 @@
+<svg viewBox="0 0 1920 640" xmlns="http://www.w3.org/2000/svg">
+  <!-- 代理翻墙：国内经线路连到 VPS，VPS 代替我访问谷歌；线路决定网速，硬件影响不大 -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="640"/>
+
+  <rect class="f-tan" x="80" y="230" width="320" height="140" rx="16"/>
+  <text class="t-name" x="240" y="314.8" text-anchor="middle">我（国内）</text>
+
+  <text class="t-cap" x="700" y="195" text-anchor="middle">决定翻墙网速</text>
+  <rect class="tag" x="620" y="215" width="160" height="85"/>
+  <text class="t-tag" x="700" y="270.8" text-anchor="middle">线路</text>
+  <line class="line" x1="408" y1="300" x2="964" y2="300" marker-end="url(#head)"/>
+
+  <rect class="actor" x="1000" y="230" width="340" height="140" rx="16"/>
+  <text class="t-name" x="1170" y="290.3" text-anchor="middle">VPS</text>
+  <text class="t-name" x="1170" y="339.3" text-anchor="middle">海外电脑</text>
+
+  <text class="t-cap" x="1460" y="282" text-anchor="middle">代替我访问</text>
+  <line class="gray" x1="1348" y1="300" x2="1546" y2="300" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="1580" y="230" width="280" height="140" rx="16"/>
+  <text class="t-name" x="1720" y="314.8" text-anchor="middle">谷歌 / 油管</text>
+
+  <rect class="f-light" x="1000" y="420" width="340" height="120" rx="24"/>
+  <text class="t-note b" x="1170" y="472.4" text-anchor="middle">硬件性能</text>
+  <text class="t-note" x="1170" y="511.4" text-anchor="middle">对网速影响不大</text>
+</svg>

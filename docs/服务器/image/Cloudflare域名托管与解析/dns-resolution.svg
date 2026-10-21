@@ -1,0 +1,40 @@
+<svg viewBox="0 0 1920 940" xmlns="http://www.w3.org/2000/svg">
+  <!-- DNS 解析：我在域名商添加解析，映射保存在 DNS 服务器；访客查询后拿到 172，再去访问网站 -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="940"/>
+
+  <line class="life" x1="215" y1="142" x2="215" y2="900"/>
+  <line class="life" x1="692" y1="142" x2="692" y2="900"/>
+  <line class="life" x1="1205" y1="142" x2="1205" y2="900"/>
+  <line class="life" x1="1705" y1="142" x2="1705" y2="900"/>
+  <rect class="f-tan" x="61" y="42.5" width="308" height="97.5" rx="16"/>
+  <text class="t-name" x="215" y="106" text-anchor="middle">我</text>
+  <rect class="actor" x="537.5" y="42.5" width="309" height="97.5" rx="16"/>
+  <text class="t-name" x="692" y="106" text-anchor="middle">DNS 服务器</text>
+  <rect class="actor" x="1050.5" y="42.5" width="309" height="97.5" rx="16"/>
+  <text class="t-name" x="1205" y="106" text-anchor="middle">访客</text>
+  <rect class="actor" x="1550.5" y="42.5" width="309" height="97.5" rx="16"/>
+  <text class="t-name" x="1705" y="106" text-anchor="middle">网站 · 172</text>
+
+  <text class="t-cap" x="453.5" y="232" text-anchor="middle">在域名商添加解析</text>
+  <line class="faint" x1="215" y1="240" x2="671" y2="240" marker-end="url(#head-faint)"/>
+
+  <rect class="f-light" x="482" y="290" width="420" height="160" rx="24"/>
+  <text class="t-note b" x="692" y="337" text-anchor="middle">保存映射关系</text>
+  <text class="t-note" x="692" y="376" text-anchor="middle">www.inficheesy.com</text>
+  <text class="t-note" x="692" y="415" text-anchor="middle">→ 172</text>
+
+  <text class="t-cap" x="948.5" y="543" text-anchor="middle">访问 www.inficheesy.com</text>
+  <line class="line" x1="1205" y1="560" x2="720" y2="560" marker-end="url(#head)"/>
+
+  <line class="line" x1="692" y1="680" x2="1177" y2="680" marker-end="url(#head)"/>
+  <rect class="tag" x="838.5" y="680" width="220" height="85"/>
+  <text class="t-tag" x="948.5" y="735.8" text-anchor="middle">访问 172</text>
+
+  <text class="t-cap" x="1455" y="842" text-anchor="middle">看到网站内容</text>
+  <line class="gray" x1="1205" y1="850" x2="1679" y2="850" marker-end="url(#head-gray)"/>
+</svg>

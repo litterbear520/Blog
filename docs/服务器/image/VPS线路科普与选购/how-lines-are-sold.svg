@@ -1,0 +1,31 @@
+<svg viewBox="0 0 1920 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 电信把 CN2 GIA 接进美国 VPS 公司的机房，美国公司再把 VPS 卖给我；我和电信没有直接接触 -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="600"/>
+
+  <rect class="ring" x="80" y="200" width="400" height="140" rx="18"/>
+  <text class="t-name" x="280" y="260.3" text-anchor="middle">中国电信</text>
+  <text class="t-name" x="280" y="309.3" text-anchor="middle">洛杉矶分公司</text>
+
+  <text class="t-cap" x="620" y="165" text-anchor="middle">卖线路</text>
+  <rect class="tag" x="520" y="185" width="200" height="85"/>
+  <text class="t-tag" x="620" y="240.8" text-anchor="middle">CN2 GIA</text>
+  <line class="line" x1="488" y1="270" x2="724" y2="270" marker-end="url(#head)"/>
+
+  <rect class="actor" x="760" y="200" width="400" height="140" rx="16"/>
+  <text class="t-name" x="960" y="260.3" text-anchor="middle">美国 VPS 公司</text>
+  <text class="t-name" x="960" y="309.3" text-anchor="middle">洛杉矶机房</text>
+
+  <text class="t-cap" x="1300" y="252" text-anchor="middle">卖 VPS</text>
+  <line class="gray" x1="1168" y1="270" x2="1406" y2="270" marker-end="url(#head-gray)"/>
+
+  <rect class="f-tan" x="1440" y="200" width="400" height="140" rx="16"/>
+  <text class="t-name" x="1640" y="284.8" text-anchor="middle">我（国内）</text>
+
+  <path class="faint dash" d="M1640,348 V470 H280 V348"/>
+  <text class="t-cap" x="960" y="455" text-anchor="middle">从头到尾没有接触</text>
+</svg>

@@ -1,0 +1,48 @@
+<svg viewBox="0 0 1920 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- 去程路由对比：DMIT 从上海 59.43 走 CN2 GIA 出国；RackNerd 从广州 202.97 走 163 网出国 -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="800"/>
+
+  <text class="t-tag" x="60" y="140">DMIT · 接入 CN2 GIA</text>
+  <rect class="f-tan" x="60" y="190" width="280" height="130" rx="16"/>
+  <text class="t-name" x="200" y="245.3" text-anchor="middle">四川电信</text>
+  <text class="t-name" x="200" y="294.3" text-anchor="middle">118.123</text>
+  <line class="gray" x1="348" y1="255" x2="426" y2="255" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="460" y="190" width="300" height="130" rx="16"/>
+  <text class="t-name" x="610" y="245.3" text-anchor="middle">上海出口</text>
+  <text class="t-name" x="610" y="294.3" text-anchor="middle">59.43</text>
+  <rect class="tag" x="830" y="170" width="200" height="85"/>
+  <text class="t-tag" x="930" y="225.8" text-anchor="middle">CN2 GIA</text>
+  <line class="line" x1="768" y1="255" x2="1064" y2="255" marker-end="url(#head)"/>
+  <text class="t-cap" x="930" y="298" text-anchor="middle">AS4809</text>
+  <rect class="actor" x="1100" y="190" width="300" height="130" rx="16"/>
+  <text class="t-name" x="1250" y="245.3" text-anchor="middle">洛杉矶落地</text>
+  <text class="t-name" x="1250" y="294.3" text-anchor="middle">59.43</text>
+  <line class="gray" x1="1408" y1="255" x2="1506" y2="255" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="1540" y="190" width="320" height="130" rx="16"/>
+  <text class="t-name" x="1700" y="245.3" text-anchor="middle">DMIT VPS</text>
+  <text class="t-name" x="1700" y="294.3" text-anchor="middle">69.63</text>
+
+  <text class="t-tag" x="60" y="500">RackNerd · 普通线路</text>
+  <rect class="f-tan" x="60" y="550" width="280" height="130" rx="16"/>
+  <text class="t-name" x="200" y="629.8" text-anchor="middle">四川电信</text>
+  <line class="gray" x1="348" y1="615" x2="426" y2="615" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="460" y="550" width="300" height="130" rx="16"/>
+  <text class="t-name" x="610" y="605.3" text-anchor="middle">广州出口</text>
+  <text class="t-name" x="610" y="654.3" text-anchor="middle">202.97</text>
+  <rect class="tag" x="850" y="530" width="160" height="85"/>
+  <text class="t-tag" x="930" y="585.8" text-anchor="middle">163 网</text>
+  <line class="gray" x1="768" y1="615" x2="1066" y2="615" marker-end="url(#head-gray)"/>
+  <text class="t-cap" x="930" y="658" text-anchor="middle">AS4134</text>
+  <rect class="actor" x="1100" y="550" width="300" height="130" rx="16"/>
+  <text class="t-name" x="1250" y="605.3" text-anchor="middle">洛杉矶落地</text>
+  <text class="t-name" x="1250" y="654.3" text-anchor="middle">202.97</text>
+  <line class="gray" x1="1408" y1="615" x2="1506" y2="615" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="1540" y="550" width="320" height="130" rx="16"/>
+  <text class="t-name" x="1700" y="605.3" text-anchor="middle">RackNerd</text>
+  <text class="t-name" x="1700" y="654.3" text-anchor="middle">纽约</text>
+</svg>

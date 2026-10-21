@@ -1,0 +1,35 @@
+<svg viewBox="0 0 1920 900" xmlns="http://www.w3.org/2000/svg">
+  <!-- 三大运营商各有一条高端、一条普通国际线路：别名 + AS 编号 -->
+  <rect class="bg" width="1920" height="900"/>
+  <text class="t-title" x="960" y="120" text-anchor="middle">三大运营商的国际线路</text>
+
+  <text class="t-tag" x="810" y="262" text-anchor="middle">高端线路</text>
+  <text class="t-tag" x="1510" y="262" text-anchor="middle">普通线路</text>
+
+  <rect class="f-tan" x="120" y="300" width="300" height="150" rx="24"/>
+  <text class="t-name" x="270" y="389.8" text-anchor="middle">中国电信</text>
+  <rect class="f-clay" x="480" y="300" width="660" height="150" rx="24"/>
+  <text class="t-l b" x="810" y="366" text-anchor="middle">CN2</text>
+  <text class="t-name" x="810" y="416" text-anchor="middle">AS4809</text>
+  <rect class="f-light" x="1180" y="300" width="660" height="150" rx="24"/>
+  <text class="t-l b" x="1510" y="366" text-anchor="middle">163 网</text>
+  <text class="t-name" x="1510" y="416" text-anchor="middle">AS4134</text>
+
+  <rect class="f-tan" x="120" y="480" width="300" height="150" rx="24"/>
+  <text class="t-name" x="270" y="569.8" text-anchor="middle">中国移动</text>
+  <rect class="f-clay" x="480" y="480" width="660" height="150" rx="24"/>
+  <text class="t-l b" x="810" y="546" text-anchor="middle">CMIN2</text>
+  <text class="t-name" x="810" y="596" text-anchor="middle">AS58807</text>
+  <rect class="f-light" x="1180" y="480" width="660" height="150" rx="24"/>
+  <text class="t-l b" x="1510" y="546" text-anchor="middle">CMI</text>
+  <text class="t-name" x="1510" y="596" text-anchor="middle">AS58453</text>
+
+  <rect class="f-tan" x="120" y="660" width="300" height="150" rx="24"/>
+  <text class="t-name" x="270" y="749.8" text-anchor="middle">中国联通</text>
+  <rect class="f-clay" x="480" y="660" width="660" height="150" rx="24"/>
+  <text class="t-l b" x="810" y="726" text-anchor="middle">联通 A 网</text>
+  <text class="t-name" x="810" y="776" text-anchor="middle">AS9929</text>
+  <rect class="f-light" x="1180" y="660" width="660" height="150" rx="24"/>
+  <text class="t-l b" x="1510" y="726" text-anchor="middle">169 网</text>
+  <text class="t-name" x="1510" y="776" text-anchor="middle">AS4837</text>
+</svg>
