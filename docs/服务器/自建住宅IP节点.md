@@ -1,5 +1,71 @@
 # 自建住宅 IP 节点
 
+<ReadMore id="简介" label="简介" title="零基础自建住宅节点教程！搭建跨境高速线路 | 住宅IP使用全流程 | 住宅VPS使用 | 真伪住宅IP区分 | 静态住宅IP | 无限芝士">
+
+◉ 搬瓦工VPS官网 ：\
+[https://bandwagonhost.com/aff.php?aff=81569](https://bandwagonhost.com/aff.php?aff=81569)\
+◉ ProxySeller 大带宽端口IP ：\
+合规IP银行类限制 | 2.55美元/月 | 85折优惠：inficheesy\
+[https://link.inficheesy.com/proxyseller](https://link.inficheesy.com/proxyseller)\
+◉ SixtyNet 真住宅 VPS 官网（视频中的Vircs已不再运营住宅VPS）：\
+[https://sixtynet.net/aff.php?aff=73](https://sixtynet.net/aff.php?aff=73)
+
+◉ 搭建节点代码 ：\
+[https://wise-vegetarian-da6.notion.site/39facc0097d380bc9e23f161136875e7](https://wise-vegetarian-da6.notion.site/39facc0097d380bc9e23f161136875e7)\
+◉ MiyaIP住宅代理：\
+9折优惠券：Cheesy9D\
+[http://miyaip.com/signup?invitecode=5315312](http://miyaip.com/signup?invitecode=5315312)\
+◉ 大带宽住宅 VPS ：\
+[https://sixtynet.net/aff.php?aff=73](https://sixtynet.net/aff.php?aff=73)
+
+◉ 线路概念和作用：\
+• [自建顶级翻墙节点 | 什么是高端跨国线路？VPS质量如何判断？| VPS优化线路科普 | 自建高质量翻墙节点 | CN2 GIA 9929 CMIN2 | 高低端VPS差异 | 无限芝士](https://www.youtube.com/watch?v=NhhyCl1w-4c)\
+◉ 伪住宅科普文章：\
+[https://x.com/InfiCheesy/status/2062826600241217776](https://x.com/InfiCheesy/status/2062826600241217776)\
+◉ FinalShell 下载地址：\
+[https://www.hostbuf.com/t/988.html](https://www.hostbuf.com/t/988.html)\
+◉ 域名购买/托管/解析教程：\
+• [如何把域名托管到Cloudflare | 享受大厂域名解析服务 | 获取Cloudflare免费CDN | Cloudflare绑定自己的域名 | 无限芝士](https://www.youtube.com/watch?v=x_-76QVuC3c)\
+◉ Spaceship 低价域名 ：\
+[https://spaceship.sjv.io/esy](https://spaceship.sjv.io/esy)\
+◉ IP2Location 检测网站：\
+[https://www.ip2location.com/](https://www.ip2location.com/)\
+◉ Fast 测速网站：\
+[https://fast.com/](https://fast.com/)\
+◉ Clash 订阅转换器 ：\
+[https://acl4ssr-sub.github.io/](https://acl4ssr-sub.github.io/)\
+—————————\
+本频道所有「软件」和「外部链接」均会发布在频道简介里的「Telegram资源发布群」，该群为本频道官方群聊，无 任 何 三 方 广 告！\
+Telegram资源发布群：[https://t.me/inficheesy](https://t.me/inficheesy)\
+Telegram问题交流群：[https://t.me/inficheesychat](https://t.me/inficheesychat)\
+—————————\
+InfiCheesy无限芝士「长期责任推广」：\
+◉ 蓝通云机场：\
+全球60+地区节点 | 8折优惠专属链接\
+[https://link.inficheesy.com/lty](https://link.inficheesy.com/lty)\
+◉ LyCheeIP高速住宅代理：\
+63元/月 | 大带宽传输稳定\
+[https://link.inficheesy.com/lycheeip](https://link.inficheesy.com/lycheeip)\
+◉ Proxy Seller住宅代理：\
+1.27U/周 | 2.55U/月 | 85折优惠码：InfiCheesy\
+[https://link.inficheesy.com/proxyseller](https://link.inficheesy.com/proxyseller)\
+—————————\
+视频编号：95期\
+[00:00](https://www.youtube.com/watch?v=ut3F2zhbsGI) 开头\
+[00:44](https://www.youtube.com/watch?v=ut3F2zhbsGI&t=44s) 原理概述\
+[05:38](https://www.youtube.com/watch?v=ut3F2zhbsGI&t=338s) 方案概述\
+[06:01](https://www.youtube.com/watch?v=ut3F2zhbsGI&t=361s) 方案1\
+[19:15](https://www.youtube.com/watch?v=ut3F2zhbsGI&t=1155s) 方案2\
+[23:34](https://www.youtube.com/watch?v=ut3F2zhbsGI&t=1414s) 方案3\
+[25:09](https://www.youtube.com/watch?v=ut3F2zhbsGI&t=1509s) 方案4\
+[26:16](https://www.youtube.com/watch?v=ut3F2zhbsGI&t=1576s) 代理软件\
+[26:40](https://www.youtube.com/watch?v=ut3F2zhbsGI&t=1600s) 业内现况\
+—————————\
+福利资源、教程干货、科技咨询\
+这里是无限芝士，一个致力于提升您上网体验的信息分享频道
+
+</ReadMore>
+
 自建节点 IP 不够纯净，无法使用 AI，海外账号经常被封锁，运营电商没流量怎么办？其实只要把你的自建 VPS 节点连接一个住宅 IP，相当于自建独享住宅 IP 节点，即可解锁绝大部分海外服务。
 
 这篇文章教你从零开始搭建住宅 IP 节点。针对新手小白，专业名词太多太复杂，链式代理，出站入站，共享端口这些看不懂都没关系，我会用白话结合实操演示，一条一条掰开揉碎讲明白，保证你看完文章一遍学会。

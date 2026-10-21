@@ -1,5 +1,62 @@
 # VPS 线路科普与选购
 
+<ReadMore id="简介" label="简介" title="自建顶级翻墙节点 | 什么是高端跨国线路？VPS质量如何判断？| VPS优化线路科普 | 自建高质量翻墙节点 | CN2 GIA 9929 CMIN2 | 高低端VPS差异 | 无限芝士">
+
+◉ 搬瓦工VPS官网（有货）：\
+50美元/3个月 | 三网顶级优化线路\
+[https://bandwagonhost.com/aff.php?aff=81569](https://bandwagonhost.com/aff.php?aff=81569)\
+◉ DMIT美国VPS（有货）：\
+中国电信顶级优化线路CN2 GIA\
+[https://www.dmit.io/aff.php?aff=18894](https://www.dmit.io/aff.php?aff=18894)\
+◉ Akile香港VPS（有货）：\
+最低40元/月 | 香港无稳定机建议【月付】\
+[https://akile.ai/register?aff_code=e34fc906-cf0c-4dd9-a1f6-c160f4d13b01](https://akile.ai/register?aff_code=e34fc906-cf0c-4dd9-a1f6-c160f4d13b01)\
+◉ Vmiss VPS官网：\
+三网顶级优化线路\
+[https://app.vmiss.com/aff.php?aff=5248](https://app.vmiss.com/aff.php?aff=5248)\
+◉ VPS测试脚本：\
+[https://wise-vegetarian-da6.notion.site/VPS-350acc0097d380b58eefd4b9034a9458](https://wise-vegetarian-da6.notion.site/VPS-350acc0097d380b58eefd4b9034a9458)\
+◉ 全球优化线路VPS推荐：\
+[https://wise-vegetarian-da6.notion.site/VPS-364acc0097d3804dacc4e94658ae3017?pvs=73](https://wise-vegetarian-da6.notion.site/VPS-364acc0097d3804dacc4e94658ae3017?pvs=73)\
+◉ 零基础自建节点系列—第一期：\
+• [如何自建翻墙节点？| 从零开始VPS搭建节点教程 | 什么是VPS、协议、面板？| 自建节点有什么好处？ | 机场节点搭建全流程 | 无限芝士](https://www.youtube.com/watch?v=MuWTmEiNe1g)\
+◉ 零基础自建节点系列—第二期：\
+• [自建节点被墙怎么办？免费CDN拯救被墙节点！| CDN是什么 | CDN作用 | CDN回源加速 | VPS套CDN | Cloudflare CDN | 无限芝士](https://www.youtube.com/watch?v=NnyG3DyZbN8)\
+◉ 零基础自建节点系列—第三期：\
+• [拯救你的垃圾VPS！优选IP加速教程 | 什么是优选IP？如何使用？ | 优选器 | 订阅转换器 | 零基础自建节点系列 | 无限芝士](https://www.youtube.com/watch?v=E5PI0LsQ43M)\
+—————————\
+本频道所有「软件」和「外部链接」均会发布在频道简介里的「Telegram资源发布群」，该群为本频道官方群聊，无 任 何 三 方 广 告！\
+Telegram资源发布群：[https://t.me/inficheesy](https://t.me/inficheesy)\
+Telegram问题交流群：[https://t.me/inficheesychat](https://t.me/inficheesychat)\
+—————————\
+InfiCheesy无限芝士「长期责任推广」：\
+◉ 蓝通云机场：\
+全球60+地区节点 | 8折优惠专属链接\
+[https://link.inficheesy.com/lty](https://link.inficheesy.com/lty)\
+◉ LyCheeIP高速住宅代理：\
+63元/月 | 大带宽传输稳定\
+[https://link.inficheesy.com/lycheeip](https://link.inficheesy.com/lycheeip)\
+◉ Proxy Seller住宅代理：\
+1.27U/周 | 2.55U/月 | 85折优惠码：InfiCheesy\
+[https://link.inficheesy.com/proxyseller](https://link.inficheesy.com/proxyseller)\
+—————————\
+视频编号：89期\
+[00:00](https://www.youtube.com/watch?v=NhhyCl1w-4c) 开头\
+[00:34](https://www.youtube.com/watch?v=NhhyCl1w-4c&t=34s) VPS线路本质\
+[07:14](https://www.youtube.com/watch?v=NhhyCl1w-4c&t=434s) VPS选购\
+[10:05](https://www.youtube.com/watch?v=NhhyCl1w-4c&t=605s) VPS测试概念\
+[11:42](https://www.youtube.com/watch?v=NhhyCl1w-4c&t=702s) 去程测试\
+[14:25](https://www.youtube.com/watch?v=NhhyCl1w-4c&t=865s) 回程测试\
+[19:44](https://www.youtube.com/watch?v=NhhyCl1w-4c&t=1184s) 稳定性测试\
+[21:29](https://www.youtube.com/watch?v=NhhyCl1w-4c&t=1289s) 其他测试\
+[23:33](https://www.youtube.com/watch?v=NhhyCl1w-4c&t=1413s) 选购建议\
+[24:48](https://www.youtube.com/watch?v=NhhyCl1w-4c&t=1488s) 总结\
+—————————\
+福利资源、教程干货、科技咨询\
+这里是无限芝士，一个致力于提升您上网体验的信息分享频道
+
+</ReadMore>
+
 哪种 VPS 好，哪种 VPS 烂，VPS 到底怎么买？新人刚入门自建节点，一堆英文字母，名词术语根本看不懂，网上教程讲的线路是什么东西？CN2，9929，ASN 这些又是什么东西？什么叫路由表，评测脚本又是什么？VPS 跑分又是什么，等等。这篇文章针对完全不懂 VPS 的小白，会用白话，把上述名词概念，业内黑话，全部掰开揉碎讲明白。保证看完后，你会对每一款 VPS 的质量有一个清晰的认知，以后选购 VPS 不吃亏。
 
 ## VPS 与线路的关系
@@ -100,7 +157,7 @@ IP 质量。买 VPS 肯定会自带一个 IP 地址，如果不是专门的住�
 
 既然去程测试，是测从国内到洛杉矶的路由情况。那回程测试，就是测从洛杉矶发到国内的路由情况。有人可能想，怎么去就怎么回来呗？现实里路可以这样走，但在网络中不一样。由于各种因素，网络路径非常复杂，导致数据回国线路和出国线路有所差异，有时甚至差异很大。所以 VPS 需要再测一次回程线路。
 
-测试回程必须打开 VPS，VPS 我已经买好了，首先使用 [FinalShell](https://www.hostbuf.com/t/988.html) 连接 VPS。这篇文章是线路科普的进阶教程，如果你还不会连接 VPS，建议看[第一期视频](https://www.youtube.com/watch?v=MuWTmEiNe1g)。回程测试，只需要在 FinalShell 输入这串代码，一键运行测试脚本。
+测试回程必须打开 VPS，VPS 我已经买好了，首先使用 [FinalShell](https://www.hostbuf.com/t/988.html) 连接 VPS。这篇文章是线路科普的进阶教程，如果你还不会连接 VPS，建议看[第一篇文章](./从零搭建VPS翻墙节点.md#用-finalshell-登录-vps)。回程测试，只需要在 FinalShell 输入这串代码，一键运行测试脚本。
 
 ```bash
 bash <(curl -Ls https://Check.Place) -N
