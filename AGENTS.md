@@ -107,7 +107,7 @@ sidebar_position: 1
 
 ### 课程
 
-- 一个主题写成一门课用 `/lesson`：课程索引页（`CourseHero` + 学习目标 + `DocCardList`）→ 课文（一课一个概念，课内一道快速检查）和单独成页的演练 → 整门课最后一篇概念评估（`McpQuiz` + `explain` 解析），每课不单独出题。结构图用 diagram-design 技能画，消息往返用 `MessageFlow`。
+- 一个主题写成一门课用 `/lesson`：课程索引页（`CourseHero` + 学习目标 + `DocCardList`）→ 课文（一课一个概念，课内一道快速检查）和单独成页的演练 → 整门课最后一篇概念评估（`McpQuiz` + `explain` 解析），每课不单独出题。配图用哪个技能（diagram-design 或 academy-diagram-design）听用户当次的说法，没说就先问；消息往返用 `MessageFlow`。
 - MCP 课程：`docs/MCP/<课程名>/index.mdx` 是课程索引页，课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只放 `<McpWalkthrough>`，测验页只放 `<McpQuiz>`。原站的 `CodeCommand` 写成 bash 代码块，`GenericPrompt`（用户提示卡）写成 `:::info[用户提示]`。
 
 ### 路线页面
