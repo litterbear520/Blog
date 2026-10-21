@@ -1,0 +1,33 @@
+<svg viewBox="0 0 1920 760" xmlns="http://www.w3.org/2000/svg">
+  <!-- 托管：NS 记录从域名商的 DNS 服务器换成 Cloudflare 的，域名的控制权随之转到 Cloudflare 后台 -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="760"/>
+
+  <text class="t-tag" x="80" y="150">托管前</text>
+  <rect class="f-tan" x="80" y="200" width="440" height="130" rx="16"/>
+  <text class="t-name" x="300" y="279.8" text-anchor="middle">inficheesylink.top</text>
+  <rect class="tag" x="600" y="180" width="200" height="85"/>
+  <text class="t-tag" x="700" y="235.8" text-anchor="middle">NS 记录</text>
+  <line class="gray" x1="528" y1="265" x2="846" y2="265" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="880" y="200" width="440" height="130" rx="16"/>
+  <text class="t-name" x="1100" y="255.3" text-anchor="middle">域名商的</text>
+  <text class="t-name" x="1100" y="304.3" text-anchor="middle">三台 DNS 服务器</text>
+  <text class="t-note" x="1390" y="256">在域名商后台</text>
+  <text class="t-note" x="1390" y="295">添加解析</text>
+
+  <text class="t-tag" x="80" y="490">托管后</text>
+  <rect class="f-tan" x="80" y="540" width="440" height="130" rx="16"/>
+  <text class="t-name" x="300" y="619.8" text-anchor="middle">inficheesylink.top</text>
+  <rect class="tag" x="600" y="520" width="200" height="85"/>
+  <text class="t-tag" x="700" y="575.8" text-anchor="middle">NS 记录</text>
+  <line class="line" x1="528" y1="605" x2="844" y2="605" marker-end="url(#head)"/>
+  <rect class="f-clay" x="880" y="540" width="440" height="130" rx="16"/>
+  <text class="t-name" x="1100" y="595.3" text-anchor="middle">Cloudflare 的</text>
+  <text class="t-name" x="1100" y="644.3" text-anchor="middle">两台 DNS 服务器</text>
+  <text class="t-note" x="1390" y="596">在 Cloudflare 后台</text>
+  <text class="t-note" x="1390" y="635">解析、开启 CDN</text>
+</svg>

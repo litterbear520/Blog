@@ -1,0 +1,36 @@
+<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <!-- 上海到洛杉矶：国内经电信基建到国际出口 59.43，海底光缆过太平洋，落地洛杉矶 59.43；两头都属于中国电信 -->
+  <defs>
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="1080"/>
+
+  <rect class="container" x="60" y="40" width="780" height="1000" rx="56"/>
+  <text class="t-xl" x="450" y="128" text-anchor="middle">上海 · 中国电信</text>
+  <rect class="f-tan" x="250" y="180" width="400" height="100" rx="16"/>
+  <text class="t-name" x="450" y="244.8" text-anchor="middle">我 · 101.226</text>
+  <line class="gray" x1="450" y1="288" x2="450" y2="306" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="250" y="340" width="400" height="100" rx="16"/>
+  <text class="t-name" x="450" y="404.8" text-anchor="middle">121.46</text>
+  <line class="gray" x1="450" y1="448" x2="450" y2="466" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="250" y="500" width="400" height="100" rx="16"/>
+  <text class="t-name" x="450" y="564.8" text-anchor="middle">103.192</text>
+  <line class="gray" x1="450" y1="608" x2="450" y2="626" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="250" y="660" width="400" height="100" rx="16"/>
+  <text class="t-name" x="450" y="724.8" text-anchor="middle">101.95</text>
+  <line class="gray" x1="450" y1="768" x2="450" y2="786" marker-end="url(#head-gray)"/>
+  <rect class="f-clay" x="250" y="820" width="400" height="100" rx="16"/>
+  <text class="t-name" x="450" y="884.8" text-anchor="middle">59.43 国际出口</text>
+
+  <rect class="container" x="1080" y="600" width="780" height="440" rx="56"/>
+  <text class="t-xl" x="1470" y="688" text-anchor="middle">洛杉矶 · 中国电信</text>
+  <rect class="f-clay" x="1270" y="820" width="400" height="100" rx="16"/>
+  <text class="t-name" x="1470" y="884.8" text-anchor="middle">59.43 落地服务器</text>
+
+  <text class="t-cap" x="960" y="765" text-anchor="middle">跨越太平洋</text>
+  <rect class="tag" x="850" y="785" width="220" height="85"/>
+  <text class="t-tag" x="960" y="840.8" text-anchor="middle">海底光缆</text>
+  <line class="line" x1="658" y1="870" x2="1234" y2="870" marker-end="url(#head)"/>
+</svg>

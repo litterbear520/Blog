@@ -1,0 +1,30 @@
+<svg viewBox="0 0 1920 640" xmlns="http://www.w3.org/2000/svg">
+  <!-- 五种常用解析记录：A / AAAA 指向地址，CNAME / MX 指向域名，NS 指定负责的 DNS 服务器 -->
+  <rect class="bg" width="1920" height="640"/>
+  <text class="t-title" x="960" y="130" text-anchor="middle">常用的解析记录</text>
+
+  <rect class="f-tan" x="75" y="230" width="330" height="300" rx="40"/>
+  <text class="t-card" x="126" y="321">A</text>
+  <text class="t-body" x="126" y="420">指向</text>
+  <text class="t-body" x="126" y="464">IPv4 地址</text>
+
+  <rect class="f-tan" x="435" y="230" width="330" height="300" rx="40"/>
+  <text class="t-card" x="486" y="321">AAAA</text>
+  <text class="t-body" x="486" y="420">指向</text>
+  <text class="t-body" x="486" y="464">IPv6 地址</text>
+
+  <rect class="f-clay" x="795" y="230" width="330" height="300" rx="40"/>
+  <text class="t-card" x="846" y="321">CNAME</text>
+  <text class="t-body" x="846" y="420">指向</text>
+  <text class="t-body" x="846" y="464">另一个域名</text>
+
+  <rect class="f-clay" x="1155" y="230" width="330" height="300" rx="40"/>
+  <text class="t-card" x="1206" y="321">MX</text>
+  <text class="t-body" x="1206" y="420">指向另一个</text>
+  <text class="t-body" x="1206" y="464">邮件服务器域名</text>
+
+  <rect class="f-deep" x="1515" y="230" width="330" height="300" rx="40"/>
+  <text class="t-card" x="1566" y="321">NS</text>
+  <text class="t-body" x="1566" y="420">该 DNS 服务器</text>
+  <text class="t-body" x="1566" y="464">对本域名负责</text>
+</svg>
