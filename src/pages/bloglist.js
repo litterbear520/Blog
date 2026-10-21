@@ -13,8 +13,8 @@ const POSTS = [
     date: '2026-10-21',
     slug: 'tame-claude',
     category: '教程',
-    swatch: 'clay',
-    cover: '',
+    swatch: 'olive',
+    cover: '/img/blog/cover-tame-claude.svg',
   },
   {
     title: '如何更有雄心地使用 AI',

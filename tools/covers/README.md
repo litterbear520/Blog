@@ -78,6 +78,7 @@ clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
+| tame-claude | olive | cover-tame-claude.svg | recipes/tame-claude.js |
 | ambitious-with-ai | coral | cover-ambitious-with-ai.svg，头图 hero-ambitious-with-ai.jpg（戈雅《飞行之法》，公有领域） | recipes/ambitious-with-ai.js |
 | claude-code-mods-guide | clay | cover-claude-code-mods-guide.svg | recipes/claude-code-mods-guide.js |
 | opus-5-5-guide | heather | cover-opus-5-5-guide.svg | recipes/opus-5-5-guide.js |

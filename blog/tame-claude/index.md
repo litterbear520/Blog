@@ -2,6 +2,7 @@
 slug: tame-claude
 title: 如何驯服claude
 date: 2026-10-21
+toc_max_heading_level: 2
 ---
 
 ![文章头图](./images/a/01-HUQzH7fasAAyKNt.jpg)
