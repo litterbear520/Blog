@@ -9,7 +9,7 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
-    title: '如何驯服claude',
+    title: '如何驯服Claude',
     date: '2026-10-21',
     slug: 'tame-claude',
     category: '教程',
