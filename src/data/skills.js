@@ -90,6 +90,23 @@ export const SKILLS = [
     repo: 'https://github.com/cathrynlavery/diagram-design',
   },
   {
+    id: 'academy-diagram-design',
+    name: 'academy-diagram-design',
+    author: 'litterbear520',
+    category: '设计',
+    source: '自建',
+    description:
+      '画 Academy 课件风的配图：Lora 衬线字、米黄和陶土色块、粗黑箭头、压在箭头上的消息标签、消息表、底部结论条；出 SVG 源文件和 WebP 放进文档。',
+    install: [
+      {
+        label: 'npx',
+        command:
+          'npx skills add litterbear520/littlebear-skills --skill academy-diagram-design',
+      },
+    ],
+    repo: 'https://github.com/litterbear520/littlebear-skills/tree/main/skills/academy-diagram-design',
+  },
+  {
     id: 'superpowers',
     name: 'superpowers',
     author: 'obra',
@@ -135,6 +152,23 @@ export const SKILLS = [
       },
     ],
     repo: 'https://github.com/vercel-labs/skills',
+  },
+  {
+    id: 'explain',
+    name: 'explain',
+    author: 'litterbear520',
+    category: '工程',
+    source: '自建',
+    description:
+      '按课程课文的讲法，在终端里讲清一个概念或一段代码的设计：先讲它解决的问题，再讲工作原理、实现、取舍和适用场合。',
+    install: [
+      {
+        label: 'npx',
+        command:
+          'npx skills add litterbear520/littlebear-skills --skill explain',
+      },
+    ],
+    repo: 'https://github.com/litterbear520/littlebear-skills/tree/main/skills/explain',
   },
   {
     id: 'agent-browser',
@@ -219,6 +253,6 @@ export const SKILLS = [
           'npx skills add litterbear520/littlebear-skills --skill boss-job-analyzer',
       },
     ],
-    repo: 'https://github.com/litterbear520/littlebear-skills/tree/main/boss-job-analyzer',
+    repo: 'https://github.com/litterbear520/littlebear-skills/tree/main/skills/boss-job-analyzer',
   },
 ];
