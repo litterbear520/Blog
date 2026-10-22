@@ -138,4 +138,4 @@ hi
 - **文字高亮**：MDX 写法，`<span style={{color: 'red'}}>红色文字</span>`、`<mark>默认黄色高亮</mark>`。
 - **图片**：正常写 `![]()`，原图比显示尺寸大时自动出现放大按钮。
 - **代码高亮语言**：bash, json, python, java, typescript, rust, go, cpp, c, diff；其他语言没有高亮。
-- **SkillHub**：数据在 `src/data/skills.js`，描述保持工具中立，取材自技能仓库的 README。
+- **SkillHub**：数据在 `src/data/skills.js`。描述是 GitHub 仓库简介（About）的中文意译，原文是中文就照搬；合集仓库的简介不讲单个技能，改用该技能 SKILL.md 的 description，只取“做什么”，不搬触发条件。
