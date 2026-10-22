@@ -112,6 +112,12 @@
   border-color: var(--filter-active-bg) !important;
 }
 
+.filterCount {
+  margin-left: 6px;
+  opacity: 0.55;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ── 网格（断点与 bloglist 一致）── */
 .grid {
   display: grid;

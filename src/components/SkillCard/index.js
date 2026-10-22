@@ -62,6 +62,7 @@ export default function SkillCard({ skill, expanded, onToggle, delay }) {
       </p>
       <div className={styles.cardMeta}>
         <span>{skill.author}</span>
+        <span className={styles.cardBadge}>{skill.category}</span>
         <span className={styles.cardBadge}>{skill.source}</span>
         <span className={clsx(styles.cardChevron, expanded && styles.chevronUp)}>
           ▾
