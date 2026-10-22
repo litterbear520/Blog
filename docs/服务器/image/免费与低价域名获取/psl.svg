@@ -1,0 +1,34 @@
+<svg viewBox="0 0 1920 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- 申请 PSL 前用户域名都算厂商的租客，不给托管；申请后每个都是独立站点 -->
+  <defs>
+    <!-- 箭头的底边对齐线的终点：线画到“箭头尖 − 箭头长”（head 28、head-faint 21、head-gray 26、head-fat 36） -->
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+    <marker id="head-fat" viewBox="0 0 36 56" refX="0" refY="28" markerWidth="36" markerHeight="56" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-fat" d="M0,0 L36,28 L0,56 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="630"/>
+
+  <!-- 左：申请 PSL 前 -->
+  <text class="t-tag" x="80" y="110">申请 PSL 前</text>
+  <rect class="container" x="80" y="150" width="820" height="370" rx="56"/>
+  <text class="t-xl" x="490" y="238" text-anchor="middle">de5.net</text>
+  <text class="t-cap" x="490" y="285" text-anchor="middle">归 DNSHE 一家所有</text>
+  <rect class="f-tan" x="110" y="340" width="240" height="120" rx="16"/>
+  <text class="t-name" x="230" y="414.8" text-anchor="middle">我的域名</text>
+  <rect class="actor" x="370" y="340" width="240" height="120" rx="16"/>
+  <text class="t-name" x="490" y="414.8" text-anchor="middle">其他用户</text>
+  <rect class="actor" x="630" y="340" width="240" height="120" rx="16"/>
+  <text class="t-name" x="750" y="414.8" text-anchor="middle">其他用户</text>
+  <text class="t-cap" x="490" y="570" text-anchor="middle">Cloudflare 眼里都是 DNSHE 的租客：不给托管</text>
+  
+  <!-- 右：申请 PSL 后 -->
+  <text class="t-tag" x="1020" y="110">申请 PSL 后</text>
+  <rect class="f-tan" x="1020" y="340" width="240" height="120" rx="16"/>
+  <text class="t-name" x="1140" y="414.8" text-anchor="middle">我的域名</text>
+  <rect class="actor" x="1310" y="340" width="240" height="120" rx="16"/>
+  <text class="t-name" x="1430" y="414.8" text-anchor="middle">其他用户</text>
+  <rect class="actor" x="1600" y="340" width="240" height="120" rx="16"/>
+  <text class="t-name" x="1720" y="414.8" text-anchor="middle">其他用户</text>
+  <text class="t-cap" x="1430" y="570" text-anchor="middle">每个都是独立站点：可以托管、套 CDN</text>
+</svg>

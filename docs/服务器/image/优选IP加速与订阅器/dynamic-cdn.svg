@@ -1,0 +1,47 @@
+<svg viewBox="0 0 1920 970" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cloudflare 每天分配的 CDN 不同，总延迟跟着变；最快那台的 IP 就是优选 IP -->
+  <defs>
+    <!-- 箭头的底边对齐线的终点：线画到“箭头尖 − 箭头长”（head 28、head-faint 21、head-gray 26、head-fat 36） -->
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+    <marker id="head-fat" viewBox="0 0 36 56" refX="0" refY="28" markerWidth="36" markerHeight="56" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-fat" d="M0,0 L36,28 L0,56 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="970"/>
+
+  
+  <!-- 昨天 -->
+  <text class="t-tag" x="80" y="140">昨天：250 毫秒</text>
+  <rect class="f-tan" x="80" y="180" width="300" height="130" rx="16"/>
+  <text class="t-name" x="230" y="259.8" text-anchor="middle">我（国内）</text>
+  <line class="gray" x1="388" y1="245" x2="786" y2="245" marker-end="url(#head-gray)"/>
+  <rect class="ring" x="820" y="180" width="300" height="130" rx="18"/>
+  <text class="t-name" x="970" y="259.8" text-anchor="middle">CDN 104</text>
+  <line class="gray" x1="1128" y1="245" x2="1466" y2="245" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="1500" y="180" width="340" height="130" rx="16"/>
+  <text class="t-name" x="1670" y="259.8" text-anchor="middle">美国 VPS</text>
+  
+  <!-- 今天 -->
+  <text class="t-tag" x="80" y="440">今天：280 毫秒</text>
+  <rect class="f-tan" x="80" y="480" width="300" height="130" rx="16"/>
+  <text class="t-name" x="230" y="559.8" text-anchor="middle">我（国内）</text>
+  <line class="gray" x1="388" y1="545" x2="786" y2="545" marker-end="url(#head-gray)"/>
+  <rect class="ring" x="820" y="480" width="300" height="130" rx="18"/>
+  <text class="t-name" x="970" y="559.8" text-anchor="middle">CDN 178</text>
+  <line class="gray" x1="1128" y1="545" x2="1466" y2="545" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="1500" y="480" width="340" height="130" rx="16"/>
+  <text class="t-name" x="1670" y="559.8" text-anchor="middle">美国 VPS</text>
+  
+  <!-- 明天 -->
+  <text class="t-tag" x="80" y="740">明天：220 毫秒（最快）</text>
+  <rect class="f-tan" x="80" y="780" width="300" height="130" rx="16"/>
+  <text class="t-name" x="230" y="859.8" text-anchor="middle">我（国内）</text>
+  <line class="line" x1="388" y1="845" x2="784" y2="845" marker-end="url(#head)"/>
+  <rect class="tag" x="486" y="760" width="200" height="85"/>
+  <text class="t-tag" x="586" y="815.8" text-anchor="middle">优选 IP</text>
+  <rect class="ring" x="820" y="780" width="300" height="130" rx="18"/>
+  <text class="t-name" x="970" y="859.8" text-anchor="middle">CDN 154</text>
+  <line class="line" x1="1128" y1="845" x2="1464" y2="845" marker-end="url(#head)"/>
+  <rect class="actor" x="1500" y="780" width="340" height="130" rx="16"/>
+  <text class="t-name" x="1670" y="859.8" text-anchor="middle">美国 VPS</text>
+</svg>
