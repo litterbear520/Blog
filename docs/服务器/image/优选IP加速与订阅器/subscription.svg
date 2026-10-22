@@ -1,0 +1,29 @@
+<svg viewBox="0 0 1920 540" xmlns="http://www.w3.org/2000/svg">
+  <!-- 订阅器把原初节点和 10 个优选 IP 合成一条订阅链接，一次导入 10 个优选节点 -->
+  <defs>
+    <!-- 箭头的底边对齐线的终点：线画到“箭头尖 − 箭头长”（head 28、head-faint 21、head-gray 26、head-fat 36） -->
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+    <marker id="head-fat" viewBox="0 0 36 56" refX="0" refY="28" markerWidth="36" markerHeight="56" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-fat" d="M0,0 L36,28 L0,56 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="540"/>
+
+  <rect class="f-tan" x="80" y="120" width="360" height="130" rx="16"/>
+  <text class="t-name" x="260" y="175.3" text-anchor="middle">原初节点</text>
+  <text class="t-name" x="260" y="224.3" text-anchor="middle">订阅链接</text>
+  <rect class="f-tan" x="80" y="350" width="360" height="130" rx="16"/>
+  <text class="t-name" x="260" y="429.8" text-anchor="middle">10 个优选 IP</text>
+  <line class="gray" x1="448" y1="185" x2="606" y2="185" marker-end="url(#head-gray)"/>
+  <line class="gray" x1="448" y1="415" x2="606" y2="415" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="640" y="120" width="380" height="360" rx="16"/>
+  <text class="t-name" x="830" y="290" text-anchor="middle">订阅器</text>
+  <text class="t-cap" x="830" y="340" text-anchor="middle">运行在 Cloudflare Workers</text>
+  <text class="t-cap" x="1246" y="195" text-anchor="middle">一键导入，支持扫码</text>
+  <rect class="tag" x="1136" y="215" width="220" height="85"/>
+  <text class="t-tag" x="1246" y="270.8" text-anchor="middle">订阅链接</text>
+  <line class="line" x1="1028" y1="300" x2="1464" y2="300" marker-end="url(#head)"/>
+  <rect class="f-tan" x="1500" y="235" width="340" height="130" rx="16"/>
+  <text class="t-name" x="1670" y="290.3" text-anchor="middle">代理软件</text>
+  <text class="t-name" x="1670" y="339.3" text-anchor="middle">10 个优选节点</text>
+</svg>

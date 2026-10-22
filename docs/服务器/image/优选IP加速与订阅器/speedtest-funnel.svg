@@ -1,0 +1,31 @@
+<svg viewBox="0 0 1920 530" xmlns="http://www.w3.org/2000/svg">
+  <!-- 优选器从 5955 个 CDN IP 里筛出 2571 个可用的，测速选出最快的 10 个，填进节点地址 -->
+  <defs>
+    <!-- 箭头的底边对齐线的终点：线画到“箭头尖 − 箭头长”（head 28、head-faint 21、head-gray 26、head-fat 36） -->
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+    <marker id="head-fat" viewBox="0 0 36 56" refX="0" refY="28" markerWidth="36" markerHeight="56" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-fat" d="M0,0 L36,28 L0,56 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="530"/>
+
+  <rect class="container" x="60" y="60" width="1240" height="410" rx="56"/>
+  <text class="t-xl" x="680" y="148" text-anchor="middle">优选器</text>
+  <rect class="actor" x="100" y="230" width="320" height="140" rx="16"/>
+  <text class="t-name" x="260" y="290.3" text-anchor="middle">抓取全网</text>
+  <text class="t-name" x="260" y="339.3" text-anchor="middle">5955 个 IP</text>
+  <line class="gray" x1="428" y1="300" x2="486" y2="300" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="520" y="230" width="320" height="140" rx="16"/>
+  <text class="t-name" x="680" y="290.3" text-anchor="middle">2571 个</text>
+  <text class="t-name" x="680" y="339.3" text-anchor="middle">可用</text>
+  <line class="gray" x1="848" y1="300" x2="906" y2="300" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="940" y="230" width="320" height="140" rx="16"/>
+  <text class="t-name" x="1100" y="290.3" text-anchor="middle">测速选出</text>
+  <text class="t-name" x="1100" y="339.3" text-anchor="middle">最快 10 个</text>
+  <rect class="tag" x="1310" y="215" width="180" height="85"/>
+  <text class="t-tag" x="1400" y="270.8" text-anchor="middle">优选 IP</text>
+  <line class="line" x1="1268" y1="300" x2="1504" y2="300" marker-end="url(#head)"/>
+  <rect class="f-tan" x="1540" y="230" width="300" height="140" rx="16"/>
+  <text class="t-name" x="1690" y="290.3" text-anchor="middle">填进</text>
+  <text class="t-name" x="1690" y="339.3" text-anchor="middle">节点地址</text>
+</svg>

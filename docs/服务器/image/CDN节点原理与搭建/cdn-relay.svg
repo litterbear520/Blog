@@ -1,0 +1,35 @@
+<svg viewBox="0 0 1920 740" xmlns="http://www.w3.org/2000/svg">
+  <!-- 直连是直接访问源站；套 CDN 后先到 CDN 服务器，再由它中转回源站 -->
+  <defs>
+    <!-- 箭头的底边对齐线的终点：线画到“箭头尖 − 箭头长”（head 28、head-faint 21、head-gray 26、head-fat 36） -->
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+    <marker id="head-fat" viewBox="0 0 36 56" refX="0" refY="28" markerWidth="36" markerHeight="56" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-fat" d="M0,0 L36,28 L0,56 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="740"/>
+
+  <!-- 第一行：直连 -->
+  <text class="t-tag" x="80" y="150">直连</text>
+  <rect class="f-tan" x="80" y="200" width="300" height="130" rx="16"/>
+  <text class="t-name" x="230" y="279.8" text-anchor="middle">我（国内）</text>
+  <text class="t-cap" x="926" y="247" text-anchor="middle">直接访问源站</text>
+  <line class="gray" x1="388" y1="265" x2="1466" y2="265" marker-end="url(#head-gray)"/>
+  <rect class="actor" x="1500" y="200" width="340" height="130" rx="16"/>
+  <text class="t-name" x="1670" y="279.8" text-anchor="middle">VPS（源站）</text>
+  
+  <!-- 第二行：套 CDN -->
+  <text class="t-tag" x="80" y="490">套 CDN</text>
+  <rect class="f-tan" x="80" y="540" width="300" height="130" rx="16"/>
+  <text class="t-name" x="230" y="619.8" text-anchor="middle">我（国内）</text>
+  <text class="t-cap" x="557" y="587" text-anchor="middle">先连 CDN</text>
+  <line class="gray" x1="388" y1="605" x2="726" y2="605" marker-end="url(#head-gray)"/>
+  <rect class="ring" x="760" y="540" width="340" height="130" rx="18"/>
+  <text class="t-name" x="930" y="619.8" text-anchor="middle">CDN 服务器</text>
+  <text class="t-cap" x="1286" y="500" text-anchor="middle">中转回源站</text>
+  <rect class="tag" x="1206" y="520" width="160" height="85"/>
+  <text class="t-tag" x="1286" y="575.8" text-anchor="middle">回源</text>
+  <line class="line" x1="1108" y1="605" x2="1464" y2="605" marker-end="url(#head)"/>
+  <rect class="actor" x="1500" y="540" width="340" height="130" rx="16"/>
+  <text class="t-name" x="1670" y="619.8" text-anchor="middle">VPS（源站）</text>
+</svg>

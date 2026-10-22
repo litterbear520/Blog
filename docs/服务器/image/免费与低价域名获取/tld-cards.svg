@@ -1,0 +1,27 @@
+<svg viewBox="0 0 1920 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- 三种付费域名：6 位数字 .xyz 最便宜，英文 .top 能放网名，.com 认可度最高 -->
+  <defs>
+    <!-- 箭头的底边对齐线的终点：线画到“箭头尖 − 箭头长”（head 28、head-faint 21、head-gray 26、head-fat 36） -->
+    <marker id="head" viewBox="0 0 28 24" refX="0" refY="12" markerWidth="28" markerHeight="24" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head" d="M0,0 L28,12 L0,24 Z"/></marker>
+    <marker id="head-faint" viewBox="0 0 21 15" refX="0" refY="7.5" markerWidth="21" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-faint" d="M0,0 L21,7.5 L0,15 Z"/></marker>
+    <marker id="head-gray" viewBox="0 0 26 20" refX="0" refY="10" markerWidth="26" markerHeight="20" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-gray" d="M0,0 L26,10 L0,20 Z"/></marker>
+    <marker id="head-fat" viewBox="0 0 36 56" refX="0" refY="28" markerWidth="36" markerHeight="56" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-fat" d="M0,0 L36,28 L0,56 Z"/></marker>
+  </defs>
+  <rect class="bg" width="1920" height="500"/>
+
+  <rect class="f-tan" x="168.5" y="60" width="515" height="380" rx="40"/>
+  <text class="t-card" x="219.5" y="151">6 位数字 .xyz</text>
+  <text class="t-body" x="231.5" y="250">•</text><text class="t-body" x="269.5" y="250">一直续费 7 元一年</text>
+  <text class="t-body" x="231.5" y="310">•</text><text class="t-body" x="269.5" y="310">不在乎好不好看</text>
+  <text class="t-body" x="231.5" y="370">•</text><text class="t-body" x="269.5" y="370">能建站、能托管</text>
+  <rect class="f-clay" x="702.5" y="60" width="515" height="380" rx="40"/>
+  <text class="t-card" x="753.5" y="151">英文 .top</text>
+  <text class="t-body" x="765.5" y="250">•</text><text class="t-body" x="803.5" y="250">NameSilo 4.88 美元一年</text>
+  <text class="t-body" x="765.5" y="310">•</text><text class="t-body" x="803.5" y="310">首年配合优惠券 1 美元</text>
+  <text class="t-body" x="765.5" y="370">•</text><text class="t-body" x="803.5" y="370">能放英文网名</text>
+  <rect class="f-deep" x="1236.5" y="60" width="515" height="380" rx="40"/>
+  <text class="t-card" x="1287.5" y="151">.com / .net</text>
+  <text class="t-body" x="1299.5" y="250">•</text><text class="t-body" x="1337.5" y="250">10 到 15 美元一年</text>
+  <text class="t-body" x="1299.5" y="310">•</text><text class="t-body" x="1337.5" y="310">认可度最高，SEO 更好</text>
+  <text class="t-body" x="1299.5" y="370">•</text><text class="t-body" x="1337.5" y="370">适合商业建站</text>
+</svg>
