@@ -122,6 +122,21 @@ export const SKILLS = [
     repo: 'https://github.com/mattpocock/skills',
   },
   {
+    id: 'find-skills',
+    name: 'find-skills',
+    author: 'vercel-labs',
+    category: '工程',
+    source: '社区',
+    description: '帮助用户发现和安装智能体技能。',
+    install: [
+      {
+        label: 'npx',
+        command: 'npx skills add vercel-labs/skills --skill find-skills',
+      },
+    ],
+    repo: 'https://github.com/vercel-labs/skills',
+  },
+  {
     id: 'agent-browser',
     name: 'agent-browser',
     author: 'vercel-labs',
