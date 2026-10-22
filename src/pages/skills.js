@@ -7,20 +7,18 @@ import SkillCard from '@site/src/components/SkillCard';
 import { CATEGORIES, SKILLS } from '@site/src/data/skills';
 import styles from './skills.module.css';
 
-const FILTERS = ['全部', ...CATEGORIES];
-const countOf = (filter) =>
-  filter === '全部'
-    ? SKILLS.length
-    : SKILLS.filter((s) => s.category === filter).length;
+// 「个人」按来源筛：自建技能除了出现在自己的用途分类里，也都收在这一栏
+const FILTERS = ['全部', ...CATEGORIES, '个人'];
+const matches = (skill, filter) =>
+  filter === '全部' ||
+  (filter === '个人' ? skill.source === '自建' : skill.category === filter);
+const countOf = (filter) => SKILLS.filter((s) => matches(s, filter)).length;
 
 export default function SkillsPage() {
   const [activeFilter, setActiveFilter] = useState('全部');
   const [expandedId, setExpandedId] = useState(null); // accordion：只记录一个展开 id
 
-  const filtered =
-    activeFilter === '全部'
-      ? SKILLS
-      : SKILLS.filter((s) => s.category === activeFilter);
+  const filtered = SKILLS.filter((s) => matches(s, activeFilter));
 
   return (
     <Layout title="Skills" description="我常用的和自己创建的 Claude 技能">
