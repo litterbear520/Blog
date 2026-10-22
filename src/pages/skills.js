@@ -4,20 +4,23 @@ import Layout from '@theme/Layout';
 import Head from '@docusaurus/Head';
 import clsx from 'clsx';
 import SkillCard from '@site/src/components/SkillCard';
-import { SKILLS } from '@site/src/data/skills';
+import { CATEGORIES, SKILLS } from '@site/src/data/skills';
 import styles from './skills.module.css';
 
-// 筛选标签从数据动态生成：加入首个 source='自建' 的技能后「自建」自动出现
-const SOURCES = ['全部', ...new Set(SKILLS.map((s) => s.source))];
+const FILTERS = ['全部', ...CATEGORIES];
+const countOf = (filter) =>
+  filter === '全部'
+    ? SKILLS.length
+    : SKILLS.filter((s) => s.category === filter).length;
 
 export default function SkillsPage() {
-  const [activeSource, setActiveSource] = useState('全部');
+  const [activeFilter, setActiveFilter] = useState('全部');
   const [expandedId, setExpandedId] = useState(null); // accordion：只记录一个展开 id
 
   const filtered =
-    activeSource === '全部'
+    activeFilter === '全部'
       ? SKILLS
-      : SKILLS.filter((s) => s.source === activeSource);
+      : SKILLS.filter((s) => s.category === activeFilter);
 
   return (
     <Layout title="Skills" description="我常用的和自己创建的 Claude 技能">
@@ -37,20 +40,21 @@ export default function SkillsPage() {
         </header>
 
         <nav className={styles.filters}>
-          {SOURCES.map((src) => (
+          {FILTERS.map((filter) => (
             <button
-              key={src}
+              key={filter}
               type="button"
               className={clsx(
                 styles.filterBtn,
-                activeSource === src && styles.filterActive,
+                activeFilter === filter && styles.filterActive,
               )}
               onClick={() => {
-                setActiveSource(src);
+                setActiveFilter(filter);
                 setExpandedId(null); // 切换筛选时收起已展开卡片，避免"幽灵展开"
               }}
             >
-              {src}
+              {filter}
+              <span className={styles.filterCount}>{countOf(filter)}</span>
             </button>
           ))}
         </nav>
@@ -64,7 +68,7 @@ export default function SkillsPage() {
               onToggle={() =>
                 setExpandedId(expandedId === skill.id ? null : skill.id)
               }
-              delay={i * 120}
+              delay={Math.min(i, 5) * 100} // 封顶，卡片多了后面的不用干等
             />
           ))}
         </section>
