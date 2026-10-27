@@ -403,6 +403,13 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
   --md-img-max-height: none;
 }
 
+/* 博文正文列宽也封顶 768px、在列里居中，文字与图片同宽，一行不至于太长 */
+.blog-post-page main > article,
+.blog-post-page main > nav {
+  max-width: 768px;
+  margin-inline: auto;
+}
+
 /* ═══════════════════════════════════════════
    提示块（:::note / info / tip / important / warning / danger）
    照 GitHub alerts 的图标（Octicons）和配色，但不画 GitHub 那条左侧竖线，
