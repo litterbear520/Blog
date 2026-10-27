@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '构建 Agent：什么时候该把子代理并入主 Agent 循环',
+    date: '2026-10-27',
+    slug: 'fold-subagents',
+    category: 'AI',
+    swatch: 'fig',
+    cover: '/img/blog/cover-fold-subagents.svg',
+  },
+  {
     title: '如何驯服Claude',
     date: '2026-10-21',
     slug: 'tame-claude',
