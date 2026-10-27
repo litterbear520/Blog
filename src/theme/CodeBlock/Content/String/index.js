@@ -1,17 +1,18 @@
 /**
  * Swizzle 自 @docusaurus/theme-classic 的 CodeBlock/Content/String：
  * 原逻辑不变，只额外读取 remark-run-output 插件挂上的 data-output，
- * 用 RunOutputProvider 包一层，供运行按钮和输出面板使用。
+ * 用 RunOutputProvider 包一层，供运行按钮和输出面板使用；
+ * useCodeWordWrap 换成本地版，修复默认显示的 tab 里不出现换行按钮。
  */
 import React from 'react';
 import {useThemeConfig} from '@docusaurus/theme-common';
 import {
   CodeBlockContextProvider,
   createCodeBlockMetadata,
-  useCodeWordWrap,
 } from '@docusaurus/theme-common/internal';
 import CodeBlockLayout from '@theme/CodeBlock/Layout';
 import {RunOutputProvider} from '@site/src/theme/CodeBlock/RunOutput/context';
+import {useCodeWordWrap} from '@site/src/theme/CodeBlock/useCodeWordWrap';
 
 function useCodeBlockMetadata(props) {
   const {prism} = useThemeConfig();
