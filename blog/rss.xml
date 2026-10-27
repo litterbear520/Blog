@@ -70,7 +70,7 @@
 </ul>
 </li>
 </ul>
-<p>这种单循环设计也有助于实现很多团队正在追求的最终状态：一个理解用户的高层目标、能代表用户行动的 Agent。因为它把 Agent 学到的一切都保留在同一个上下文里。</p>
+<p>这种单循环设计也有助于实现很多团队正在追求的最终状态（一个理解用户的高层目标、能代表用户行动的 Agent），因为它把 Agent 学到的一切都保留在同一个上下文里。</p>
 <p>下面的建议讲的是，团队怎样分阶段从多 Agent 系统走到单 Agent 循环，以及多个团队在这个过程中怎样持续为这个 Agent 出力。</p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="任务完成度评测">任务完成度评测<a href="https://huangsitao.fun/blog/fold-subagents#%E4%BB%BB%E5%8A%A1%E5%AE%8C%E6%88%90%E5%BA%A6%E8%AF%84%E6%B5%8B" class="hash-link" aria-label="Direct link to 任务完成度评测" title="Direct link to 任务完成度评测" translate="no">​</a></h3>
 <p>第一步是建一套评测集，帮你判断是否应该把某个子代理并入主 Agent 循环。我们见过行之有效的评测结构是：一套由中央团队负责的共享端到端评测集，再加上各技能的负责团队随技能一起交付的小评测集。哪怕只有 10 个黄金样例，也足够起步。</p>
@@ -81,7 +81,7 @@
 <p><span class="wrap_IvEC"><img decoding="async" loading="lazy" alt="并入子代理的三种做法：合并共享上下文的子代理；主 Agent 把子代理当作工具调用并继续主持对话；把子代理的提示词变成技能、API 调用变成工具" src="https://huangsitao.fun/assets/images/folding-in-subagents-823f3c0330a954fcb892b7119cdccf87.gif" width="2024" height="892" class="img_ev3q"></span></p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="合并领域-agent">合并领域 Agent<a href="https://huangsitao.fun/blog/fold-subagents#%E5%90%88%E5%B9%B6%E9%A2%86%E5%9F%9F-agent" class="hash-link" aria-label="Direct link to 合并领域 Agent" title="Direct link to 合并领域 Agent" translate="no">​</a></h3>
 <p>第一次合并之前，先建一个小的端到端评测。然后<strong>按共享上下文来合并，从使用最多的子代理开始。</strong></p>
-<p><a href="https://claude.com/resources/articles/building-multi-agent-systems-when-and-how-to-use-them" target="_blank" rel="noopener noreferrer" class="">合并</a>这样的专家：会串联使用彼此的输出、操作同一份数据，或者经常被一起调用。比如，生产流量里有相当一部分都是先调用一个专家、紧接着调用另一个，那这就是一对紧密耦合的专家，适合合并成一个领域 Agent。</p>
+<p>把满足下面任一条件的专家<a href="https://claude.com/resources/articles/building-multi-agent-systems-when-and-how-to-use-them" target="_blank" rel="noopener noreferrer" class="">合并</a>起来：会串联使用彼此的输出、操作同一份数据，或者经常被一起调用。比如，生产流量里有相当一部分都是先调用一个专家、紧接着调用另一个，那这就是一对紧密耦合的专家，适合合并成一个领域 Agent。</p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="把子代理当作工具调用">把子代理当作工具调用<a href="https://huangsitao.fun/blog/fold-subagents#%E6%8A%8A%E5%AD%90%E4%BB%A3%E7%90%86%E5%BD%93%E4%BD%9C%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8" class="hash-link" aria-label="Direct link to 把子代理当作工具调用" title="Direct link to 把子代理当作工具调用" translate="no">​</a></h3>
 <p>如果前面说的三个条件之一成立，你决定保留某个子代理，那么让主 Agent 把子代理当作工具来调用会很有效，这样主 Agent 就能继续主持和用户的对话。</p>
 <p>只有子代理需要直接和用户对话时，我们才建议完全移交，也就是让子代理接管对话。其他情况都可以做成主循环里的技能加工具。</p>
