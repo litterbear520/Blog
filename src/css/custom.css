@@ -403,9 +403,11 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
   --md-img-max-height: none;
 }
 
-/* 博文正文列宽也封顶 768px、在列里居中，文字与图片同宽，一行不至于太长 */
+/* 正文列宽也封顶 768px、在列里居中，文字与图片同宽，一行不至于太长：
+   博文是 article + 上下篇导航，docs / roadmap 是 docItemContainer（类名带哈希，按前缀匹配） */
 .blog-post-page main > article,
-.blog-post-page main > nav {
+.blog-post-page main > nav,
+[class*='docItemContainer'] {
   max-width: 768px;
   margin-inline: auto;
 }
