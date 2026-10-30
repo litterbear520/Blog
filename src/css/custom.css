@@ -391,10 +391,10 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
   --md-img-max-width: min(100%, 768px);
 }
 
-/* 博文正文图片：同样封顶 768px，另加高度上限，手机长截图一屏看得全；
+/* 博文正文图片：随正文列宽封顶 680px，另加高度上限，手机长截图一屏看得全；
    正文第一段是头图（见 AGENTS.md 博客约定），照旧铺满 */
 .blog-post-page .markdown {
-  --md-img-max-width: min(100%, 768px);
+  --md-img-max-width: min(100%, 680px);
   --md-img-max-height: 70vh;
 }
 
@@ -410,6 +410,27 @@ html.docs-doc-id-高效商务Agent架构指南\/index .markdown h5 {
 [class*='docItemContainer'] {
   max-width: 768px;
   margin-inline: auto;
+}
+
+/* 博文和路线是长篇阅读：列再收窄到 680px、正文 18px，每行约 38 个汉字（16px × 768px 时是 48 个）；
+   手机列本来就窄，字号保持 16px。代码块固定回原来的 15.2px，不随正文放大 */
+.blog-post-page main > article,
+.blog-post-page main > nav,
+html.plugin-id-roadmap [class*='docItemContainer'] {
+  max-width: 680px;
+}
+
+.blog-post-page .markdown,
+html.plugin-id-roadmap .markdown {
+  line-height: 1.75;
+  --ifm-code-font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+  .blog-post-page .markdown,
+  html.plugin-id-roadmap .markdown {
+    font-size: 1.125rem;
+  }
 }
 
 /* ═══════════════════════════════════════════
