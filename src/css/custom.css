@@ -434,7 +434,7 @@ html.plugin-id-roadmap .markdown {
 }
 
 /* 博文和路线的版式节奏照 claude.dev 博客：段距 14px、列表条目间 6px；
-   小标题是等宽小字（h2 / h3 / h4 同款，靠上方留白区分层级，h4 再降一级颜色），中文落到 Noto Sans SC；
+   小标题只照它的上下留白（h2 上方 54px、h3 36px、h4 28px），字体字号保持全站原样；
    商务 Agent 架构指南有五级标题，保留它自己的层级样式（见「排版细节」）；
    代码块、表格、提示块、图片上下各留 32px；链接用正文色加下划线，不用强调色 */
 :is(.blog-post-page, html.plugin-id-roadmap) .markdown {
@@ -450,11 +450,6 @@ html.plugin-id-roadmap .markdown {
 
 :is(.blog-post-page, html.plugin-id-roadmap:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index)) .markdown > :is(h2, h3, h4) {
   margin: 3.375rem 0 1.25rem;
-  font-family: var(--ifm-font-family-monospace), 'Noto Sans SC', sans-serif;
-  font-size: 0.984375rem;
-  font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: 0.02em;
 }
 
 :is(.blog-post-page, html.plugin-id-roadmap:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index)) .markdown > h3 {
@@ -463,7 +458,6 @@ html.plugin-id-roadmap .markdown {
 
 :is(.blog-post-page, html.plugin-id-roadmap:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index)) .markdown > h4 {
   margin-top: 1.75rem;
-  color: var(--th-text-2);
 }
 
 :is(.blog-post-page, html.plugin-id-roadmap) .markdown > :is(.theme-code-block, .theme-admonition, .md-table, .tabs-container, p:has(> [class*='wrap_'] > img)) {
@@ -476,7 +470,7 @@ html.plugin-id-roadmap .markdown {
 }
 
 /* 笔记的版式节奏照 Academy 课文：段距和列表 16px、列表条目间 8px；
-   h2 22px、上方留 64px，h3 18px、上下各 16px；代码块、表格、提示块上下各 32px；图片 8px 圆角 */
+   h2 上方留 64px，h3 上下各 16px（标题字体字号保持全站原样）；代码块、表格、提示块上下各 32px；图片 8px 圆角 */
 html.plugin-id-default .theme-doc-markdown {
   --ifm-paragraph-margin-bottom: 1rem; /* 松散列表、提示块里的段落 */
   --ifm-list-item-margin: 0.5rem;
@@ -489,13 +483,10 @@ html.plugin-id-default .theme-doc-markdown > :is(p, ul, ol) {
 
 html.plugin-id-default .theme-doc-markdown > h2 {
   margin: 4rem 0 1rem;
-  font-size: 1.375rem;
-  letter-spacing: -0.025em;
 }
 
 html.plugin-id-default .theme-doc-markdown > h3 {
   margin: 1rem 0;
-  font-size: 1.125rem;
 }
 
 html.plugin-id-default .theme-doc-markdown > :is(.theme-code-block, .theme-admonition, .md-table, .tabs-container) {
