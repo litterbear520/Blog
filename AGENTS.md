@@ -49,7 +49,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 - `--th-dg-*`：图表角色色 neutral / process / done / external，加 body、stroke、loop，深浅两套，画图的组件都用它。
 - `--th-admonition-*`：提示块配色。
 
-正文图片宽度不超过正文列宽，大图靠放大按钮看原图；博客另加 70vh 高度上限，正文第一段的头图不受限。正文列宽同样封顶并居中，文字与图片同宽：docs 768px；博文和 roadmap 680px，宽屏正文 18px、行高 1.75，每行约 38 个汉字。版式节奏（段距、小标题、代码块和图片上下留白）：docs 照 Academy 课文，博文和 roadmap 照 claude.dev 博客（正文色链接）；只照留白，标题字体字号不跟参考站改，数值写在 `custom.css` 对应注释里。
+正文图片宽度不超过正文列宽，大图靠放大按钮看原图；博客另加 70vh 高度上限，正文第一段的头图不受限。正文列宽同样封顶并居中，文字与图片同宽：docs 768px；博文和 roadmap 680px，宽屏正文 18px、行高 1.75，每行约 38 个汉字。版式节奏（段距、小标题、代码块和图片上下留白）：docs 照 Academy 课文，博文和 roadmap 照 claude.dev 博客；只照留白，标题字体字号不跟参考站改，数值写在 `custom.css` 对应注释里。
 
 ## 组件
 
