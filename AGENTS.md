@@ -49,7 +49,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 - `--th-dg-*`：图表角色色 neutral / process / done / external，加 body、stroke、loop，深浅两套，画图的组件都用它。
 - `--th-admonition-*`：提示块配色。
 
-正文图片宽度不超过正文列宽，大图靠放大按钮看原图；博客另加 70vh 高度上限，正文第一段的头图不受限。正文列宽同样封顶并居中，文字与图片同宽：docs 768px；博文和 roadmap 680px，宽屏正文 18px、行高 1.75，每行约 38 个汉字。
+正文图片宽度不超过正文列宽，大图靠放大按钮看原图；博客另加 70vh 高度上限，正文第一段的头图不受限。正文列宽同样封顶并居中，文字与图片同宽：docs 768px；博文和 roadmap 680px，宽屏正文 18px、行高 1.75，每行约 38 个汉字。版式节奏（段距、小标题、代码块和图片上下留白）：docs 照 Academy 课文，博文和 roadmap 照 claude.dev 博客（等宽小标题、正文色链接），数值写在 `custom.css` 对应注释里。
 
 ## 组件
 
@@ -135,6 +135,7 @@ hi
 - **提示块**：`:::note / info / tip / important / warning / danger`，标题写成 `:::warning[标题]`（v4 语法，必须用 `[]`）；不写标题时显示中文默认标签。标题写“提示”就用 `:::tip`，写“注意”就用 `:::warning`，别用 `:::info[提示]`。
 - **表格**：竖线不对齐（避免 markdownlint MD060），分隔行写 `| ---- | ---- |`。
 - **数学公式**：KaTeX，行内 `$E = mc^2$`，块级 `$$ ... $$`；只在 docs / roadmap 生效，博客没配。
+- **加粗**：`**` 内侧紧挨全角标点、外侧紧挨汉字时不会生效（如 `**连接（Connect）**按钮`），能把标点挪到外面就挪，挪不了改用 `<strong>`。
 - **文字高亮**：MDX 写法，`<span style={{color: 'red'}}>红色文字</span>`、`<mark>默认黄色高亮</mark>`。
 - **图片**：正常写 `![]()`，原图比显示尺寸大时自动出现放大按钮。
 - **代码高亮语言**：bash, json, python, java, typescript, rust, go, cpp, c, diff；其他语言没有高亮。
