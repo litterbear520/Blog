@@ -438,6 +438,7 @@ html.plugin-id-roadmap .markdown {
    商务 Agent 架构指南有五级标题，保留它自己的层级样式（见「排版细节」）；
    代码块、表格、提示块、图片上下各留 32px；链接用正文色加下划线，不用强调色 */
 :is(.blog-post-page, html.plugin-id-roadmap) .markdown {
+  --ifm-paragraph-margin-bottom: 0.875rem; /* 松散列表、提示块里的段落 */
   --ifm-list-item-margin: 0.375rem;
   --ifm-list-left-padding: 1.25em;
 }
@@ -460,7 +461,7 @@ html.plugin-id-roadmap .markdown {
   margin-top: 2.25rem;
 }
 
-.blog-post-page .markdown > h4 {
+:is(.blog-post-page, html.plugin-id-roadmap:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index)) .markdown > h4 {
   margin-top: 1.75rem;
   color: var(--th-text-2);
 }
@@ -477,6 +478,7 @@ html.plugin-id-roadmap .markdown {
 /* 笔记的版式节奏照 Academy 课文：段距和列表 16px、列表条目间 8px；
    h2 22px、上方留 64px，h3 18px、上下各 16px；代码块、表格、提示块上下各 32px；图片 8px 圆角 */
 html.plugin-id-default .theme-doc-markdown {
+  --ifm-paragraph-margin-bottom: 1rem; /* 松散列表、提示块里的段落 */
   --ifm-list-item-margin: 0.5rem;
   --ifm-list-left-padding: 1rem;
 }
