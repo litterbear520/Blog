@@ -16,8 +16,8 @@ mcp dev mcp_server.py
 
 该检查器界面正在积极开发中，因此您使用时可能会看到不同的外观。但是，核心功能保持一致。请留意以下关键元素：
 
-- 一个用于启动您的 MCP 服务器的**连接（Connect）**按钮
-- 用于**资源（Resources）**、**工具（Tools）**、**提示（Prompts）**和其他功能的导航标签
+- 一个用于启动您的 MCP 服务器的<strong>连接（Connect）</strong>按钮
+- 用于<strong>资源（Resources）</strong>、<strong>工具（Tools）</strong>、<strong>提示（Prompts）</strong>和其他功能的导航标签
 - 一个工具列表和测试面板
 
 首先点击连接按钮以初始化您的服务器。您将看到连接状态从"已断开（Disconnected）"变为"已连接（Connected）"。
