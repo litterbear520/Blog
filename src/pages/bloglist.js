@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '10分钟学会设计Agent架构',
+    date: '2026-11-01',
+    slug: 'design-agent-architecture',
+    category: 'AI',
+    swatch: 'oat',
+    cover: '/img/blog/cover-design-agent-architecture.svg',
+  },
+  {
     title: '构建 Agent：什么时候该把子代理并入主 Agent 循环',
     date: '2026-10-27',
     slug: 'fold-subagents',
