@@ -65,7 +65,7 @@ const POSTS = [
     cover: '/img/blog/cover-opus-5-5-guide.svg',
   },
   {
-    title: '为什么语音代理的记忆问题比想象中更难',
+    title: '语音代理中的记忆问题比你想的更难',
     date: '2026-09-09',
     slug: 'voice-agent-memory',
     category: 'AI',
