@@ -54,3 +54,28 @@
   visibility: visible;
   transform: translate(-50%, 0);
 }
+
+/* 窄屏放不下居中的弹层：行首行尾的词会把它顶出屏幕，隐藏时也会撑出横向滚动，
+   所以固定到屏幕底部；触屏没有悬停，点一下靠 :focus 显示 */
+@media (max-width: 1024px) {
+  .tip {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: auto;
+    max-width: none;
+    transform: translateY(4px);
+  }
+
+  .tip::after {
+    display: none;
+  }
+
+  .term:hover .tip,
+  .term:focus .tip {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+}
