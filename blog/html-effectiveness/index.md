@@ -27,6 +27,8 @@ Markdown 已成为智能体与我们沟通时使用的主流文件格式。它�
 
 ### 信息密度
 
+![一个 HTML 文件能承载的八类信息：表格、设计、插图、代码、交互、工作流、空间数据和图片](./eight-kinds-of-information.jpg)
+
 与 Markdown 相比，HTML 能够传达更丰富的信息。它当然可以实现简单的文档结构（如标题和格式），但还能表示各种其他信息，例如：
 
 - 用表格呈现成行成列的数据
@@ -42,9 +44,11 @@ Markdown 已成为智能体与我们沟通时使用的主流文件格式。它�
 
 我发现，模型如果不能用 HTML 呈现，就可能在 Markdown 里用更低效的办法，比如 ASCII 图表，或者我最喜欢的一种：用 Unicode 字符来近似表示颜色，就像这张 Claude Code 截图里那样。
 
-![1783498092463](./1783498092463.png)
+![Claude Code 用 Unicode 字符近似表示颜色的截图](./1783498092463.png)
 
 ### 视觉清晰度与阅读舒适度
+
+![同一份支付服务规格：Markdown 是要一直往下滚的 240 行，HTML 有标签页、指标卡片和柱状图，结构一目了然](./markdown-vs-html.jpg)
 
 随着 Claude 能够处理更复杂的工作，它写的规格说明和计划也越来越长。实际上，我发现超过 100 行的 Markdown 文件我往往并不会真的去读，更没法让其他同事去读。
 
@@ -59,6 +63,8 @@ Markdown 文件相当难以分享，因为大多数浏览器无法很好地原�
 如果以 HTML 格式呈现，你的规格说明、报告或 PR 说明真正被人读到的可能性会大大提高。
 
 ### 双向互动
+
+![在浏览器里用滑块调好按钮动画的参数，点“复制为提示词”，再粘贴回 Claude Code，应用到真实组件](./tune-and-paste-back.jpg)
 
 HTML 可以让你和文档互动。比如，你可以让 Claude 加上滑块或旋钮，用来调整设计，或者调节算法里的不同选项，看看会发生什么。你还可以让它支持把这些改动复制成提示词，再粘贴回 Claude Code。
 
@@ -91,6 +97,8 @@ HTML 可以让你和文档互动。比如，你可以让 Claude 加上滑块或�
 HTML 表现力丰富，Claude 可以用它深入钻研一个问题。开始处理一个问题时，我不会只写一份简单的 Markdown 计划，而是预期要做出一组互相关联的 HTML 文件。例如，我可能会先让 Claude Code 头脑风暴，做出几份文件，分别探索不同的方案。然后让它把其中一个方向展开得更深入，也许再做些模拟界面或代码片段。最后，等我觉得差不多了，就让它写实施计划。对计划满意后，我会开一个新会话，把所有这些文件传进去，让它照着实现。
 
 验证时，我也会让负责验证的智能体读这些文件，这样它对需求的了解就会全面得多。
+
+![一个 HTML 页面并排比较防抖搜索的三种方案，列出各自的优缺点，看完直接选一个](./pick-an-approach.jpg)
 
 示例提示词：
 
@@ -137,6 +145,8 @@ Create a thorough implementation plan in a HTML file, be sure to make some mocku
 
 代码放在 Markdown 文件里可能很难读。但借助 HTML，我们可以呈现 diff、注释、流程图、模块等内容。你可以用它来理解智能体写的代码、做代码审查，或者向审查你代码的人讲解 PR。我发现这通常比 GitHub 默认的 diff 视图效果更好，现在我提交的每个 PR 都会附上一个讲解代码的 HTML 页面。
 
+![PR 讲解页面：左边是 diff，右边的页边注释按严重程度分成 blocking、nit、nice 三种颜色](./pr-review.png)
+
 示例提示词：
 
 <Tabs groupId="prompt-lang">
@@ -167,6 +177,8 @@ Help me review this PR by creating an HTML artifact that describes it. I'm not v
 Claude Design 基于 HTML，因为 HTML 在设计方面表现力极强，即使你最终要做的界面不是 HTML 也一样。Claude 可以先用 HTML 勾勒出设计草图，再用你选择的语言或框架写出来，比如 React、Swift 等。
 
 你还可以给交互做原型，比如动画、动作等。不妨让 Claude 做一些滑块、旋钮之类的控件，把效果调到正好是你想要的样子。
+
+![设计系统页面：颜色、字体、按钮和间距的取值都放在一页里](./design-tokens.jpg)
 
 示例提示词：
 
@@ -199,6 +211,8 @@ I want to prototype a new checkout button, when clicked it does a play animation
 Claude Code 非常擅长把多个数据源的信息综合起来，整理成便于阅读的报告。你可以让 Claude 搜索你的 Slack、代码库、Git 历史记录、互联网等，再用这些信息给你自己、领导层、团队等写出非常好读的报告。
 
 你可以把报告做成一份长篇幅的 HTML 文档、一个交互式讲解页面，甚至一套幻灯片/演示文稿。还可以让 Claude 用 SVG 画图表，帮助把内容可视化。
+
+![限流机制讲解页面：顶部是请求流程图，中间是带注释的代码和文字说明，底部列出容易踩的坑](./rate-limiting-explainer.jpg)
 
 例如，写那几篇关于提示词缓存的帖子时，我让 Claude 先读 Git 历史记录，再准备一份 HTML 格式的深度研究文件给我读，内容是我们对提示词缓存做过的所有改动。
 
@@ -234,6 +248,8 @@ I don't understand how our rate limiter actually works. Read the relevant code a
 有时光靠一个文本框，很难说清你想要什么。这时我会让 Claude 专门为我手头这件事做一个一次性的编辑器。它不是产品，也不是可复用的工具，只是一个 HTML 文件，专为手头这一份数据量身定制。
 
 诀窍在于始终以导出功能收尾：一个“复制为 JSON”或“复制为提示词”的按钮，把我在界面上做的所有操作，变回可以粘贴到 Claude Code 里的内容。
+
+![功能开关编辑器：开关按功能分组，依赖没满足时给出警告；复制 diff 只导出改动过的两个键，再粘贴给 Claude](./feature-flags-editor.jpg)
 
 示例提示词：
 

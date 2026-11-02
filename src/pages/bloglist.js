@@ -65,7 +65,7 @@ const POSTS = [
     cover: '/img/blog/cover-opus-5-5-guide.svg',
   },
   {
-    title: '语音代理中的记忆问题比你想的更难',
+    title: '语音代理的记忆不能放在关键路径上',
     date: '2026-09-09',
     slug: 'voice-agent-memory',
     category: 'AI',
