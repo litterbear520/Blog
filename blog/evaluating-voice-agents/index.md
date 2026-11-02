@@ -13,7 +13,7 @@ toc_max_heading_level: 2
 
 我在写[语音代理入门](https://manthanguptaa.in/posts/voice_agents_primer)时，曾把评估列为标准 LLM 评测完全覆盖不到的内容之一，并留到之后再写。完整的评估必须覆盖通话本身：选对评估单位，给通话的四个层面打分，弄清你的模拟器和 LLM 裁判是否可信，再把结果变成“发还是不发”的决定。
 
-这是语音代理系列的第三篇，也是最后一篇，前两篇分别是[语音代理入门](https://manthanguptaa.in/posts/voice_agents_primer)和[语音代理的记忆](https://manthanguptaa.in/posts/voice_agent_memory/)。
+这是语音代理系列的第三篇，也是最后一篇，前两篇分别是[语音代理入门](https://manthanguptaa.in/posts/voice_agents_primer)和[语音代理的记忆](/blog/voice-agent-memory)。
 
 我们开始吧。
 
