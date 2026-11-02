@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '如何评估语音代理',
+    date: '2026-11-02',
+    slug: 'evaluating-voice-agents',
+    category: 'AI',
+    swatch: 'sky',
+    cover: '/img/blog/cover-evaluating-voice-agents.svg',
+  },
+  {
     title: '10分钟学会设计Agent架构',
     date: '2026-11-01',
     slug: 'design-agent-architecture',
