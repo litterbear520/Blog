@@ -59,13 +59,13 @@ export const Loop = ({ src, poster, label }) => (
 
 从一个空文件夹开始写出您的第一个 Claude Code mod，再看看这套 API 还能做什么。
 
-mod 是一个运行在 Claude Code 会话里的小型 JavaScript 或 TypeScript 文件。它可以观察会话里正在发生的事，改变 Claude Code 的行为，也可以在终端或桌面应用里画出自己的界面。想试一个 mod，不需要先学 API：运行 `claude`，然后描述您想要的 mod。它问要不要开启热重载时，选允许；这一轮结束，mod 就出现了。
+mod 是一个运行在 Claude Code 会话里的小型 JavaScript 或 TypeScript 文件。它可以观察会话里正在发生的事，改变 Claude Code 的行为，也可以在终端或桌面应用里画出自己的界面。想试一个 mod，不需要先学 API：运行 `claude`，然后描述您想要的 mod。Claude 问要不要开启热重载时，选允许；这一轮结束，mod 就出现了。
 
 {/* truncate */}
 
 Claude Code 本来就允许您调整很多行为：settings、权限规则、斜杠命令、skill 和状态栏。mod 更进一步：它可以改写甚至替换 Claude Code 的行为，还能画出自定义的界面。从底层看，mod 就是随插件一起发布的 hook，每个 mod 都能实时看到会话里发生的每一个事件。
 
-所以，mod 是让 Claude Code 贴合您工作方式的一种手段。您可以加一个随时要看的读数，在那些让您心里发毛的命令前面加一道关卡，或者按您喜欢的方式做一个审阅改动的视图。
+所以，mod 能让 Claude Code 贴合您的工作方式。您可以加一个随时要看的读数，在让您不放心的命令前面加一道关卡，或者按您喜欢的方式做一个审阅改动的视图。
 
 本指南从一个空文件夹开始，写出一个 mod：**Token Weather**，它在输入框上方画出上下文窗口的实时“天气预报”，代码大约 80 行。然后带您看两个更大的 mod：**Blast Radius** 和 **Replay Theater**，展示这套 API 还能做什么。三个 mod 的完整代码都在 [anthropics/claude-code-playground](https://github.com/anthropics/claude-code-playground/tree/main/claude-code/mods) 里。
 
@@ -90,11 +90,11 @@ Claude Code 本来就允许您调整很多行为：settings、权限规则、斜
 
 mod 是一个 Claude Code 插件，它的行为写在一个 JavaScript 或 TypeScript 模块里：
 
-- 这个文件夹就是一个普通插件，带有 `.claude-plugin/plugin.json` 清单文件。
+- mod 的文件夹就是一个普通插件，带有 `.claude-plugin/plugin.json` 清单文件。
 - `hooks/hooks.json` 在 `modules` 下指定一个模块。
-- 这个模块导出 `register(on, options)`。在函数里调用 `on(event, matcher?, hook)` 添加 hook。
+- 这个模块导出 `register(on, options)`。在这个函数里调用 `on(event, matcher?, hook)` 添加 hook。
 
-每个 hook 的形状都一样：
+每个 hook 的写法都一样：
 
 ```javascript
 on("tool.call", { tool: "Bash" }, async ($, e, next) => {
@@ -113,7 +113,7 @@ hook 像中间件一样串成一条链。您的 hook 先运行，`next(e)` 把�
 
 | <span style={{ whiteSpace: 'nowrap' }}>做法</span> | 写法 | 例子 |
 | ---- | ---- | ---- |
-| **<span style={{ whiteSpace: 'nowrap' }}>观察</span>** | `const r = await next(e); /* 查看 */ return r` | 记录每一次文件编辑；每一轮结束后读一次数。 |
+| **<span style={{ whiteSpace: 'nowrap' }}>观察</span>** | `const r = await next(e); /* 查看 */ return r` | 记录每一次文件编辑；每一轮结束后取一次读数。 |
 | **<span style={{ whiteSpace: 'nowrap' }}>改写</span>** | `return next({ ...e, command: safer })` | 改变链上后面各环看到的内容。 |
 | **<span style={{ whiteSpace: 'nowrap' }}>作答</span>** | `return { deny: "…" }`，不调用 `next` | 拒绝一次工具调用；自己处理一条命令或一个工具。 |
 
@@ -121,7 +121,7 @@ hook 像中间件一样串成一条链。您的 hook 先运行，`next(e)` 把�
 
 **和 settings 里的 hook 有什么不同。** settings hook 每来一个事件就运行一次 shell 命令，通过 stdin 和 stdout 传递 JSON。mod 只加载一次，之后一直留在会话里。它可以保存状态，画出随事件更新的界面，还能反过来调用 Claude Code：打开面板、运行进程、注册斜杠命令，或者注册一个模型可以调用的工具。
 
-**Claude Code 自己也在用。** Claude Code 有些自带功能就是用 mod 做的，包括对 AGENTS.md 的支持，以及对话旁边的 `/diff` 面板。它们的源码连同测试都在公开的 [anthropics/claude-code](https://github.com/anthropics/claude-code) 仓库的 `mods/` 目录下，您可以看看团队是怎么写的。
+**Claude Code 自己也在用。** Claude Code 有些自带功能就是用 mod 做的，包括对 AGENTS.md 的支持，以及对话旁边的 `/diff` 面板。它们的源码连同测试都在公开的 [anthropics/claude-code](https://github.com/anthropics/claude-code) 仓库的 `mods/` 目录下，您可以看看 Claude Code 团队是怎么写的。
 
 ## 写第一个 mod：Token Weather {/* #build-your-first-mod-token-weather */}
 
@@ -245,7 +245,7 @@ token-weather/
 
 ### 第 2 步：先画点东西 {/* #step-2-draw-something */}
 
-输入框正上方的横栏是一个叫 `AbovePrompt` 的组件。Claude Code 自己不在那里画任何东西，所以它很适合当第一个目标。挂上它的 `ui.render` 事件，返回一棵元素树：
+输入框正上方的横栏是一个叫 `AbovePrompt` 的组件。Claude Code 自己不在那里画任何东西，所以这里很适合当第一个目标。给 `AbovePrompt` 的 `ui.render` 事件挂一个 hook，返回一棵元素树：
 
 ```javascript
 // hooks/token-weather.mjs
@@ -274,9 +274,9 @@ claude --plugin-dir ./token-weather
 
 ### 第 3 步：读取真实数据，存进 `$.state` {/* #step-3-read-real-numbers-and-keep-them-in-state */}
 
-`$.session.usage()` 返回的数据和状态栏里的一样。`context.tokens` 是上一次回复所基于的输入量，`context.window` 是模型的窗口大小，`context.percent` 是两者之比。这个调用不花钱：只有在您要求 `breakdown` 时，它才会发送一次 token 计数请求。
+`$.session.usage()` 返回的数据和状态栏里的一样。`context.tokens` 是生成上一次回复时的输入量，`context.window` 是模型的窗口大小，`context.percent` 是两者之比。这个调用不花钱：只有在您要求 `breakdown` 时，它才会发送一次 token 计数请求。
 
-在会话开始时和每一轮结束后各读一次数：
+在会话开始时和每一轮结束后各取一次读数：
 
 ```javascript
 on("session.start", async ($, e, next) => {
@@ -296,7 +296,7 @@ on("turn.complete", async ($, e, next) => {
 
 两个 hook 都先调用 `next(e)`，然后再观察，都不会改变实际发生的事。
 
-**读数存在哪里。** 在模块顶层写一个 `let readings = []` 看起来是最顺手的做法，但热重载相当于重新加载一遍：`register` 会再运行一次，`session.start` 会再触发一次，模块变量也会从头开始。所以要把历史记录放进 `$.state`。它在宿主里为整个会话保存命名的值，重新加载后也不会丢。
+**读数存在哪里。** 在模块顶层写一个 `let readings = []` 看起来是最顺手的做法，但热重载相当于重新加载一遍：`register` 会再运行一次，`session.start` 会再触发一次，模块变量也会从头开始。所以要把历史记录放进 `$.state`。它把带名字的值存在<Term tip="运行 mod 沙箱的一方，这里就是 Claude Code">宿主</Term>里，整个会话都在，重新加载后也不会丢。
 
 ```javascript
 // 由宿主保存，所以这个文件热重载之后，历史记录还在。
@@ -326,7 +326,7 @@ declare module "claude-code" {
 
 然后在 `plugin.json` 里加上 `"types": "./types/index.d.ts"`。如果跳过这一步，`claude plugin validate` 会报错拦住您，错误信息里直接写明了怎么修：`token-weather.readings is not declared: the manifest's types contract must name it in interface PluginState { … }`。
 
-作为回报，重绘就不用您操心了。渲染 hook 运行期间调用的 `$.state.get` 会让这次绘制订阅对应的值，之后每次 `$.state.set` 都会重绘横栏。您从来不需要调用 `$.ui.invalidate`。
+换来的好处是，重绘不用您操心了。在渲染 hook 运行期间调用 `$.state.get`，这次绘制就订阅了对应的值，之后每次 `$.state.set` 都会重绘横栏。您完全不需要调用 `$.ui.invalidate`。
 
 ### 第 4 步：画出天气预报 {/* #step-4-draw-the-forecast */}
 
@@ -517,7 +517,7 @@ mod 是 Claude Code 插件，所以分享方式和其他插件完全一样，没
 
 重新加载后 mod 就会启动。如果没有出现，就重启 Claude Code。
 
-mod 是在您机器上、在 Claude Code 内部运行的代码，拥有和 Claude Code 相同的权限，而且它出自发布者之手，而不是 Anthropic。所以安装 mod 要像安装软件包一样谨慎：先读一读仓库，只安装您信任的人发布的。在您运行安装命令之前，什么都不会被装上。
+mod 是在您的机器上、在 Claude Code 内部运行的代码，拥有和 Claude Code 相同的权限。它是发布者写的，不是 Anthropic 写的。所以安装 mod 要像安装软件包一样谨慎：先读一读仓库，只安装您信任的人发布的。在您运行安装命令之前，什么都不会被装上。
 
 Claude 目录（Claude directory）接受包含 mod 的插件。您可以在 [claude.ai/directory/manage](https://claude.ai/directory/manage) 提交自己的 mod，这样别人不用您给链接也能找到它。
 
@@ -564,10 +564,10 @@ on("tool.call", { tool: "Bash" }, async ($, e, next) => {
 
 从中可以学到：
 
-- **用 `$.process.run` 做试运行。** 报告来自这些工具自己的命令：`git status --porcelain`、`git clean -n`、`git log HEAD..origin/main`、`showmigrations`。参数以 argv 数组的形式传入，所以路径里的任何内容都不会被当成 shell 代码执行。
-- **扣住一次调用。** 每次分派，hook 自己只有 10 秒的时间，但在 `$` 调用里等待的时间不算在内。循环靠一个个短暂的 `sleep` 进程等待，直到某个按钮的 `onPress` 做出决定；`next.signal` 中止时（也就是您按了 Esc），它就放弃等待。
+- **用 `$.process.run` 做试运行。** 报告来自各个工具自己的命令：`git status --porcelain`、`git clean -n`、`git log HEAD..origin/main`、`showmigrations`。参数以 argv 数组的形式传入，所以路径里的任何内容都不会被当成 shell 代码执行。
+- **扣住一次调用。** 每次分派事件，hook 自身只有 10 秒可用，但在 `$` 调用里等待的时间不算在内。循环靠一个个短暂的 `sleep` 进程等待，直到某个按钮的 `onPress` 做出决定；`next.signal` 中止时（也就是您按了 Esc），它就放弃等待。
 - **带快捷键的按钮。** `Button({ label: "Proceed", hotkey: "1", onPress })` 可以点击，可以用 Tab 加回车，也可以直接按数字键。
-- **退回到横栏。** 终端够宽时，会把面板停靠在对话记录旁边。当 `$.ui.open` 返回 `isPlaced: false` 时，同一份报告就改画在输入框上方：
+- **退回到横栏。** 终端够宽时，面板会停靠在对话记录旁边。当 `$.ui.open` 返回 `isPlaced: false` 时，同一份报告就改画在输入框上方：
 
 ![一个没有侧边面板的终端：输入框上方一个黄色边框的框里写着这条命令、它会丢弃的两个有未提交改动的文件，以及带编号的 Proceed 和 Cancel 两个选项。](./fig-e-band.png)
 
@@ -577,7 +577,7 @@ on("tool.call", { tool: "Bash" }, async ($, e, next) => {
 
 ### Replay Theater：逐步回看上一轮的编辑 {/* #replay-theater-step-through-the-last-turns-edits */}
 
-一轮运行期间，Replay Theater 会记录每一次 Edit 和 Write 调用：改的是哪个文件，以及修改前后的文本。这一轮结束时，输入框上方会出现一条提示。按 `r`（或输入 `/replay`），一个面板就会一次一个 diff 地带您走一遍这些编辑，上面有一排带编号的步骤，以及 **Prev**、**Next** 和 **Close** 按钮。
+一轮运行期间，Replay Theater 会记录每一次 Edit 和 Write 调用：改的是哪个文件，以及修改前后的文本。这一轮结束时，输入框上方会出现一条提示。按 `r`（或输入 `/replay`），就会打开一个面板，逐个 diff 回看这些编辑。面板上有一排带编号的步骤，以及 **Prev**、**Next** 和 **Close** 按钮。
 
 <Tabs groupId="surface">
 <TabItem value="terminal" label="终端">
@@ -588,7 +588,7 @@ on("tool.call", { tool: "Bash" }, async ($, e, next) => {
 </TabItem>
 </Tabs>
 
-*图 F：Replay Theater：一次横跨 3 个文件、共 5 处编辑的重命名之后出现提示，然后在面板里依次查看第 1 到第 5 步。*
+*图 F：一次横跨 3 个文件、共 5 处编辑的重命名之后，Replay Theater 给出提示，然后在面板里依次显示第 1 到第 5 步。*
 
 它从不拦截或改动任何编辑，只是观察：
 
@@ -617,9 +617,9 @@ on("command.run", { command: "replay" }, async ($, e) => ({ text: (await openRep
 从中可以学到：
 
 - **事件配对。** `turn.start` 和 `turn.complete` 把一轮里的编辑框在一起，每轮生成一次回放；`e.agentId` 把子代理的轮次排除在外。
-- **注册斜杠命令。** 在 `session.start` 里调用 `$.command.register`，然后在 `command.run` 上应答。
-- **读取文件。** 对于 Write，`$.fs.read` 会在写入落盘之前拿到旧内容，所以 diff 是真实的。
-- **放在哪里由界面决定。** 全屏时，面板停靠在右侧；80 列宽时，它在输入框上方内联打开。两种情况下，mod 画的都是同一棵树。
+- **注册斜杠命令。** 在 `session.start` 里调用 `$.command.register`，然后在 `command.run` 的 hook 里作答。
+- **读取文件。** 对于 Write，`$.fs.read` 会在写入落盘前的那一刻读到旧内容，所以 diff 反映的是真实的改动。
+- **面板放在哪里，由当前界面决定。** 全屏时，面板停靠在右侧；80 列宽时，它在输入框上方内联打开。两种情况下，mod 画的都是同一棵树。
 
 ![一个很高的终端窗口，输入框上方有一个品红色边框的框：一排带编号的步骤、文件 greet.js、一行 diff，以及 Prev、Next 和 Close 按钮。](./fig-g-inline.png)
 
@@ -627,19 +627,19 @@ on("command.run", { command: "replay" }, async ($, e) => ({ text: (await openRep
 
 ## 值得养成的四个习惯 {/* #four-habits-worth-keeping */}
 
-- **借助 Claude Code 为您写好的类型。** 每次加载 mod，Claude Code 都会把与您当前版本对应的声明写进 mod 的 `.claude-plugin/types/` 文件夹，所以编辑器和 `tsc -p` 无需任何额外步骤就能用。每个事件、`$` 上的每个方法、每个元素的 props，都以它们为准。
+- **借助 Claude Code 为您写好的类型。** 每次加载 mod，Claude Code 都会把与您当前版本对应的声明写进 mod 的 `.claude-plugin/types/` 文件夹，所以编辑器和 `tsc -p` 无需任何额外步骤就能用。每个事件、`$` 上的每个方法、每个元素的 props，都以这些声明为准。
 - **从 `e.props` 读取 props。** `hasSurvey`、`bodyColumns` 等都在那里，不在 `e` 本身上。
 - **为热重载做好准备。** 每次保存都会重新运行 `register` 和 `session.start`，所以数据要放在 `$.state` 里，而不是模块变量里。
 - **画的东西没显示出来时，就看日志。** 运行 `claude --debug`，找找有没有一行说某个 hook 返回的树没有通过校验。
 
 ## 您会做一个什么样的 mod？ {/* #what-will-you-mod */}
 
-这里的三个 mod，各自源于一个问题：我的上下文用了多少？这条命令要删掉什么？Claude 刚才改了什么？您的问题会不一样，而这正是意义所在。下面是一些可以入手的点子：
+这里的三个 mod，各自源于一个问题：我的上下文用了多少？这条命令要删掉什么？Claude 刚才改了什么？您的问题会不一样，这正是 mod 的意义所在。下面是一些可以入手的点子：
 
 - 用 `$.session.usage()` 做一个费用表或限流额度表，通过 `$.ui.status` 显示在状态栏里
 - 一个 `prompt.submit` hook，把团队的约定加到每一条提示词里
 - 一个面板，列出 Claude 这次会话读过的文件，实时呈现它看过哪些内容
-- 一个专注计时器，长的一轮结束时用 `$.ui.toast` 弹出通知
+- 一个专注计时器，耗时长的一轮结束时用 `$.ui.toast` 弹出通知
 - 一个按您的技术栈定制的 `tool.call` 关卡，比如拦住生产环境的 kubectl 上下文或 `terraform apply`
 
 ### 分享您做的东西 {/* #share-what-you-build */}
