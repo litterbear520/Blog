@@ -40,7 +40,7 @@
 <p><span class="wrap_IvEC"><img decoding="async" loading="lazy" alt="Session 的消息分三种，AssistantMessage 带着 ToolCall，ToolResult 通过 tool_call_id 指回对应的 ToolCall" src="https://huangsitao.fun/assets/images/domain-session-b7909969d83a164a90ec342a320ee999.png" width="1920" height="916" class="img_ev3q"></span></p>
 <p>接下来是应用层，为了存取对话，我们需要定义一个 <code>SessionStore</code>，规定对话存储需要哪些方法，分别是列出对话，存对话和取对话等等。</p>
 <p>我们之前不是说和外部的翻译，要放到适配层吗？怎么这个 <code>SessionStore</code> 放到应用层了？答案是 <code>SessionStore</code>，本身只是一个接口。它说明应用层需要什么。真正的实现放在适配层。</p>
-<p>这样我们等会儿编排流程的时候，就可以直接依赖接口，而不用依赖具体的类。换技术实现的时候，会很方便。测试的时候，也可以换一个假的存储。这就是我们在上一期视频提过的依赖倒置。如果还是不太理解，没有关系，往后看，你会越来越理解这一点。</p>
+<p>这样我们等会儿编排流程的时候，就可以直接依赖接口，而不用依赖具体的类。换技术实现的时候，会很方便。测试的时候，也可以换一个假的存储。这就是我们在<a class="" href="https://huangsitao.fun/roadmap/%E5%89%8D%E8%A8%80/5%E5%88%86%E9%92%9F%E5%AD%A6%E4%BC%9A%E5%86%99%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1">上一篇文章</a>提过的依赖倒置。如果还是不太理解，没有关系，往后看，你会越来越理解这一点。</p>
 <p><span class="wrap_IvEC"><img decoding="async" loading="lazy" alt="应用层只依赖 SessionStore 接口，测试时可以换上假的存储" src="https://huangsitao.fun/assets/images/dependency-inversion-f59a84644778117aa6882a48de10cb68.png" width="1920" height="916" class="img_ev3q"></span></p>
 <p>然后我们要在适配层实现 <code>SessionStore</code> 接口。我打算用 JSONL 来存对话，所以定义一个 <code>JsonlSessionStore</code>。相比起刚刚的接口，它多出了一个文件路径的字段。这样我们就完成了对话在领域层，应用层和适配层的定义。</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="工具与上下文">工具与上下文<a href="https://huangsitao.fun/blog/design-agent-architecture#%E5%B7%A5%E5%85%B7%E4%B8%8E%E4%B8%8A%E4%B8%8B%E6%96%87" class="hash-link" aria-label="Direct link to 工具与上下文" title="Direct link to 工具与上下文" translate="no">​</a></h2>
