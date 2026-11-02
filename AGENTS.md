@@ -31,7 +31,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | ---- | ---- |
 | `blog/<slug>/index.md(x)` | 一篇文章一个文件夹，正文图片放同目录 |
 | `docs/<分类>/` | 笔记；MCP 课程在 `docs/MCP/<课程名>/` |
-| `roadmap/前言/` | `index.md` 是 `/roadmap` 首页（`slug: /`），子目录是三篇 Anthropic 文章的中译，原图放同目录 |
+| `roadmap/前言/` | `index.md` 是 `/roadmap` 首页（`slug: /`），子目录是三篇 Anthropic 文章的中译和三篇视频转成的文章，图放同目录 |
 | `src/components/` | 组件，见下文“组件” |
 | `src/data/` | 组件数据：一个 variant 一个文件，在同目录 `index.js` 登记；另有 `skills.js`（SkillHub）、`swatches.json`（封面底色）、`mcp*Quiz.js`（题库） |
 | `src/theme/` | swizzle 覆盖，见下文“主题覆盖” |
