@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '揭秘 AI Agent 评测',
+    date: '2026-11-02',
+    slug: 'demystifying-evals',
+    category: 'AI',
+    swatch: 'cactus',
+    cover: '/img/blog/cover-demystifying-evals.svg',
+  },
+  {
     title: '如何评估语音代理',
     date: '2026-11-02',
     slug: 'evaluating-voice-agents',
