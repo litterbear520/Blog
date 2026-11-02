@@ -211,7 +211,7 @@ plugins: [
 
 在AI时代下：
 
-<mark style={{backgroundColor: '#fff3cd', padding: '0 4px', borderRadius: '3px'}}>力量本身并不可怕，可怕的是它的主人</mark>
+<p><mark style={{backgroundColor: '#fff3cd', padding: '0 4px', borderRadius: '3px'}}>力量本身并不可怕，可怕的是它的主人</mark></p>
 
 虽然我通过工具技巧的使用，完成了这次的开发，但如果看token量和时间呢：
 
