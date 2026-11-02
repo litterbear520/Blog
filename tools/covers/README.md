@@ -78,6 +78,7 @@ clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
+| evaluating-voice-agents | sky | cover-evaluating-voice-agents.svg | recipes/evaluating-voice-agents.js |
 | design-agent-architecture | oat | cover-design-agent-architecture.svg | recipes/design-agent-architecture.js |
 | fold-subagents | fig | cover-fold-subagents.svg | recipes/fold-subagents.js |
 | tame-claude | olive | cover-tame-claude.svg | recipes/tame-claude.js |
