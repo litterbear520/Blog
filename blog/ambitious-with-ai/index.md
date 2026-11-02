@@ -11,7 +11,7 @@ import TabItem from '@theme/TabItem';
 
 Felix Rieseberg 是 Claude 的开发者之一。这份工作带来一种很奇妙的体验：几乎每天，他都会听说又有人借助 Claude 做成了某件了不起的事，或者干脆是 Claude 自己做成的。这些事他要么从没想过，要么觉得不可能，要么只是缺少去尝试的好奇心和时间。
 
-光是这个月，Claude 可能帮忙发现了一颗新行星；他看到了第一支真正喜欢的 AI 音乐视频；大家也正在讨论数学的新时代。
+光是这个月，Claude 可能帮忙[发现了一颗新行星](https://gizmodo.com/did-claude-help-an-amateur-astronomer-discover-a-new-planet-2000824393)；他看到了第一支[真正喜欢](https://www.youtube.com/watch?v=AoNnbz237E0)的 AI 音乐视频；大家也正在讨论[数学的新时代](https://terrytao.wordpress.com/2026/10/10/math-2-0/)。
 
 {/* truncate */}
 
@@ -48,7 +48,7 @@ Felix 主要用的是 Claude（这还用说），不过这些建议并不限于�
 
 目前这条路也有局限（到了 2026 年，对大多数企业来说，光靠一句“Claude，去赚钱吧”似乎还行不通），但 Felix 的总体感受是：模型越强，往往就越能在更高的抽象层次上工作。
 
-在高度上，人们还能搭出长期有效的工作流，把人从环节里撤出来，你也就不用一个接一个地给模型派活了。要做好这一点，往往得先改造你现有的做事方式。为了让 Claude 保证应用零崩溃，Felix 先得让它能方便地拉取崩溃报告，弄清每个应用版本对应哪个 git 提交，还要给它 Windows、macOS 和 Linux 电脑，这样它才能真正独立地复现问题、验证修复。
+在高度上，人们还能搭出长期有效、不再需要人参与的工作流，你也就不用一个接一个地给模型派活了。要做好这一点，往往得先改造你现有的做事方式。为了让 Claude 保证应用零崩溃，Felix 先得让它能方便地拉取崩溃报告，弄清每个应用版本对应哪个 git 提交，还要给它 Windows、macOS 和 Linux 电脑，这样它才能真正独立地复现问题、验证修复。
 
 ## 深度
 
@@ -97,7 +97,7 @@ Then rewrite my prompt to ask for exactly that.
 
 这算不上什么独到的见解：每部劫案电影都要花前 30 分钟，把一群背景各异、各怀绝技的角色凑齐。随着 AI 产品让多智能体系统（多线程、编排器，或者干脆就是子智能体）越来越容易跑起来，Felix 一再要求 Claude 多引入几个领域，得到了一些非常有意思的结果。
 
-真要做起来并不容易，这需要你有创造力。在看到同事 Alex Albert 用 Blender 渲染室内设计之前，Felix 从没想过可以用 Claude 给自己的个人主页做 3D 场景——尽管他以前还做过电子游戏！不过，他见过的“魔法”，无疑大多发生在广度上。
+真要做起来并不容易，这需要你有创造力。在看到同事 Alex Albert 用 Blender 渲染室内设计之前，Felix 从没想过可以用 Claude 给自己的[个人主页](https://www.felixrieseberg.com/)做 3D 场景——尽管他以前还做过电子游戏！不过，他见过的“魔法”，无疑大多发生在广度上。
 
 那具体该怎么做？Felix 用的是下面几种技巧：
 
@@ -114,9 +114,9 @@ Then rewrite my prompt to ask for exactly that.
 
 我们人类能做成什么，一直受限于自己相信什么是可能的——更糟的是，我们往往只在很窄的领域里相信自己。众所周知，米开朗基罗当初并不想画西斯廷礼拜堂——要知道，他是雕塑家，不是画家。
 
-Felix 在研究雄心这个问题时发现，心理学里对此有个专门的说法：自我效能感（self-efficacy）。简单说，自我效能感高的人更相信自己的能力，也因此真的做成了更多事。
+Felix 在研究雄心这个问题时发现，心理学里对此有个专门的说法：[自我效能感（self-efficacy）](https://en.wikipedia.org/wiki/Self-efficacy)。简单说，自我效能感高的人更相信自己的能力，也因此真的做成了更多事。
 
-有证据表明，自我效能感可以靠一些窍门提升。Locke 和 Latham 翻遍了 35 年的目标设定研究，底气十足地得出结论：拿到具体而困难目标的人，比只被告知“尽力就好”的人表现更好。Stripe 创始人 Patrick Collison 维护着一份 “Fast” 清单，记录了人类在目标大胆、期限紧迫时完成的许多事情。下面几个窍门都有据可查：
+有证据表明，自我效能感可以靠一些窍门提升。Locke 和 Latham 翻遍了 35 年的目标设定研究，底气十足地得出结论：拿到具体而困难目标的人，[比只被告知“尽力就好”的人表现更好](https://med.stanford.edu/content/dam/sm/s-spire/documents/PD.locke-and-latham-retrospective_Paper.pdf)。Stripe 创始人 Patrick Collison 维护着一份 [“Fast” 清单](https://patrickcollison.com/fast)，记录了人类在目标大胆、期限紧迫时完成的许多事情。下面几个窍门都有据可查：
 
 - **相信能做到，难事就能做成**：1939 年，George Dantzig 在伯克利上统计课时迟到了。他把黑板上的两道题抄下来，以为是家庭作业，做完交了上去。那其实是统计学里两个悬而未决的难题。
 - **看过别人做到，难事也就能做成**：几十年来，人们一直想在四分钟内跑完一英里。Roger Bannister 在 1954 年 5 月做到了，可他作为唯一做到的人，只保持了短短 46 天。如果你关注跑步，马拉松的两小时大关正在上演类似的一幕：今年 4 月，Sabastian Sawe 在伦敦跑出了首个官方认可的破二成绩，同一场比赛的亚军也跑进了两小时。
@@ -124,7 +124,7 @@ Felix 在研究雄心这个问题时发现，心理学里对此有个专门的�
 
 自我效能感不是新问题，但它现在的影响更大了。在能力每隔几周就跃升一次的今天，我们需要一些方法，去做那些从没认真想过、或者根本不相信能做到的事。如果你找到了更多让自己更有雄心的方法，欢迎告诉 Felix！
 
-*本文配图是弗朗西斯科·戈雅（Francisco Goya）的《飞行之法》（Modo de volar / A Way of Flying）。*
+*本文配图是[弗朗西斯科·戈雅（Francisco Goya）](https://en.wikipedia.org/wiki/Francisco_Goya)的《飞行之法》（Modo de volar / A Way of Flying）。*
 
 ---
 
