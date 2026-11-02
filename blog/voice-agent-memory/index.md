@@ -1,6 +1,6 @@
 ---
 slug: voice-agent-memory
-title: 语音代理中的记忆问题比你想的更难
+title: 语音代理的记忆不能放在关键路径上
 date: 2026-09-09
 ---
 
@@ -10,9 +10,9 @@ date: 2026-09-09
 
 第一次尝试为语音代理接入记忆层时，系统从第一轮开始就慢了数百毫秒，之后再也没有恢复。只过了一个来回，原本自然的对话就变得让人想问：“电话还通着吗？”原因是我原封不动地移植了文本代理的记忆架构：先对托管存储中的记忆做同步向量检索，再做一次简单的重排序，最后才交给 LLM。在文本聊天界面上，根本没人会注意到这点延迟。但在语音场景中，每一轮都让人感觉代理开口前要先缓冲一下。
 
-语音记忆并不是给文本记忆收紧一点延迟预算就能实现的。它对延迟的要求严苛到必须把读写路径反转过来。大部分记忆操作都不能放在响应的<Term tip="从用户说完话到听见代理回应之间必须走完的那段流程，这里多花的每一毫秒用户都得等着">关键路径</Term>上，而要提前加载、提前计算，或在响应之后写入。
+语音留给记忆的时间太紧，读写路径必须反转过来。你以为的记忆操作，大部分都不能放在响应的<Term tip="从用户说完话到听见代理回应之间必须走完的那段流程，这里多花的每一毫秒用户都得等着">关键路径</Term>上：要么提前加载，要么提前计算，要么事后写入。这一切都建立在[语音代理架构](https://manthanguptaa.in/posts/voice_agents_primer)那篇讲过的 ASR → LLM → TTS 流水线之上。
 
-我花了不少时间研究不同项目的记忆机制，包括 ChatGPT 和 Claude 的记忆如何运作，以及 Mem0、Hindsight、OpenClaw（小龙虾）等开源项目的记忆实现。但这些经验仍不足以让我充分应对语音场景给架构设计带来的挑战。这篇文章讨论的，就是语音场景的约束、由此带来的权衡、生产环境中常见的四类架构，以及那些走过弯路才会明白的经验。
+我花了不少时间研究不同项目的记忆机制，包括 [ChatGPT](https://manthanguptaa.in/posts/chatgpt_memory) 和 [Claude](https://manthanguptaa.in/posts/claude_memory) 的记忆如何运作，以及 Mem0、Hindsight、OpenClaw（小龙虾）等开源项目的记忆实现。原文作者还在 [Water](https://github.com/manthanguptaa/water) 里做过分层记忆，把 BYOM 做成了用户自己掌握、可以随身带走的记忆层，并[主张](https://manthanguptaa.in/posts/memory_is_a_mistake)大多数 AI 产品根本不该上线记忆功能。可一到语音，设计还是得换。这篇文章讨论的，就是语音场景的约束、由此带来的权衡，以及生产环境中反复出现的四类架构。
 
 ## 为何语音记忆与文本记忆截然不同
 
@@ -22,7 +22,7 @@ date: 2026-09-09
 
 输入形式是第二个差异。文本代理接收的是经过组织的文字，而语音代理接收的是即兴口语的流式转录，其中夹杂着口头停顿、说到一半重新起句、指代错误和自我纠正。在我的实践中，语音识别错误尤其令人头疼。即使是在文本聊天中表现很好的<Term tip="从对话内容里抽出值得记住的信息，比如用户的姓名和偏好">事实提取</Term>流程，到了语音场景也会遇到困难。
 
-<Term tip="对话里一方连续说完的一段话算一轮">轮次</Term>密度是第三个差异。语音对话的每一轮更短、交替更快，包含的信息也更少，通常每轮只有 10–30 个词。一次 10 分钟的对话平均会产生 40–60 轮，以及 1500–2000 个 Token 的转录文本。这听起来还可控，但在<Term tip="直接输入和输出音频、不经过文字转换的模型，也就是后文的端到端语音模型">语音原生模型</Term>上，音频会把这个数字放大很多。OpenAI 的 Realtime API 手册就明确提到：“在实践中，同一句话用音频表示时，Token 数通常约为文本的 10 倍”，而 `gpt-realtime` 的上下文窗口上限为 32k。一次普通的客服对话，就足以超过这个上限。
+<Term tip="对话里一方连续说完的一段话算一轮">轮次</Term>密度是第三个差异。语音对话的每一轮更短、交替更快，包含的信息也更少，通常每轮只有 10–30 个词。一次 10 分钟的对话平均会产生 40–60 轮，以及 1500–2000 个 Token 的转录文本。这听起来还可控，但在<Term tip="直接输入和输出音频、不经过文字转换的模型，也就是后文的端到端语音模型">语音原生模型</Term>上，音频会把这个数字放大很多。OpenAI 的 [Realtime API 手册](https://developers.openai.com/cookbook/examples/context_summarization_with_realtime_api)就明确提到：“在实践中，同一句话用音频表示时，Token 数通常约为文本的 10 倍”，而 `gpt-realtime` 的上下文窗口上限为 32k。一次普通的客服对话，就足以超过这个上限。
 
 第四个差异常被忽视，那就是冷启动问题。在文本聊天中，用户通常已经登录，系统知道会话属于谁。而在电话语音场景中，系统最初往往只有一个电话号码，必须在最初的几百毫秒内确认用户身份。假定“第一轮就知道用户是谁”的记忆架构很脆弱。好的架构把“不知道用户是谁”当作默认情况。
 
@@ -83,7 +83,7 @@ date: 2026-09-09
 
 | 模式 | 适用场景 | 代价与局限 |
 | ---- | ---- | ---- |
-| 全部注入上下文 | 用户的记忆条目少于 20–30 条时 | 超过阈值后，Token 用量膨胀；上下文过长时，模型容易忽略中间的信息 |
+| 全部注入上下文 | 用户的记忆条目少于 20–30 条时 | 超过阈值后，Token 用量膨胀；上下文过长时，模型容易[忽略中间的信息](https://arxiv.org/abs/2307.03172) |
 | 纯语义搜索 | 每一轮能否查到相关内容成为瓶颈时 | 每轮增加 50–200 毫秒延迟，对语音交互而言通常太慢 |
 | 预加载上下文 | 用户拥有稳定、可总结的历史记录时 | 长时间会话中，预加载内容可能过时；冷启动时没有可加载的内容 |
 | 混合模式（预加载 + 按需检索） | 大多数生产级语音代理 | 需要检测话题切换，但它是正确的默认选择 |
@@ -213,4 +213,19 @@ date: 2026-09-09
 
 ---
 
-*参考文章：[Memory in Voice Agents Is a Harder Problem Than You Think](https://manthanguptaa.in/posts/voice_agent_memory/)*
+*如果你觉得这篇文章有意思，欢迎告诉原文作者你的想法：可以在 [Twitter](https://twitter.com/manthanguptaa)、[LinkedIn](https://www.linkedin.com/in/manthanguptaa/) 上分享，或者发邮件到 guptaamanthan01[at]gmail[dot]com。*
+
+## 参考文献
+
+- Liu, Nelson F., et al. [Lost in the Middle: How Language Models Use Long Contexts.](https://arxiv.org/abs/2307.03172) arXiv:2307.03172, 2023.
+- Park, Joon Sung, et al. [Generative Agents: Interactive Simulacra of Human Behavior.](https://arxiv.org/abs/2304.03442) UIST 2023.
+- Zhong, Wanjun, et al. [MemoryBank: Enhancing Large Language Models with Long-Term Memory.](https://arxiv.org/pdf/2305.10250) arXiv:2305.10250, 2023.
+- Chhikara, Prateek, et al. [Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory.](https://arxiv.org/pdf/2504.19413) arXiv:2504.19413, 2025.
+- Xu, Wujiang, et al. [A-MEM: Agentic Memory for LLM Agents.](http://arxiv.org/abs/2502.12110v7) NeurIPS 2025.
+- Du, Xingbo, et al. [MemR3: Memory Retrieval via Reflective Reasoning for LLM Agents.](https://arxiv.org/abs/2512.20237) arXiv:2512.20237, 2025.
+- [Sleep-time Compute: Beyond Inference Scaling at Test-time.](https://arxiv.org/abs/2504.13171v1) arXiv:2504.13171, 2025.
+- Luo, Jinghao, et al. [From Storage to Experience: A Survey on the Evolution of LLM Agent Memory Mechanisms.](https://arxiv.org/abs/2605.06716) arXiv:2605.06716, 2026.
+
+---
+
+*参考文章：[Voice Agent Memory Cannot Live on the Critical Path](https://manthanguptaa.in/posts/voice_agent_memory/)*
