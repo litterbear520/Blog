@@ -1,6 +1,6 @@
 ---
 slug: voice-agent-memory
-title: 语音代理的记忆不能放在关键路径上
+title: 为什么语音代理的记忆问题比想象中更难
 date: 2026-09-09
 ---
 
