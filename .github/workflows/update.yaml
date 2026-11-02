@@ -1,20 +1,21 @@
 name: Build HTML
 on: push
 
-# 同一分支连续 push 时取消上一次还没跑完的构建，避免两次部署并行抢 gh-pages
-concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  build-and-deploy:
+  build:
     # 固定 24.04：ubuntu-latest 从 2026-10-19 起会切到 Ubuntu 26.04，
     # 下面的 Chromium 测试对系统和字体敏感，换镜像要单独开一次改动验证后再升
     runs-on: ubuntu-24.04
     # 浏览器步骤偶尔会卡住，别让它占满默认的 6 小时
     timeout-minutes: 25
+    # 同一分支连续 push 时取消上一次还没跑完的构建
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: true
     permissions:
-      contents: write
+      contents: read
+    outputs:
+      browser: ${{ steps.scope.outputs.browser }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -23,34 +24,26 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
 
-      - name: Install Chinese fonts for browser verification
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y fonts-noto-cjk
-          # 先把 fontconfig 缓存建好，Chromium 首次启动不必再付这笔时间
-          fc-cache -f
+      # 只改文章、图片时演练页不受影响，后面的浏览器步骤都跳过
+      - name: Decide whether browser checks are needed
+        id: scope
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node tools/ci-scope.mjs
 
-      # 两个浏览器脚本都读 CHROMIUM_BIN；在这里定一次，省得各自去猜，
-      # 版本号也留在日志里，方便以后把失败和 runner 镜像更新对上。
-      - name: Resolve browser
-        run: |
-          BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"
-          if [ -z "$BIN" ]; then
-            echo "::error::runner 上没有可用的 Chrome/Chromium"
-            exit 1
-          fi
-          echo "CHROMIUM_BIN=$BIN" >> "$GITHUB_ENV"
-          "$BIN" --version
+      - name: Run unit tests
+        run: npm run test:code-viewer-unit && npm run test:focus-range && npm run test:message-flow && npm run test:diagrams && npm run test:quick-check && npm run test:ci-scope
 
-      - name: Run data tests
-        run: npm run test:focus-range && npm run test:message-flow && npm run test:diagrams && npm run test:quick-check
+      - uses: ./.github/actions/setup-browser
+        if: steps.scope.outputs.browser != 'false'
 
       # 真实 Chromium 偶尔起不来（首条 CDP 命令无应答），重试两次再判失败；
       # 真实回归会连着三次都挂，不会被重试掩盖。
       - name: Run project viewer layout tests
+        if: steps.scope.outputs.browser != 'false'
         run: |
           for attempt in 1 2 3; do
-            if npm run test:code-viewer; then exit 0; fi
+            if npm run test:code-viewer-layout; then exit 0; fi
             echo "::warning title=浏览器测试重试::第 ${attempt} 次失败，重试"
             sleep 5
           done
@@ -60,7 +53,12 @@ jobs:
       - name: Build site
         run: npm run build --ignore-scripts
 
+      # 线上版本的标记：部署后靠它确认新版本到了，下次 push 靠它算改动范围
+      - name: Write revision marker
+        run: printf '{"revision":"%s"}' "$GITHUB_SHA" > build/walkthrough-revision.json
+
       - name: Verify real walkthrough pages on desktop and mobile
+        if: steps.scope.outputs.browser != 'false'
         run: |
           if ! node tools/walkthrough-browser.mjs; then
             # Preserve the static site for reproducing a browser failure offline.
@@ -69,24 +67,75 @@ jobs:
             exit 1
           fi
 
-      - uses: peaceiris/actions-gh-pages@v4
+      - uses: actions/upload-pages-artifact@v5
         if: github.ref == 'refs/heads/main'
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
-
-      - name: Verify deployed walkthrough pages
-        if: github.ref == 'refs/heads/main'
-        env:
-          WALKTHROUGH_BASE_URL: https://huangsitao.fun
-          WALKTHROUGH_WAIT_SECONDS: 300
-        run: node tools/walkthrough-browser.mjs
+          path: build
 
       - name: Save walkthrough browser screenshots and results
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: walkthrough-browser-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    # 部署排队，不取消已经开始的部署；排队中的旧部署会被新的顶替
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
+    # 部署权限只给这个 job，npm ci 和构建都碰不到
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
+
+      - name: Confirm the new revision is live
+        if: needs.build.outputs.browser == 'false'
+        run: |
+          for _ in $(seq 1 60); do
+            if curl -fsS --max-time 15 "https://huangsitao.fun/walkthrough-revision.json?verify=$RANDOM" | grep -q "$GITHUB_SHA"; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::新版本 5 分钟内没有出现在线上"
+          exit 1
+
+      - uses: actions/checkout@v7
+        if: needs.build.outputs.browser != 'false'
+      - uses: actions/setup-node@v7
+        if: needs.build.outputs.browser != 'false'
+        with:
+          node-version: 24
+      - uses: ./.github/actions/setup-browser
+        if: needs.build.outputs.browser != 'false'
+
+      - name: Smoke test deployed walkthrough pages
+        if: needs.build.outputs.browser != 'false'
+        env:
+          WALKTHROUGH_BASE_URL: https://huangsitao.fun
+          WALKTHROUGH_WAIT_SECONDS: 300
+          WALKTHROUGH_SMOKE: '1'
+        run: node tools/walkthrough-browser.mjs
+
+      - name: Save live browser screenshots and results
+        if: always() && needs.build.outputs.browser != 'false'
+        uses: actions/upload-artifact@v7
+        with:
+          name: walkthrough-live-${{ github.run_id }}-${{ github.run_attempt }}
           path: test-results/
           if-no-files-found: ignore
           retention-days: 7

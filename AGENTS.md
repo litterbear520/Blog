@@ -10,13 +10,18 @@ npm run build                # 构建；prebuild 先跑全部单测，其中 tes
 npm run serve                # 本地预览构建结果
 npm run build && npm run serve  # 构建后预览（模拟生产环境，提交前确认用这个）
 npm run clear                # 清理 Docusaurus 缓存
-npm run test:<名>            # 单测：code-viewer / focus-range / message-flow / diagrams / quick-check
+npm run test:<名>            # 单测：code-viewer / focus-range / message-flow / diagrams / quick-check / ci-scope
 npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers/README.md
 ```
 
 ## 部署
 
-`.github/workflows/update.yaml`：任意分支 push → 数据单测 + Chromium 布局测试 → `npm run build --ignore-scripts` → `tools/walkthrough-browser.mjs` 在桌面和手机宽度验证演练页。只有 `main` 会部署到 `gh-pages`，部署后再验证一次线上页面。同一分支的新 push 会取消未完成的旧构建。
+`.github/workflows/update.yaml` 分两个 job，仓库的 Pages 来源是 GitHub Actions：
+
+- `build`（任意分支 push）：单测 → Chromium 布局测试 → `npm run build --ignore-scripts` → `tools/walkthrough-browser.mjs` 在桌面和手机宽度全量验证演练页。`tools/ci-scope.mjs` 拿这次改动和线上版本比，只改了文章、图片这类内容时跳过所有浏览器步骤。
+- `deploy`（只有 `main`）：`actions/deploy-pages` 部署，再抽查线上页面（`WALKTHROUGH_SMOKE=1`）；纯内容改动只确认新版本已经上线。
+
+同一分支的新 push 会取消未完成的构建，已经开始的部署不取消。
 
 ## 框架注意事项
 
@@ -38,7 +43,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | `src/css/custom.css` | 全局样式和主题令牌 |
 | `src/pages/` | `index.js` 首页、`bloglist.js` 博客列表（`POSTS`）、`skills.js` SkillHub（`/skills`） |
 | `plugins/` | `copy-markdown-source/`（构建时生成清洗后的 `.md`，供“复制 Markdown”按钮用）、`remark-run-output.js` |
-| `tools/` | `covers/` 封面流水线；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证 |
+| `tools/` | `covers/` 封面流水线；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证；`ci-scope.mjs` 判断这次 push 要不要跑浏览器 |
 | `.claude/skills/` | `blog-cover`、`lesson`、`note`、`academy-diagram-design`（Academy 课件风配图），用法见各自 `SKILL.md`；跨项目通用的 `/explain` 在全局 `~/.claude/skills/` |
 
 ## 样式令牌

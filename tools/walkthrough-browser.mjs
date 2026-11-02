@@ -1,6 +1,7 @@
 // Actual built / deployed React pages, not a CSS fixture. No npm dependencies.
 // node tools/walkthrough-browser.mjs
 // WALKTHROUGH_BASE_URL=https://huangsitao.fun node tools/walkthrough-browser.mjs
+// WALKTHROUGH_SMOKE=1 只跑一课的桌面和手机两种场景
 import assert from 'node:assert/strict';
 import { spawn, execFileSync } from 'node:child_process';
 import { createReadStream, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -11,6 +12,8 @@ import { fileURLToPath } from 'node:url';
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const live = process.env.WALKTHROUGH_BASE_URL;
+// 部署后只抽查：线上产物和上线前全量验证过的是同一份，这里只确认线上环境能打开、能交互
+const smoke = process.env.WALKTHROUGH_SMOKE === '1';
 const output = join(repo, 'test-results', live ? 'walkthrough-live' : 'walkthrough-local');
 mkdirSync(output, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -175,7 +178,6 @@ try {
   server = live ? null : await serveBuild();
   const baseURL = live || server.url;
   const revision = process.env.GITHUB_SHA;
-  if (!live && revision) writeFileSync(join(repo, 'build', 'walkthrough-revision.json'), JSON.stringify({ revision }));
   if (live) {
     const deadline = Date.now() + Number(process.env.WALKTHROUGH_WAIT_SECONDS || 300) * 1000;
     let ready = false;
@@ -194,7 +196,7 @@ try {
     assert.ok(ready, 'New article did not reach the public domain before the deployment timeout');
   }
   chrome = startChrome();
-  for (const lesson of lessons) for (const scenario of scenarios) {
+  for (const lesson of smoke ? lessons.slice(0, 1) : lessons) for (const scenario of smoke ? scenarios.filter(({ name }) => name === 'desktop-dark' || name === 'phone-dark') : scenarios) {
     const label = `${lesson.name}-${scenario.name}`;
     const { targetId } = await chrome.call('Target.createTarget', { url: 'about:blank' });
     const { sessionId } = await chrome.call('Target.attachToTarget', { targetId, flatten: true });

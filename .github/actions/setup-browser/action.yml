@@ -1,0 +1,41 @@
+name: Set up browser
+description: 装好中文字体，并把 Chromium 路径写进 CHROMIUM_BIN
+runs:
+  using: composite
+  steps:
+    # 缓存安装包而不是字体文件，dpkg -i 装出来的字体和 fontconfig 配置都和 apt 一样；
+    # 换 runner 镜像时把 key 里的版本一起改掉
+    - id: fonts
+      uses: actions/cache@v6
+      with:
+        path: ~/fonts-deb
+        key: fonts-noto-cjk-ubuntu-24.04-v1
+
+    - name: Download Chinese fonts
+      if: steps.fonts.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        sudo apt-get update -qq
+        mkdir -p ~/fonts-deb
+        cd ~/fonts-deb
+        apt-get download fonts-noto-cjk
+
+    - name: Install Chinese fonts
+      shell: bash
+      run: |
+        sudo dpkg -i ~/fonts-deb/*.deb
+        # 先把 fontconfig 缓存建好，Chromium 首次启动不必再付这笔时间
+        fc-cache -f
+
+    # 两个浏览器脚本都读 CHROMIUM_BIN；在这里定一次，省得各自去猜，
+    # 版本号也留在日志里，方便以后把失败和 runner 镜像更新对上。
+    - name: Resolve browser
+      shell: bash
+      run: |
+        BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"
+        if [ -z "$BIN" ]; then
+          echo "::error::runner 上没有可用的 Chrome/Chromium"
+          exit 1
+        fi
+        echo "CHROMIUM_BIN=$BIN" >> "$GITHUB_ENV"
+        "$BIN" --version
