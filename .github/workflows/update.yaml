@@ -32,7 +32,7 @@ jobs:
         run: node tools/ci-scope.mjs
 
       - name: Run unit tests
-        run: npm run test:code-viewer-unit && npm run test:focus-range && npm run test:message-flow && npm run test:diagrams && npm run test:quick-check && npm run test:ci-scope
+        run: npm run test:code-viewer-unit && npm run test:focus-range && npm run test:message-flow && npm run test:diagrams && npm run test:quick-check && npm run test:term && npm run test:ci-scope
 
       - uses: ./.github/actions/setup-browser
         if: steps.scope.outputs.browser != 'false'

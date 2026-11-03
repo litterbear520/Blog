@@ -10,7 +10,7 @@ npm run build                # 构建；prebuild 先跑全部单测，其中 tes
 npm run serve                # 本地预览构建结果
 npm run build && npm run serve  # 构建后预览（模拟生产环境，提交前确认用这个）
 npm run clear                # 清理 Docusaurus 缓存
-npm run test:<名>            # 单测：code-viewer / focus-range / message-flow / diagrams / quick-check / ci-scope
+npm run test:<名>            # 单测：code-viewer / focus-range / message-flow / diagrams / quick-check / term / ci-scope
 npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers/README.md
 ```
 
@@ -62,7 +62,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 
 | 组件 | 写法与约定 | 数据 |
 | ---- | ---- | ---- |
-| `Term` | `<Term tip="解释">LOAD_FAST</Term>`：术语悬停或聚焦时弹出解释 | |
+| `Term` | `<Term tip="解释">LOAD_FAST</Term>`：术语悬停或聚焦时弹出解释，弹层 fixed 定位，表格这类滚动容器裁不到 | 坐标计算在 `placement.mjs`，带单测 |
 | `QuickCheck` | `<QuickCheck question options />`：课文里当场判对错的单选，每个选项带解释，可改选，不计分 | 校验在 `model.mjs`，带单测 |
 | `ReadMore` | `<ReadMore title="...">`：折叠卡，标题写成读者会问的问题；传 `id` 后正文可用 `[文字](#id)` 跳过来并自动展开（视频笔记开头的简介块就是 `id="简介"`） | |
 | `LessonMeta` | `<LessonMeta lesson minutes />`：课文标题下的课序和时长，数字由 `/lesson` 的 `lesson_lint.py` 算出并核对 | |
