@@ -335,10 +335,6 @@ AI Agent 评估仍是一个刚起步、变化很快的领域。随着 Agent 承�
 
 很多团队会组合使用多种工具，自己写评测框架，或者先用简单的评估脚本起步。我们的看法是，框架确实能加快进度、统一做法，但框架的价值取决于用它运行的评测任务。通常最好的做法是很快选定一个适合自己工作流的框架，然后把精力投到评测本身，不断打磨高质量的测试用例和评分器。
 
-## 致谢
-
-本文由 Mikaela Grace、Jeremy Hadfield、Rodrigo Olivares 和 Jiri De Jonghe 撰写。我们还要感谢 David Hershey、Gian Segato、Mike Merrill、Alex Shaw、Nicholas Carlini、Ethan Dixon、Pedram Navid、Jake Eaton、Alyssa Baum、Lina Tawfik、Karen Zhou、Alexander Bricken、Sam Kennedy、Robert Ying 以及其他贡献者。特别感谢在评测方面与我们合作、让我们受益良多的客户和合作伙伴，包括 iGent、Cognition、Bolt、Sierra、Vals.ai、Macroscope、PromptLayer、Stripe、Shopify、Terminal Bench 团队等。这项工作凝聚了多个团队的共同努力，他们帮助 Anthropic 发展出了评测实践。
-
 ---
 
 *参考文章：[Demystifying evals for AI agents](https://www.anthropic.com/research/demystifying-evals-for-ai-agents)*
