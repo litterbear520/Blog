@@ -1,5 +1,4 @@
 .term {
-  position: relative;
   cursor: help;
   text-decoration: underline dotted;
   text-decoration-color: var(--th-accent);
@@ -14,10 +13,10 @@
 }
 
 .tip {
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 8px);
-  transform: translate(-50%, 4px);
+  position: fixed;
+  left: var(--tip-left, 0);
+  top: var(--tip-top, 0);
+  transform: translateY(4px);
   z-index: 20;
   width: max-content;
   max-width: min(320px, 80vw);
@@ -42,26 +41,33 @@
   content: '';
   position: absolute;
   top: 100%;
-  left: 50%;
+  left: var(--tip-arrow, 50%);
   transform: translateX(-50%);
   border: 6px solid transparent;
   border-top-color: var(--th-line-strong);
 }
 
-.term:hover .tip,
-.term:focus-visible .tip {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, 0);
+.tip[data-side='below']::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--th-line-strong);
 }
 
-/* 窄屏放不下居中的弹层：行首行尾的词会把它顶出屏幕，隐藏时也会撑出横向滚动，
-   所以固定到屏幕底部；触屏没有悬停，点一下靠 :focus 显示 */
+.term:hover .tip[data-side],
+.term:focus-visible .tip[data-side] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+/* 窄屏放不下词旁边的弹层，固定到屏幕底部；触屏没有悬停，点一下靠 :focus 显示 */
 @media (max-width: 1024px) {
   .tip {
     position: fixed;
     left: 16px;
     right: 16px;
+    top: auto;
     bottom: 16px;
     width: auto;
     max-width: none;
