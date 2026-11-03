@@ -378,6 +378,39 @@ html.docs-doc-id-前言\/高效商务Agent架构指南\/index .markdown h5 {
   border-bottom: 0;
 }
 
+/* 单元格里写列表（<ul><li>）的表格：折行悬挂在圆点之后，分得清“折行”和“下一项”；
+   三列等宽、行距放松，窄屏保住列宽、在框内横向滚动。没有列表的表格不受影响 */
+.markdown .md-table:has(td ul) table {
+  table-layout: fixed;
+  min-width: 36rem;
+}
+
+.markdown .md-table:has(td ul) table th {
+  padding-block: 0.75rem;
+}
+
+.markdown .md-table:has(td ul) table td {
+  padding-block: 1rem;
+}
+
+.markdown .md-table:has(td ul) table :is(th, td):not(:last-child) {
+  padding-right: 1.5rem;
+}
+
+.markdown .md-table td ul {
+  margin: 0;
+  padding-left: 1.25em;
+  list-style: disc;
+}
+
+.markdown .md-table td li {
+  margin: 0;
+}
+
+.markdown .md-table td li + li {
+  margin-top: 0.5rem;
+}
+
 /* 窄列里的行内代码常被折行，每一段都画完整的边框和圆角 */
 .markdown .md-table code {
   -webkit-box-decoration-break: clone;
