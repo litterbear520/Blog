@@ -32,7 +32,7 @@ AI 在编程上的设计能力基本为零。举个例子，我让 AI 帮我实�
 
 而 service 刚好在中间，没有 domain 层那么固定，但也没有 api 或者 db 那么灵活。于是我们可以得到一条依赖关系，db 和 api 依赖于 service，service 依赖于 domain。
 
-![api 和 db 依赖 service，service 依赖 domain](./layer-dependency.png)
+![api 和 db 依赖 service，service 依赖 domain](./layer-dependency.gif)
 
 为了方便展示，这个用例比较小，所以在重构过程中，你可能会觉得似乎看起来更复杂了。但那只是因为这个用例太小了，对于现实中的用例，这样的重构肯定会是利大于弊的。接下来我们开始依次完成这几层。
 
@@ -88,7 +88,7 @@ AI 在编程上的设计能力基本为零。举个例子，我让 AI 帮我实�
 
 之后比如说我们要把 db 从 SQLite，换成 Postgres，也只需要把这里从 SQLite 换成 Postgres 就可以了，就像这样。这样我们就完成了从 SQLite 换成 Postgres，非常方便。
 
-![db 这一行换成 PostgresDb，其余组装代码不变](./server-postgres.png)
+![db 这一行换成 PostgresDb，其余组装代码不变](./server-postgres.gif)
 
 那么到这里我们就完成了我们从一团乱麻到井井有条的重构。
 
