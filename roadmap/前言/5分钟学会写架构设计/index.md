@@ -30,6 +30,8 @@ AI 在编程上的设计能力基本为零。举个例子，我让 AI 帮我实�
 
 像 api 和 db 就是容易变化的层，我们很有可能哪天突然想从 Flask 换成 FastAPI，或者从 SQLite 换成 Postgres。而 domain 就是不容易变化的层，人满了就是没法报上名，这一点无论技术怎么变都不会变。
 
+![api 和 db 容易变化，移到上面；domain 不容易变化，沉到下面](./layer-volatility.gif)
+
 而 service 刚好在中间，没有 domain 层那么固定，但也没有 api 或者 db 那么灵活。于是我们可以得到一条依赖关系，db 和 api 依赖于 service，service 依赖于 domain。
 
 ![api 和 db 依赖 service，service 依赖 domain](./layer-dependency.gif)
@@ -88,7 +90,7 @@ AI 在编程上的设计能力基本为零。举个例子，我让 AI 帮我实�
 
 之后比如说我们要把 db 从 SQLite，换成 Postgres，也只需要把这里从 SQLite 换成 Postgres 就可以了，就像这样。这样我们就完成了从 SQLite 换成 Postgres，非常方便。
 
-![db 这一行换成 PostgresDb，其余组装代码不变](./server-postgres.gif)
+![import 加上 PostgresDb，db 这一行换成 PostgresDb，其余组装代码不变](./server-postgres.gif)
 
 那么到这里我们就完成了我们从一团乱麻到井井有条的重构。
 
