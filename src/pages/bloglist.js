@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: 'Super-agent是什么',
+    date: '2026-11-06',
+    slug: 'super-agent',
+    category: 'AI',
+    swatch: 'clay',
+    cover: '/img/blog/cover-super-agent.svg',
+  },
+  {
     title: '揭秘 AI Agent 评测',
     date: '2026-11-02',
     slug: 'demystifying-evals',

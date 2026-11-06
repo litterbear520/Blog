@@ -38,3 +38,6 @@ docs/多模态探索/image/index/1755149583346.png
 
 # Python 字节码（技能脚本被 import 测试时会生成）
 __pycache__/
+
+# 抖音原视频和转写（仅本地保留，不进仓库）
+/video
