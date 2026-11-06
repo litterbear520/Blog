@@ -4,10 +4,11 @@
 // SVG 里不写颜色和字号，只写下面这些类名，映射在 src/components/Diagram/styles.module.css：
 //   形状  mask（标签底）· zone（容器）· band（容器标题带）· divider（记录框分隔线）· boundary（边界虚线）
 //         n-neutral 中性 · n-process 处理 · n-done 完成 · n-external 外部 · n-focal 结论框（每张图至多一个）
+//         em 强调边（叠在 n-* / zone / s-card 上，换成回路蓝粗边）
 //         n-option 选项标签（选项对照图底部那条，实心陶土底；紧跟的 <text> 是标签文字）
 //   连线  arrow · arrow loop（回路）；箭头 marker 里用 mk / mk-loop（开口 V 形）
 //   文字  t-name 名称 · t-band 标题带 · t-sub 说明 · t-note 旁注 · t-label 连线标签
-//         t-mono / t-mono-strong 代码名 · t-code（t-note 里的行内代码）· t-accent 强调色文字（和 s-leader 配对的标注）
+//         t-mono / t-mono-strong 代码名 · t-code（t-note 里的行内代码）· t-accent 强调色文字（和 s-leader 配对的标注）· t-info 蓝色文字
 //   场景  s-window 窗口 · s-bar 窗口标题条 · s-bubble-user 顾客 / 用户气泡 · s-bubble-agent Agent 气泡
 //         s-card 商品卡（写真实的名字和一项关键数据，不画图片占位）· s-panel 代码 / 终端面板（墨色实底）
 //         s-hl 强调框（框住一个词或一行）· s-leader 强调色曲线标注 · s-dim 淡化的元素（被禁用、没发生的路径）
@@ -15,5 +16,16 @@
 // <svg> 要带 role="img" 和 aria-labelledby，id 统一用这张图的文件名作前缀，<desc> 写成“这张图说明……”一整句。
 
 import modsHookChain from './modsHookChain';
+import superAgentChannels from './superAgentChannels';
+import superAgentProactive from './superAgentProactive';
+import superAgentArch from './superAgentArch';
+import superAgentTwoLayer from './superAgentTwoLayer';
+import superAgentFilter from './superAgentFilter';
+import superAgentThreads from './superAgentThreads';
+import superAgentSubscribe from './superAgentSubscribe';
+import superAgentRecall from './superAgentRecall';
+import superAgentSpeculative from './superAgentSpeculative';
+import superAgentAsyncLoop from './superAgentAsyncLoop';
+import superAgentDecouple from './superAgentDecouple';
 
-export default { modsHookChain };
+export default { modsHookChain, superAgentChannels, superAgentProactive, superAgentArch, superAgentTwoLayer, superAgentFilter, superAgentThreads, superAgentSubscribe, superAgentRecall, superAgentSpeculative, superAgentAsyncLoop, superAgentDecouple };

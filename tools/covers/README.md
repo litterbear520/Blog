@@ -78,6 +78,7 @@ clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
+| super-agent-design | peach | cover-super-agent-design.svg | recipes/super-agent-design.js |
 | super-agent | clay | cover-super-agent.svg | recipes/super-agent.js |
 | demystifying-evals | cactus | cover-demystifying-evals.svg | recipes/demystifying-evals.js |
 | evaluating-voice-agents | sky | cover-evaluating-voice-agents.svg | recipes/evaluating-voice-agents.js |
