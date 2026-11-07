@@ -24,7 +24,13 @@ mkdir -p src/<slug>   # 原图按文章里出现的顺序存成 fig01.png、fig0
 
 `rmac` 把本目录同步到 Mac、在 Mac 上跑无头 Chrome、再取回 `out/`，本机不占 CPU；Mac 不可用时把 `rmac` 换成 `python3 -I render.py`（本机要有 Chrome）。一次只跑一张。
 
-核对通过后把成品复制进 `blog/<slug>/`，改成有意义的文件名。
+核对通过后把成品复制进 `blog/<slug>/`，改成有意义的文件名。Chrome 导出的 PNG 没有压到最小，入库前在 Mac 上无损压缩（体积约减半，像素不变）：
+
+```bash
+rsync -aq blog/<slug>/*.png mac:pngopt/
+ssh mac 'export PATH=/opt/homebrew/bin:$PATH; oxipng -q -o max --strip safe pngopt/*.png'   # 首次先 brew install oxipng
+rsync -aq mac:pngopt/ blog/<slug>/ && ssh mac 'rm -rf pngopt'
+```
 
 ## 约定
 
