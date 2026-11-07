@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: 'Agent 记忆的组成部分',
+    date: '2026-11-07',
+    slug: 'components-of-agent-memory',
+    category: 'AI',
+    swatch: 'mineral',
+    cover: '/img/blog/cover-components-of-agent-memory.svg',
+  },
+  {
     title: 'Super-agent 设计探索：迈向更自主的 Agent 系统',
     date: '2026-11-06',
     slug: 'super-agent-design',
