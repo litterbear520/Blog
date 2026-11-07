@@ -512,20 +512,6 @@ html:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index) :is(.theme-d
   border-radius: 8px;
 }
 
-/* 旧写法 <div className="figure-wide">：图片现在一律与正文同宽，这层只当普通图片段落 */
-.blog-post-page .markdown > .figure-wide {
-  padding-block: 1rem;
-  margin-bottom: 1rem;
-}
-
-.blog-post-page .markdown > .figure-wide > p {
-  margin: 0;
-}
-
-.blog-post-page .markdown > .figure-wide img {
-  display: block;
-}
-
 /* ═══════════════════════════════════════════
    提示块（:::note / info / tip / important / warning / danger）
    照 GitHub alerts 的图标（Octicons）和配色，但不画 GitHub 那条左侧竖线，
