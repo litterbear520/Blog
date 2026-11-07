@@ -34,7 +34,8 @@
   --ifm-heading-font-family: 'Source Serif 4', 'Noto Serif SC', Georgia, 'Times New Roman', serif;
   --ifm-font-family-monospace: Menlo, Monaco, Consolas, 'Droid Sans Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
   --ifm-code-font-size: 95%;
-  --ifm-pre-line-height: 1.5;
+  --ifm-pre-line-height: 1.4616; /* 代码块 13px 字配 19px 行高，照 Academy */
+  --ifm-pre-padding: 0.75rem;     /* 代码块内边距 12px，照 Academy */
   --ifm-line-height-base: 1.65;
   --ifm-font-weight-semibold: 500;
   --ifm-font-weight-bold: 600;
@@ -42,6 +43,7 @@
   --ifm-heading-line-height: 1.25;
   --ifm-heading-color: var(--th-text);
   --ifm-global-radius: 0.5rem;
+  --ifm-code-border-radius: 12px; /* 代码块外框，照 Academy；行内代码另写 8px */
 
   /* ── 强调色：陶土 ── */
   --ifm-color-primary: #a84b29;
@@ -234,17 +236,35 @@ html[data-theme='dark'] {
    排版细节
    ═══════════════════════════════════════════ */
 
-/* 标题：h1/h2 中等字重 + 微收字距；h3 以下半粗 */
+/* 标题：h1/h2 中等字重 + 微收字距；h3 以下半粗。
+   字号与行高照 Academy 课文：h1 36px（手机 32px）、h2 22px、h3 18px，h2/h3 行高 1.5 */
 .markdown h1:first-child {
   --ifm-h1-font-size: 2.25rem;
 }
 
+/* 博文标题在 .markdown 外（文章头部），主题默认 48px，跟上面统一 */
+.blog-post-page article > header h1 {
+  font-size: 2.25rem;
+}
+
+@media (max-width: 767px) {
+  .markdown h1:first-child {
+    --ifm-h1-font-size: 2rem;
+  }
+
+  .blog-post-page article > header h1 {
+    font-size: 2rem;
+  }
+}
+
 .markdown > h2 {
-  --ifm-h2-font-size: 1.5rem;
+  --ifm-h2-font-size: 1.375rem;
+  line-height: 1.5;
 }
 
 .markdown > h3 {
-  --ifm-h3-font-size: 1.25rem;
+  --ifm-h3-font-size: 1.125rem;
+  line-height: 1.55;
 }
 
 .markdown h1,
@@ -277,13 +297,20 @@ html[data-theme='dark'] {
    Infima 默认 h4 与正文同字号、h5 比正文还小，五级标题的长文里层级会糊掉；
    只对这一篇生效（主题给每篇文档的 <html> 加了 docs-doc-id-<id> 类） */
 html.docs-doc-id-前言\/高效商务Agent架构指南\/index .markdown {
-  --ifm-h2-font-size: 1.625rem;
-  --ifm-h3-font-size: 1.375rem;
   --ifm-h4-font-size: 1.125rem;
-  --ifm-h5-font-size: 1.0625rem;
+  --ifm-h5-font-size: 1rem;
   --ifm-h3-vertical-rhythm-top: 2;
   --ifm-h4-vertical-rhythm-top: 1.75;
   --ifm-h5-vertical-rhythm-top: 1.75;
+}
+
+/* 五级标题逐级差 2px：h2 24px、h3 20px、h4 18px、h5 16px（变量要写在元素上才盖得过全站的 .markdown > h2 / h3） */
+html.docs-doc-id-前言\/高效商务Agent架构指南\/index .markdown > h2 {
+  --ifm-h2-font-size: 1.5rem;
+}
+
+html.docs-doc-id-前言\/高效商务Agent架构指南\/index .markdown > h3 {
+  --ifm-h3-font-size: 1.25rem;
 }
 
 html.docs-doc-id-前言\/高效商务Agent架构指南\/index .markdown h2,
@@ -419,31 +446,76 @@ html.docs-doc-id-前言\/高效商务Agent架构指南\/index .markdown h5 {
   box-decoration-break: clone;
 }
 
-/* 文档正文图片：宽度封顶 768px（与课程原站列宽一致），大图靠放大按钮看原图；
-   只作用于 docs / roadmap（theme-doc-markdown），博客头图不受影响。
-   变量由 src/theme/MDXComponents/Img 的外层容器消费，见那里的说明 */
-.theme-doc-markdown {
-  --md-img-max-width: min(100%, 768px);
+/* ═══════════════════════════════════════════
+   正文版式：笔记、博文、路线三处统一照 Academy 课文
+   列宽 768px、正文 16px / 26px（每行约 48 个全角字符），文字与图片同宽；
+   段距和列表 16px、列表条目间 8px；h2 上 64px 下 16px，h3 上下 16px；
+   代码块、表格、提示块上下 32px；图片最宽到列宽、8px 圆角，与上下文字各隔 32px。
+   docs / roadmap 正文是 .theme-doc-markdown，博文是 .blog-post-page .markdown
+   ═══════════════════════════════════════════ */
+
+/* 正文列封顶 768px、在主列里居中：博文是 article + 上下篇导航，docs / roadmap 是 docItemContainer（类名带哈希，按前缀匹配） */
+.blog-post-page main > article,
+.blog-post-page main > nav,
+[class*='docItemContainer'] {
+  max-width: 768px;
+  margin-inline: auto;
 }
 
-/* 博文正文图片：随正文列宽封顶 632px，另加高度上限，手机长截图一屏看得全；
-   正文第一段是头图（见 AGENTS.md 博客约定），照旧铺满 */
+/* 图片宽度上限由 src/theme/MDXComponents/Img 的外层容器消费，见那里的说明 */
+:is(.theme-doc-markdown, .blog-post-page .markdown) {
+  --md-img-max-width: min(100%, 768px);
+  --ifm-paragraph-margin-bottom: 1rem; /* 松散列表、提示块里的段落 */
+  --ifm-list-item-margin: 0.5rem;
+  --ifm-list-left-padding: 1rem;
+  line-height: 1.625;
+}
+
+/* 博文另加高度上限，手机长截图一屏看得全；正文第一段是头图（见 AGENTS.md 博客约定），不受限 */
 .blog-post-page .markdown {
-  --md-img-max-width: min(100%, 632px);
   --md-img-max-height: 70vh;
 }
 
 .blog-post-page .markdown > p:first-child {
-  --md-img-max-width: 100%;
   --md-img-max-height: none;
 }
 
-/* 博文宽图：原图很大、图里有小字的配图（如转载文章的数据图），在正文里包一层
-   <div className="figure-wide">，桌面端突破 632px 正文列，最宽到主栏宽度（不压右侧目录），
-   字跟着放大约 1.5 倍，不用每张都点放大；图注仍是正文列宽。窗口窄于 997px 时目录收起，照常随正文列。
-   主栏宽度按 Infima 栅格算：容器去掉左右各 1rem 后，正文栏占 3/4，再去掉栏内边距 */
+/* Infima 用 .markdown > p / ul 写死了 --ifm-leading（20px），段距要在这里直接覆盖 */
+:is(.theme-doc-markdown, .blog-post-page .markdown) > :is(p, ul, ol) {
+  margin-bottom: 1rem;
+}
+
+/* 商务 Agent 架构指南有五级标题，小标题留白用它自己的层级样式（见「排版细节」） */
+html:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index) :is(.theme-doc-markdown, .blog-post-page .markdown) > h2 {
+  margin: 4rem 0 1rem;
+}
+
+html:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index) :is(.theme-doc-markdown, .blog-post-page .markdown) > :is(h3, h4) {
+  margin: 1rem 0;
+}
+
+:is(.theme-doc-markdown, .blog-post-page .markdown) > :is(.theme-code-block, .theme-admonition, .md-table, .tabs-container) {
+  margin-block: 2rem;
+}
+
+/* 图片段落：上下内边距 16px 加段距 16px，与文字隔 32px，后面接 h2 时隔 80px，和 Academy 一样；
+   img 默认是行内元素，下方会多出一截行距，改成块级 */
+:is(.theme-doc-markdown, .blog-post-page .markdown) > p:has(> [class*='wrap_'] > img) {
+  padding-block: 1rem;
+}
+
+:is(.theme-doc-markdown, .blog-post-page .markdown) > p > [class*='wrap_'] > img {
+  display: block;
+}
+
+:is(.theme-doc-markdown, .blog-post-page .markdown) [class*='wrap_'] > img {
+  border-radius: 8px;
+}
+
+/* 旧写法 <div className="figure-wide">：图片现在一律与正文同宽，这层只当普通图片段落 */
 .blog-post-page .markdown > .figure-wide {
-  margin-block: 3rem;
+  padding-block: 1rem;
+  margin-bottom: 1rem;
 }
 
 .blog-post-page .markdown > .figure-wide > p {
@@ -452,114 +524,6 @@ html.docs-doc-id-前言\/高效商务Agent架构指南\/index .markdown h5 {
 
 .blog-post-page .markdown > .figure-wide img {
   display: block;
-}
-
-@media (min-width: 997px) {
-  .blog-post-page .markdown > .figure-wide {
-    --md-img-max-width: 100%;
-    --md-img-max-height: none;
-    --figure-wide-width: min(944px, calc((100vw - 2rem) * 0.75 - 2rem));
-    width: var(--figure-wide-width);
-    margin-inline: calc((100% - var(--figure-wide-width)) / 2);
-  }
-}
-
-/* 正文列宽也封顶 768px、在列里居中，文字与图片同宽，一行不至于太长：
-   博文是 article + 上下篇导航，docs / roadmap 是 docItemContainer（类名带哈希，按前缀匹配） */
-.blog-post-page main > article,
-.blog-post-page main > nav,
-[class*='docItemContainer'] {
-  max-width: 768px;
-  margin-inline: auto;
-}
-
-/* 博文和路线是长篇阅读：列再收窄到 632px、正文 18px，每行约 35 个全角字符（16px × 768px 时是 48 个）；
-   手机列本来就窄，字号保持 16px。代码块固定回原来的 15.2px，不随正文放大 */
-.blog-post-page main > article,
-.blog-post-page main > nav,
-html.plugin-id-roadmap [class*='docItemContainer'] {
-  max-width: 632px;
-}
-
-.blog-post-page .markdown,
-html.plugin-id-roadmap .markdown {
-  line-height: 1.75;
-  --ifm-code-font-size: 0.95rem;
-}
-
-@media (min-width: 768px) {
-  .blog-post-page .markdown,
-  html.plugin-id-roadmap .markdown {
-    font-size: 1.125rem;
-  }
-}
-
-/* 博文和路线的版式节奏：段距 24px、列表条目间 10px；
-   小标题上方留白 h2 54px、h3 36px、h4 28px，字体字号保持全站原样；
-   商务 Agent 架构指南有五级标题，保留它自己的层级样式（见「排版细节」）；
-   代码块、表格、提示块上下各留 32px，图片上下各留 48px */
-:is(.blog-post-page, html.plugin-id-roadmap) .markdown {
-  --ifm-paragraph-margin-bottom: 1.5rem; /* 松散列表、提示块里的段落 */
-  --ifm-list-item-margin: 0.625rem;
-  --ifm-list-left-padding: 1.25em;
-}
-
-/* Infima 用 .markdown > p / ul 写死了 --ifm-leading（20px），段距要在这里直接覆盖 */
-:is(.blog-post-page, html.plugin-id-roadmap) .markdown > :is(p, ul, ol) {
-  margin-bottom: 1.5rem;
-}
-
-:is(.blog-post-page, html.plugin-id-roadmap:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index)) .markdown > :is(h2, h3, h4) {
-  margin: 3.375rem 0 1.25rem;
-}
-
-:is(.blog-post-page, html.plugin-id-roadmap:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index)) .markdown > h3 {
-  margin-top: 2.25rem;
-}
-
-:is(.blog-post-page, html.plugin-id-roadmap:not(.docs-doc-id-前言\/高效商务Agent架构指南\/index)) .markdown > h4 {
-  margin-top: 1.75rem;
-}
-
-:is(.blog-post-page, html.plugin-id-roadmap) .markdown > :is(.theme-code-block, .theme-admonition, .md-table, .tabs-container) {
-  margin-block: 2rem;
-}
-
-:is(.blog-post-page, html.plugin-id-roadmap) .markdown > p:has(> [class*='wrap_'] > img) {
-  margin-block: 3rem;
-}
-
-/* img 默认是行内元素，下方会多出一截行距，上下留白就不相等了 */
-:is(.blog-post-page, html.plugin-id-roadmap) .markdown > p > [class*='wrap_'] > img {
-  display: block;
-}
-
-/* 笔记的版式节奏照 Academy 课文：段距和列表 16px、列表条目间 8px；
-   h2 上方留 64px，h3 上下各 16px（标题字体字号保持全站原样）；代码块、表格、提示块上下各 32px；图片 8px 圆角 */
-html.plugin-id-default .theme-doc-markdown {
-  --ifm-paragraph-margin-bottom: 1rem; /* 松散列表、提示块里的段落 */
-  --ifm-list-item-margin: 0.5rem;
-  --ifm-list-left-padding: 1rem;
-}
-
-html.plugin-id-default .theme-doc-markdown > :is(p, ul, ol) {
-  margin-bottom: 1rem;
-}
-
-html.plugin-id-default .theme-doc-markdown > h2 {
-  margin: 4rem 0 1rem;
-}
-
-html.plugin-id-default .theme-doc-markdown > h3 {
-  margin: 1rem 0;
-}
-
-html.plugin-id-default .theme-doc-markdown > :is(.theme-code-block, .theme-admonition, .md-table, .tabs-container) {
-  margin-block: 2rem;
-}
-
-html.plugin-id-default .theme-doc-markdown img {
-  border-radius: 8px;
 }
 
 /* ═══════════════════════════════════════════
@@ -780,7 +744,7 @@ html[data-theme='dark'] .theme-admonition [class*='admonitionHeading'] {
   content: '';
   position: absolute;
   top: 12px;
-  left: 14px;
+  left: 12px;
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -803,7 +767,7 @@ html[data-theme='dark'] .theme-admonition [class*='admonitionHeading'] {
   content: '';
   position: absolute;
   top: 50%;
-  left: 14px;
+  left: 12px;
   transform: translateY(-50%);
   width: 12px;
   height: 12px;
@@ -812,10 +776,23 @@ html[data-theme='dark'] .theme-admonition [class*='admonitionHeading'] {
   box-shadow: 20px 0 0 #febc2e, 40px 0 0 #28c840;
 }
 
-/* 代码块正文：Cursor 默认 14px、无连字（编辑器默认关闭 fontLigatures） */
+/* 代码块正文：13px / 19px（照 Academy），无连字（Cursor 默认关闭 fontLigatures） */
 .prism-code {
-  font-size: 14px;
+  font-size: 13px;
   font-variant-ligatures: none;
+}
+
+/* 代码块外框圆角 12px（照 Academy）；全站 pre 的 8px 留给其他组件。
+   只选代码本体 pre.prism-code，别碰运行输出面板里的 pre；特异性 (0,3,2) 高过下面带 !important 的
+   [data-theme='dark'] pre，和后面的 run-output-open 同级，靠后的 run-output-open 胜出。
+   带 title 的代码块：标题栏下面的代码区顶部不要圆角 */
+html[data-theme] .theme-code-block pre.prism-code {
+  border-radius: 12px !important;
+}
+
+html[data-theme] .theme-code-block:has([class*='codeBlockTitle']) pre.prism-code {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }
 
 /* 暗色代码块容器：取 Cursor Dark 的 editor.background / editorGroup.border；
@@ -863,7 +840,7 @@ html[data-theme='dark'] .theme-admonition [class*='admonitionHeading'] {
   color: inherit;
   border: 1px solid var(--th-line);
   padding: 1px 6px;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 0.875em;
 }
 
@@ -902,7 +879,7 @@ pre {
 
 
 /* ---- 代码块预录输出面板（```python run + ```output，见 plugins/remark-run-output.js）---- */
-.theme-code-block.run-output-open pre {
+html[data-theme] .theme-code-block.run-output-open pre {
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   margin-bottom: 0;
@@ -915,16 +892,16 @@ pre {
   color: var(--th-text-2);
   background: var(--prism-background-color);
   border-top: 1px solid var(--th-line);
-  border-bottom-left-radius: var(--ifm-code-border-radius);
-  border-bottom-right-radius: var(--ifm-code-border-radius);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 [data-theme='dark'] .run-output {
   background: #181818;
   border: 1px solid #262626;
   border-top-color: #2e2e2e;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 /* 图标 + 输出排成一行：图标是行首标记，和第一行输出对齐，文字紧随其后 */
