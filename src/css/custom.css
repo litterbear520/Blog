@@ -438,6 +438,32 @@ html.docs-doc-id-前言\/高效商务Agent架构指南\/index .markdown h5 {
   --md-img-max-height: none;
 }
 
+/* 博文宽图：原图很大、图里有小字的配图（如转载文章的数据图），在正文里包一层
+   <div className="figure-wide">，桌面端突破 632px 正文列，最宽到主栏宽度（不压右侧目录），
+   字跟着放大约 1.5 倍，不用每张都点放大；图注仍是正文列宽。窗口窄于 997px 时目录收起，照常随正文列。
+   主栏宽度按 Infima 栅格算：容器去掉左右各 1rem 后，正文栏占 3/4，再去掉栏内边距 */
+.blog-post-page .markdown > .figure-wide {
+  margin-block: 3rem;
+}
+
+.blog-post-page .markdown > .figure-wide > p {
+  margin: 0;
+}
+
+.blog-post-page .markdown > .figure-wide img {
+  display: block;
+}
+
+@media (min-width: 997px) {
+  .blog-post-page .markdown > .figure-wide {
+    --md-img-max-width: 100%;
+    --md-img-max-height: none;
+    --figure-wide-width: min(944px, calc((100vw - 2rem) * 0.75 - 2rem));
+    width: var(--figure-wide-width);
+    margin-inline: calc((100% - var(--figure-wide-width)) / 2);
+  }
+}
+
 /* 正文列宽也封顶 768px、在列里居中，文字与图片同宽，一行不至于太长：
    博文是 article + 上下篇导航，docs / roadmap 是 docItemContainer（类名带哈希，按前缀匹配） */
 .blog-post-page main > article,

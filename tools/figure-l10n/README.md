@@ -24,7 +24,7 @@ mkdir -p src/<slug>   # 原图按文章里出现的顺序存成 fig01.png、fig0
 
 `rmac` 把本目录同步到 Mac、在 Mac 上跑无头 Chrome、再取回 `out/`，本机不占 CPU；Mac 不可用时把 `rmac` 换成 `python3 -I render.py`（本机要有 Chrome）。一次只跑一张。
 
-核对通过后把成品复制进 `blog/<slug>/`，改成有意义的文件名。Chrome 导出的 PNG 没有压到最小，入库前在 Mac 上无损压缩（体积约减半，像素不变）：
+核对通过后把成品复制进 `blog/<slug>/`，改成有意义的文件名。博文正文列只有 632px，这类原图缩到列宽后小字看不清，正文里给每张图包一层 `<div className="figure-wide">`（前后空一行），桌面端会加宽到主栏宽度。Chrome 导出的 PNG 没有压到最小，入库前在 Mac 上无损压缩（体积约减半，像素不变）：
 
 ```bash
 rsync -aq blog/<slug>/*.png mac:pngopt/
