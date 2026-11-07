@@ -1,0 +1,145 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: "SC"; src: url("fonts/NotoSansSC.ttf"); font-weight: 100 900; }
+body { margin: 0; }
+</style></head>
+<body>
+<pre id="rep"></pre>
+<pre id="out"></pre>
+<script>
+// 用法：render.html?fig=<slug>/figNN[&debug=1][&crop=x0,y0,x1,y1][&orig=1]（平时用 render.py / rmac 调它）
+// 规格文件 specs/<slug>/figNN.js 设置 window.SPEC = { src, items: [...] }，src 相对本目录，坐标一律用原图像素。
+// item 字段：
+//   r: [x0,y0,x1,y1]  粗略框住要替换的英文（框里不要混进别的线条）
+//   t: '中文'          替换后的文字，\n 换行；不写 t 就只遮盖
+//   size, weight      字号（原图像素）和字重，默认 400
+//   anchor            'start' | 'middle' | 'end'，默认 start，对齐原文字迹的左/中/右
+//   x, y              直接指定锚点（y 是第一行的中线）；不写就跟原文字迹对齐
+//   dx, dy            在自动位置上微调
+//   color             文字颜色，默认取原文字迹颜色
+//   bg                遮盖用的底色，默认取框外一圈的中位色
+//   patch             [x0,y0,x1,y1] 直接指定遮盖范围（默认 = 字迹外扩 pad）
+//   pad               字迹外扩像素，默认 6
+//   thr               判定字迹的色差阈值，默认 40
+//   lh                行高倍数，默认 1.3
+//   mono              true 用等宽字体
+//   noPatch           true 不遮盖（只写字）
+//   segs              [{t, color, weight}] 单行分段着色（如后半句换色），t 仍写全文
+//   inpaint           {color, tol, grow}：不整块遮盖，只抹掉 patch 内接近 color 的字迹再从周围补回（字压在连线上时用，需同时写 patch、x、y、color）
+//   rot               旋转角度（如 -90），以原文字迹中心为锚点居中书写；x/y 可覆盖锚点
+const q = new URLSearchParams(location.search);
+const fig = q.get('fig'), debug = q.get('debug') === '1', orig = q.get('orig') === '1';
+const rep = [];
+function load(src) { return new Promise((ok, err) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = err; document.head.appendChild(s); }); }
+function img(src) { return new Promise((ok, err) => { const i = new Image(); i.onload = () => ok(i); i.onerror = err; i.src = src; }); }
+const hex = c => '#' + c.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+const parse = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+(async () => {
+  await load(`specs/${fig}.js?${Date.now()}`);
+  const S = window.SPEC;
+  const im = await img(S.src);
+  const W = im.naturalWidth, H = im.naturalHeight;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  ctx.drawImage(im, 0, 0);
+  const D = ctx.getImageData(0, 0, W, H).data;
+  const px = (x, y) => { const i = (y * W + x) * 4; return [D[i], D[i + 1], D[i + 2]]; };
+  const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+  const median = arr => { const s = [0, 1, 2].map(k => arr.map(a => a[k]).sort((m, n) => m - n)[arr.length >> 1]); return s; };
+  function ring([x0, y0, x1, y1], m = 3) {
+    const a = [];
+    for (let x = x0 - m; x <= x1 + m; x += 2) for (const y of [y0 - m, y1 + m]) if (x >= 0 && y >= 0 && x < W && y < H) a.push(px(x, y));
+    for (let y = y0 - m; y <= y1 + m; y += 2) for (const x of [x0 - m, x1 + m]) if (x >= 0 && y >= 0 && x < W && y < H) a.push(px(x, y));
+    return median(a);
+  }
+  await document.fonts.load('400 40px SC'); await document.fonts.load('700 40px SC');
+  const jobs = [];
+  for (const it of S.items) {
+    const r = it.r;
+    const bg = it.bg ? parse(it.bg) : ring(r);
+    const thr = it.thr ?? 40;
+    let ix0 = 1e9, iy0 = 1e9, ix1 = -1, iy1 = -1, maxd = 0;
+    for (let y = r[1]; y <= r[3]; y++) for (let x = r[0]; x <= r[2]; x++) {
+      const d = dist(px(x, y), bg);
+      if (d > thr) { ix0 = Math.min(ix0, x); iy0 = Math.min(iy0, y); ix1 = Math.max(ix1, x); iy1 = Math.max(iy1, y); maxd = Math.max(maxd, d); }
+    }
+    if (ix1 < 0) { ix0 = r[0]; iy0 = r[1]; ix1 = r[2]; iy1 = r[3]; }
+    let col = it.color;
+    if (!col) {
+      const a = [];
+      for (let y = iy0; y <= iy1; y++) for (let x = ix0; x <= ix1; x++) { const p = px(x, y); if (dist(p, bg) >= 0.8 * maxd) a.push(p); }
+      col = a.length ? hex([0, 1, 2].map(k => a.reduce((s, p) => s + p[k], 0) / a.length)) : '#000000';
+    }
+    const pad = it.pad ?? 6;
+    const patch = it.patch || [ix0 - pad, iy0 - pad, ix1 + pad, iy1 + pad];
+    rep.push({ t: it.t, ink: [ix0, iy0, ix1, iy1], h: iy1 - iy0, bg: hex(bg), color: col });
+    jobs.push({ it, bg, col, patch, ink: [ix0, iy0, ix1, iy1] });
+  }
+  if (!orig) {
+    for (const j of jobs) if (!j.it.noPatch && !debug && !j.it.inpaint) { ctx.fillStyle = hex(j.bg); const p = j.patch; ctx.fillRect(p[0], p[1], p[2] - p[0] + 1, p[3] - p[1] + 1); }
+    // inpaint：只抹掉 patch 范围内接近文字颜色的像素（外扩 grow 像素），再从周围像素逐圈扩散补回，
+    // 用在字压在连线上的地方，线条大多能保留下来。
+    for (const j of jobs) if (j.it.inpaint && !debug) {
+      const { color: ic, tol = 50, grow = 3 } = j.it.inpaint, tc = parse(ic);
+      const [x0, y0, x1, y1] = j.patch, w = x1 - x0 + 1, h = y1 - y0 + 1;
+      const id = ctx.getImageData(x0, y0, w, h), d = id.data;
+      let m = new Uint8Array(w * h);
+      for (let i = 0; i < w * h; i++) if (dist([d[4 * i], d[4 * i + 1], d[4 * i + 2]], tc) < tol) m[i] = 1;
+      for (let g = 0; g < grow; g++) {
+        const n = m.slice();
+        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (m[y * w + x])
+          for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const X = x + dx, Y = y + dy; if (X >= 0 && Y >= 0 && X < w && Y < h) n[Y * w + X] = 1; }
+        m = n;
+      }
+      let left = m.reduce((s, v) => s + v, 0);
+      while (left > 0) {
+        const fill = [];
+        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (m[y * w + x]) {
+          let s = [0, 0, 0], c = 0;
+          for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const X = x + dx, Y = y + dy; if ((dx || dy) && X >= 0 && Y >= 0 && X < w && Y < h && !m[Y * w + X]) { const k = 4 * (Y * w + X); s[0] += d[k]; s[1] += d[k + 1]; s[2] += d[k + 2]; c++; } }
+          if (c) fill.push([y * w + x, s.map(v => v / c)]);
+        }
+        if (!fill.length) break;
+        for (const [i, s] of fill) { d[4 * i] = s[0]; d[4 * i + 1] = s[1]; d[4 * i + 2] = s[2]; m[i] = 0; left--; }
+      }
+      ctx.putImageData(id, x0, y0);
+    }
+    for (const j of jobs) {
+      const { it, col, ink } = j;
+      if (debug) { ctx.strokeStyle = '#ff00ff'; ctx.lineWidth = 2; const p = j.patch; ctx.strokeRect(p[0], p[1], p[2] - p[0], p[3] - p[1]); }
+      if (!it.t || debug) continue;
+      const size = it.size, lines = it.t.split('\n'), lh = (it.lh ?? 1.3) * size;
+      ctx.font = `${it.weight ?? 400} ${size}px ${it.mono ? '"DejaVu Sans Mono", monospace' : 'SC'}`;
+      ctx.fillStyle = col; ctx.textBaseline = 'middle';
+      const anchor = it.anchor || 'start'; ctx.textAlign = anchor === 'start' ? 'left' : anchor === 'end' ? 'right' : 'center';
+      let x = it.x ?? (anchor === 'start' ? ink[0] : anchor === 'end' ? ink[2] : (ink[0] + ink[2]) / 2);
+      let y = it.y ?? ((ink[1] + ink[3]) / 2 - (lines.length - 1) * lh / 2);
+      x += it.dx || 0; y += it.dy || 0;
+      if (it.segs) {
+        // 分段着色（单行）：segs: [{t, color?, weight?}]，未写的沿用本项的 color / weight；t 仍需写全文
+        const fontOf = s => `${s.weight ?? it.weight ?? 400} ${size}px SC`;
+        const ws = it.segs.map(s => { ctx.font = fontOf(s); return ctx.measureText(s.t).width; });
+        const total = ws.reduce((a, b) => a + b, 0);
+        let sx = anchor === 'start' ? x : anchor === 'end' ? x - total : x - total / 2;
+        ctx.textAlign = 'left';
+        it.segs.forEach((s, k) => { ctx.font = fontOf(s); ctx.fillStyle = s.color || col; ctx.fillText(s.t, sx, y); sx += ws[k]; });
+      } else if (it.rot) {
+        // 旋转书写：默认以原文字迹中心为锚点，文字在旋转后的坐标系里居中
+        const cx = (it.x ?? (ink[0] + ink[2]) / 2) + (it.dx || 0), cy = (it.y ?? (ink[1] + ink[3]) / 2) + (it.dy || 0);
+        ctx.save(); ctx.translate(cx, cy); ctx.rotate(it.rot * Math.PI / 180); ctx.textAlign = 'center';
+        lines.forEach((l, k) => ctx.fillText(l, 0, (k - (lines.length - 1) / 2) * lh));
+        ctx.restore();
+      } else lines.forEach((l, k) => ctx.fillText(l, x, y + k * lh));
+    }
+  }
+  let out = cv;
+  if (q.get('crop')) {
+    const [x0, y0, x1, y1] = q.get('crop').split(',').map(Number);
+    out = document.createElement('canvas'); out.width = x1 - x0; out.height = y1 - y0;
+    out.getContext('2d').drawImage(cv, x0, y0, x1 - x0, y1 - y0, 0, 0, x1 - x0, y1 - y0);
+  }
+  document.getElementById('rep').textContent = JSON.stringify(rep);
+  document.getElementById('out').textContent = out.toDataURL('image/png');
+})().catch(e => { document.getElementById('rep').textContent = 'ERROR ' + e; });
+</script></body></html>

@@ -1,0 +1,9 @@
+#!/bin/bash
+# 在 Mac 上渲染：./rmac <slug>/figNN [render.py 的其他参数]，成品取回到 out/
+# 本机只同步规格、原图和字体，Chrome 在 Mac 上跑，不占本机 CPU。需要 `ssh mac` 免密可用、Mac 装了 Google Chrome。
+set -e
+HERE="$(cd "$(dirname "$0")" && pwd)"
+REMOTE='figure-l10n'
+rsync -aq --exclude 'out/' --exclude '__pycache__' "$HERE/" "mac:$REMOTE/"
+ssh mac "cd $REMOTE && CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' python3 render.py $*" | sed "s|/Users/[^ ]*/$REMOTE/|$HERE/|"
+rsync -aq "mac:$REMOTE/out/" "$HERE/out/"
