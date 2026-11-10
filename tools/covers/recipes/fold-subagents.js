@@ -1,7 +1,7 @@
 // 把子代理并入主 Agent 循环：一块大纸白剪纸圆是主 Agent，上面一圈墨线箭头是它的循环；
 // 右侧三块小纸白方块是散在外面的子代理，各伸出一支箭头折进圆里
 module.exports = {
-  swatch: 'fig',
+  swatch: 'oat',
   seed: 7,
   draw(d, m) {
     // 纸片：主 Agent

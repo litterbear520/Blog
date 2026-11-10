@@ -2,7 +2,7 @@
 // 左上一块纸白对话气泡是群聊，右下一张纸白文档是 Pull Request，两块之间隔着底色；
 // 一条墨线从气泡里的墨点出发，跨过缝隙一路不断地走进文档，末端是箭头
 module.exports = {
-  swatch: 'peach',
+  swatch: 'fig',
   seed: 5,
   draw(d, m) {
     // 纸片：对话气泡，左下角一个尖尾

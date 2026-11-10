@@ -13,7 +13,7 @@ const POSTS = [
     date: '2026-11-10',
     slug: 'which-claude-model',
     category: 'AI',
-    swatch: 'coral',
+    swatch: 'plum',
     cover: '/img/blog/cover-which-claude-model.svg',
   },
   {
@@ -21,7 +21,7 @@ const POSTS = [
     date: '2026-11-07',
     slug: 'components-of-agent-memory',
     category: 'AI',
-    swatch: 'mineral',
+    swatch: 'heather',
     cover: '/img/blog/cover-components-of-agent-memory.svg',
   },
   {
@@ -29,7 +29,7 @@ const POSTS = [
     date: '2026-11-06',
     slug: 'super-agent-design',
     category: 'AI',
-    swatch: 'peach',
+    swatch: 'fig',
     cover: '/img/blog/cover-super-agent-design.svg',
   },
   {
@@ -37,7 +37,7 @@ const POSTS = [
     date: '2026-11-06',
     slug: 'super-agent',
     category: 'AI',
-    swatch: 'clay',
+    swatch: 'peach',
     cover: '/img/blog/cover-super-agent.svg',
   },
   {
@@ -45,7 +45,7 @@ const POSTS = [
     date: '2026-11-02',
     slug: 'demystifying-evals',
     category: 'AI',
-    swatch: 'cactus',
+    swatch: 'sky',
     cover: '/img/blog/cover-demystifying-evals.svg',
   },
   {
@@ -53,7 +53,7 @@ const POSTS = [
     date: '2026-11-02',
     slug: 'evaluating-voice-agents',
     category: 'AI',
-    swatch: 'sky',
+    swatch: 'cactus',
     cover: '/img/blog/cover-evaluating-voice-agents.svg',
   },
   {
@@ -61,7 +61,7 @@ const POSTS = [
     date: '2026-11-01',
     slug: 'design-agent-architecture',
     category: 'AI',
-    swatch: 'oat',
+    swatch: 'mineral',
     cover: '/img/blog/cover-design-agent-architecture.svg',
   },
   {
@@ -69,7 +69,7 @@ const POSTS = [
     date: '2026-10-27',
     slug: 'fold-subagents',
     category: 'AI',
-    swatch: 'fig',
+    swatch: 'oat',
     cover: '/img/blog/cover-fold-subagents.svg',
   },
   {

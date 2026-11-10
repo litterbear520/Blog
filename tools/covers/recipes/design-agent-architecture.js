@@ -1,7 +1,7 @@
 // 设计 Agent 架构：三层同心剪纸圆是领域层、应用层、适配层（纸白 / tint / 纸白交替）；
 // 右边一进一出两支墨线箭头穿过外圈，是适配层在系统和外部之间来回翻译
 module.exports = {
-  swatch: 'oat',
+  swatch: 'mineral',
   seed: 5,
   draw(d, m) {
     const cx = 420;

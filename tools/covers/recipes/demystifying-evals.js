@@ -1,7 +1,7 @@
 // 揭秘 AI Agent 评测：一张大纸白评分表，九格墨线对勾和叉，代表多个任务的多次试验；
 // 背后错开一张 tint 卡片，表示下一轮评测
 module.exports = {
-  swatch: 'cactus',
+  swatch: 'sky',
   seed: 7,
   draw(d, m) {
     // 纸片：背后的卡片 + 主评分表

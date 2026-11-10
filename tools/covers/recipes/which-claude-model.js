@@ -1,6 +1,6 @@
 // 该用哪个模型：四根由矮到高的纸白柱子是四档模型，一支墨线箭头从左上绕过来，落在第三根上（先从 Opus 起步）
 module.exports = {
-  swatch: 'coral',
+  swatch: 'plum',
   seed: 23,
   draw(d, m) {
     // 纸片：四档模型，一档比一档高，柱子之间留出底色缝

@@ -1,7 +1,7 @@
 // Super-agent：顶上一块宽纸白剪纸是 Router，只管分发；下面三张纸片是并行的 Worker。
 // 墨线从 Router 中间的墨点往下分叉，三支箭头各自贯穿一张 Worker，从头干到尾
 module.exports = {
-  swatch: 'clay',
+  swatch: 'peach',
   seed: 3,
   draw(d, m) {
     // 纸片：Router

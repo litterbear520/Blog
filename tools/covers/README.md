@@ -79,14 +79,14 @@ clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
-| which-claude-model | coral | cover-which-claude-model.svg | recipes/which-claude-model.js |
-| components-of-agent-memory | mineral | cover-components-of-agent-memory.svg，头图 components-of-agent-memory.jpg | recipes/components-of-agent-memory.js |
-| super-agent-design | peach | cover-super-agent-design.svg | recipes/super-agent-design.js |
-| super-agent | clay | cover-super-agent.svg | recipes/super-agent.js |
-| demystifying-evals | cactus | cover-demystifying-evals.svg | recipes/demystifying-evals.js |
-| evaluating-voice-agents | sky | cover-evaluating-voice-agents.svg | recipes/evaluating-voice-agents.js |
-| design-agent-architecture | oat | cover-design-agent-architecture.svg | recipes/design-agent-architecture.js |
-| fold-subagents | fig | cover-fold-subagents.svg | recipes/fold-subagents.js |
+| which-claude-model | plum | cover-which-claude-model.svg | recipes/which-claude-model.js |
+| components-of-agent-memory | heather | cover-components-of-agent-memory.svg，头图 components-of-agent-memory.jpg | recipes/components-of-agent-memory.js |
+| super-agent-design | fig | cover-super-agent-design.svg | recipes/super-agent-design.js |
+| super-agent | peach | cover-super-agent.svg | recipes/super-agent.js |
+| demystifying-evals | sky | cover-demystifying-evals.svg | recipes/demystifying-evals.js |
+| evaluating-voice-agents | cactus | cover-evaluating-voice-agents.svg | recipes/evaluating-voice-agents.js |
+| design-agent-architecture | mineral | cover-design-agent-architecture.svg | recipes/design-agent-architecture.js |
+| fold-subagents | oat | cover-fold-subagents.svg | recipes/fold-subagents.js |
 | tame-claude | olive | cover-tame-claude.svg | recipes/tame-claude.js |
 | ambitious-with-ai | coral | cover-ambitious-with-ai.svg，头图 hero-ambitious-with-ai.jpg（戈雅《飞行之法》，公有领域） | recipes/ambitious-with-ai.js |
 | claude-code-mods-guide | clay | cover-claude-code-mods-guide.svg | recipes/claude-code-mods-guide.js |
