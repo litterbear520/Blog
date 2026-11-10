@@ -222,7 +222,8 @@ test('postBuild：写出 .md、在页面头部声明、生成 llms.txt', async (
     fs.mkdirSync(path.join(out, dir), { recursive: true });
     fs.writeFileSync(path.join(out, dir, 'index.html'), `<html><head><title>t</title></head><body>${assets}</body></html>`);
   };
-  page('blog/which-claude-model', '<source src="/assets/medias/fig-a-alley-312565c1b4.mp4">');
+  // 一个带引号，一个是压缩后不带引号的写法
+  page('blog/which-claude-model', '<source src="/assets/medias/fig-a-alley-312565c1b4.mp4"><source src=/assets/medias/fig-c-render-styles-9f8e7d6c5b.mp4>');
   page('docs/python/描述器');
   const plugins = [
     { name: 'docusaurus-plugin-content-docs', options: { id: 'default' }, content: { loadedVersions: [{ docs: [
@@ -245,6 +246,7 @@ test('postBuild：写出 .md、在页面头部声明、生成 llms.txt', async (
   const blogMd = fs.readFileSync(path.join(out, 'blog/which-claude-model.md'), 'utf8');
   assert.match(blogMd, /^# 该用哪个 Claude 模型\n\n> 模型选择\n\n- 原文：<https:\/\/huangsitao\.fun\/blog\/which-claude-model>\n- 日期：2026-11-10\n/);
   assert.match(blogMd, /\[视频：图 A：同一张小巷照片[^\]]*\]\(https:\/\/huangsitao\.fun\/assets\/medias\/fig-a-alley-312565c1b4\.mp4\)/);
+  assert.match(blogMd, /\]\(https:\/\/huangsitao\.fun\/assets\/medias\/fig-c-render-styles-9f8e7d6c5b\.mp4\)/);
   // 页面里没有构建地址的视频退回仓库里的原文件
   assert.match(blogMd, /\]\(https:\/\/github\.com\/litterbear520\/Blog\/raw\/main\/blog\/which-claude-model\/fig-b-portfolio\.mp4\)/);
 

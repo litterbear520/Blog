@@ -26,7 +26,8 @@ function htmlFileOf(outDir, permalink) {
 // 页面里引用的 /assets/ 文件按“原文件名去掉扩展名”登记：构建产物的文件名是“原名-哈希.扩展名”
 function assetsOf(html) {
   const map = new Map();
-  for (const [, url] of html.matchAll(/(?:src|href|poster)="(\/assets\/[^"]+)"/g)) {
+  // 构建后的 HTML 经过压缩，属性值可能不带引号（src=/assets/…）
+  for (const [, url] of html.matchAll(/(?:src|href|poster)=["']?(\/assets\/[^"'\s>]+)/g)) {
     const base = decodeURIComponent(path.basename(url));
     const m = /^(.*)-[0-9a-f]{6,}(\.[^.]+)$/.exec(base);
     if (!m) continue;
