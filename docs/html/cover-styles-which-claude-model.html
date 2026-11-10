@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>封面风格六选一</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&display=swap">
+<style>
+/* 版式：顶部一段结论 + 现用封面作参照，下面 3×2 网格，每格从上到下是大图 → 列表卡片实际大小 → 取舍 */
+:root {
+  --bg: #f5f4ef; --surface: #fcfcfa; --ink: #16150f; --ink-2: #55534b; --ink-3: #8b887e;
+  --line: rgba(22, 21, 15, .12); --accent: #a84b29; --accent-tint: rgba(198, 97, 63, .12);
+  --card-bg: #f0eee6; --card-line: #e8e6dc;
+  --serif: 'Noto Serif SC', 'Songti SC', 'Source Han Serif SC', Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171613; --surface: #1f1e1a; --ink: #f0efea; --ink-2: #b5b3aa; --ink-3: #7d7b72;
+    --line: rgba(255, 255, 255, .12); --accent: #e08a67; --accent-tint: rgba(198, 97, 63, .18);
+    --card-bg: #262521; --card-line: #3a3935; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171613; --surface: #1f1e1a; --ink: #f0efea; --ink-2: #b5b3aa; --ink-3: #7d7b72;
+  --line: rgba(255, 255, 255, .12); --accent: #e08a67; --accent-tint: rgba(198, 97, 63, .18);
+  --card-bg: #262521; --card-line: #3a3935; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink-2); font: 15px/1.7 var(--sans); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-block: 48px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2 { font-family: var(--serif); color: var(--ink); margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(26px, 3.4vw, 38px); line-height: 1.25; font-weight: 700; }
+.lede { max-width: 46em; margin: 14px 0 0; }
+.top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: 40px; align-items: end; margin-bottom: 44px; }
+.verdict { margin: 22px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; max-width: 46em; }
+.verdict li { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 12px; }
+.verdict b { color: var(--ink); font-weight: 600; }
+.now-label { font: 12px/1 var(--mono); letter-spacing: .08em; color: var(--ink-3); margin-bottom: 10px; display: block; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 44px 32px; }
+.opt { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.opt-head { display: flex; align-items: baseline; gap: 10px; border-top: 1px solid var(--line); padding-top: 14px; }
+.opt-head h2 { font-size: 21px; font-weight: 700; }
+.num { font: 13px/1 var(--mono); color: var(--accent); font-variant-numeric: tabular-nums; }
+.en { font: 12px/1 var(--mono); color: var(--ink-3); letter-spacing: .04em; margin-left: auto; }
+.big { border-radius: 6px; overflow: hidden; aspect-ratio: 1; max-width: 100%; }
+.big svg, .mock-visual svg { display: block; width: 100%; height: 100%; }
+.idea { margin: 0; color: var(--ink); }
+.mock { background: var(--card-bg); border: 1px solid var(--card-line); border-radius: 24px; overflow: hidden; }
+.mock-visual { height: 180px; padding: 16px 0; }
+.mock-body { display: grid; gap: 8px; padding: 20px 24px 20px; }
+.mock-date { font-size: 12px; color: var(--ink-3); }
+.mock-title { font: 600 17px/1.4 var(--serif); color: var(--ink); }
+.mock-tag { justify-self: start; font-size: 12px; padding: 2px 12px; border-radius: 999px; background: var(--card-line); color: var(--ink-2); }
+.notes { margin: 0; display: grid; gap: 4px; font-size: 14px; }
+.notes dt { font-weight: 600; color: var(--ink); margin-top: 8px; }
+.notes dd { margin: 0; }
+.notes ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; }
+.foot { margin-top: 56px; border-top: 1px solid var(--line); padding-top: 20px; max-width: 46em; font-size: 14px; }
+@media (max-width: 1040px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .grid { grid-template-columns: minmax(0, 1fr); } .top { grid-template-columns: minmax(0, 1fr); align-items: start; } .verdict li { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="wc-wash0" x="-25%" y="-25%" width="150%" height="150%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="4" result="n"/>
+  <feDisplacementMap in="SourceGraphic" in2="n" scale="64" xChannelSelector="R" yChannelSelector="G" result="d"/>
+  <feGaussianBlur in="d" stdDeviation="2.4" result="b"/>
+  <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="4" seed="9" result="g"/>
+  <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.5 1.55" result="ga"/>
+  <feComposite in="b" in2="ga" operator="in"/>
+</filter>
+<filter id="wc-wash1" x="-25%" y="-25%" width="150%" height="150%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="3" seed="21" result="n"/>
+  <feDisplacementMap in="SourceGraphic" in2="n" scale="58" xChannelSelector="G" yChannelSelector="R" result="d"/>
+  <feGaussianBlur in="d" stdDeviation="2.4" result="b"/>
+  <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" seed="3" result="g"/>
+  <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.5 1.55" result="ga"/>
+  <feComposite in="b" in2="ga" operator="in"/>
+</filter>
+<filter id="wc-paper" x="0" y="0" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="2"/>
+  <feColorMatrix type="matrix" values="0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .28  0 0 0 .5 -.18"/>
+</filter>
+<filter id="wc-pencil" x="-10%" y="-10%" width="120%" height="120%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="7" result="n"/>
+  <feDisplacementMap in="SourceGraphic" in2="n" scale="7"/>
+</filter>
+<pattern id="cm-dots" width="30" height="30" patternUnits="userSpaceOnUse" patternTransform="rotate(28)">
+  <circle cx="15" cy="15" r="8.5" fill="#f08c00"/>
+</pattern>
+<linearGradient id="cm-fadeg" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#fff" stop-opacity="1"/>
+</linearGradient>
+<mask id="cm-fade"><rect width="1000" height="1000" fill="url(#cm-fadeg)"/></mask>
+<clipPath id="cm-top"><rect width="1000" height="330"/></clipPath>
+<pattern id="bp-fine" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="#eaf2fb" stroke-opacity=".07" stroke-width="1.5"/></pattern>
+<pattern id="bp-grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M100 0H0V100" fill="none" stroke="#eaf2fb" stroke-opacity=".16" stroke-width="2"/></pattern>
+<pattern id="bp-hatch" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V22" stroke="#eaf2fb" stroke-width="4" stroke-opacity=".75"/></pattern>
+<filter id="rs-grain0" x="-5%" y="-5%" width="110%" height="110%">
+  <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="5" result="g"/>
+  <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.8" result="ga"/>
+  <feComposite in="SourceGraphic" in2="ga" operator="in"/>
+</filter>
+<clipPath id="rs-sun"><circle cx="548" cy="236" r="122"/></clipPath>
+<filter id="rs-grain1" x="-5%" y="-5%" width="110%" height="110%">
+  <feTurbulence type="fractalNoise" baseFrequency="1.0" numOctaves="2" seed="14" result="g"/>
+  <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.8" result="ga"/>
+  <feComposite in="SourceGraphic" in2="ga" operator="in"/>
+</filter></defs><symbol id="cover-wc" viewBox="0 0 1000 1000"><rect width="1000" height="1000" fill="#f4eee2"/>
+<rect width="1000" height="1000" filter="url(#wc-paper)" opacity=".16"/><g style="mix-blend-mode:multiply" filter="url(#wc-wash0)" opacity=".72"><rect x="52" y="700" width="224" height="210" rx="60" fill="#e2ad55" stroke="#e2ad55" stroke-width="16" stroke-opacity=".55"/><rect x="92" y="784" width="138" height="132" rx="50" fill="#e2ad55" opacity=".45"/></g><g style="mix-blend-mode:multiply" filter="url(#wc-wash1)" opacity=".72"><rect x="276" y="520" width="224" height="390" rx="60" fill="#d5745c" stroke="#d5745c" stroke-width="16" stroke-opacity=".55"/><rect x="316" y="667" width="138" height="231" rx="50" fill="#d5745c" opacity=".45"/></g><g style="mix-blend-mode:multiply" filter="url(#wc-wash0)" opacity=".92"><rect x="500" y="330" width="224" height="580" rx="60" fill="#34558c" stroke="#34558c" stroke-width="16" stroke-opacity=".55"/><rect x="540" y="544" width="138" height="336" rx="50" fill="#34558c" opacity=".45"/></g><g style="mix-blend-mode:multiply" filter="url(#wc-wash1)" opacity=".72"><rect x="724" y="90" width="224" height="820" rx="60" fill="#5f9485" stroke="#5f9485" stroke-width="16" stroke-opacity=".55"/><rect x="764" y="388" width="138" height="468" rx="50" fill="#5f9485" opacity=".45"/></g><g fill="#34558c" opacity=".55" filter="url(#wc-wash1)"><circle cx="455" cy="205" r="13"/><circle cx="492" cy="150" r="7"/><circle cx="700" cy="250" r="9"/><circle cx="180" cy="560" r="8"/><circle cx="238" cy="610" r="5"/></g><g fill="none" stroke="#3a3632" stroke-linecap="round" filter="url(#wc-pencil)" opacity=".8"><path d="M455 330 C470 235 760 225 775 340 C790 450 480 470 452 352 C440 300 520 262 610 262" stroke-width="7"/></g></symbol><symbol id="cover-cm" viewBox="0 0 1000 1000"><rect width="1000" height="1000" fill="#ffd43b"/><rect width="1000" height="1000" fill="url(#cm-dots)" mask="url(#cm-fade)"/><polygon points="612,-30 661.7,82.3 738.1,38.1 748.7,128.6 876.9,88.7 777.3,220.4 970.2,218.3 807.6,300 916.9,369.6 818,399.2 843.8,484.9 742.4,463.5 765.9,619.6 652.2,475.9 612,658 566.1,501.2 482.3,569.4 469.1,479.2 370.4,492.7 433.5,386 255.5,381.4 429.7,300 277.6,223.7 416.5,205.9 384.2,118.3 471.7,124.1 470.7,6.6 570,116.2" fill="#fff" stroke="#111" stroke-width="12" stroke-linejoin="round"/><path d="M379.9 263.2L315.7 253.1M372.1 219.6L318.1 201.5M372.9 172.5L329.6 149.5M425.8 156.7L350.5 98.7M439.8 114.6L407.9 80.2M463 73.6L441.6 41.1M517.1 85L482.7 7.3M549.5 54.8L530.5 -19.8M589.5 29.9L587.1 1M631.5 65.8L637.7 -8.9M674.5 54.8L691 -10.1M721.5 52.1L745.3 -1.9M741.2 103.7L776.9 49.4M784.2 114.6L823 72.8M826.7 134.7L865.6 104.8M819.4 189.5L903.2 144.8M851.9 219.6L896.4 204.7M879.7 257.6L918.2 251.5" stroke="#111" stroke-width="5" stroke-linecap="round" clip-path="url(#cm-top)"/><rect x="90" y="720" width="188" height="240" fill="#111"/><rect x="70" y="700" width="188" height="240" fill="#fff" stroke="#111" stroke-width="14" stroke-linejoin="round"/><path d="M104 744v150M132 744v70" stroke="#111" stroke-width="9" stroke-linecap="round" opacity=".9"/><rect x="314" y="540" width="188" height="420" fill="#111"/><rect x="294" y="520" width="188" height="420" fill="#fff" stroke="#111" stroke-width="14" stroke-linejoin="round"/><path d="M328 564v170M356 564v70" stroke="#111" stroke-width="9" stroke-linecap="round" opacity=".9"/><rect x="538" y="350" width="188" height="610" fill="#111"/><rect x="518" y="330" width="188" height="610" fill="#ef3b36" stroke="#111" stroke-width="14" stroke-linejoin="round"/><path d="M552 374v170M580 374v70" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity=".9"/><rect x="762" y="110" width="188" height="850" fill="#111"/><rect x="742" y="90" width="188" height="850" fill="#fff" stroke="#111" stroke-width="14" stroke-linejoin="round"/><path d="M776 134v170M804 134v70" stroke="#111" stroke-width="9" stroke-linecap="round" opacity=".9"/><g transform="translate(215 250) rotate(-10)"><path d="M-150 -30 C-150 -130 150 -130 150 -30 C150 60 60 95 -20 92 L-95 165 L-80 78 C-125 55 -150 20 -150 -30Z" fill="#fff" stroke="#111" stroke-width="12" stroke-linejoin="round"/><path d="M-42 -45 A44 44 0 1 1 6 6 L6 26" fill="none" stroke="#111" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="62" r="15" fill="#111"/></g></symbol><symbol id="cover-iso" viewBox="0 0 1000 1000"><rect width="1000" height="1000" fill="#18243b"/><polygon points="263.2,431.9 970.5,840.2 736.8,975.1 29.5,566.7" fill="#22324f"/><path d="M351.6 482.9L117.9 617.8M440 534L206.4 668.8M528.4 585L294.8 719.9M616.8 636L383.2 770.9M705.2 687.1L471.6 822M793.6 738.1L560 873M882.1 789.2L648.4 924.1M185.3 476.8L892.6 885.2M107.4 521.8L814.7 930.2" stroke="#2f4368" stroke-width="2" fill="none"/><polygon points="142.3,566.7 263.2,636.5 263.2,692.3 142.3,622.6" fill="#111a2c" opacity=".55"/><polygon points="142.3,566.7 263.2,636.5 263.2,515.6 142.3,445.8" fill="#cfc8b8"/><polygon points="384,566.7 263.2,636.5 263.2,515.6 384,445.8" fill="#a39c8c"/><polygon points="263.2,376 384,445.8 263.2,515.6 142.3,445.8" fill="#f4efe4"/><polygon points="300.2,657.9 421.1,727.7 421.1,783.5 300.2,713.7" fill="#111a2c" opacity=".55"/><polygon points="300.2,657.9 421.1,727.7 421.1,495.1 300.2,425.3" fill="#cfc8b8"/><polygon points="541.9,657.9 421.1,727.7 421.1,495.1 541.9,425.3" fill="#a39c8c"/><polygon points="421.1,355.6 541.9,425.3 421.1,495.1 300.2,425.3" fill="#f4efe4"/><polygon points="458.1,749.1 578.9,818.8 578.9,874.7 458.1,804.9" fill="#111a2c" opacity=".55"/><polygon points="458.1,749.1 578.9,818.8 578.9,456 458.1,386.3" fill="#d97757"/><polygon points="699.8,749.1 578.9,818.8 578.9,456 699.8,386.3" fill="#b3542f"/><polygon points="578.9,316.5 699.8,386.3 578.9,456 458.1,386.3" fill="#f2a07f"/><ellipse cx="578.9" cy="386.3" rx="42.8" ry="21.4" fill="none" stroke="#18243b" stroke-width="5"/><path d="M578.9 386.3L578.9 276.7" stroke="#f4efe4" stroke-width="5" stroke-dasharray="4 12" stroke-linecap="round"/><circle cx="578.9" cy="246.7" r="30" fill="#f4efe4"/><circle cx="578.9" cy="246.7" r="12" fill="#d97757"/><polygon points="616,840.2 736.8,910 736.8,965.8 616,896" fill="#111a2c" opacity=".55"/><polygon points="616,840.2 736.8,910 736.8,389.1 616,319.3" fill="#cfc8b8"/><polygon points="857.7,840.2 736.8,910 736.8,389.1 857.7,319.3" fill="#a39c8c"/><polygon points="736.8,249.5 857.7,319.3 736.8,389.1 616,319.3" fill="#f4efe4"/></symbol><symbol id="cover-bp" viewBox="0 0 1000 1000"><rect width="1000" height="1000" fill="#17467f"/><rect width="1000" height="1000" fill="url(#bp-fine)"/><rect width="1000" height="1000" fill="url(#bp-grid)"/><g fill="none" stroke="#eaf2fb" stroke-linecap="round" stroke-linejoin="round"><path d="M40 940H960" stroke-width="5"/><rect x="84" y="700" width="128" height="240" stroke-width="5" fill="none"/><path d="M240 700V940M226 700h28M226 940h28M231 716L240 700l9 16M231 924L240 940l9 -16" stroke-width="2.5" opacity=".85"/><path d="M84 700H64" stroke-width="2" stroke-dasharray="6 8" opacity=".6"/><rect x="308" y="520" width="128" height="420" stroke-width="5" fill="none"/><path d="M464 520V940M450 520h28M450 940h28M455 536L464 520l9 16M455 924L464 940l9 -16" stroke-width="2.5" opacity=".85"/><path d="M308 520H288" stroke-width="2" stroke-dasharray="6 8" opacity=".6"/><rect x="532" y="330" width="128" height="610" stroke-width="7" fill="url(#bp-hatch)"/><path d="M688 330V940M674 330h28M674 940h28M679 346L688 330l9 16M679 924L688 940l9 -16" stroke-width="2.5" opacity=".85"/><path d="M532 330H512" stroke-width="2" stroke-dasharray="6 8" opacity=".6"/><rect x="756" y="90" width="128" height="850" stroke-width="5" fill="none"/><path d="M912 90V940M898 90h28M898 940h28M903 106L912 90l9 16M903 924L912 940l9 -16" stroke-width="2.5" opacity=".85"/><path d="M756 90H736" stroke-width="2" stroke-dasharray="6 8" opacity=".6"/><path d="M100 250A150 150 0 0 1 400 250" stroke-width="5"/><path d="M126 250L88 250M162.3 162.3L135.4 135.4M250 126L250 88M337.7 162.3L364.6 135.4M374 250L412 250" stroke-width="4"/><path d="M250 250L172.2 172.2" stroke-width="8"/><circle cx="250" cy="250" r="14" fill="#eaf2fb" stroke="none"/><path d="M430 300H560L596 322" stroke-width="3"/><circle cx="596" cy="322" r="7" fill="#eaf2fb" stroke="none"/></g><g fill="#eaf2fb" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="30" letter-spacing="2"><text x="84" y="984">H</text><text x="308" y="984">S</text><text x="532" y="984">O</text><text x="756" y="984">F</text><text x="430" y="286" font-size="26">START</text><text x="100" y="312" font-size="24">EFFORT</text></g></symbol><symbol id="cover-rs" viewBox="0 0 1000 1000"><rect width="1000" height="1000" fill="#f3eee4"/><g style="mix-blend-mode:multiply" filter="url(#rs-grain0)" fill="#2b54c8"><circle cx="140" cy="816" r="84"/><circle cx="548" cy="718" r="182"/><rect x="40" y="905" width="920" height="16"/><g clip-path="url(#rs-sun)"><rect x="420" y="108" width="260" height="15"/><rect x="420" y="138" width="260" height="15"/><rect x="420" y="168" width="260" height="15"/><rect x="420" y="198" width="260" height="15"/><rect x="420" y="228" width="260" height="15"/><rect x="420" y="258" width="260" height="15"/><rect x="420" y="288" width="260" height="15"/><rect x="420" y="318" width="260" height="15"/><rect x="420" y="348" width="260" height="15"/></g></g><g style="mix-blend-mode:multiply" filter="url(#rs-grain1)" fill="#ff4f7b" transform="translate(9 -7)"><circle cx="318" cy="772" r="128"/><circle cx="548" cy="718" r="182"/><circle cx="768" cy="688" r="212"/><rect x="60" y="938" width="560" height="12"/></g></symbol><symbol id="cover-px" viewBox="0 0 1000 1000"><rect width="1000" height="1000" fill="#1a1c2c"/><g shape-rendering="crispEdges"><rect x="65" y="115" width="20" height="20" fill="#566c86"/><rect x="265" y="215" width="20" height="20" fill="#566c86"/><rect x="865" y="65" width="20" height="20" fill="#566c86"/><rect x="115" y="465" width="20" height="20" fill="#566c86"/><rect x="415" y="65" width="20" height="20" fill="#566c86"/><rect x="915" y="315" width="20" height="20" fill="#566c86"/><rect x="315" y="615" width="20" height="20" fill="#566c86"/><rect x="50" y="700" width="150" height="200" fill="#41a6f6"/><rect x="50" y="700" width="150" height="25" fill="#73eff7"/><rect x="175" y="725" width="25" height="175" fill="#3b5dc9"/><rect x="50" y="800" width="25" height="25" fill="#3b5dc9" opacity="0.61"/><rect x="100" y="800" width="25" height="25" fill="#3b5dc9" opacity="0.61"/><rect x="150" y="800" width="25" height="25" fill="#3b5dc9" opacity="0.61"/><rect x="50" y="850" width="25" height="25" fill="#3b5dc9" opacity="0.79"/><rect x="100" y="850" width="25" height="25" fill="#3b5dc9" opacity="0.79"/><rect x="150" y="850" width="25" height="25" fill="#3b5dc9" opacity="0.79"/><rect x="300" y="500" width="150" height="400" fill="#38b764"/><rect x="300" y="500" width="150" height="25" fill="#a7f070"/><rect x="425" y="525" width="25" height="375" fill="#257179"/><rect x="300" y="700" width="25" height="25" fill="#257179" opacity="0.25"/><rect x="350" y="700" width="25" height="25" fill="#257179" opacity="0.25"/><rect x="400" y="700" width="25" height="25" fill="#257179" opacity="0.25"/><rect x="300" y="750" width="25" height="25" fill="#257179" opacity="0.43"/><rect x="350" y="750" width="25" height="25" fill="#257179" opacity="0.43"/><rect x="400" y="750" width="25" height="25" fill="#257179" opacity="0.43"/><rect x="300" y="800" width="25" height="25" fill="#257179" opacity="0.61"/><rect x="350" y="800" width="25" height="25" fill="#257179" opacity="0.61"/><rect x="400" y="800" width="25" height="25" fill="#257179" opacity="0.61"/><rect x="300" y="850" width="25" height="25" fill="#257179" opacity="0.79"/><rect x="350" y="850" width="25" height="25" fill="#257179" opacity="0.79"/><rect x="400" y="850" width="25" height="25" fill="#257179" opacity="0.79"/><rect x="550" y="300" width="150" height="600" fill="#ffcd75"/><rect x="550" y="300" width="150" height="25" fill="#f4f4f4"/><rect x="675" y="325" width="25" height="575" fill="#ef7d57"/><rect x="550" y="700" width="25" height="25" fill="#ef7d57" opacity="0.25"/><rect x="600" y="700" width="25" height="25" fill="#ef7d57" opacity="0.25"/><rect x="650" y="700" width="25" height="25" fill="#ef7d57" opacity="0.25"/><rect x="550" y="750" width="25" height="25" fill="#ef7d57" opacity="0.43"/><rect x="600" y="750" width="25" height="25" fill="#ef7d57" opacity="0.43"/><rect x="650" y="750" width="25" height="25" fill="#ef7d57" opacity="0.43"/><rect x="550" y="800" width="25" height="25" fill="#ef7d57" opacity="0.61"/><rect x="600" y="800" width="25" height="25" fill="#ef7d57" opacity="0.61"/><rect x="650" y="800" width="25" height="25" fill="#ef7d57" opacity="0.61"/><rect x="550" y="850" width="25" height="25" fill="#ef7d57" opacity="0.79"/><rect x="600" y="850" width="25" height="25" fill="#ef7d57" opacity="0.79"/><rect x="650" y="850" width="25" height="25" fill="#ef7d57" opacity="0.79"/><rect x="800" y="100" width="150" height="800" fill="#b13e53"/><rect x="800" y="100" width="150" height="25" fill="#ef7d57"/><rect x="925" y="125" width="25" height="775" fill="#5d275d"/><rect x="800" y="700" width="25" height="25" fill="#5d275d" opacity="0.25"/><rect x="850" y="700" width="25" height="25" fill="#5d275d" opacity="0.25"/><rect x="900" y="700" width="25" height="25" fill="#5d275d" opacity="0.25"/><rect x="800" y="750" width="25" height="25" fill="#5d275d" opacity="0.43"/><rect x="850" y="750" width="25" height="25" fill="#5d275d" opacity="0.43"/><rect x="900" y="750" width="25" height="25" fill="#5d275d" opacity="0.43"/><rect x="800" y="800" width="25" height="25" fill="#5d275d" opacity="0.61"/><rect x="850" y="800" width="25" height="25" fill="#5d275d" opacity="0.61"/><rect x="900" y="800" width="25" height="25" fill="#5d275d" opacity="0.61"/><rect x="800" y="850" width="25" height="25" fill="#5d275d" opacity="0.79"/><rect x="850" y="850" width="25" height="25" fill="#5d275d" opacity="0.79"/><rect x="900" y="850" width="25" height="25" fill="#5d275d" opacity="0.79"/><rect x="0" y="900" width="1000" height="50" fill="#333c57"/><rect x="0" y="900" width="1000" height="12" fill="#566c86"/><rect x="525" y="275" width="75" height="25" fill="#f4f4f4"/><rect x="525" y="275" width="25" height="75" fill="#f4f4f4"/><rect x="650" y="275" width="75" height="25" fill="#f4f4f4"/><rect x="700" y="275" width="25" height="75" fill="#f4f4f4"/><rect x="600" y="50" width="50" height="50" fill="#f4f4f4"/><rect x="500" y="100" width="250" height="50" fill="#f4f4f4"/><rect x="550" y="150" width="150" height="50" fill="#f4f4f4"/><rect x="600" y="200" width="50" height="50" fill="#f4f4f4"/></g></symbol><symbol id="cover-now" viewBox="0 0 1000 1000">
+<path fill="#FAF9F5" d="M 65.9 695.7 L 256.1 698.2 L 251.7 821.2 L 261.3 935.1 L 67.1 935.9 Z"/>
+<path fill="#FAF9F5" d="M 297.4 519.7 L 477.6 519.5 L 486.9 937.1 L 291.3 936.9 Z"/>
+<path fill="#FAF9F5" d="M 514.6 332.2 L 612.7 336.2 L 708.7 333.9 L 707.5 943.1 L 515.2 938.1 Z"/>
+<path fill="#FAF9F5" d="M 746 94.5 L 931.5 88.2 L 927 938.9 L 738.6 941.8 Z"/>
+<path fill="#141413" d="M 147.7 538.8 L 149.7 533.9 L 150.1 528.8 L 149.7 523.6 L 150.9 518.5 L 150.1 513.5 L 150.4 508.4 L 150.4 503.4 L 150.6 498.4 L 150.8 493.4 L 151.3 488.4 L 151.6 483.3 L 151.1 478.4 L 151 473.4 L 150.9 468.4 L 150.6 463.4 L 150.6 458.4 L 150.8 453.4 L 150.5 448.4 L 151 443.5 L 151.4 438.6 L 150.8 433.6 L 150.8 428.6 L 150.3 423.6 L 150.8 418.7 L 150.6 413.8 L 151.1 408.8 L 151.3 403.8 L 151.5 398.8 L 151.1 394 L 151.7 389.1 L 152.7 384.2 L 153.1 379.2 L 152.9 374.2 L 153.6 369.5 L 153.6 364.6 L 154.5 359.7 L 153.9 354.6 L 155.3 349.8 L 155.5 345.1 L 155.3 340.2 L 156.4 335.3 L 157 330.4 L 158 325.6 L 158.2 320.9 L 159.2 316.2 L 160.3 311.4 L 161.7 306.5 L 162.8 302.2 L 164.6 298 L 165.9 293.2 L 167.9 288.6 L 169.2 284.3 L 171.1 280.2 L 172.5 275.4 L 174.1 270.6 L 176.8 266.7 L 179 262.6 L 181.2 258.1 L 184.1 254 L 186.3 249.8 L 188.3 245.6 L 191.5 241.7 L 194.1 237.5 L 197.1 233.7 L 199.4 229.6 L 202.5 225.7 L 205.4 221.6 L 208.1 217.6 L 210.9 213.7 L 214.1 210 L 217.2 206.1 L 220.5 202.5 L 223.8 199 L 227.3 195.6 L 230.6 191.8 L 234.3 188.5 L 237.2 184.7 L 241 181.7 L 244 177.6 L 247.6 174.2 L 250.7 170.5 L 254.5 167.6 L 258.1 164.1 L 261.9 160.9 L 265.6 157.8 L 269.9 155.6 L 273.6 152.2 L 277.2 148.7 L 280.8 145.5 L 284.9 143.1 L 288.8 140.1 L 293.3 137.9 L 297.1 135.1 L 300.8 132 L 305.4 129.9 L 309.1 126.8 L 313.2 124.6 L 317.7 122.7 L 322 120.2 L 326.2 118.4 L 330.4 116.3 L 335.2 114.8 L 339.1 112.3 L 343.4 110.6 L 348.1 109 L 352.8 107.9 L 357.3 106.9 L 361.8 105.1 L 366.6 103.8 L 371.1 102.9 L 375.9 102.4 L 380.7 100.9 L 385.4 100.3 L 390 100 L 394.8 98.9 L 399.7 98.9 L 404.3 98.4 L 409.1 98.1 L 414.1 98.1 L 418.7 97.8 L 423.3 98.5 L 428.3 98.9 L 433 98.5 L 437.6 98.8 L 442.4 99.2 L 447.3 99.6 L 451.8 100.3 L 456.4 100.9 L 461.4 101.3 L 465.9 102.1 L 470.2 103.7 L 475.2 104.5 L 479.2 106.7 L 483.3 108.4 L 487.9 110.2 L 492 111.8 L 495.7 114.1 L 500.1 116.2 L 503.9 117.9 L 507.1 120.5 L 511.3 123.1 L 514.3 125.9 L 517.1 129.1 L 520.9 132.4 L 524 135.7 L 526.8 139.2 L 529.7 143 L 532.8 146.9 L 535.3 150.8 L 537.8 154.8 L 540.4 159 L 542.2 163.7 L 544.8 167.6 L 548 171.3 L 549.2 176.4 L 551.9 180.6 L 553.6 185.1 L 556.1 189.2 L 558.8 193.5 L 560.5 198.2 L 562.5 202.6 L 564.4 207.1 L 566.7 211.5 L 568.4 216.3 L 570.1 220.9 L 571.5 225.6 L 573.9 230 L 575.5 234.7 L 578 239.1 L 580.3 243.5 L 581.9 248.3 L 583.7 252.9 L 585.2 257.7 L 587.8 262 L 589.8 266.7 L 592.4 271.1 L 594.6 275.6 L 596.9 280.2 L 599.4 284.8 L 601.6 289.4 L 604 292.3 L 617.5 285.7 L 615.8 282.4 L 614.4 277.7 L 612.4 273.3 L 610.3 268.9 L 609.1 264 L 607.4 259.4 L 605.7 254.7 L 603.9 250.1 L 602 245.4 L 600.1 240.8 L 598.7 236 L 596.3 231.5 L 595.1 226.6 L 593.6 221.8 L 591.2 217.3 L 589.8 212.4 L 586.9 208.1 L 584.4 203.7 L 582.7 199 L 580.4 194.4 L 578.7 189.6 L 576 185.3 L 573.9 180.7 L 572 175.9 L 568.9 171.6 L 567 167 L 564.5 162.7 L 562.6 157.7 L 559.4 153.5 L 557 149 L 554.4 144.8 L 551.3 140.4 L 547.9 136.2 L 545.3 131.9 L 542.1 127.8 L 539.1 123.1 L 535.8 118.8 L 532.2 115.3 L 529 110.4 L 524.5 106.6 L 520.6 103.2 L 515.8 100 L 510.6 97.1 L 505.9 95 L 501.2 91.9 L 495.7 90.4 L 491.2 88.2 L 485.8 86.8 L 480.6 84.9 L 475.8 83.7 L 470.5 82.5 L 465.3 80.9 L 460.1 80.8 L 455 79.4 L 449.7 78 L 444.7 76.9 L 439.5 76.2 L 434.1 76.3 L 428.8 76.4 L 423.8 76.3 L 418.4 76.1 L 413.1 77.2 L 408.1 76.7 L 402.8 77.2 L 397.5 78.3 L 392.5 78.9 L 387.4 79.5 L 382.1 80.4 L 376.9 81.1 L 372 82.2 L 366.7 82.7 L 361.6 84.5 L 356.6 85.1 L 351.7 87.1 L 346.6 88.6 L 341.5 89.9 L 337 92.1 L 331.8 93.6 L 326.6 95.2 L 322.2 97.7 L 317.5 100.2 L 312.5 102.2 L 308.4 105.4 L 303.8 107.7 L 299.4 110.7 L 294.8 113.1 L 290.5 115.7 L 286.2 118.6 L 281.8 121.6 L 277.8 124.7 L 273.6 127.4 L 269.3 130.5 L 265.5 134.2 L 261.8 137.5 L 257.4 140.1 L 253.6 143.8 L 250 147.5 L 246.4 151 L 242.8 154.4 L 238.5 157.5 L 234.5 160.9 L 230.9 164.4 L 227.3 167.8 L 223.4 171.3 L 220.1 175.4 L 217 179.3 L 212.9 182.4 L 209.7 186.5 L 206.5 190.7 L 203.1 194.4 L 200.2 198.5 L 197.1 202.6 L 193.6 206.5 L 190.4 210.5 L 187.5 214.6 L 184.2 218.5 L 181.3 222.9 L 178.7 227.4 L 176.2 231.8 L 173.3 235.9 L 170.4 240.3 L 168 245 L 165.2 249.2 L 162.7 253.5 L 160 258.1 L 158.5 263.3 L 156 267.7 L 153.6 272.1 L 150.6 276.9 L 149.5 282.3 L 147.6 286.9 L 146.3 291.8 L 144.1 296.8 L 143.3 302.3 L 142.4 307.2 L 140.8 312 L 139.9 317.1 L 138.6 322.3 L 138.2 327.5 L 137.5 332.4 L 136.1 337.3 L 135.4 342.4 L 134.7 347.7 L 133.7 352.6 L 133.3 357.6 L 132.6 362.6 L 131.7 367.7 L 131.2 372.9 L 131.3 378 L 131.6 383 L 130.9 387.9 L 131.4 393.1 L 130.5 398.2 L 130.6 403.3 L 130 408.3 L 130.1 413.3 L 130.2 418.3 L 130.6 423.5 L 130.1 428.5 L 130.5 433.5 L 130.2 438.5 L 130.1 443.5 L 130.6 448.6 L 129.9 453.6 L 130.5 458.6 L 129.8 463.6 L 130.8 468.7 L 130.5 473.7 L 130.7 478.7 L 130.9 483.7 L 130.4 488.7 L 130.5 493.7 L 131 498.7 L 131.7 503.7 L 132 508.6 L 132 513.5 L 131.9 518.5 L 132.2 523.4 L 132.5 528.3 L 132.9 533.2 L 133.5 538.2 Z"/>
+<path fill="#141413" d="M 148 538.5 L 147.3 541.6 L 145.3 544.1 L 142.4 545.5 L 139.2 545.5 L 136.3 544.1 L 134.3 541.6 L 133.6 538.5 L 134.3 535.4 L 136.3 532.9 L 139.2 531.5 L 142.4 531.5 L 145.3 532.9 L 147.3 535.4 Z"/>
+<path fill="#141413" d="M 617.7 289.1 L 617 292.2 L 615 294.7 L 612.1 296.1 L 608.9 296.1 L 606 294.7 L 604 292.2 L 603.3 289.1 L 604 286 L 606 283.5 L 608.9 282.1 L 612.1 282.1 L 615 283.5 L 617 286 Z"/>
+<path fill="#141413" d="M 615.4 283.4 L 611.9 279.2 L 607.4 277 L 603 274.6 L 598.6 272.1 L 593.9 270.3 L 589 269 L 584.7 266.6 L 580.2 264.3 L 573 264.6 L 567.3 277.1 L 571.9 282.1 L 576.5 284.2 L 580.9 286.6 L 585.6 288.3 L 590 290.7 L 594.5 293 L 599.3 294.5 L 603.5 297.3 L 609.2 296.8 Z"/>
+<path fill="#141413" d="M 619.6 290 L 618.9 293.1 L 616.9 295.6 L 614 297 L 610.8 297 L 607.9 295.6 L 605.9 293.1 L 605.2 290 L 605.9 286.9 L 607.9 284.4 L 610.8 283 L 614 283 L 616.9 284.4 L 618.9 286.9 Z"/>
+<path fill="#141413" d="M 577.5 270.5 L 576.8 273.7 L 574.8 276.2 L 571.9 277.6 L 568.7 277.6 L 565.8 276.2 L 563.8 273.7 L 563.1 270.5 L 563.8 267.4 L 565.8 264.9 L 568.7 263.5 L 571.9 263.5 L 574.8 264.9 L 576.8 267.4 Z"/>
+<path fill="#141413" d="M 618.5 290.8 L 622.2 286.2 L 622.9 281.2 L 623.8 276.3 L 624.5 271.3 L 625.4 266.4 L 626.2 261.4 L 626.3 256.4 L 627.3 251.5 L 625.1 245.5 L 608.4 243.7 L 604.8 249.1 L 604.9 254.1 L 604.3 259.1 L 603.6 264 L 602.5 268.9 L 602.5 274 L 602.9 279 L 601.9 283.9 L 604.6 289.3 Z"/>
+<path fill="#141413" d="M 619 290 L 618.3 293.2 L 616.3 295.7 L 613.4 297.1 L 610.2 297.1 L 607.3 295.7 L 605.3 293.2 L 604.6 290 L 605.3 286.9 L 607.3 284.4 L 610.2 283 L 613.4 283 L 616.3 284.4 L 618.3 286.9 Z"/>
+<path fill="#141413" d="M 623.9 244.6 L 623.2 247.7 L 621.2 250.2 L 618.3 251.6 L 615.1 251.6 L 612.2 250.2 L 610.2 247.7 L 609.5 244.6 L 610.2 241.5 L 612.2 239 L 615.1 237.6 L 618.3 237.6 L 621.2 239 L 623.2 241.5 Z"/>
+</symbol></svg>
+<main class="wrap">
+  <section class="top">
+    <div>
+      <h1>封面风格六选一</h1>
+      <p class="lede">六张图画的是同一件事：四档模型由小到大，从第三档起步。画面相同，差别就只剩风格。每一格里，上面是放大的封面，中间是它放进博客列表卡片后的实际大小，下面是取舍。</p>
+      <ul class="verdict">
+        <li><b>最推荐</b><span>5 孔版套印。缩小后最清楚，换一对墨色就是新的一张，成系列的能力和现在的剪纸封面相当，但更有自己的面貌。</span></li>
+        <li><b>最省事</b><span>3 等距立体。能直接并进现有的封面流水线，底色表不用动。</span></li>
+        <li><b>单篇点缀</b><span>2 漫画和 6 像素。个性强，适合个别轻松的文章，不适合 18 篇全换。</span></li>
+        <li><b>不建议做封面</b><span>1 水彩和 4 蓝图。放大好看，缩到卡片就糊了或看不清，更适合当文章头图。</span></li>
+      </ul>
+    </div>
+    <div>
+      <span class="now-label">现用 · 剪纸 + 毛笔线</span>
+      <div class="mock">
+        <div class="mock-visual" style="background:#ebcece"><svg viewBox="0 0 1000 1000" role="img" aria-label="现用的剪纸风格封面"><use href="#cover-now"/></svg></div>
+        <div class="mock-body"><span class="mock-date">2026-11-10</span><span class="mock-title">该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku</span><span class="mock-tag">AI</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="grid">
+<article class="opt">
+  <header class="opt-head">
+    <span class="num">1</span>
+    <h2>水彩</h2>
+    <span class="en">Watercolor</span>
+  </header>
+  <div class="big" style="background:#f4eee2">
+    <svg viewBox="0 0 1000 1000" role="img" aria-label="水彩风格封面"><use href="#cover-wc"/></svg>
+  </div>
+  <p class="idea">四片晕开的颜料，颜色在交界处叠出第三种色；第三档颜色最深，外面一圈铅笔线。</p>
+  <div class="mock" aria-label="放进博客列表卡片后的样子">
+    <div class="mock-visual" style="background:#f4eee2"><svg viewBox="0 0 1000 1000" aria-hidden="true"><use href="#cover-wc"/></svg></div>
+    <div class="mock-body"><span class="mock-date">2026-11-10</span><span class="mock-title">该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku</span><span class="mock-tag">AI</span></div>
+  </div>
+  <dl class="notes">
+    <dt>得到什么</dt><dd><ul><li>放大看最有手工感，和技术博客常见的扁平插画拉得最开</li><li>颜色叠加、颗粒、边缘沉色全靠 SVG 滤镜，文件只有几 KB</li></ul></dd>
+    <dt>付出什么</dt><dd><ul><li>缩到列表卡片 180px 高时，边缘晕染糊成一团，形状辨认度是六种里最低的</li><li>滤镜逐像素计算，一屏十几张时低端手机滚动会掉帧；Safari 和 Chrome 的噪点还略有差异</li></ul></dd>
+    <dt>怎么落地</dt><dd>自带纸色底，不能再套 11 种底色，整站会变成同一个米色。适合只做文章头图，不适合列表封面。</dd>
+  </dl>
+</article>
+<article class="opt">
+  <header class="opt-head">
+    <span class="num">2</span>
+    <h2>漫画</h2>
+    <span class="en">Comic / Pop</span>
+  </header>
+  <div class="big" style="background:#ffd43b">
+    <svg viewBox="0 0 1000 1000" role="img" aria-label="漫画风格封面"><use href="#cover-cm"/></svg>
+  </div>
+  <p class="idea">粗黑描边、网点、爆炸框和速度线。四根柱子里红色那根被爆炸框顶起来，左上一个问号气泡。</p>
+  <div class="mock" aria-label="放进博客列表卡片后的样子">
+    <div class="mock-visual" style="background:#ffd43b"><svg viewBox="0 0 1000 1000" aria-hidden="true"><use href="#cover-cm"/></svg></div>
+    <div class="mock-body"><span class="mock-date">2026-11-10</span><span class="mock-title">该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku</span><span class="mock-tag">AI</span></div>
+  </div>
+  <dl class="notes">
+    <dt>得到什么</dt><dd><ul><li>六种里最抢眼，缩小后轮廓依然硬朗，一眼能认出主体</li><li>纯矢量，没有滤镜，渲染零负担</li></ul></dd>
+    <dt>付出什么</dt><dd><ul><li>情绪很吵，和正文克制的版式、偏严肃的 AI 文章气质不搭</li><li>每篇都要想一个“梗”才撑得起来，18 篇全换的话创作成本最高</li></ul></dd>
+    <dt>怎么落地</dt><dd>高饱和底色和现有底色表冲突，需要另配一套 4–5 个漫画底色。适合教程、踩坑类轻松文章，不适合整站。</dd>
+  </dl>
+</article>
+<article class="opt">
+  <header class="opt-head">
+    <span class="num">3</span>
+    <h2>等距立体</h2>
+    <span class="en">Isometric</span>
+  </header>
+  <div class="big" style="background:#18243b">
+    <svg viewBox="0 0 1000 1000" role="img" aria-label="等距立体风格封面"><use href="#cover-iso"/></svg>
+  </div>
+  <p class="idea">四根等距视角的柱子立在一块网格地面上，三个面三档明度；第三根换成陶土色，头顶一个定位标记。</p>
+  <div class="mock" aria-label="放进博客列表卡片后的样子">
+    <div class="mock-visual" style="background:#18243b"><svg viewBox="0 0 1000 1000" aria-hidden="true"><use href="#cover-iso"/></svg></div>
+    <div class="mock-body"><span class="mock-date">2026-11-10</span><span class="mock-title">该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku</span><span class="mock-tag">AI</span></div>
+  </div>
+  <dl class="notes">
+    <dt>得到什么</dt><dd><ul><li>体积感让“档位高低”这类数量关系最直观，缩小后依然清楚</li><li>全部由坐标算出来，可以直接做成封面流水线里的新母题，批量换文章成本低</li></ul></dd>
+    <dt>付出什么</dt><dd><ul><li>很多 SaaS 官网都是这个味道，辨识度一般，容易显得“模板”</li><li>只擅长表达结构、数量、层级；讲观点和故事的文章不好找画面</li></ul></dd>
+    <dt>怎么落地</dt><dd>深底最好看，浅底需要重调三档明度。可以保留透明底 + 底色表的现有机制，是替换成本最低的一种。</dd>
+  </dl>
+</article>
+<article class="opt">
+  <header class="opt-head">
+    <span class="num">4</span>
+    <h2>蓝图</h2>
+    <span class="en">Blueprint</span>
+  </header>
+  <div class="big" style="background:#17467f">
+    <svg viewBox="0 0 1000 1000" role="img" aria-label="蓝图风格封面"><use href="#cover-bp"/></svg>
+  </div>
+  <p class="idea">蓝底白线的工程图：四个只有轮廓的柱子带尺寸线，第三个打斜线；左上是 effort 刻度盘。</p>
+  <div class="mock" aria-label="放进博客列表卡片后的样子">
+    <div class="mock-visual" style="background:#17467f"><svg viewBox="0 0 1000 1000" aria-hidden="true"><use href="#cover-bp"/></svg></div>
+    <div class="mock-body"><span class="mock-date">2026-11-10</span><span class="mock-title">该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku</span><span class="mock-tag">AI</span></div>
+  </div>
+  <dl class="notes">
+    <dt>得到什么</dt><dd><ul><li>“技术文档”气质最足，和文章里的表格、参数对得上</li><li>画面里能放标注，信息量是六种里最大的</li></ul></dd>
+    <dt>付出什么</dt><dd><ul><li>细线和小字缩到卡片尺寸几乎看不见，只剩一片蓝</li><li>依赖文字标注，现有封面“不放文字”的规矩要破掉</li></ul></dd>
+    <dt>怎么落地</dt><dd>只有蓝底成立，全站会变成一种颜色。更适合做文章内的示意图，或少数硬核技术文的头图。</dd>
+  </dl>
+</article>
+<article class="opt">
+  <header class="opt-head">
+    <span class="num">5</span>
+    <h2>孔版套印</h2>
+    <span class="en">Risograph</span>
+  </header>
+  <div class="big" style="background:#f3eee4">
+    <svg viewBox="0 0 1000 1000" role="img" aria-label="孔版套印风格封面"><use href="#cover-rs"/></svg>
+  </div>
+  <p class="idea">蓝、粉两版油墨叠印：四个由小到大的圆，只有第三个两版都印，叠成深紫；粉版故意错开几像素，带油墨颗粒。</p>
+  <div class="mock" aria-label="放进博客列表卡片后的样子">
+    <div class="mock-visual" style="background:#f3eee4"><svg viewBox="0 0 1000 1000" aria-hidden="true"><use href="#cover-rs"/></svg></div>
+    <div class="mock-body"><span class="mock-date">2026-11-10</span><span class="mock-title">该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku</span><span class="mock-tag">AI</span></div>
+  </div>
+  <dl class="notes">
+    <dt>得到什么</dt><dd><ul><li>只用两种墨就有三种颜色，形状极简，缩小后是六种里最稳的</li><li>每篇文章换一对墨色就是一张新封面，天然成系列，独立刊物的味道</li></ul></dd>
+    <dt>付出什么</dt><dd><ul><li>颗粒也靠滤镜，比纯矢量重（但比水彩轻，没有位移计算）</li><li>形状必须足够几何，太具体的物件套印后会显脏</li></ul></dd>
+    <dt>怎么落地</dt><dd>需要纸色底才有叠印效果，底色表得改成“墨色对”表。是我认为最值得整站切换的一种。</dd>
+  </dl>
+</article>
+<article class="opt">
+  <header class="opt-head">
+    <span class="num">6</span>
+    <h2>像素</h2>
+    <span class="en">Pixel Art</span>
+  </header>
+  <div class="big" style="background:#1a1c2c">
+    <svg viewBox="0 0 1000 1000" role="img" aria-label="像素风格封面"><use href="#cover-px"/></svg>
+  </div>
+  <p class="idea">20×20 格的像素画：四根带高光和抖动阴影的柱子，第三根金色，被选择框圈住，头顶一个向下的箭头。</p>
+  <div class="mock" aria-label="放进博客列表卡片后的样子">
+    <div class="mock-visual" style="background:#1a1c2c"><svg viewBox="0 0 1000 1000" aria-hidden="true"><use href="#cover-px"/></svg></div>
+    <div class="mock-body"><span class="mock-date">2026-11-10</span><span class="mock-title">该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku</span><span class="mock-tag">AI</span></div>
+  </div>
+  <dl class="notes">
+    <dt>得到什么</dt><dd><ul><li>游戏里“选角色 / 选装备”的画面，和“选模型”的主题贴得最近</li><li>全是整格矩形，任何尺寸都锐利，文件最小</li></ul></dd>
+    <dt>付出什么</dt><dd><ul><li>怀旧游戏感很强，放在讲评估、记忆架构的文章上会出戏</li><li>画具体物件要一格一格摆，复杂画面的制作时间最长</li></ul></dd>
+    <dt>怎么落地</dt><dd>深色底最合适，可以做透明底配深色底色。适合工具、玩法、上手类文章，或站里已有的像素动画视频那篇。</dd>
+  </dl>
+</article></section>
+  <p class="foot">这六张都是手写的内联 SVG，没有用到图片或 AI 生成的位图。选定方向后，再把它做成 <code>tools/covers/</code> 里的一套新原语和配方，现有 18 篇可以逐篇重渲。带纸色或深色底的方案（1、2、4、5）和现在“透明图 + 11 种底色”的机制不兼容，切换时列表页的底色逻辑要一起改。</p>
+</main>
+</body>
+</html>
