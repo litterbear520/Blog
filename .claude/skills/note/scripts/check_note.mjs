@@ -133,12 +133,15 @@ for (const file of files) {
   }
 
   for (const { n, text } of bodyLines(src)) {
+    // 双反引号（及更多）包住的行内代码是语法示例，如 `` [`dis` 模块](url) ``，先整段去掉；
+    // 开头和结尾的反引号个数相同才算一段，单反引号的 [`dis` 模块](url) 不受影响
+    const noLong = text.replace(/(?<!`)(`{2,})(?!`)[\s\S]*?(?<!`)\1(?!`)/g, '');
     // 2. 链接文字里有行内代码
-    if (/\[[^\]]*`[^\]]*\]\([^)]*\)/.test(text)) {
+    if (/\[[^\]]*`[^\]]*\]\([^)]*\)/.test(noLong)) {
       report(file, n, '链接文字里包了行内代码，把代码移到链接外面');
     }
     // 3. 相对链接、图片、锚点。行内代码里的 [文字](#xx) 是语法示例，先去掉再扫
-    const prose = text.replace(/`[^`]*`/g, '');
+    const prose = noLong.replace(/`[^`]*`/g, '');
     for (const m of prose.matchAll(/!?\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
       const target = m[1];
       if (/^[a-z][a-z0-9+.-]*:/i.test(target)) continue; // https:、mailto: 等

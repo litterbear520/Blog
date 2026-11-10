@@ -245,22 +245,80 @@ def lint_lesson(path, raw):
 
 SIZE = {'t-name': 16, 't-band': 14, 't-msg': 14}
 MONO = {'t-mono', 't-mono-strong', 't-panel', 't-code'}
+SERIF = {'t-name'}
+# 拉丁字符的估宽（em）：在 Chrome 里按图里的实际字号实测站点字体的逐字符宽度，向上取到 0.05em 分档，宁可略宽
+# （取 0.1em 分档时 16px 的长英文串会多估 10% 以上，贴边的框会误报）。
+# t-name 是 Source Serif 4 600 / 16px，其余是 Inter 400–600 / 12–14px（取各字重里最宽的）；两者都带光学尺寸轴，
+# 小字号下字形比大字号宽，要按实际字号量。等宽字按 0.6em，中文按 1em，表外的符号（× → … 等）按 1em。
+LATIN_EM = {
+    'serif': {
+        0.25: " '",
+        0.3: ',./[\\]',
+        0.35: '!()-:;fijl{|}',
+        0.4: 'IJ`t',
+        0.45: '"?',
+        0.5: '*rsz',
+        0.55: '#$+0123456789<=>S^_aceg~',
+        0.6: 'FLZkoqvxy',
+        0.65: 'BCEPTbdhnpu',
+        0.7: 'RVXY',
+        0.75: '&ADGKNOQU',
+        0.8: 'H',
+        0.85: 'w',
+        0.9: '@',
+        0.95: '%Mm',
+        1.05: 'W',
+    },
+    'sans': {
+        0.3: ' Iijl',
+        0.35: "!',.:;\\ft",
+        0.4: '()/[]`|',
+        0.45: '1r',
+        0.5: '-^_{}',
+        0.55: '"*?s',
+        0.6: '7FJLacekvxyz',
+        0.65: '#235689EPbdghnopqu',
+        0.7: '$&+04<=>BRSTZ~',
+        0.75: 'ACDGHKUVXY',
+        0.8: 'NOQ',
+        0.85: 'w',
+        0.95: 'Mm',
+        1.0: '@',
+        1.05: '%W',
+    },
+}
+LATIN = {font: {ch: em for em, chars in table.items() for ch in chars} for font, table in LATIN_EM.items()}
 
 
-def text_width(text, size, mono):
+def text_width(text, size, font):
     width = 0.0
     for ch in text:
         if CJK.match(ch) or ord(ch) > 0x2E80:
             width += 1.0
-        elif mono:
+        elif font == 'mono':
             width += 0.6
-        elif ch == ' ':
-            width += 0.3
-        elif ch.isupper() or ch.isdigit():
-            width += 0.62
         else:
-            width += 0.52
-    return width * size
+            width += LATIN[font].get(ch, 1.0)
+    # 再放宽 2%：13 张图 224 段文字里，实测最多比查表结果宽 1.1%（字距微调），放宽到 3% 起贴边的框开始误报
+    return width * size * 1.02
+
+
+def text_runs(el, size, font):
+    """把 <text> 拆成 (文字, 字号, 字体) 几段：<tspan class="t-mono"> 这类换字体的片段按它自己的类估宽。"""
+    if el.text:
+        yield el.text, size, font
+    for child in el:
+        classes = set(child.get('class', '').split())
+        csize, cfont = size, font
+        if classes & MONO:
+            cfont, csize = 'mono', 12
+        elif classes & SERIF:
+            cfont = 'serif'
+        if classes & SIZE.keys():
+            csize = max(SIZE[c] for c in classes & SIZE.keys())
+        yield from text_runs(child, csize, cfont)
+        if child.tail:
+            yield child.tail, size, font
 
 
 def lint_svg(variant):
@@ -290,7 +348,11 @@ def lint_svg(variant):
             continue
         classes = set(t.get('class', '').split())
         size = max([SIZE.get(c, 12) for c in classes] or [12])
-        width = text_width(content, size, bool(classes & MONO))
+        font = 'mono' if classes & MONO else 'serif' if classes & SERIF else 'sans'
+        runs = list(text_runs(t, size, font))
+        runs[0] = (runs[0][0].lstrip(), *runs[0][1:])
+        runs[-1] = (runs[-1][0].rstrip(), *runs[-1][1:])
+        width = sum(text_width(*run) for run in runs)
         x, y = float(t.get('x', 0)), float(t.get('y', 0))
         anchor = t.get('text-anchor', 'start')
         left = x - width / 2 if anchor == 'middle' else x - width if anchor == 'end' else x

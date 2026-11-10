@@ -10,7 +10,7 @@ mkdir -p fonts && curl -sL -o fonts/NotoSansSC.ttf "https://github.com/google/fo
 mkdir -p src/<slug>   # 原图按文章里出现的顺序存成 fig01.png、fig02.png …
 ```
 
-原图取原站的最大分辨率版本（Anthropic 的图去掉 `/_next/image?url=` 包装，直接下 `www-cdn.anthropic.com/images/...`）。`src/`、`out/`、`fonts/` 都不进仓库。
+原图取原站的最大分辨率版本（Anthropic 的图去掉 `/_next/image?url=` 包装，直接下 `www-cdn.anthropic.com/images/...`）。`src/`、`out/`、`fonts/` 都不进仓库。所以新转载一篇时，同样在 `specs/<slug>/SOURCES.md` 里记下 figNN → 原图地址（例：`specs/components-of-agent-memory/SOURCES.md`），以后改译名要重渲时才找得回原图。
 
 ## 流程
 
