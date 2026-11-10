@@ -20,7 +20,8 @@ FAIL 必须改；WARN 是提醒，确认是有意为之可以保留。退出码�
 阈值来自 Academy 五类课文的实测：MCP 两门课（docs/MCP 中译）、《使用 Claude API 构建》工具与智能体两章、
 Claude Code 101 与子代理 / 技能课、AI 能力与局限。正文 500–1600 字（多数 600–1100），段落平均 30–75 字、
 最长 124 字，没有一张 Markdown 表格，没有“规则 N”“指南里说过”这类要读者去别处查的引用；
-提到下一课、别的课只出现在收尾那一节。这些课文不出 FAIL（纯视频文字稿页除外），偏离常态才出 WARN。
+提到下一课、别的课只出现在收尾那一节。这些课文除缺 `<LessonMeta>`（这些课文早于 /lesson）外不出 FAIL
+（纯视频文字稿页除外），偏离常态才出 WARN。
 """
 import json
 import math
@@ -56,8 +57,10 @@ META = re.compile(r'<LessonMeta\s+lesson=\{(\d+)\}\s+minutes=\{(\d+)\}\s*/>')
 
 def lesson_number(path):
     # 第几课：同一目录里带两位编号的课文和演练页按文件名排序，从 1 数起
+    # 文件名不带两位编号时返回 None，由调用方报 FAIL
     names = sorted(p.name for p in Path(path).parent.iterdir() if re.match(r'\d\d-.+\.mdx?$', p.name))
-    return names.index(Path(path).name) + 1
+    name = Path(path).name
+    return names.index(name) + 1 if name in names else None
 
 
 def opens_with_options(raw):
@@ -69,7 +72,10 @@ def opens_with_options(raw):
 def previous_lesson(path):
     names = sorted(p.name for p in Path(path).parent.iterdir()
                    if re.match(r'\d\d-.+\.mdx?$', p.name) and not p.name.endswith('-walkthrough.mdx'))
-    i = names.index(Path(path).name)
+    name = Path(path).name
+    if name not in names:
+        return None
+    i = names.index(name)
     return Path(path).parent / names[i - 1] if i > 0 else None
 
 
@@ -88,15 +94,21 @@ def walkthrough_minutes(steps):
 
 
 def check_meta(path, raw, minutes):
+    # minutes 为 None（算不出时长，比如 CodeWalkthrough 演练页）时只查课序、有没有、在不在 H1 下一行
     where = str(path)
-    expect = f'<LessonMeta lesson={{{lesson_number(path)}}} minutes={{{minutes}}} />'
+    number = lesson_number(path)
+    if number is None:
+        report('FAIL', where, '文件名要以两位编号开头（01-xxx.mdx）')
+    expect = f'<LessonMeta lesson={{{number or "N"}}} minutes={{{"M" if minutes is None else minutes}}} />'
     body = strip_page(raw)
     after_h1 = re.search(r'^# .+\n+(.*)$', body, flags=re.M)
     m = META.search(raw)
     if not m:
         report('FAIL', where, f'标题下缺课序和时长：H1 下一行写 {expect}')
-    elif (int(m.group(1)), int(m.group(2))) != (lesson_number(path), minutes):
-        report('FAIL', where, f'课序或时长和篇幅对不上：改成 {expect}')
+    elif number is not None and int(m.group(1)) != number:
+        report('FAIL', where, f'课序对不上：改成 {expect}')
+    elif minutes is not None and int(m.group(2)) != minutes:
+        report('FAIL', where, f'时长和篇幅对不上：改成 {expect}')
     elif not after_h1 or not META.match(after_h1.group(1)):
         report('FAIL', where, f'{expect} 要紧跟在 H1 下一行')
 
@@ -125,8 +137,14 @@ def blocks(text):
     return [b.strip() for b in re.split(r'\n\s*\n', text) if b.strip()]
 
 
+# 块级组件：这些标签开头（含闭合标签）的块不是正文段落；<Term>、<strong> 这类行内标签开头的段落照常算
+BLOCK_COMPONENT = re.compile(
+    r'^</?(?:Diagram|MessageFlow|AgentLoopViz|QuickCheck|ReadMore|LessonMeta|McpWalkthrough|CodeWalkthrough'
+    r'|CardGrid|Card|CourseHero|McpQuiz|DocCardList|VideoFigure)\b')
+
+
 def is_prose(block):
-    return not re.match(r'^(#|\||:::|<|!\[|(\d+\.|[-*]) )', block)
+    return not (re.match(r'^(#|\||:::|!\[|(\d+\.|[-*]) )', block) or BLOCK_COMPONENT.match(block))
 
 
 # ── 概念课 ──────────────────────────────────────────────────────────────────
@@ -322,13 +340,20 @@ def lint_walkthrough_page(path, raw, found):
         report('FAIL', where, f'演练页正文 {len(prose)} 段 {n} 字：只写一句“对照……逐步查看……”，操作方法引导卡会讲')
     if re.search(r'^## ', body, flags=re.M):
         report('FAIL', where, '演练页不分小节')
+    meta_checked = False
+    if any(component == 'CodeWalkthrough' for component, _ in found):
+        report('WARN', where, 'CodeWalkthrough 演练页的步骤和 LessonMeta 没有自动检查，手动核对')
     for component, variant in found:
+        if component == 'CodeWalkthrough':
+            continue
         loaded = load_steps(component, variant)
         if not loaded:
             continue
         target, steps = loaded
         data = str(target.relative_to(ROOT))
-        check_meta(path, raw, walkthrough_minutes(steps))
+        if not meta_checked:
+            check_meta(path, raw, walkthrough_minutes(steps))
+            meta_checked = True
         if not 3 <= len(steps) <= 9:
             report('WARN', data, f'{len(steps)} 步，基线 6–7 步')
         for i, step in enumerate(steps, 1):
@@ -357,6 +382,9 @@ def lint_walkthrough_page(path, raw, found):
             for pattern, what in ((LOOKUP, '要读者去别处查的引用'), (POINTER, '提到了别的课'), (EVIDENCE, '引证口吻')):
                 for m in pattern.finditer(joined):
                     report('FAIL', data, f'{label}{what}：“{m.group(0)}”')
+    if not meta_checked:
+        # 读不出步骤时算不出时长，和步数无关的几项照常查
+        check_meta(path, raw, None)
 
 
 # ── --stats：并排对照 ─────────────────────────────────────────────────────
@@ -364,10 +392,19 @@ def lint_walkthrough_page(path, raw, found):
 def academy_txt_to_md(text):
     # 抓取稿里正文段落和列表项带 leading-relaxed 类；图、视频记成一张图，代码块记成一个空代码块
     out = []
+    seen = set()
     for line in text.splitlines():
         if line.startswith('== ') and out and 'INVENTORY' not in line:
             break
         if re.match(r'^(IMG|IFRAME)', line):
+            # “IMG y=…”是抓取稿末尾的版面清单，同一张图又记了一遍；同一张图（src 相同）只记一次
+            if re.match(r'^(IMG|IFRAME) y=', line):
+                continue
+            src = re.search(r'\bsrc=(\S+)', line)
+            if src:
+                if src.group(1) in seen:
+                    continue
+                seen.add(src.group(1))
             out.append('![](x.png)\n')
             continue
         if line.startswith('PRE'):
@@ -407,10 +444,16 @@ def stats(paths):
     rows = []
     for name in paths:
         raw = Path(name).expanduser().read_text()
+        m = measure(academy_txt_to_md(raw) if name.endswith('.txt') else raw)
         if name.endswith('.txt'):
-            raw = academy_txt_to_md(raw)
-        rows.append((Path(name).name, measure(raw)))
-    cols = list(rows[0][1]) if rows else []
+            if m['字数'] == 0:
+                print(f'{name} 不是可解析的抓取稿，跳过')
+                continue
+            m['代码/千字'] = '-'  # 抓取稿不保留行内代码
+        rows.append((Path(name).name, m))
+    if not rows:
+        return 0
+    cols = list(rows[0][1])
     width = max([len(n) for n, _ in rows] + [4])
     print('文件'.ljust(width), *[c.rjust(8) for c in cols])
     for n, m in rows:
@@ -424,20 +467,26 @@ def fix_meta(path):
         return
     found = WALKTHROUGH.findall(raw)
     if found and cjk_len(re.sub(r'<[^>]+>', '', strip_page(raw))) < 200:
+        if found[0][0] == 'CodeWalkthrough':
+            report('WARN', str(path), 'CodeWalkthrough 演练页的步骤和 LessonMeta 没有自动检查，手动核对')
+            return
         loaded = load_steps(*found[0])
         if not loaded:
             return
         minutes = walkthrough_minutes(loaded[1])
     else:
         minutes = concept_minutes(raw)
-    tag = f'<LessonMeta lesson={{{lesson_number(path)}}} minutes={{{minutes}}} />'
-    if META.search(raw):
-        new = META.sub(lambda m: tag, raw, count=1)
-    else:
-        new, n = re.subn(r'^(# .+\n)', lambda m: m.group(1) + '\n' + tag + '\n', raw, count=1, flags=re.M)
-        if not n:
-            report('FAIL', str(path), '找不到 H1，没法写课序和时长')
-            return
+    number = lesson_number(path)
+    if number is None:
+        report('FAIL', str(path), '文件名要以两位编号开头（01-xxx.mdx）')
+        return
+    tag = f'<LessonMeta lesson={{{number}}} minutes={{{minutes}}} />'
+    # 已有的标签不管在哪，连同紧随的空行先删掉，再统一插到 H1 下一行
+    stripped = re.sub(r'^[ \t]*<LessonMeta\b[^>]*/>[ \t]*(?:\n|\Z)(?:[ \t]*\n)?', '', raw, count=1, flags=re.M)
+    new, n = re.subn(r'^(# .+\n)', lambda m: m.group(1) + '\n' + tag + '\n', stripped, count=1, flags=re.M)
+    if not n:
+        report('FAIL', str(path), '找不到 H1，没法写课序和时长')
+        return
     if new != raw:
         path.write_text(new)
     print(f'{path}  {tag}')

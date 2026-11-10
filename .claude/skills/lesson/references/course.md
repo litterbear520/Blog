@@ -23,7 +23,7 @@
   - 专题或课程的索引页里，学习目标和 `lessonCount` 跟着新结构更新。
 - **frontmatter** 只写 `description`：一句话，读者在目录卡片上看到。H1 是中文课名，不带编号。
 - **分组页**：frontmatter 写 `sidebar_position`、`description`，正文是 H1、一句话介绍、`<DocCardList />`，照 `docs/MCP/Model Context Protocol：高级主题/核心 MCP 功能/index.md`。
-- **路线里的专题**：就是项目目录下的一个分组，`sidebar_position` 排在各 Stage 之后；它的 `index.md` 可以多写一段“这个专题讲什么”和学习目标。
+- **路线里的专题**：路线里 `roadmap/<项目>/index.mdx` 是课程索引页；`<专题>` 是它下面的一个分组，概念评估放在该分组最后一页。项目索引页不存在时先建。
 
 ## 课程索引页
 
@@ -36,7 +36,7 @@
 5. `## 前提条件`：读者要先会什么。
 6. `## 课程内容` 加 `<DocCardList />`。
 
-`lessonCount` 数概念课和演练页，不数概念评估。
+`lessonCount` 数课程里所有带两位编号的页面：概念课、演练页、概念评估都算，分组页和索引页不算。范文是 5 + 6 + 1 = 12（传输与通信 5 篇、核心 MCP 功能 6 篇、评估 1 篇），《Model Context Protocol 简介》的 11 也是这样数的。
 
 ## 概念评估
 

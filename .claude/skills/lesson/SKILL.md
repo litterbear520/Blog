@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 把用户的一个想法写成博客里的一门**课**，读起来要像在 academy.claude.com 上课。Academy 各门课的讲法和版面各不相同：MCP 课用两个选项对照，API 课从贯穿项目的缺口推出工具，Claude Code 课先讲骨架再讲部件，AI 能力课先让读者下注，教程页让读者先预测再揭晓。所以每一课都要按内容从 Academy 的整套讲法里挑一种；读感是共同的：每课只讲一个概念，几分钟读完，段落短，图和课内检查把机制摆到眼前，代码放在紧随其后的演练页里，整门课最后一篇概念评估。读者是用户自己。
 
-这套写法只在用户调用 `/lesson` 时使用。目标位置在 AGENTS.md 里的硬约束照守：路线页面不提 Step 编号和 dev 仓库路径、不用 `run` 输出面板、引号用 “”。AGENTS.md「路线页面」另有几条写法规则，在 `/lesson` 里由本技能代替：课文结构（“上一课留下的问题 → 机制 → 演练 → 设计取舍 → 在本地运行”）照 [讲法目录](references/skeletons.md) 选；演练单独成页，不放进课文；设计取舍不引用六条规则的编号；结尾照讲法目录的“收尾”选，不固定写成“一段话带到下一课”。
+这套写法只在用户调用 `/lesson` 时使用。目标位置在 AGENTS.md 里的硬约束照守：页面单独看就要能懂，不提学习计划里的步骤编号和私有仓库的文件路径，引用位置一律用课名或分组名。引号一律用 “”。AGENTS.md「路线页面」另有一条写法规则，在 `/lesson` 里由本技能代替：结尾照 [讲法目录](references/skeletons.md) 的“收尾”选，不固定写成“一段话带到下一课”。课文里不放 `run` 输出面板，这是本技能自己的规定（见 [组件怎么选](references/components.md)），AGENTS.md「代码运行输出」本身允许 docs / roadmap / blog 都用。
 
 ## 输入
 
@@ -19,13 +19,13 @@ disable-model-invocation: true
 代码：<源仓库路径>（讲代码设计时给）
 ```
 
-- **位置**：`docs/<分类>/…` 或 `roadmap/<项目>/…`，斜杠后面是课程名；推断不出来时停下来问。
+- **位置**：`docs/<分类>/<课程名>` 或 `roadmap/<项目>/<专题>`。路线里 `roadmap/<项目>/index.mdx` 是课程索引页，`<专题>` 是它下面的一个分组（见 [课程结构](references/course.md)）；推断不出来时停下来问。
 - **规模**：三个概念及以上做成课程（索引页 + 概念课 + 演练页 + 概念评估）；一两个概念写成单篇概念课加演练页，不加测验。
 
 ## 步骤
 
 1. **同步，校准读感。** `git pull --ff-only`。读 AGENTS.md 里目标位置那一节的硬约束，再读 [读感](references/style.md) 和 [讲法目录](references/skeletons.md)。然后读范文，标杆是 Academy 原文：
-   - **按这门课的主题和要用的课型，挑两三篇最接近的 Academy 原文。** 抓取稿在 `~/workspace/academy-research/`（仓库外，只在这台机器上）：`api-*.txt` 是《使用 Claude API 构建》工具使用与智能体两章，`mcp-*.txt` 是 MCP 高级主题，`cc-*.txt` 是 Claude Code 101、子代理入门和智能体技能入门，`cap-*.txt` 是 AI 能力与局限，`use-*.txt` 是教程和用例。每行开头是元素类型，`P`、`LI`、`H2` 是正文，`IMG` 是配图；配图原件在 `fig/`、`img/`，页面截图在 `shots/`，都可以直接打开看。
+   - **按这门课的主题和要用的课型，挑两三篇最接近的 Academy 原文。** 抓取稿在 `~/workspace/academy-research/`（仓库外，只在这台机器上）：`api-*.txt` 是《使用 Claude API 构建》工具使用与智能体两章，`mcp-*.txt` 是 MCP 高级主题，`cc-*.txt` 是 Claude Code 101、子代理入门和智能体技能入门，`cap-*.txt` 是 AI 能力与局限，`use-*.txt` 是教程和用例（多数是整页文字或交互转储，`--stats` 解析不出正文会提示跳过，能并排量的只有 `use-visualize.txt` 这类正文稿）。每行开头是元素类型，`P`、`LI`、`H2` 是正文，`IMG` 是配图；配图原件在 `fig/`、`img/`，页面截图在 `shots/`，都可以直接打开看。
    - **演练页的范文**是 `docs/MCP/Model Context Protocol：高级主题/核心 MCP 功能/02-sampling-walkthrough.mdx` 和步骤数据 `src/data/mcpWalkthroughs/sampling.js`（只看 `steps`）。
    目标目录里已有的课文只用来对齐叫法和具名场景，写法以范文为准。
    完成标准：对读过的每篇范文，能说出它的课型、开头怎么切入、小标题序列、每张图前后各是什么文字、怎么收尾。
@@ -40,7 +40,7 @@ disable-model-invocation: true
    完成标准：`python3 .claude/skills/lesson/scripts/lesson_lint.py <课文>` 没有 FAIL；每个 WARN 要么改掉，要么能说出保留的理由。
 6. **写演练页。** 页面照 [讲法目录](references/skeletons.md) 的“演练页”，步骤数据照 [组件怎么选](references/components.md) 的 `McpWalkthrough` 一行：每步一两句话，只框住这一步讲的那几行。
    完成标准：对演练页跑同一个 lint 没有 FAIL。
-7. **补测试。** 新演练照 `tools/agent-tool-lessons.test.mjs` 的 `LESSONS` 登记：演练页路径 `walkthrough`、它讲的概念课 `pages[]`（每页列出嵌的图和消息流）、快照文件和每一步的语义锚点（`[文件, 起始锚点, 结束锚点]`，用了 `{ after }` 的步骤把它写成第 4 项），并加进 `tools/walkthrough-browser.mjs` 的 `lessons`；新 variant 加进 `src/components/ProjectCodeViewer/actions.test.mjs` 的 `supported` 白名单；新图由 `npm run test:diagrams` 校验，新消息流图由 `npm run test:message-flow` 校验。本机内存跑不动构建和浏览器测试，只跑这几个纯 Node 的测试：`npm run test:diagrams && npm run test:message-flow && npm run test:agent-tools && npm run test:quick-check && node --test src/components/ProjectCodeViewer/actions.test.mjs`；其余交给 CI。
+7. **补测试。** 新演练的数据放 `src/data/mcpWalkthroughs/<variant>.js`（一个 variant 一个文件，在同目录 `index.js` 里 import 并加进 `WALKTHROUGHS`），再加进 `tools/walkthrough-browser.mjs` 的 `lessons`，CI 用它在真实页面上逐步点一遍。`lessons` 的每一项是 `{ name, path, data }`：`name` 是 variant，`path` 是演练页的站内路径（以 `/` 结尾），`data` 是数据文件的默认导出；路线里的演练再加 `roadmap: true`，会多查页面里没有 academy.claude.com / platform.claude.com 的链接、点“下一步”时文章不跳动。现有三项由 `['notifications', 'roots', 'sampling'].map(...)` 生成，路径固定在 MCP 高级主题的“核心 MCP 功能”下；别处的演练在数组里另写一项：`{ name: '<variant>', path: '/roadmap/<项目>/<专题>/<slug>-walkthrough/', data: (await import(dataURL(read('src/data/mcpWalkthroughs/<variant>.js')))).default, roadmap: true }`。这里是把文件内容转成 `data:` URL 再导入，数据文件里有相对 import（比如 `focusRange`、第 4 步的快照文件）时会报 `ERR_UNSUPPORTED_RESOLVE_REQUEST`，walkthrough-browser 读不进来；现有三份数据都把文件内容和行号写成字面量。要用相对 import 时先停下来告诉用户。新 variant 加进 `src/components/ProjectCodeViewer/actions.test.mjs` 的 `supported` 白名单；新图由 `npm run test:diagrams` 校验，新消息流图由 `npm run test:message-flow` 校验。本机内存跑不动构建和浏览器测试，只跑这几个纯 Node 的测试：`npm run test:diagrams && npm run test:message-flow && npm run test:focus-range && npm run test:quick-check && node --test src/components/ProjectCodeViewer/actions.test.mjs`；其余交给 CI。
 8. **通读对照。** 先跑 `python3 .claude/skills/lesson/scripts/lesson_lint.py --stats <自己的课> <第 1 步挑的 Academy 抓取稿 .txt>`，把字数、段落、图和密度并排看；再重读那几篇原文，从头读自己的课：段落的长短、图和检查出现的频率、读到哪里需要停下来查别处，都和原文比一比。哪一段读着比原文吃力，就把那段拆短，或者把细节挪进演练、收进“阅读更多”。
 9. **提交、看 CI、截图对照。** 提交信息用中文，按 `feat:` / `docs:` 前缀写改了什么，只描述改动本身；直接推 `main`，`gh run watch <id> --exit-status` 等 CI。CI 通过后用 `python3 .claude/skills/lesson/scripts/page_shots.py <线上链接> ...` 截线上页面（浅色；内存够时加 `--theme dark` 再截一遍），和 `~/workspace/academy-research/shots/` 里同课型的 Academy 截图（同样 1280 宽；这一型没有整页截图时，版面用最接近的整页截图对照，图用 `fig/`、`img/` 里的原图对照）并排看：图有没有被裁、图里的字是不是太小、段落和图的节奏、标题下的标签、快速检查和演练能不能用。哪里不如原文，改了再推，再截。
    完成标准：截图里每一页都说得出和对应 Academy 截图的差别，剩下的差别都是有意的（比如深色模式、可放大的图）。
