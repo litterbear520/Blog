@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { ChevronDown, Copy } from 'lucide-react';
 import styles from './styles.module.css';
@@ -8,6 +8,8 @@ import styles from './styles.module.css';
 // .md 由 plugins/copy-markdown-source 在构建时生成，地址是页面地址加 .md。
 
 const RESET_MS = 2000;
+// 菜单离屏幕两边至少留这么多
+const EDGE = 8;
 
 // 中文路径解码后再拼，发给 Claude 的那句话里读得懂
 const pageUrl = () => window.location.origin + decodeURI(window.location.pathname).replace(/\/$/, '');
@@ -34,6 +36,8 @@ function Spark() {
 export default function CopyMarkdownButton() {
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
+  // 菜单的水平位置（相对按钮组左边）；null 表示和按钮组右边对齐
+  const [menuLeft, setMenuLeft] = useState(null);
   const resetTimer = useRef(null);
   const wrapRef = useRef(null);
   const toggleRef = useRef(null);
@@ -90,6 +94,23 @@ export default function CopyMarkdownButton() {
     };
     document.addEventListener('pointerdown', onDown);
     return () => document.removeEventListener('pointerdown', onDown);
+  }, [open]);
+
+  // 打开时在绘制前量一次位置：默认和按钮组右边对齐；按钮靠左（手机上在标题下面）时这样会伸出屏幕左边，
+  // 就改成从下拉箭头处往右展开（参考站手机版的做法）；最后再夹在屏幕里
+  useLayoutEffect(() => {
+    if (!open) {
+      setMenuLeft(null);
+      return;
+    }
+    const wrap = wrapRef.current.getBoundingClientRect();
+    const width = menuRef.current.offsetWidth;
+    const viewport = document.documentElement.clientWidth;
+    let left = wrap.width - width;
+    if (wrap.left + left < EDGE) left = toggleRef.current.offsetLeft;
+    left = Math.min(left, viewport - EDGE - width - wrap.left);
+    left = Math.max(left, EDGE - wrap.left);
+    setMenuLeft(left === wrap.width - width ? null : left);
   }, [open]);
 
   // 打开时焦点落到第一项
@@ -159,7 +180,14 @@ export default function CopyMarkdownButton() {
         </button>
       </div>
       {open && (
-        <div ref={menuRef} className={styles.menu} role="menu" aria-label="更多选项" onKeyDown={onMenuKey}>
+        <div
+          ref={menuRef}
+          className={styles.menu}
+          role="menu"
+          aria-label="更多选项"
+          onKeyDown={onMenuKey}
+          style={menuLeft === null ? undefined : { left: menuLeft, right: 'auto' }}
+        >
           {items.map((item) => (
             <button key={item.label} type="button" role="menuitem" tabIndex={-1} className={styles.item} onClick={choose(item.action)}>
               {item.icon}

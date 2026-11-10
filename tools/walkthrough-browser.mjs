@@ -97,7 +97,9 @@ async function serveBuild() {
   const root = join(repo, 'build');
   assert.ok(existsSync(root), 'Run npm run build first');
   const types = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript', '.css': 'text/css',
-    '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2' };
+    '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2',
+    // 复制页面按钮先用 HEAD 确认有没有 .md、内容类型对不对，和 GitHub Pages 返回的一致
+    '.md': 'text/markdown; charset=utf-8', '.txt': 'text/plain; charset=utf-8' };
   const server = createServer((req, res) => {
     try {
       const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
@@ -111,6 +113,47 @@ async function serveBuild() {
   });
   await new Promise((r) => server.listen(0, '127.0.0.1', r));
   return { url: `http://127.0.0.1:${server.address().port}`, close: () => new Promise((r) => server.close(r)) };
+}
+
+// 复制页面按钮（src/components/CopyMarkdownButton），在真实页面里跑：
+// 宽屏在标题第一行右边，窄于 1024px 时在标题下面靠左；尺寸 28 高，整个在屏幕里，不在 h1 里面
+function inspectCopyButton() {
+  const failures = [];
+  const check = (ok, message) => { if (!ok) failures.push(message); };
+  const group = document.querySelector('[data-copy-md-btn] [role=group]');
+  const h1 = document.querySelector('article h1');
+  const r = group.getBoundingClientRect();
+  const h = h1.getBoundingClientRect();
+  const vw = document.documentElement.clientWidth;
+  check(r.width > 0 && Math.round(r.height) === 28, `copy button is ${r.width}x${r.height}`);
+  check(r.left >= 0 && r.right <= vw + 0.5, `copy button ${r.left}-${r.right} outside viewport ${vw}`);
+  check(!h1.textContent.includes('复制页面'), 'copy button sits inside the heading');
+  if (innerWidth >= 1024) {
+    const line = parseFloat(getComputedStyle(h1).lineHeight) || h.height;
+    check(r.left >= h.right - 1, 'copy button overlaps the title');
+    check(Math.abs(r.top + r.height / 2 - (h.top + Math.min(h.height, line) / 2)) < 2, 'copy button not centred on the first title line');
+  } else {
+    check(r.top >= h.bottom - 1, 'copy button not below the title on a narrow screen');
+    check(Math.abs(r.left - h.left) < 1, 'copy button not left-aligned with the title on a narrow screen');
+  }
+  check(document.documentElement.scrollWidth <= innerWidth + 1, 'copy button causes horizontal overflow');
+  return { failures, checks: 6 };
+}
+
+// 下拉菜单：三项、每项 32 高，左右离屏幕边至少 8px，焦点在第一项，页面不横向溢出
+function inspectCopyMenu() {
+  const failures = [];
+  const check = (ok, message) => { if (!ok) failures.push(message); };
+  const menu = document.querySelector('[data-copy-md-btn] [role=menu]');
+  const r = menu.getBoundingClientRect();
+  const vw = document.documentElement.clientWidth;
+  const items = [...menu.querySelectorAll('[role=menuitem]')];
+  check(items.map((i) => i.textContent.trim()).join('|') === '复制为 Markdown|打开 Markdown|在 Claude.ai 中对话', 'copy menu items');
+  check(items.every((i) => Math.round(i.getBoundingClientRect().height) === 32), 'copy menu item height');
+  check(r.left >= 7.5 && r.right <= vw - 7.5, `copy menu ${r.left}-${r.right} not inside viewport ${vw}`);
+  check(document.activeElement === items[0], 'focus not on the first menu item');
+  check(document.documentElement.scrollWidth <= innerWidth + 1, 'copy menu causes horizontal overflow');
+  return { failures, checks: 5 };
 }
 
 // Run inside the real page. Scroll clipping at the LIST edge is intentional;
@@ -256,6 +299,29 @@ try {
       await click('[data-e2e-skip]');
       await waitFor("!document.querySelector('[data-e2e-skip]')");
       assert.equal(await evaluate('document.documentElement.dataset.theme'), scenario.theme, `${label}: theme`);
+      // 复制页面按钮：位置、菜单、Esc 关闭、复制出的是本页 Markdown。手机和平板视口同样要有
+      await waitFor("!!document.querySelector('[data-copy-md-btn] [role=group]')");
+      const copyButton = await evaluate(`(${inspectCopyButton.toString()})()`);
+      assert.deepEqual(copyButton.failures, [], `${label}: copy button`);
+      await click('[data-copy-md-btn] [aria-haspopup=menu]');
+      await waitFor("!!document.querySelector('[data-copy-md-btn] [role=menu]')");
+      await sleep(50);
+      const copyMenu = await evaluate(`(${inspectCopyMenu.toString()})()`);
+      assert.deepEqual(copyMenu.failures, [], `${label}: copy menu`);
+      await call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+      await call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+      await waitFor("!document.querySelector('[data-copy-md-btn] [role=menu]') && document.activeElement?.getAttribute('aria-haspopup') === 'menu'");
+      // 剪贴板在无头浏览器里要授权，这里接住写入的内容来核对
+      await evaluate(`(() => {
+        window.__copied = null;
+        navigator.clipboard.writeText = (text) => { window.__copied = text; return Promise.resolve(); };
+        navigator.clipboard.write = async (items) => { window.__copied = await (await items[0].getType('text/plain')).text(); };
+      })()`);
+      await click('[data-copy-md-btn] [role=group] button:first-child');
+      await waitFor("typeof window.__copied === 'string'");
+      assert.ok(await evaluate(String.raw`/^# .+\n/.test(window.__copied) && window.__copied.includes('- 原文：') && !window.__copied.includes('<McpWalkthrough')`), `${label}: copied Markdown`);
+      await waitFor("[...document.querySelectorAll('[data-copy-md-btn] button:first-child span span')].some((s) => s.textContent === '已复制' && getComputedStyle(s).opacity === '1')");
+      report.assertions += copyButton.checks + copyMenu.checks + 3;
       if (lesson.roadmap) {
         assert.equal(await evaluate("!!document.querySelector('article a[href*=\"academy.claude.com\"], article a[href*=\"platform.claude.com\"]')"), false, 'reference links removed');
       }

@@ -49,14 +49,20 @@
   grid-row: 1;
 }
 
-/* 窄屏不放：标题会被挤到折行，照参考站的做法只在宽屏显示 */
+/* 窄屏：照参考站的手机版，按钮挪到标题下面靠左（博客文章在日期下面），尺寸不变 */
 @media (max-width: 1023px) {
-  .wrap {
-    display: none;
-  }
-
   :global(.copy-md-row) {
     column-gap: 0;
+  }
+
+  :global(.copy-md-row) > [data-copy-md-btn] {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    order: 1;
+    justify-self: start;
+    /* 宽屏时 Root.js 按标题行高算的上边距，这里不要 */
+    margin-top: 0 !important;
+    margin-bottom: 8px;
   }
 }
 
