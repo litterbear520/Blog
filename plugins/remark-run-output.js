@@ -15,16 +15,20 @@
  * 还可以写 {3,7-9} 高亮输出里的第 3、7、8、9 行（1 起数），提示读者该看哪几行。
  */
 
-function parseStatus(meta) {
-  const m = (meta || '').trim();
-  if (m === 'hang') return 'hang';
-  if (m === 'empty') return 'empty';
-  const exit = m.match(/exit=(\d+)/);
+// 引号里的内容（title="npm run build"）不算标记
+const bare = (meta) => (meta || '').replace(/"[^"]*"|'[^']*'/g, '');
+const hasWord = (meta, word) => new RegExp(`(^|\\s)${word}(\\s|$)`).test(bare(meta));
+
+export function parseStatus(meta) {
+  // hang / empty 可以和 {3,7-9}、id=xxx 写在一起
+  if (hasWord(meta, 'hang')) return 'hang';
+  if (hasWord(meta, 'empty')) return 'empty';
+  const exit = bare(meta).match(/(?:^|\s)exit=(\d+)/);
   return exit ? `exit:${exit[1]}` : 'exit:0';
 }
 
 // 解析 {3,7-9} 这种行号范围，展开成 "3,7,8,9"；没写返回 undefined
-function parseHighlight(meta) {
+export function parseHighlight(meta) {
   const m = (meta || '').match(/\{([\d,\s-]+)\}/);
   if (!m) return undefined;
   const lines = new Set();
@@ -38,8 +42,8 @@ function parseHighlight(meta) {
   return lines.size ? [...lines].join(',') : undefined;
 }
 
-function hasRunFlag(meta) {
-  return /(^|\s)run(\s|$)/.test(meta || '');
+export function hasRunFlag(meta) {
+  return hasWord(meta, 'run');
 }
 
 function walk(parent) {
