@@ -17,7 +17,7 @@
     "test:term": "node --test src/components/Term/placement.test.mjs",
     "test:ci-scope": "node --test tools/ci-scope.test.mjs",
     "test:covers": "node --test tools/covers.test.mjs",
-    "test:plugins": "node --test tools/plugins.test.mjs",
+    "test:plugins": "node --test tools/plugins.test.mjs tools/copy-markdown.test.mjs",
     "test:data-module": "node --test tools/data-module.test.mjs",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

@@ -42,7 +42,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | `src/theme/` | swizzle 覆盖，见下文“主题覆盖” |
 | `src/css/custom.css` | 全局样式和主题令牌 |
 | `src/pages/` | `index.js` 首页、`bloglist.js` 博客列表（`POSTS`）、`skills.js` SkillHub（`/skills`） |
-| `plugins/` | `copy-markdown-source/`（构建时给 `docs/` 下的笔记生成清洗后的 `.md`，供“复制 Markdown”按钮用；blog 和 roadmap 没有这个按钮）、`remark-run-output.js`；两者的单测在 `tools/plugins.test.mjs`，还会扫全站检查每个 `run` 围栏都配了 `output` |
+| `plugins/` | `copy-markdown-source/`（构建后给笔记、路线、博客文章每页生成同名 `.md`、在页面头部声明，并生成站点根目录的 `llms.txt`；组件按 `convert.mjs` 展开成文字，演练、测验的代码和题目从 `src/data/` 读出来写全。新组件要在 `convert.mjs` 的 `RENDERERS` 里登记怎么转，单测在 `tools/copy-markdown.test.mjs`）、`remark-run-output.js`（单测在 `tools/plugins.test.mjs`，还会扫全站检查每个 `run` 围栏都配了 `output`） |
 | `tools/` | `covers/` 封面流水线；`figure-l10n/` 转载配图汉化；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证（用 `data-module.mjs` 在 Node 里导入 `src/data/` 的数据文件，数据文件可以引用别的文件）；`ci-scope.mjs` 判断这次 push 要不要跑浏览器 |
 | `.claude/skills/` | `blog-cover`、`lesson`、`note`、`academy-diagram-design`（Academy 课件风配图），用法见各自 `SKILL.md`；跨项目通用的 `/explain` 在全局 `~/.claude/skills/` |
 
@@ -77,7 +77,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | `CourseHero` | 课程索引页顶部信息卡（在 `McpCourse/`） | |
 | `InfoCards` | `CardGrid`（可编号）+ `Card` + `SkillList` + `LinkCallout` | |
 | `GitWorkflowViz` | Git 工作流分步演示，在 `docs/Git工作流/index.mdx` 里用 `BrowserOnly` 挂载 | `steps.js` |
-| 其他 | `CsvTable`、`SkillCard`（SkillHub）、`HomepageFeatures`、`CopyMarkdownButton`（由 `Root.js` 注入）、`Lightbox`（markdown 图片和 `Diagram` 共用的放大弹层） | |
+| 其他 | `CsvTable`、`SkillCard`（SkillHub）、`HomepageFeatures`、`CopyMarkdownButton`（由 `Root.js` 注入到有 `.md` 的页面标题旁）、`Lightbox`（markdown 图片和 `Diagram` 共用的放大弹层） | |
 
 ## 主题覆盖
 

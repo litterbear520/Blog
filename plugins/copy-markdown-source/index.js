@@ -1,111 +1,155 @@
 const fs = require('fs');
 const path = require('path');
+const { pathToFileURL } = require('url');
 
 /**
- * 清洗 Markdown/MDX 内容，移除 Docusaurus 特有语法。
- * 代码围栏里的内容原样保留：示例代码里的 import、--- 和标签都不是 MDX 语法。
+ * 构建后给每一页生成同名的 .md（页面地址后面加 .md），供“复制 Markdown”按钮和模型读取。
+ * 做法照 claude.dev、platform.claude.com、code.claude.com：
+ *   - 笔记（docs）、路线（roadmap）、博客文章（blog）三处都生成；
+ *   - 交互组件展开成文字，代码一个不丢，转换规则在 ./convert.mjs；
+ *   - 每页 HTML 头部加 <link rel="alternate" type="text/markdown">；
+ *   - 站点根目录生成 llms.txt，列出所有页面的 .md 地址。
  */
-function cleanProse(text) {
-  let cleaned = text;
-  // 移除 MDX import 语句（只匹配 from '@theme/...' 或 from '@site/...' 的 import）
-  cleaned = cleaned.replace(/^import\s+.*from\s+['"]@(theme|site|docusaurus)\/.*['"];?\s*$/gm, '');
-  // 移除 <DocCardList /> 自闭合组件
-  cleaned = cleaned.replace(/^\s*<DocCardList\s*\/>\s*$/gm, '');
-  // 移除 <CsvTable ... /> 自闭合组件（可能跨多行）
-  cleaned = cleaned.replace(/<CsvTable[\s\S]*?\/>/g, '');
-  // 移除 <Tabs ...> </Tabs> <TabItem ...> </TabItem> 标签行（保留内部内容）
-  cleaned = cleaned.replace(/^\s*<\/?(Tabs|TabItem)\s*[^>]*>\s*$/gm, '');
-  // <Term tip="解释">术语</Term> 只留术语
-  cleaned = cleaned.replace(/<Term\s+tip=(?:"[^"]*"|'[^']*'|\{[^}]*\})\s*>([\s\S]*?)<\/Term>/g, '$1');
-  // <ReadMore title="标题"> 换成加粗标题，里面的内容保留
-  cleaned = cleaned.replace(/^[ \t]*<ReadMore\b[^>]*?\btitle="([^"]*)"[^>]*>[ \t]*$/gm, '**$1**');
-  cleaned = cleaned.replace(/^[ \t]*<\/?ReadMore\b[^>]*>[ \t]*$/gm, '');
-  // MDX 注释
-  cleaned = cleaned.replace(/\{\/\*[\s\S]*?\*\/\}/g, '');
-  return cleaned;
-}
 
-function cleanMarkdown(content) {
-  // YAML frontmatter 只认文件开头那一段。正文里的分隔线也是 ---，
-  // 不锚定开头的话，没写 frontmatter 的文档会被删掉两条分隔线之间的正文
-  const body = content.replace(/^\uFEFF?---\r?\n[\s\S]*?\r?\n---[ \t]*(\r?\n|$)/, '');
+// 链接地址里的空格和括号会让 Markdown 断开，转义掉；中文保留，读起来方便
+const safeUrl = (url) => url.replace(/[ ()<>]/g, (c) => encodeURIComponent(c));
 
-  // 按代码围栏切开，只清洗围栏外面的部分
-  const out = [];
-  let prose = [];
-  let fence = null;
-  for (const line of body.split('\n')) {
-    const mark = line.match(/^\s*(`{3,}|~{3,})/);
-    if (fence) {
-      out.push(line);
-      if (mark && mark[1][0] === fence[0] && mark[1].length >= fence.length && line.trim() === mark[1]) fence = null;
-    } else if (mark) {
-      out.push(cleanProse(prose.join('\n')));
-      prose = [];
-      fence = mark[1];
-      out.push(line);
-    } else {
-      prose.push(line);
-    }
+// 构建好的这一页 HTML
+function htmlFileOf(outDir, permalink) {
+  const p = decodeURIComponent(permalink).replace(/\/$/, '');
+  for (const candidate of [path.join(outDir, p, 'index.html'), path.join(outDir, `${p}.html`)]) {
+    if (fs.existsSync(candidate)) return candidate;
   }
-  out.push(cleanProse(prose.join('\n')));
-
-  // 合并多余空行（3个以上 → 2个）
-  return out.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
+  return null;
 }
+
+// 页面里引用的 /assets/ 文件按“原文件名去掉扩展名”登记：构建产物的文件名是“原名-哈希.扩展名”
+function assetsOf(html) {
+  const map = new Map();
+  for (const [, url] of html.matchAll(/(?:src|href|poster)="(\/assets\/[^"]+)"/g)) {
+    const base = decodeURIComponent(path.basename(url));
+    const m = /^(.*)-[0-9a-f]{6,}(\.[^.]+)$/.exec(base);
+    if (!m) continue;
+    const key = `${m[1]}${m[2]}`;
+    if (!map.has(key)) map.set(key, url);
+  }
+  return map;
+}
+
+// 一个内容插件里的所有页面：[{ source, permalink, title, description, date, frontMatter, instance, sidebarPosition }]
+function pagesOf(plugin, siteDir) {
+  const toAbs = (source) => path.join(siteDir, source.replace(/^@site\//, ''));
+  if (plugin.name === 'docusaurus-plugin-content-docs') {
+    const instance = plugin.options?.id ?? 'default';
+    return (plugin.content?.loadedVersions || []).flatMap((v) => v.docs).map((doc) => ({
+      file: toAbs(doc.source), permalink: doc.permalink, title: doc.title,
+      description: doc.frontMatter?.description, frontMatter: doc.frontMatter || {},
+      sidebarPosition: doc.sidebarPosition, instance,
+    }));
+  }
+  if (plugin.name === 'docusaurus-plugin-content-blog') {
+    return (plugin.content?.blogPosts || []).map(({ metadata: m }) => ({
+      file: toAbs(m.source), permalink: m.permalink, title: m.title,
+      description: m.frontMatter?.description, frontMatter: m.frontMatter || {},
+      date: new Date(m.date).toISOString().slice(0, 10), instance: 'blog',
+    }));
+  }
+  return [];
+}
+
+const SECTIONS = { blog: '博客', default: '笔记', roadmap: '路线' };
 
 module.exports = function copyMarkdownSourcePlugin(context) {
+  const { siteDir, siteConfig } = context;
+  const siteUrl = siteConfig.url.replace(/\/$/, '');
+
   return {
     name: 'copy-markdown-source',
 
-    async postBuild(props) {
-      const { outDir, siteDir, plugins } = props;
+    async postBuild({ outDir, plugins }) {
+      const { toMarkdown } = await import(pathToFileURL(path.join(__dirname, 'convert.mjs')).href);
+      const { importDataModule } = await import(pathToFileURL(path.join(siteDir, 'tools', 'data-module.mjs')).href);
+      const modules = new Map();
+      const loadModule = (file) => {
+        if (!modules.has(file)) modules.set(file, importDataModule(file));
+        return modules.get(file);
+      };
 
-      // 找到 docusaurus-plugin-content-docs
-      // 只处理默认的 docs 实例（/docs/ 下的笔记）；roadmap 是同名的第二个实例，按钮也只在 /docs/ 页面出现
-      const docsPlugin = plugins.find(
-        (p) => p.name === 'docusaurus-plugin-content-docs' && (p.options?.id ?? 'default') === 'default'
-      );
-      if (!docsPlugin || !docsPlugin.content) {
-        console.warn('[copy-markdown-source] 未找到 plugin-content-docs，跳过');
-        return;
-      }
+      const pages = plugins.flatMap((p) => pagesOf(p, siteDir)).filter((p) => fs.existsSync(p.file));
+      const urlOf = (page) => safeUrl(siteUrl + page.permalink.replace(/\/$/, ''));
+      const byFile = new Map(pages.map((p) => [p.file, p]));
 
-      const { loadedVersions } = docsPlugin.content;
+      // DocCardList 列出的下级页面：同目录的其他页面，加上直接子目录的 index 页
+      const childPages = (page) => {
+        if (!/^index\.mdx?$/.test(path.basename(page.file))) return [];
+        const dir = path.dirname(page.file);
+        return pages
+          .filter((p) => p !== page && p.instance === page.instance && (
+            path.dirname(p.file) === dir
+            || (path.dirname(path.dirname(p.file)) === dir && /^index\.mdx?$/.test(path.basename(p.file)))))
+          .sort((a, b) => (a.sidebarPosition ?? Infinity) - (b.sidebarPosition ?? Infinity) || a.file.localeCompare(b.file))
+          .map((p) => ({ title: p.title, url: urlOf(p), description: p.description }));
+      };
+
       let count = 0;
+      const failed = [];
+      for (const page of pages) {
+        const htmlFile = htmlFileOf(outDir, page.permalink);
+        const html = htmlFile ? fs.readFileSync(htmlFile, 'utf8') : '';
+        const assets = assetsOf(html);
+        // 找不到构建产物里的地址时（小图片会被内联），退回仓库里的原文件
+        const resolveAsset = (abs) => {
+          const hit = assets.get(path.basename(abs));
+          if (hit) return safeUrl(siteUrl + hit);
+          if (!fs.existsSync(abs)) return null;
+          return safeUrl(`https://github.com/litterbear520/Blog/raw/main/${path.relative(siteDir, abs).split(path.sep).join('/')}`);
+        };
 
-      for (const version of loadedVersions) {
-        for (const doc of version.docs) {
-          const { permalink, source } = doc;
+        let md;
+        try {
+          md = await toMarkdown(fs.readFileSync(page.file, 'utf8'), {
+            file: page.file, siteDir, siteUrl, pageUrl: urlOf(page),
+            title: page.title, date: page.date, description: page.description,
+            resolveAsset,
+            pageUrlOf: (abs) => (byFile.has(abs) ? urlOf(byFile.get(abs)) : null),
+            childPages: childPages(page),
+            loadModule,
+          });
+        } catch (error) {
+          // 一篇转换失败不拦部署：这一篇给源文件，构建日志里报出来
+          failed.push(`${path.relative(siteDir, page.file)}：${error.message}`);
+          md = fs.readFileSync(page.file, 'utf8');
+        }
 
-          // source 格式: @site/docs/xxx.md
-          const relativePath = source.replace(/^@site\//, '');
-          const srcFile = path.join(siteDir, relativePath);
+        const outPath = path.join(outDir, `${decodeURIComponent(page.permalink).replace(/\/$/, '')}.md`);
+        fs.mkdirSync(path.dirname(outPath), { recursive: true });
+        fs.writeFileSync(outPath, md, 'utf8');
+        page.mdUrl = `${urlOf(page)}.md`;
+        count++;
 
-          if (!fs.existsSync(srcFile)) {
-            continue;
-          }
-
-          const raw = fs.readFileSync(srcFile, 'utf-8');
-          const cleaned = cleanMarkdown(raw);
-
-          // 输出路径: {outDir}{permalink}.md
-          // permalink 如 /docs/Agent → build/docs/Agent.md
-          let outPath = permalink;
-          if (outPath.endsWith('/')) {
-            outPath = outPath.slice(0, -1);
-          }
-          outPath = path.join(outDir, outPath + '.md');
-
-          fs.mkdirSync(path.dirname(outPath), { recursive: true });
-          fs.writeFileSync(outPath, cleaned, 'utf-8');
-          count++;
+        // 页面头部声明 .md 版本，抓取工具和浏览器插件靠它找到
+        if (htmlFile && !html.includes('type="text/markdown"')) {
+          const link = `<link rel="alternate" type="text/markdown" href="${page.mdUrl}">`;
+          fs.writeFileSync(htmlFile, html.replace('</head>', `${link}</head>`), 'utf8');
         }
       }
 
-      console.log(`[copy-markdown-source] 已生成 ${count} 个 .md 文件`);
+      // llms.txt：按博客、笔记、路线分组列出每一页的 .md
+      const lines = [`# ${siteConfig.title}`, '', `> ${siteConfig.tagline}。中文个人技术博客，每一页都有对应的 Markdown 版本，地址是页面地址后面加 .md。`, ''];
+      for (const [instance, heading] of Object.entries(SECTIONS)) {
+        const list = pages.filter((p) => p.instance === instance && p.mdUrl);
+        if (!list.length) continue;
+        if (instance === 'blog') list.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        else list.sort((a, b) => a.permalink.localeCompare(b.permalink));
+        lines.push(`## ${heading}`, '', ...list.map((p) => `- [${p.title}](${p.mdUrl})${p.description ? `: ${p.description}` : ''}`), '');
+      }
+      fs.writeFileSync(path.join(outDir, 'llms.txt'), lines.join('\n'), 'utf8');
+
+      console.log(`[copy-markdown-source] 已生成 ${count} 个 .md 文件和 llms.txt`);
+      if (failed.length) console.warn(`[copy-markdown-source] ${failed.length} 篇没能转换，给的是源文件：\n  ${failed.join('\n  ')}`);
     },
   };
 };
 
-module.exports.cleanMarkdown = cleanMarkdown;
+module.exports.assetsOf = assetsOf;
+module.exports.pagesOf = pagesOf;

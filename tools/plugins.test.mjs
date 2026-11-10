@@ -1,57 +1,12 @@
-// 两个构建插件的单测：复制 Markdown 的清洗、代码运行输出的围栏标记；
+// 代码运行输出插件的单测（复制 Markdown 的在 copy-markdown.test.mjs）；
 // 外加一遍全站扫描，保证每个 run 围栏后面都跟着 output 围栏。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { createRequire } from 'node:module';
 import remarkRunOutput, { parseStatus, parseHighlight, hasRunFlag } from '../plugins/remark-run-output.js';
 
-const require = createRequire(import.meta.url);
-const { cleanMarkdown } = require('../plugins/copy-markdown-source/index.js');
 const ROOT = path.resolve(import.meta.dirname, '..');
-
-test('frontmatter 只删文件开头那一段', () => {
-  assert.equal(cleanMarkdown('---\nsidebar_position: 1\n---\n\n# 标题\n\n正文\n'), '# 标题\n\n正文\n');
-  // 没有 frontmatter 的文档：两条分隔线之间的正文要留着
-  const doc = '# 标题\n\n第一节\n\n---\n\n第二节\n\n---\n\n第三节\n';
-  assert.equal(cleanMarkdown(doc), doc);
-});
-
-test('清洗 MDX 组件，代码围栏里的不动', () => {
-  const doc = [
-    "import Tabs from '@theme/Tabs';",
-    '',
-    '<Term tip="解释 > 说明">LOAD_FAST</Term> 是一条指令。{/* truncate */}',
-    '',
-    '<ReadMore id="简介" label="简介" title="视频标题">',
-    '',
-    '简介内容',
-    '',
-    '</ReadMore>',
-    '',
-    '```jsx',
-    "import Tabs from '@theme/Tabs';",
-    '<Term tip="x">y</Term>',
-    '---',
-    '```',
-    '',
-  ].join('\n');
-  assert.equal(cleanMarkdown(doc), [
-    'LOAD_FAST 是一条指令。',
-    '',
-    '**视频标题**',
-    '',
-    '简介内容',
-    '',
-    '```jsx',
-    "import Tabs from '@theme/Tabs';",
-    '<Term tip="x">y</Term>',
-    '---',
-    '```',
-    '',
-  ].join('\n'));
-});
 
 test('output 围栏的进程状态', () => {
   assert.equal(parseStatus(''), 'exit:0');

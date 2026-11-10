@@ -38,8 +38,8 @@ export default function CopyMarkdownButton() {
     <button
       className={clsx(styles.copyButton, copied && styles.copied)}
       onClick={handleCopy}
-      title="复制 Markdown 源码"
-      aria-label={copied ? '已复制' : '复制 Markdown 源码'}
+      title="复制为 Markdown"
+      aria-label={copied ? '已复制' : '复制为 Markdown'}
       aria-live="polite"
     >
       {/* 两个图标叠在同一格里，靠 class 切换做交叉过渡 */}
