@@ -82,7 +82,9 @@ const CHECK = `(async () => {
     }
     if (CJK.test(t.textContent)) {
       const cjk = fams.find((f) => /SC$/.test(f));
-      if (cjk) used.add(cjk); else warns.push(name(t) + ' 有中文，但字体列表里没有 Noto Serif SC / Noto Sans SC');
+      if (!cjk) warns.push(name(t) + ' 有中文，但字体列表里没有 Noto Serif SC / Noto Sans SC');
+      else if (!faces.some((f) => f.fam === cjk)) errors.push(name(t) + ' 有中文，但字体 ' + cjk + ' 没有加载（检查 static/fonts/google-fonts.css 是否在、字体文件能否读到）');
+      else used.add(cjk);
     }
     if (size < 24) warns.push(name(t) + ' 字号 ' + size + 'px：在 1920 宽画布上小于 24，放进正文后太小');
     if (t.hasAttribute('data-upright')) infos.push(name(t) + ' 含中文，已改成正体');

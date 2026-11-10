@@ -16,6 +16,7 @@ export const CJK_FONTS = path.join(REPO, 'static/fonts/google-fonts.css');
 export const url = (p) => pathToFileURL(p).href;
 
 export function fontLinks() {
+  if (!fs.existsSync(CJK_FONTS)) console.warn(`WARN  找不到中文字体样式表 ${CJK_FONTS}，图里的中文会用系统回退字体`);
   return [LATIN_FONTS, CJK_FONTS]
     .filter((p) => fs.existsSync(p))
     .map((p) => `<link rel="stylesheet" href="${url(p)}">`)

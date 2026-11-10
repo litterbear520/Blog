@@ -25,8 +25,8 @@ argument-hint: "[要画什么，或要复刻的原图路径]"
 1. **定内容。** 用一句话写下这张图要让读者看懂什么，列出元素：参与者、框、消息、结论。主元素超过 6 个就拆成两张。从 [构件](references/components.md) 里选版式：时序图、横向链路、容器加压线标签、双栏大块、卡片排、步骤条加消息表、代码面板。
    完成标准：一句话、元素清单、选定的版式都写下来了。
 2. **写 SVG。** 复制 `assets/template.svg`，存到第 4 步说的图片目录，按 1920 宽的坐标摆构件（高度随内容，见 components.md 的“画布”），尺寸和间距照 components.md。`examples/` 里有三张一比一量出来再汉化的范例，拿不准比例时照它们摆。中文按每字 1em、英文每字 0.5em 估宽度：框宽至少是字宽加两边各 0.6em，放不下就换行，不缩字号。
-   完成标准：SVG 里除了 template 自带的部分，只有类名和坐标，没有颜色、字体、字号。
-3. **渲染自检。** 在仓库根目录跑 `node .claude/skills/academy-diagram-design/scripts/render.mjs <图>.svg`（要 Node 22 以上和 Chrome：脚本用 Node 自带的 WebSocket 驱动无头 Chrome）。它先检查字体、出画布、顶到框、文字重叠、字号和调色板，再在 SVG 旁边写出同名 WebP，PNG 预览写到临时目录（路径会打印出来）。用 Read 打开预览，对照“这套样式”逐条看，改完再渲染。
+   完成标准：SVG 里除了 template 自带的部分和 components.md 点名允许的字号覆盖（行内 `style="font-size:…"`），只有类名和坐标，没有颜色、字体、字号。
+3. **渲染自检。** 在仓库根目录跑 `node .claude/skills/academy-diagram-design/scripts/render.mjs <图>.svg`（要 Node 22 以上和 Chrome：脚本用 Node 自带的 WebSocket 驱动无头 Chrome）。它先检查字体、出画布、顶到框、文字重叠、字号和调色板，再在 SVG 旁边写出同名 WebP，PNG 预览写到临时目录（路径会打印出来）。用 Read 打开预览，对照“这套样式”逐条看，改完再渲染。一次渲染多张图（比如整门课重画）时放到 Mac 上跑，本机不占 CPU：把技能目录、`static/fonts/` 和要渲染的 SVG 按仓库里的相对路径同步到 Mac（脚本按相对位置找中文字体样式表，少了它中文会落到系统字体），在 Mac 上跑同样的命令，再把 WebP 取回；Mac 要有 Node 22 以上和 Google Chrome。
    完成标准：报告里没有 ERROR；每条 WARN 要么改掉，要么说得出保留的理由；预览里每条样式都对得上。
 4. **放进文档。** docs 的图放 `docs/<分类>/image/<文档名>/<图名>.webp`，SVG 源文件放在同一目录，以后改图用；博文的图放 `blog/<slug>/`。正文引用 WebP：`![一句话说明](image/<文档名>/<图名>.webp)`。SVG 只是源文件，它不带字体，直接当图片引用会变回系统字体。站点会给大图自动加放大按钮。
    完成标准：文档里引用的路径存在，图放在讲到它的那段话之后。
