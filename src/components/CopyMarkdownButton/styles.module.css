@@ -62,7 +62,8 @@
     justify-self: start;
     /* 宽屏时 Root.js 按标题行高算的上边距，这里不要 */
     margin-top: 0 !important;
-    margin-bottom: 8px;
+    /* 和下面正文隔开约 28px，与参考站手机版一致 */
+    margin-bottom: 20px;
   }
 }
 
