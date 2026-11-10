@@ -52,14 +52,16 @@
 
    最后一章之后按语速外推；知道视频总长时加 `--end <秒数>` 会更准。
 
-2. 截帧拼字幕条，用 Read 打开拼图读原话。几个疑点一次传进去（重叠的时间段只截一次，少 seek 几次就晚一点被限流），命令放后台跑，要几分钟：
+2. 截帧拼字幕条，用 Read 打开拼图读原话。截帧要开几分钟无头 Chrome，在 Mac 上跑，拼图取回到本机的 scratchpad。几个疑点一次传进去（重叠的时间段只截一次，少 seek 几次就晚一点被限流），命令放后台跑：
 
    ```bash
-   uv run --no-project --with pillow python .claude/skills/note/scripts/subtitle_frames.py <视频 ID> <秒数>... --out <scratchpad 下的目录>
+   .claude/skills/note/scripts/subtitle_frames_mac.sh <scratchpad 下的目录> <视频 ID> <秒数>...
    ```
 
+   `ssh mac` 连不上时才退回本机直接跑 `uv run --no-project --with pillow python .claude/skills/note/scripts/subtitle_frames.py <视频 ID> <秒数>... --out <目录>`，并在报告里说明。
+
 3. 字幕和讲稿对不上时：字幕对，就按字幕改，报告里注明“对照字幕”。字幕本身也会错（字幕写“此时未弹出套餐”，上下文是“会弹出”），和上下文冲突时按上下文。字幕里就是讲者用词的（“专有名字”“会员线路”）照留，那是原话，不是识别错误。
-4. 截帧脚本以退出码 3 结束，说明 YouTube 在限流，当天就别再试了。把剩下的疑点交给用户去听，报告里写原文、你的猜测和 `locate.py` 给的带时间链接。
+4. 截帧脚本（包括 Mac 上跑的）以退出码 3 结束，说明 YouTube 在限流，当天就别再试了。把剩下的疑点交给用户去听，报告里写原文、你的猜测和 `locate.py` 给的带时间链接。
 
 ## 报告里多写
 
