@@ -9,7 +9,8 @@ import styles from './styles.module.css';
 //   </VideoFigure>
 //
 // - 必须给 poster 和画面的 width / height（默认 1920×1080）：封面先出，位置提前留好，页面不跳动。
-// - 视频滚到视口附近才取索引，之前只加载封面图；逻辑见 lazy.mjs。
+// - 封面图和视频索引都是滚到视口附近才加载，视口外的视频打开页面时一个请求都不发；逻辑见 lazy.mjs。
+// - eager：文章开头、首屏就能看到的视频加上，封面图直接写进标记，不等脚本。
 // - preload="none"：始终不预取，点播放才发请求。索引很大的长视频用。
 // - loop：无声循环短片，当动图用。进视口自动播、出视口暂停，不显示控件。
 // - 不写图注时只有视频本身，可以放进 Tabs，图注另写在下面。
@@ -26,6 +27,7 @@ export default function VideoFigure({
   height = 1080,
   loop = false,
   preload = 'near',
+  eager = false,
   children,
 }) {
   const videoRef = useRef(null);
@@ -33,8 +35,8 @@ export default function VideoFigure({
 
   useEffect(() => {
     if (!videoRef.current) return undefined;
-    return attachLazyVideo(videoRef.current, { loop, preload });
-  }, [src, loop, preload]);
+    return attachLazyVideo(videoRef.current, { loop, preload, poster: eager ? undefined : poster });
+  }, [src, poster, eager, loop, preload]);
 
   return (
     <figure className={styles.figure}>
@@ -46,7 +48,7 @@ export default function VideoFigure({
         muted={loop}
         playsInline
         preload="none"
-        poster={poster}
+        poster={eager ? poster : undefined}
         width={width}
         height={height}
         aria-label={label}

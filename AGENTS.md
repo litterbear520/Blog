@@ -66,7 +66,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | `QuickCheck` | `<QuickCheck question options />`：课文里当场判对错的单选，每个选项带解释，可改选，不计分 | 校验在 `model.mjs`，带单测 |
 | `ReadMore` | `<ReadMore title="...">`：折叠卡，标题写成读者会问的问题；传 `id` 后正文可用 `[文字](#id)` 跳过来并自动展开（视频笔记开头的简介块就是 `id="简介"`） | |
 | `LessonMeta` | `<LessonMeta lesson minutes />`：课文标题下的课序和时长，数字由 `/lesson` 的 `lesson_lint.py` 算出并核对 | |
-| `VideoFigure` | `<VideoFigure src={clip} poster={clipPoster} fig="A" label="画面描述">图注</VideoFigure>`：正文里的视频一律用它，不手写 `<video>`。原生播放器 + 封面图 + 预留宽高（默认 1920×1080，其他尺寸写 `width` / `height`），滚到视口附近才取视频索引；`loop` 是当动图用的无声循环短片，`preload="none"` 给索引很大的长视频；不写图注就只有视频，可放进 `Tabs`。视频和封面图放文章文件夹，在 `.mdx` 里 `import` 进来；视频用 H.264 MP4，索引放文件开头（`-movflags +faststart`） | 加载逻辑在 `lazy.mjs` |
+| `VideoFigure` | `<VideoFigure src={clip} poster={clipPoster} fig="A" label="画面描述">图注</VideoFigure>`：正文里的视频一律用它，不手写 `<video>`。原生播放器 + 封面图 + 预留宽高（默认 1920×1080，其他尺寸写 `width` / `height`），封面图和视频索引都是滚到视口附近才加载；文章开头首屏就能看到的视频加 `eager`，封面图直接出；`loop` 是当动图用的无声循环短片，`preload="none"` 给索引很大的长视频；不写图注就只有视频，可放进 `Tabs`。视频和封面图放文章文件夹，在 `.mdx` 里 `import` 进来；视频用 H.264 MP4，索引放文件开头（`-movflags +faststart`） | 加载逻辑在 `lazy.mjs` |
 | `AgentLoopViz` | `<AgentLoopViz variant="..." />`：Agent 循环分镜动画，第 0 帧就是结构图。对话内容示意即可，但工具名、字段、`stop_reason` 必须和代码一致 | `src/data/agentRuns/` |
 | `CodeWalkthrough` | “一步步改代码”的演练（如 `docs/python/unittest.mdx`）。每一步只写本步改动的文件（`null` 表示删除）、说明和可运行命令；只写 `file` + `lines: [[起, 止]]` 的步骤用来在同一份代码里逐段讲。文章每节写 `<CodeWalkthrough variant="..." step={3} />` 停在对应步骤，只给最后一个实例加 `nav`。终端输出必须是本地实跑录下来的 | `src/data/codeWalkthroughs/` |
 | `McpWalkthrough` | `<McpWalkthrough variant="..." />`：分步说明 + 代码查看器 | `src/data/mcpWalkthroughs/`；高亮行号可用 `src/data/focusRange.js` 的语义锚点算 |

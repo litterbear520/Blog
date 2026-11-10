@@ -12,17 +12,21 @@ import Diagram from '@site/src/components/Diagram';
 import figATerminal from './fig-a-terminal.mp4';
 import figATerminalPoster from './fig-a-terminal-poster.jpg';
 import figADesktop from './fig-a-desktop.mp4';
+import figADesktopPoster from './fig-a-desktop-poster.jpg';
 import figBBand from './fig-b-band.mp4';
 import figBBandStill from './fig-b-band.png';
 import figCTerminal from './fig-c-terminal.mp4';
 import figCTerminalPoster from './fig-c-terminal-poster.jpg';
 import figCDesktop from './fig-c-desktop.mp4';
+import figCDesktopPoster from './fig-c-desktop-poster.jpg';
 import figDTerminal from './fig-d-terminal.mp4';
 import figDTerminalPoster from './fig-d-terminal-poster.jpg';
 import figDDesktop from './fig-d-desktop.mp4';
+import figDDesktopPoster from './fig-d-desktop-poster.jpg';
 import figFTerminal from './fig-f-terminal.mp4';
 import figFTerminalPoster from './fig-f-terminal-poster.jpg';
 import figFDesktop from './fig-f-desktop.mp4';
+import figFDesktopPoster from './fig-f-desktop-poster.jpg';
 
 从一个空文件夹开始写出您的第一个 Claude Code mod，再看看这套 API 还能做什么。
 
@@ -41,7 +45,7 @@ Claude Code 本来就允许您调整很多行为：settings、权限规则、斜
 <VideoFigure src={figATerminal} poster={figATerminalPoster} label="三段演示之间穿插标题卡，都在深色终端里：Token Weather 的横栏从 18% 的 Clear 涨到 81% 的 Storm；Blast Radius 扣下 rm -rf build，列出它会删除的 9 个文件；Replay Theater 逐步回看把 greet 重命名为 welcome 的编辑。" />
 </TabItem>
 <TabItem value="desktop" label="桌面端">
-<VideoFigure src={figADesktop} label="同样三段演示，在 Claude 桌面应用浅色的 Code 标签页里：Token Weather 的横栏从 10% 的 Clear 涨到 77% 的 Storm；一张 Blast Radius 卡片列出 rm -rf build 会删除的 9 个文件；Replay Theater 逐步回看把 greet 重命名为 welcome 的编辑。" />
+<VideoFigure src={figADesktop} poster={figADesktopPoster} label="同样三段演示，在 Claude 桌面应用浅色的 Code 标签页里：Token Weather 的横栏从 10% 的 Clear 涨到 77% 的 Storm；一张 Blast Radius 卡片列出 rm -rf build 会删除的 9 个文件；Replay Theater 逐步回看把 greet 重命名为 welcome 的编辑。" />
 </TabItem>
 </Tabs>
 
@@ -109,7 +113,7 @@ Token Weather 在每一轮结束后读取上下文窗口的占用情况，然后
 <VideoFigure src={figCTerminal} poster={figCTerminalPoster} label="深色终端窗口里，每一轮都让 Claude 多读一些 Python 文件，输入框上方的横栏从黄色的 Clear 变成蓝色的 Showers，再变成粉色的 Storm。" />
 </TabItem>
 <TabItem value="desktop" label="桌面端">
-<VideoFigure src={figCDesktop} label="Claude 桌面应用浅色的 Code 标签页里，每一轮都让 Claude 多读一些气象站服务的代码：先是日志和读数，然后是测试；输入框上方的横栏从黄色的 Clear 变成蓝色的 Showers，再变成粉色的 Storm。" />
+<VideoFigure src={figCDesktop} poster={figCDesktopPoster} label="Claude 桌面应用浅色的 Code 标签页里，每一轮都让 Claude 多读一些气象站服务的代码：先是日志和读数，然后是测试；输入框上方的横栏从黄色的 Clear 变成蓝色的 Showers，再变成粉色的 Storm。" />
 </TabItem>
 </Tabs>
 
@@ -503,7 +507,7 @@ Token Weather 只负责观察和绘制。接下来这两个 mod 会介入事件�
 <VideoFigure src={figDTerminal} poster={figDTerminalPoster} label="深色终端里，用户让 Claude 删掉 build 文件夹；一个黄色边框的 Blast Radius 面板写出这条命令，列出 build/ 下它会删除的文件，并给出带编号的 Proceed 和 Cancel 两个选项。" />
 </TabItem>
 <TabItem value="desktop" label="桌面端">
-<VideoFigure src={figDDesktop} label="Claude 桌面应用浅色的 Code 标签页里，用户让 Claude 清掉旧的构建产物；一张黄色边框的 Blast Radius 卡片写出这条命令，列出 build/ 下它会删除的文件，并给出带编号的 Proceed 和 Cancel 两个选项。" />
+<VideoFigure src={figDDesktop} poster={figDDesktopPoster} label="Claude 桌面应用浅色的 Code 标签页里，用户让 Claude 清掉旧的构建产物；一张黄色边框的 Blast Radius 卡片写出这条命令，列出 build/ 下它会删除的文件，并给出带编号的 Proceed 和 Cancel 两个选项。" />
 </TabItem>
 </Tabs>
 
@@ -551,7 +555,7 @@ on("tool.call", { tool: "Bash" }, async ($, e, next) => {
 <VideoFigure src={figFTerminal} poster={figFTerminalPoster} label="深色终端里是一串把 greet 重命名为 welcome 的红绿 diff，输入框上方出现一条品红色的 Replay 提示；随后一个品红色边框的面板一次一个 diff 地回看这些编辑，带有 Prev、Next 和 Close 按钮。" />
 </TabItem>
 <TabItem value="desktop" label="桌面端">
-<VideoFigure src={figFDesktop} label="Claude 桌面应用浅色的 Code 标签页里，Claude 在四个文件里把 greet 重命名为 welcome；输入框上方出现一条带 Replay 按钮的品红色提示，随后一个品红色边框的面板一次一个 diff 地回看这些编辑，带有 Prev、Next 和 Close 按钮。" />
+<VideoFigure src={figFDesktop} poster={figFDesktopPoster} label="Claude 桌面应用浅色的 Code 标签页里，Claude 在四个文件里把 greet 重命名为 welcome；输入框上方出现一条带 Replay 按钮的品红色提示，随后一个品红色边框的面板一次一个 diff 地回看这些编辑，带有 Prev、Next 和 Close 按钮。" />
 </TabItem>
 </Tabs>
 
