@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
-import { ArrowUpRight, ChevronDown, Copy } from 'lucide-react';
+import { ChevronDown, Copy } from 'lucide-react';
 import styles from './styles.module.css';
 
 // 页面标题旁的“复制页面”分体按钮，由 src/theme/Root.js 插到有 .md 的页面上。
@@ -11,6 +11,15 @@ const RESET_MS = 2000;
 
 const pageUrl = () => window.location.origin + window.location.pathname.replace(/\/$/, '');
 const mdUrl = () => `${window.location.pathname.replace(/\/$/, '')}.md`;
+
+// 斜向箭头：从左下角伸到右上角，比 Lucide 的 ArrowUpRight 长，和参考站一致
+function OpenIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M5 19 19 5M8 5h11v11" />
+    </svg>
+  );
+}
 
 // Claude 的星芒标志
 function Spark() {
@@ -111,8 +120,8 @@ export default function CopyMarkdownButton() {
   };
 
   const items = [
-    { label: '复制为 Markdown', icon: <Copy size={16} strokeWidth={1.5} aria-hidden="true" />, action: copy },
-    { label: '打开 Markdown', icon: <ArrowUpRight size={16} strokeWidth={1.5} aria-hidden="true" />,
+    { label: '复制为 Markdown', icon: <Copy size={16} strokeWidth={1.75} aria-hidden="true" />, action: copy },
+    { label: '打开 Markdown', icon: <OpenIcon />,
       action: () => window.open(mdUrl(), '_blank', 'noopener') },
     { label: '在 Claude.ai 中对话', icon: <Spark />,
       action: () => window.open(`https://claude.ai/new?q=${encodeURIComponent(`我想讨论这个页面的内容：${pageUrl()}`)}`, '_blank', 'noopener') },
@@ -122,7 +131,7 @@ export default function CopyMarkdownButton() {
     <div ref={wrapRef} className={styles.wrap} onPointerEnter={prefetch} onFocus={prefetch}>
       <div className={styles.group} role="group" aria-label="复制页面">
         <button type="button" className={clsx(styles.segment, styles.main)} onClick={copy} aria-live="polite">
-          <Copy size={16} strokeWidth={1.5} aria-hidden="true" />
+          <Copy size={16} strokeWidth={1.75} aria-hidden="true" />
           {/* 两个文字叠在同一格里，切换时按钮宽度不跳 */}
           <span className={styles.labels}>
             <span className={clsx(!copied && styles.hidden)} aria-hidden={!copied}>已复制</span>
@@ -145,7 +154,7 @@ export default function CopyMarkdownButton() {
             }
           }}
         >
-          <ChevronDown size={16} strokeWidth={1.5} aria-hidden="true" />
+          <ChevronDown size={16} strokeWidth={1.75} aria-hidden="true" />
         </button>
       </div>
       {open && (

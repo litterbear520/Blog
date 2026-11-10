@@ -39,16 +39,23 @@ export default function Root({ children }) {
       // 等待期间可能已经切到别的页面，或者别的回调已经插好了
       if (window.location.pathname !== pathname || !h1.isConnected || document.querySelector('[data-copy-md-btn]')) return;
 
-      // 让 h1 变成 flex 容器，按钮放在右侧
-      h1.style.display = 'flex';
-      h1.style.alignItems = 'center';
-      h1.style.justifyContent = 'space-between';
-
       const container = document.createElement('span');
       container.setAttribute('data-copy-md-btn', 'true');
-      container.style.flexShrink = '0';
-      container.style.marginLeft = '16px';
-      h1.appendChild(container);
+      const header = h1.parentElement;
+      if (header && header.tagName === 'HEADER') {
+        // 按钮放在标题旁边、不进 h1：和标题第一行垂直居中，header 排成两列（样式在 CopyMarkdownButton 里）
+        const line = parseFloat(getComputedStyle(h1).lineHeight) || h1.getBoundingClientRect().height;
+        container.style.marginTop = `${Math.max(0, (line - 28) / 2)}px`;
+        header.classList.add('copy-md-row');
+        h1.after(container);
+      } else {
+        // 没有 header 包着的标题，只能放进 h1 里
+        h1.style.display = 'flex';
+        h1.style.alignItems = 'center';
+        h1.style.justifyContent = 'space-between';
+        container.style.marginLeft = '16px';
+        h1.appendChild(container);
+      }
 
       createRoot(container).render(<CopyMarkdownButton />);
     }
