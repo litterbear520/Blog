@@ -10,7 +10,7 @@ npm run build                # 构建；prebuild 先跑全部单测，其中 tes
 npm run serve                # 本地预览构建结果
 npm run build && npm run serve  # 构建后预览（模拟生产环境，提交前确认用这个）
 npm run clear                # 清理 Docusaurus 缓存
-npm run test:<名>            # 单测：code-viewer / focus-range / message-flow / diagrams / quick-check / term / ci-scope
+npm run test:<名>            # 单测：code-viewer / focus-range / message-flow / diagrams / quick-check / term / ci-scope / covers / plugins
 npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers/README.md
 ```
 
@@ -42,7 +42,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | `src/theme/` | swizzle 覆盖，见下文“主题覆盖” |
 | `src/css/custom.css` | 全局样式和主题令牌 |
 | `src/pages/` | `index.js` 首页、`bloglist.js` 博客列表（`POSTS`）、`skills.js` SkillHub（`/skills`） |
-| `plugins/` | `copy-markdown-source/`（构建时生成清洗后的 `.md`，供“复制 Markdown”按钮用）、`remark-run-output.js` |
+| `plugins/` | `copy-markdown-source/`（构建时给 `docs/` 下的笔记生成清洗后的 `.md`，供“复制 Markdown”按钮用；blog 和 roadmap 没有这个按钮）、`remark-run-output.js`；两者的单测在 `tools/plugins.test.mjs`，还会扫全站检查每个 `run` 围栏都配了 `output` |
 | `tools/` | `covers/` 封面流水线；`figure-l10n/` 转载配图汉化；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证；`ci-scope.mjs` 判断这次 push 要不要跑浏览器 |
 | `.claude/skills/` | `blog-cover`、`lesson`、`note`、`academy-diagram-design`（Academy 课件风配图），用法见各自 `SKILL.md`；跨项目通用的 `/explain` 在全局 `~/.claude/skills/` |
 

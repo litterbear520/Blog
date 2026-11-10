@@ -10,6 +10,7 @@ npm run cover -- <slug> --preview   # recipes/<slug>.js → static/img/blog/cove
 npm run cover -- --motifs           # 母题总览 → .preview/motifs.png
 npm run cover -- --all --preview    # 重渲所有配方
 npm run cover -- --sheet            # 所有配方拼成一张 → .preview/sheet.png，看整体是否统一
+npm run test:covers                 # 已提交的 SVG 是不是配方渲出来的、尺寸规则、三处登记；构建前自动跑
 ```
 
 流程（Claude Code 里用 `/blog-cover <slug>` 可自动走完）：
@@ -50,7 +51,7 @@ npm run cover -- --sheet            # 所有配方拼成一张 → .preview/shee
 
 `screen` `easel` `window` `terminal` `chart` `network` `shape`（`kind: square / tri / disc / diamond / hourglass`）`bubble` `stairs` `book` `magnifier` `lock` `doc` `cursor` `bigArrow` `scribble`。
 用法 `d.at({ x: 500, y: 520, s: 1.1, rot: -6 }, () => m.screen(d))`；长相跑一次 `--motifs` 看图。
-`m.magnifier({ lens: false })` 去掉纸白镜片。
+`m.magnifier(d, { lens: false })` 去掉纸白镜片。
 
 ## 风格约定
 
@@ -59,11 +60,11 @@ npm run cover -- --sheet            # 所有配方拼成一张 → .preview/shee
 - 只有两色：墨黑 `#141413`、纸白 `#FAF9F5`；偶尔用底色深一档（`d.tint`）的色块代替纸白。SVG 透明，底色由 `swatch` 决定
 - 纸片不描边；墨线画的是另一件东西（折线、连线、框架、光标），叠在纸片上面
 - 纸片是剪刀剪的直边，圆是看得出棱的多边形；不要撕纸毛边
-- 墨线约 20 粗，全图一个粗细，平滑、圆头
+- 墨线约 20 粗，平滑、圆头；连线、箭头、框架全图一个粗细，母题里物件自身的粗笔（锁梁、放大镜手柄、终端提示符）粗一档
 - 不画手：程序画出来的手显得僵、惊悚，动作改用光标、箭头、墨线表达
 - 没有星芒、文字、数字、界面细节（窗口圆点、代码符号、文字横线）
 - 一个主物件最长边 650 以上，其他东西叠在它上面
-- 画面撑满（长边 85–95%），但线条和纸片都在画布内收尾，`render` 会报告越界点数；一张图至多两组东西
+- 画面撑满（长边 85–95%），但线条和纸片都在画布内收尾，`render` 会报告越界、贴边、长边不在这个范围、纸片相隔不到 25；一张图至多两组东西
 - 相邻纸片之间留 30 以上的底色缝，否则会糊成一块
 - 列表卡片 180px 高、`object-fit: contain`，插图整体可见
 
@@ -72,14 +73,14 @@ npm run cover -- --sheet            # 所有配方拼成一张 → .preview/shee
 `src/data/swatches.json`，取自 claude.com 品牌色板：
 clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `#827dbd` · mineral `#629987` · heather `#cbcadb` · oat `#e3dacc` · olive `#788c5d` · coral `#ebcece` · fig `#c46686`
 
-新文章优先挑清单里没出现过的，并让列表里相邻两篇深浅交替。
+11 个底色都已用过：新文章在和紧挨着那篇深浅相反的底色里，挑用得最少、又和相邻两篇不同色的。点名渲染某一篇时，`render` 会检查它和列表里的邻居是否撞色、深浅是否交替。
 
 ## 封面清单
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
 | which-claude-model | coral | cover-which-claude-model.svg | recipes/which-claude-model.js |
-| components-of-agent-memory | mineral | cover-components-of-agent-memory.svg | recipes/components-of-agent-memory.js |
+| components-of-agent-memory | mineral | cover-components-of-agent-memory.svg，头图 components-of-agent-memory.jpg | recipes/components-of-agent-memory.js |
 | super-agent-design | peach | cover-super-agent-design.svg | recipes/super-agent-design.js |
 | super-agent | clay | cover-super-agent.svg | recipes/super-agent.js |
 | demystifying-evals | cactus | cover-demystifying-evals.svg | recipes/demystifying-evals.js |
@@ -91,8 +92,8 @@ clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `
 | claude-code-mods-guide | clay | cover-claude-code-mods-guide.svg | recipes/claude-code-mods-guide.js |
 | opus-5-5-guide | heather | cover-opus-5-5-guide.svg | recipes/opus-5-5-guide.js |
 | voice-agent-memory | plum | cover-voice-agent-memory.svg | recipes/voice-agent-memory.js |
-| html-effectiveness | oat | cover-html-effectiveness.svg | recipes/html-effectiveness.js |
-| fable-guide | mineral | cover-fable-guide.svg | recipes/fable-guide.js |
+| html-effectiveness | oat | cover-html-effectiveness.svg，头图 hero-html-effectiveness.jpg | recipes/html-effectiveness.js |
+| fable-guide | mineral | cover-fable-guide.svg，头图 hero-field-guide-fable.jpg | recipes/fable-guide.js |
 | subscribe-claude | peach | cover-subscribe-claude.svg，头图 hero-subscribe-claude.png（legacy/hero-subscribe-ticket.html） | recipes/subscribe-claude.js |
 | ai-and-depth | sky | cover-ai-and-depth.svg | recipes/ai-and-depth.js |
 | tianchi-top2 | cactus | cover-tianchi-top2.svg | recipes/tianchi-top2.js |

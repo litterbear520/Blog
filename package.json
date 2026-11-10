@@ -5,7 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start --port 3003",
-    "prebuild": "npm run test:code-viewer && npm run test:focus-range && npm run test:message-flow && npm run test:diagrams && npm run test:quick-check && npm run test:term && npm run test:ci-scope",
+    "prebuild": "npm run test:code-viewer && npm run test:focus-range && npm run test:message-flow && npm run test:diagrams && npm run test:quick-check && npm run test:term && npm run test:ci-scope && npm run test:covers && npm run test:plugins",
     "build": "docusaurus build",
     "test:code-viewer": "npm run test:code-viewer-unit && npm run test:code-viewer-layout",
     "test:code-viewer-unit": "node --test src/components/ProjectCodeViewer/model.test.mjs src/components/ProjectCodeViewer/actions.test.mjs src/components/ProjectCodeViewer/SymbolsIcon/icons.test.mjs",
@@ -16,6 +16,8 @@
     "test:quick-check": "node --test src/components/QuickCheck/model.test.mjs",
     "test:term": "node --test src/components/Term/placement.test.mjs",
     "test:ci-scope": "node --test tools/ci-scope.test.mjs",
+    "test:covers": "node --test tools/covers.test.mjs",
+    "test:plugins": "node --test tools/plugins.test.mjs",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

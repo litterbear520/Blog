@@ -1,6 +1,6 @@
 'use strict';
 // 手绘涂鸦库 v3：照 claude.com/blog 封面的画法——纸白剪纸块 + 墨黑毛笔线，两层各画各的东西。
-// 纸片不描边；墨线画手、折线、连线，叠在纸片上面。纯函数、无 DOM，输出 SVG 字符串。
+// 纸片不描边；墨线画折线、连线、箭头、框架，叠在纸片上面（不画手）。纯函数、无 DOM，输出 SVG 字符串。
 // 画布 1000×1000，背景透明，底色由页面 CSS 或预览脚本提供。
 
 const SWATCHES = require('../../../src/data/swatches.json');
@@ -75,8 +75,6 @@ function makeDraw(seed = 1, { bg = '#d97757' } = {}) {
     }
     return [px, py];
   }
-  // 局部坐标换算成画布坐标：在 d.at 里调用，旋转 / 缩放后找指尖、节点落在画布哪里
-  const toCanvas = (p) => T(p);
   // 当前变换的总缩放：线宽按画布像素给，不随 at({ s }) 放大，全图线宽才统一
   const scale = () => stack.reduce((k, f) => k * f.s, 1);
 
@@ -100,7 +98,7 @@ function makeDraw(seed = 1, { bg = '#d97757' } = {}) {
   // w 是画布像素，不受 at 缩放影响；粗细沿路径缓慢起伏，两端略收、圆头。
   // 2 个点是直线，3 个以上经 Catmull-Rom 平滑成曲线；smooth: false 时逐点直连、保留硬转角
   // （坐标轴、书框这类直角）；closed 时首尾相接成一圈。
-  // trim：把线的两头裁到离画布边 trim 像素以内（手臂这类“伸向画外”的线用它自动收尾）
+  // trim：把线的两头裁到离画布边 trim 像素以内（贴边的长线用它自动收尾）
   function brush(pts, { w = 20, amp = 1.5, taper = 0.12, closed = false, smooth = true, trim = 0, color = INK } = {}) {
     // 闭合线按开口线画、首尾多绕一段叠住接缝：直角处内外边线会交叉，不能用 evenodd 填一个环
     if (closed) {
@@ -229,15 +227,13 @@ function makeDraw(seed = 1, { bg = '#d97757' } = {}) {
     if (drawing && seg.length > 1 && acc >= dash / 2) brush([seg[0], seg[seg.length - 1]], { w, amp: 0.5, taper: 0.2, color });
   }
 
-  const raw = (str) => els.push(str);
-
   function svg({ bg = null, size = 1000 } = {}) {
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 1000 1000">\n` +
       (bg ? `<rect width="1000" height="1000" fill="${bg}"/>\n` : '') +
       els.join('\n') + '\n</svg>\n';
   }
 
-  return { bg, tint: shade(bg), toCanvas, brush, cut, disc, dot, ring, link, arrow, dashed, at, rect, circle, raw, svg, j, rnd, INK, PAPER };
+  return { bg, tint: shade(bg), brush, cut, disc, dot, ring, link, arrow, dashed, at, rect, circle, svg, j, rnd, INK, PAPER };
 }
 
 // 底色调深一档：官方偶尔用“比底色深一点”的色块代替纸白（如摊开的书页）
