@@ -108,8 +108,6 @@ jobs:
         continue-on-error: true
         with:
           timeout: 180000
-          # 临时：让第一次部署必然失败，验证下面的重试能把站点部署上去。验证完删掉这一行
-          artifact_name: retry-path-test
 
       - name: Retry a stuck Pages deployment
         if: steps.deployment.outcome == 'failure'
