@@ -10,7 +10,7 @@ npm run build                # 构建；prebuild 先跑全部单测，其中 tes
 npm run serve                # 本地预览构建结果
 npm run build && npm run serve  # 构建后预览（模拟生产环境，提交前确认用这个）
 npm run clear                # 清理 Docusaurus 缓存
-npm run test:<名>            # 单测：code-viewer / focus-range / message-flow / diagrams / quick-check / term / ci-scope / covers / plugins
+npm run test:<名>            # 单测：code-viewer / focus-range / message-flow / diagrams / quick-check / term / ci-scope / covers / plugins / data-module
 npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers/README.md
 ```
 
@@ -43,7 +43,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | `src/css/custom.css` | 全局样式和主题令牌 |
 | `src/pages/` | `index.js` 首页、`bloglist.js` 博客列表（`POSTS`）、`skills.js` SkillHub（`/skills`） |
 | `plugins/` | `copy-markdown-source/`（构建时给 `docs/` 下的笔记生成清洗后的 `.md`，供“复制 Markdown”按钮用；blog 和 roadmap 没有这个按钮）、`remark-run-output.js`；两者的单测在 `tools/plugins.test.mjs`，还会扫全站检查每个 `run` 围栏都配了 `output` |
-| `tools/` | `covers/` 封面流水线；`figure-l10n/` 转载配图汉化；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证；`ci-scope.mjs` 判断这次 push 要不要跑浏览器 |
+| `tools/` | `covers/` 封面流水线；`figure-l10n/` 转载配图汉化；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证（用 `data-module.mjs` 在 Node 里导入 `src/data/` 的数据文件，数据文件可以引用别的文件）；`ci-scope.mjs` 判断这次 push 要不要跑浏览器 |
 | `.claude/skills/` | `blog-cover`、`lesson`、`note`、`academy-diagram-design`（Academy 课件风配图），用法见各自 `SKILL.md`；跨项目通用的 `/explain` 在全局 `~/.claude/skills/` |
 
 ## 样式令牌
@@ -115,7 +115,7 @@ sidebar_position: 1
 
 ### 课程
 
-- 一个主题写成一门课用 `/lesson`：课程索引页（`CourseHero` + 学习目标 + `DocCardList`）→ 课文（一课一个概念，课内一道快速检查）和单独成页的演练 → 整门课最后一篇概念评估（`McpQuiz` + `explain` 解析），每课不单独出题。配图用哪个技能（diagram-design 或 academy-diagram-design）听用户当次的说法，没说就先问；消息往返用 `MessageFlow`。
+- 一个主题写成一门课用 `/lesson`：课程索引页（`CourseHero` + 学习目标 + `DocCardList`）→ 课文（一课一个概念，课内一到两道快速检查，放法见 lesson 技能的 `references/skeletons.md`）和单独成页的演练 → 整门课最后一篇概念评估（`McpQuiz` + `explain` 解析），每课不单独出题。配图用哪个技能（diagram-design 或 academy-diagram-design）听用户当次的说法，没说就先问；消息往返用 `MessageFlow`。
 - MCP 课程：`docs/MCP/<课程名>/index.mdx` 是课程索引页，课文按官方分组放子目录，文件名用 `01-xxx.md` 数字前缀排序；演练页只放 `<McpWalkthrough>`，测验页只放 `<McpQuiz>`。原站的 `CodeCommand` 写成 bash 代码块，`GenericPrompt`（用户提示卡）写成 `:::info[用户提示]`。
 
 ### 路线页面

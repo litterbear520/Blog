@@ -4,11 +4,12 @@
 // WALKTHROUGH_SMOKE=1 只跑一课的桌面和手机两种场景
 import assert from 'node:assert/strict';
 import { spawn, execFileSync } from 'node:child_process';
-import { createReadStream, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { createReadStream, existsSync, mkdirSync, mkdtempSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { dirname, extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { importDataModule } from './data-module.mjs';
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const live = process.env.WALKTHROUGH_BASE_URL;
@@ -17,13 +18,12 @@ const smoke = process.env.WALKTHROUGH_SMOKE === '1';
 const output = join(repo, 'test-results', live ? 'walkthrough-live' : 'walkthrough-local');
 mkdirSync(output, { recursive: true });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const dataURL = (text) => `data:text/javascript;base64,${Buffer.from(text).toString('base64')}`;
-const read = (path) => readFileSync(join(repo, path), 'utf8');
 const mcpPath = '/docs/MCP/Model Context Protocol：高级主题/核心 MCP 功能/';
 const lessons = [
   ...await Promise.all(['notifications', 'roots', 'sampling'].map(async (name) => ({
     name, path: `${mcpPath}${name}-walkthrough/`,
-    data: (await import(dataURL(read(`src/data/mcpWalkthroughs/${name}.js`)))).default,
+    // 数据文件可以 import 别的文件（代码快照、focusRange），见 tools/data-module.mjs
+    data: (await importDataModule(join(repo, `src/data/mcpWalkthroughs/${name}.js`))).default,
   }))),
 ];
 const scenarios = [
