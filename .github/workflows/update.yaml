@@ -101,6 +101,9 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          # 站点产物约 200MB，Pages 同步文件偶尔超过默认的 10 分钟，被当成失败取消
+          timeout: 1200000
 
       - name: Confirm the new revision is live
         if: needs.build.outputs.browser == 'false'
