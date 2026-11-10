@@ -1,0 +1,53 @@
+/* 视频配图：细边圆角卡片，视频在上，图注在下，用一条横线隔开。
+   上下留白和正文图片一致（32px）。 */
+.figure {
+  margin: 2rem 0;
+  border: 1px solid var(--th-line);
+  border-radius: 8px;
+  background: var(--th-surface-1);
+  overflow: hidden;
+}
+
+/* 放在 Tabs 里时，间距由 Tabs 自己管 */
+:global([role='tabpanel']) > .figure {
+  margin: 0;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cap {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.625rem 0.875rem;
+  border-top: 1px solid var(--th-line);
+  color: var(--th-text-3);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.cap b {
+  flex: none;
+  color: var(--th-text-2);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* 图注在 MDX 里另起一行写时会被包成段落 */
+.cap p {
+  margin: 0;
+}
+
+.failed {
+  margin: 0;
+  padding: 0.625rem 0.875rem;
+  border-top: 1px solid var(--th-line);
+  font-size: 0.8125rem;
+}

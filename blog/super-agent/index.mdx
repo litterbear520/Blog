@@ -9,19 +9,12 @@ toc_max_heading_level: 2
 import superAgentVideo from './super-agent.mp4';
 import superAgentPoster from './super-agent-poster.jpg';
 
-<video
-  controls
-  playsInline
-  preload="none"
-  width="1920"
-  height="1080"
+<VideoFigure
+  src={superAgentVideo}
   poster={superAgentPoster}
-  aria-label="原视频《Super-agent是什么》，7 分 48 秒，像素动画讲解，字幕已烧录在画面里"
-  style={{ display: 'block', width: '100%', height: 'auto', aspectRatio: '16 / 9', borderRadius: 8 }}
->
-  <source src={superAgentVideo} type="video/mp4" />
-  <a href={superAgentVideo}>下载视频</a>
-</video>
+  preload="none"
+  label="原视频《Super-agent是什么》，7 分 48 秒，像素动画讲解，字幕已烧录在画面里"
+/>
 
 DeepSeek Super-agent 是什么？跟普通 agent 有什么区别？
 

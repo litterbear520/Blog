@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku',
+    date: '2026-11-10',
+    slug: 'which-claude-model',
+    category: 'AI',
+    swatch: 'coral',
+    cover: '/img/blog/cover-which-claude-model.svg',
+  },
+  {
     title: 'Agent 记忆的组成部分',
     date: '2026-11-07',
     slug: 'components-of-agent-memory',

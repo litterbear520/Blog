@@ -1,0 +1,251 @@
+---
+slug: which-claude-model
+title: 该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku
+date: 2026-11-10
+toc_max_heading_level: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+import figAAlley from './fig-a-alley.mp4';
+import figAAlleyPoster from './fig-a-alley-poster.jpg';
+import figBPortfolio from './fig-b-portfolio.mp4';
+import figBPortfolioPoster from './fig-b-portfolio-poster.jpg';
+import figCRenderStyles from './fig-c-render-styles.mp4';
+import figCRenderStylesPoster from './fig-c-render-styles-poster.jpg';
+import figDCoffeeShop from './fig-d-coffee-shop.mp4';
+import figDCoffeeShopPoster from './fig-d-coffee-shop-poster.jpg';
+import figEPresidioMap from './fig-e-presidio-map.mp4';
+import figEPresidioMapPoster from './fig-e-presidio-map-poster.jpg';
+
+该选哪个 Claude 模型，它们各自多少钱，以及怎样把它们搭配起来用。
+
+目前的 Claude 模型阵容里，有四个模型已经正式开放：Claude Haiku 5.5、Claude Sonnet 5.5、Claude Opus 5.5 和 Claude Fable 5.2。Claude Mythos 5.2 是我们在网络安全和生命科学研究上能力最强的模型，需要通过我们的验证计划才能使用。
+
+如果您在 Claude Platform 上开发，或者在 Claude Code 里工作，大概会想知道日常任务该用哪个模型。这篇文章帮您回答这个问题，也讲讲其中的取舍该怎么权衡。
+
+<VideoFigure src={figAAlley} poster={figAAlleyPoster} fig="A" label="一张夜晚窄巷的照片，旁边是 Haiku 5.5、Sonnet 5.5、Opus 5.5 和 Fable 5.2 用代码把它画出来的四个版本，每一幅都从第一层一步步画到完成。">
+同一张小巷照片，由 Claude Haiku 5.5、Sonnet 5.5、Opus 5.5 和 Fable 5.2 分别用代码画出来。每幅画都是模型写的一个 Python 程序，程序调用的绘图引擎也是模型自己写的，视频展示了从第一层画到完成的全过程。演示：Lance Martin。
+</VideoFigure>
+
+{/* truncate */}
+
+## 先说结论
+
+一句话：大多数工作先从 Opus 5.5 开始，<Term tip="控制模型在一个任务上投入多少思考和工作量的设置，文中出现的等级从低到高是 low、medium、high、xhigh、max">effort</Term> 用它的默认等级 `medium`。
+
+它是 Claude Code 的默认模型，这是有原因的。它的输入和输出 token 单价都只有 Fable 5.2 的一半，大多数编程和知识工作，我们都建议从它开始。
+
+在这个基础上再调整：
+
+- 范围明确的日常工作，比如修一个 bug、照着规格做一个功能，往下换成 Sonnet 5.5。不过，规格清楚不等于就该用 Sonnet。一次迁移或者一次性能优化，规格可以很清楚，难度却仍然配得上 Opus 5.5，大型的甚至要用 Fable 5.2。
+- 最简单、量又很大的工作，比如分类、路由和信息提取，再往下换成 Haiku 5.5。Haiku 5.5 也适合用来跑子代理，替更大的模型处理旁支任务。
+- 编程、金融和科学领域里最难的技术项目，往上换成 Claude Fable 5.2。Opus 5.5 开到 `high` 仍然不够用，或者要长时间无人值守地运行时，也往上换。
+
+换模型之前，先试着调 effort 等级。它是一个更精细的旋钮，成本和能力都能调。过了 `high` 之后，再升一级 effort 的花费可能就和换一个更大的模型差不多了，所以两种做法都要拿您自己的任务比一比。已经超过 `high` 的话，不如换成高一档的模型，用低一些的 effort 试试。反过来，降一级 effort，也可能用更低的价格拿到您要的结果。
+
+模型需要想得更久、调用更多工具，或者多检查几遍自己的工作时，调高 effort 会有帮助。只是要记得，延迟也会跟着增加。另外，effort 调得再高，也不会让模型凭空多出它本来没有的知识和本事。要补这些，还是得换更大的模型。
+
+## 按任务选模型
+
+| 任务 | 起步模型 | 起步 effort | 原因 |
+| ---- | ---- | ---- | ---- |
+| 日常工程和调试；横跨多个 PR 的功能开发 | Opus 5.5 | `medium`（默认），不够再用 `high` | 对日常任务来说，成本和能力比较均衡。 |
+| 分类、路由、打标签和大批量信息提取 | Haiku 5.5 | `medium`（默认） | 整个模型家族里成本最低、延迟最小。 |
+| 负责搜索文件、读日志或做摘要的子代理 | Haiku 5.5 或 Sonnet 5.5 | 模型的默认值 | 答错了很容易发现，需要拿主意的事本来也是主模型在做。 |
+| 聊天和交互式会话 | Sonnet 5.5（简单、量大的聊天用 Haiku 5.5） | `low` 或 `medium` | Sonnet 5.5 速度快，effort 设为 `low` 或 `medium` 时尤其明显。 |
+| 范围明确的编程，比如修 bug、迭代功能、照规格开发 | Sonnet 5.5 | `medium`，更难的任务用 `high` | 范围明确的任务它处理得很好，token 价格只有 Opus 5.5 的一半。 |
+| 日常的文档、幻灯片和电子表格 | Sonnet 5.5 | `high`（默认；Claude Code 里是 `medium`） | 它迭代快，设计眼光也好。如果是复杂的财务模型，或者要从一大堆原始材料里整理出一份文档，就从 Opus 5.5 开始。 |
+| 反复运行的 agent 任务，比如调查、审查或起草 | Sonnet 5.5 | `medium` | 定义清楚、反复执行的任务，很少需要更大的模型。 |
+| 操作电脑（computer use）和重度依赖视觉的工作流 | Opus 5.5 | `medium` | 这类任务是很长的 agent 循环，要处理大量截图和图片，Opus 5.5 正是为这种长时间运行的 agent 工作设计的。 |
+| 大型重构和迁移、架构规划，以及带领许多子代理 | Fable 5.2 | `medium`，不够再用 `high`（API 默认是 `high`） | 在技术领域，它是 Anthropic 已正式开放的模型里能力最强的。 |
+| 深度研究，以及科学分析或量化分析 | Fable 5.2 | `medium`，不够再用 `high`（API 默认是 `high`） | 它就是为编程、金融和科学领域里最难的技术项目设计的。 |
+| 还拿不准 | Opus 5.5 | `medium`（默认） | 在 Pro、Max、Ultra、Team、Enterprise 套餐和 Anthropic API 上，Claude Code 默认用的都是它，平台文档也建议从它起步。 |
+
+## 四个模型并排比较
+
+| | Haiku 5.5 | Sonnet 5.5 | Opus 5.5 | Fable 5.2 |
+| ---- | ---- | ---- | ---- | ---- |
+| **适合做什么** | 量大、对成本敏感的任务 | 范围明确的任务，又快又能干 | 我们日常主力使用的模型，用于复杂的编程和知识工作 | 最有雄心、最不设限的技术工作 |
+| **相对延迟** | 最快 | 快 | 中等 | 中等 |
+| **输入 / 输出价格（每百万 token）** | 提示词不超过 10 万 token 时 $0.10 / $0.50，超过 10 万时 $0.50 / $2.50 | $2 / $10 | $4 / $20 | $8 / $40 |
+| **缓存读取价格（每百万 token）** | 不超过 10 万时 $0.01，超过 10 万时 $0.05 | $0.10 | $0.20 | $0.20 |
+| **上下文窗口** | 100 万 token | 100 万 token | 100 万 token | 100 万 token |
+| **最大输出** | 12.8 万 token | 12.8 万 token | 12.8 万 token | 12.8 万 token |
+| **API 上的思考** | 自适应，默认开启，可以关闭 | 自适应，默认开启；`between_tools` 会跳过开头的思考 | 自适应，始终开启 | 自适应，始终开启 |
+| **API 上的默认 effort**（Claude Code 里可能不同，用 `/effort status` 查看您当前的设置） | `medium` | `high`（Claude Code 里是 `medium`） | `medium` | `high`（Claude Code 里是 `medium`） |
+| **快速模式** | 没有 | 没有 | 有 | 有 |
+
+表中是 Claude API 的标价。基准测试成绩见 [Fable 5.2 页面](https://www.anthropic.com/claude/fable)。
+
+<VideoFigure src={figBPortfolio} poster={figBPortfolioPoster} fig="B" label="Fable 5.2、Opus 5.5、Sonnet 5.5 和 Haiku 5.5 各自做出的四个作品集网站，并排展示。">
+Claude Fable 5.2、Opus 5.5、Sonnet 5.5 和 Haiku 5.5 各自把同一个作品集网站做了一遍，并排展示。演示：Addy Osmani。
+</VideoFigure>
+
+## 几组取舍
+
+在模型之间做选择，就是在做取舍。比如选一个更大的模型，就是拿延迟换能力。下面是几组主要的取舍，值得逐一想清楚。
+
+### 能力与完成一个任务的成本
+
+一般来说，模型越大，每个 token 越贵，能力也越强。但落到具体任务上，“贵就更强”这个关系并不总是成立。
+
+每个 token 的价格更高，不代表完成一个任务的成本更高，也不代表结果更好。我们在 [Spending your effort](https://claude.dev/blog/spending-your-effort/) 一文里展示过：在 Anthropic 自己跑的 Terminal-Bench 3.0 上，上一版 Fable（5.1）用 `max` 得了 58.0%，而 Opus 5.5 用 `high` 得了 58.9%，token 用量只有前者的一半。
+
+在最难的工作上，价格差距可能被抹平。在 FrontierCode 2.0 上，Fable 5.2 用 `high` 的得分和 Opus 5.5 用 `max` 基本持平（45.3% 对 45.5%），每个任务的成本却只有后者的一半左右。所以遇到难题时，先别急着把 Opus 5.5 调到 `high` 以上，先试试 Fable 5.2。至于日常工作，仍然从 Opus 5.5 的 `medium` 开始。基准测试成绩见[发布文章](https://www.anthropic.com/claude-fable-and-mythos-5-2)。
+
+话说回来，Claude Platform 的[成本与智能实测](https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence)也显示，小模型有它的局限。小模型通常在量大、结果可以核对的工作上表现不错，不太适合很长的 agent 循环。
+
+比较两个模型时，除了算典型任务的价钱，也要算您这批任务里最难的那几个，因为大部分开销都花在最难的任务上。在一个有 20 道题的搜索基准上，光是其中两道题就占了 43% 的开销。
+
+<VideoFigure src={figCRenderStyles} poster={figCRenderStylesPoster} fig="C" label="同一个湖边 3D 场景用十六种渲染风格重画，从线框、像素画一直到光线追踪。">
+Fable 5.2 演示游戏引擎是怎样搭出一个世界的。它把同一个 3D 场景画成十六种样子，从线框、像素画一直到光线追踪，并给每种技术标上名字。演示：Dan Fein。
+</VideoFigure>
+
+### 延迟与准确率
+
+模型和 effort 的组合越快，任务完成得越早，漏掉的东西也可能越多。选模型和 effort 等级之前，先想清楚人能等多久。如果回复是有人在等着看的，就从 Sonnet 5.5 的 `low` 或 `medium` 开始。
+
+新一代模型往往比上一代更快。Fable 5.2 生成输出的速度比 Fable 5.1 最多快 30%，Sonnet 5.5 比 Sonnet 5 快 30%。
+
+effort 等级和延迟大体上同增同减。您要判断的是，多出来的准确率值不值得多等的那段时间。举个例子，在 SWE-bench Pro 上，Opus 5.5 用 `medium` 的得分比用 `high` 低约 2.5 个百分点，成本约为 `high` 的 70%；用 `low` 低约 8 个百分点，成本约为 `high` 的三分之一；用 `xhigh` 高约 1.4 个百分点，成本却是 `high` 的 2.5 倍。
+
+很多时候，与其调 effort 等级，不如给模型一个自我验证的手段，这样更划算，增加的延迟也更少。某个模型做某项任务不够好时，按顺序试这几步：
+
+1. 确认模型有办法验证自己的工作，比如跑一个测试、构建一次，或者用脚本调一下接口。
+2. 把 effort 调高一级。
+3. 换成高一档的模型，起步的 effort 比您在小模型上用的低一些。
+
+如果结果可以自动检查，那就全部先用低 effort 跑一遍，只把失败的用高 effort 重跑。在同一个 SWE-bench Pro 子集上，Opus 5.5 先用 `low` 跑、失败的再用 `high` 重跑，通过了约 97% 的任务，每个任务约 $0.17；所有任务都用 `high` 跑，通过 95.3%，每个 $0.29。
+
+如果您想让同一个模型回复得更快，可以花钱买速度，不必牺牲能力。在 Claude API 上，Opus 5.5 和 Fable 5.2 都提供[快速模式](https://platform.claude.com/docs/en/build-with-claude/fast-mode)，输出更快，价格也更高。
+
+### 上下文与成本
+
+这一代的每个模型都有 100 万 token 的上下文窗口。上下文大，有助于模型完成任务，但每一轮都要为它付钱，因为每一轮都会把它重新发送一遍。话虽如此，[长时间运行时，大部分输入是按缓存读取计费的](https://claude.com/blog/claude-opus-5-5-built-for-coding-sessions-that-use-more-context)。
+
+Opus 5.5 的缓存读取价格是每百万 token $0.20，Sonnet 5.5 是 $0.10。Fable 5.2 同样是 $0.20，所以在缓存命中率很高的长时间运行里，Fable 和 Opus 的价差只剩两项：没有命中缓存的输入，以及输出。这两项上，Fable 每个 token 都贵一倍。
+
+[What a task costs on Opus 5.5](https://claude.dev/blog/what-a-task-costs-on-opus-5-5/) 一文算过：上下文有 15 万 token 时，一轮的缓存读取大约花 $0.03；只有 2 万时，大约花 $0.004。
+
+由此可以得出一点：主模型越大，保持主上下文精简就越重要。让昂贵模型的上下文只装和决策有关的内容，把大段大段的阅读交给便宜的子代理。
+
+Haiku 5.5 是唯一一个 token 单价随提示词长度变化的模型。提示词不超过 10 万 token 时按低档计费，超过 10 万时按五倍的价格计费。即便是长提示词这一档，单价也只有 Sonnet 5.5 的四分之一。所以 Haiku 5.5 在短提示词上最划算，输入价格只有 Sonnet 5.5 的二十分之一。
+
+如果每次调用都要用长提示词，就别按标价比较 Haiku 5.5 和 Sonnet 5.5，要比完成一个任务的成本。
+
+## 混用多个模型
+
+<VideoFigure src={figDCoffeeShop} poster={figDCoffeeShopPoster} fig="D" label="四个模型同时搭建一家线上咖啡店：Fable 5.2 把代码迁移到 TypeScript，Opus 5.5 做订阅功能，Sonnet 5.5 写商品页，Haiku 5.5 给顾客留言分类。">
+一个项目，四个模型，各做一类工作。Claude Fable 5.2 把一家网店从 JavaScript 迁移到 TypeScript，Opus 5.5 做按月订阅功能，Sonnet 5.5 写商品页，Haiku 5.5 给顾客留言分类。Opus 5.5 等 Fable 5.2 的新代码合入之后，才开始做它的功能。演示：Dan Fein。
+</VideoFigure>
+
+### 在自然的停顿处切换
+
+提示缓存是跟着模型走的，哪个模型写入的缓存，就只有哪个模型能用。换到新模型后的第一轮，整段对话都要按缓存写入的价格付费。想让这一轮要付费的内容少一些，在 Claude Code 里可以先运行 `/compact`，或者带着一份简短的书面计划开一个新会话。在 API 上，新模型的对话开头只放一份摘要，概括到目前为止的工作，不要放完整的历史。
+
+每个思考块都记着它是哪个模型产生的，而每个模型只能读取特定几个模型的思考块。在 Claude API 和 Claude Models on Google Cloud（由 Google 托管）上，Opus 5.5 能读 Sonnet 5.5 和 Haiku 5.5 的思考块，Sonnet 5.5 能读 Haiku 5.5 的，Fable 5.2 能读 Opus 5.5、Sonnet 5.5 和 Haiku 5.5 的。在 Claude API 上，Fable 5.1 能读 Opus 5.5 的。
+
+往下换一档，之前的推理就丢了，因为模型一律读不了档次比它高的模型的思考块。其他方向的切换也可能丢。新模型读不了前一个模型的思考块时，API 会把这些块丢掉，请求照样成功，只是新模型接下来干活时就没有那段推理可用了。
+
+[Preserved thinking](https://platform.claude.com/docs/en/build-with-claude/preserved-thinking)（保留思考）文档列出了每一种情况。从 Fable 5.2 换到其他任何一个正式开放的模型，它的推理都会丢掉。
+
+### 让子代理跑在更小的模型上
+
+子代理在它自己的上下文窗口里运行，做完交回一份摘要。它用掉的 token，按它所用模型的价格计费。在 Claude Code 里，可以在子代理的定义中写 `model: haiku` 或 `model: sonnet`。没有指定模型的子代理，默认用环境变量 `CLAUDE_CODE_SUBAGENT_MODEL` 设定的模型。
+
+把下面的内容保存为 `.claude/agents/log-reader.md`：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```markdown
+---
+name: log-reader
+description: Reads test output and logs, and reports each failing case. Use after a test run.
+tools: Read, Grep, Glob, Bash
+model: haiku
+---
+
+Read the logs you're given. For each failure, report the file, the test name and the first error line. Don't edit any files.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```markdown
+---
+name: log-reader
+description: 读取测试输出和日志，报告每一个失败的用例。在跑完测试之后使用。
+tools: Read, Grep, Glob, Bash
+model: haiku
+---
+
+阅读交给你的日志。对每一处失败，报告所在文件、测试名称和第一行错误信息。不要修改任何文件。
+```
+
+</TabItem>
+</Tabs>
+
+小模型只负责那些一出错就容易发现的工作，比如找文件、跑测试、读日志。改代码和需要拿主意的事留给主模型。小模型一旦看错了搜索结果，主模型就会打开错误的文件，白白在上面花 token。
+
+<VideoFigure src={figEPresidioMap} poster={figEPresidioMapPoster} width={1460} height={1080} fig="E" label="一张旧金山要塞公园（Presidio）的地图。输入框里打出几条请求，分别要海拔、自行车路线、雾和气温，每个请求都分发给侧边栏里列出的一组 Haiku 5.5 子代理，由它们把各自负责的部分画到地图上。">
+观众点名要一个图层，比如海拔、自行车路线、雾或气温。Opus 5.5 规划工作，多个 Haiku 5.5 子代理并行把各自的部分画到同一张地图上。气温只是示意，雾也只画了个大概，不是天气预报。地图数据 © OpenStreetMap 贡献者；海拔数据来自 USGS 3DEP 激光雷达。演示：Lance Martin。
+</VideoFigure>
+
+在当前版本的 Claude Code 里，内置的 Explore 子代理用的是您会话的模型，不再固定用 Haiku。通过 Claude API 使用时，Explore 用的模型最高只到 Opus。想让探索保持便宜，可以自己定义一个名叫 `Explore` 的子代理，写上 `model: haiku`。`haiku` 这个别名具体指向哪个模型，可以用 `ANTHROPIC_DEFAULT_HAIKU_MODEL` 固定下来。
+
+在 Anthropic API 上，`haiku` 别名现在指向 Haiku 5.5，这需要 Claude Code v2.1.293 或更高版本。在 Amazon Bedrock、Google Cloud、Microsoft Foundry 和 Claude Platform on AWS 上，它仍然指向 Haiku 4.5。细节见 Claude Code 的[模型配置](https://code.claude.com/docs/en/model-config)文档。
+
+Claude Code 还有一个 `opusplan` 别名：在计划模式下用 Opus 做规划，然后用 Sonnet 执行计划。这样一来，改代码的就是 Sonnet。这和上面的建议正好相反：上面说的是改代码留给主模型，小模型只负责那些一出错就容易发现的工作。把 `opusplan` 设为默认之前，先在您自己的任务上测一测。
+
+### 难做的决定，交给顾问模型
+
+[advisor 工具](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)（测试版）把一个更快、更便宜的执行模型和一个更强的顾问模型配成一对。执行模型负责跑任务，中途可以向顾问模型请教。大部分 token 按执行模型的价格计费。顾问模型要帮得上忙，得同时满足两点：它有执行模型缺少的能力，并且执行模型开口去问了。effort 低的时候，执行模型问得比较少。
+
+可能划算的场景：大多数轮次都是常规操作的 agent 工作。平台的成本与智能文档说得很谨慎：它的 advisor 表格里有四组搭配，没有一组明显胜过只用执行模型，而且顾问模型只有在执行模型去请教时才帮得上忙。所以先测一测您的执行模型请教的频率，再查一查它接受哪些顾问模型。比如，用 Sonnet 5.5 做执行模型时，可以接受 Fable 5.2、Opus 5.5、Opus 5 和 Sonnet 5.5 做顾问；用 Fable 5.2 做执行模型时，只接受 Fable 5.2 或 Mythos 5.2。
+
+帮助不大的场景：那四组搭配里，有一组用 `high` 的 Opus 5.5 做执行模型、Fable 5.1 做顾问，在一个内部编程基准上得了 90.1%，每次尝试花 $2.92。和单独用 `high` 的 Opus 5.5 相比，分数高了 1.7 个百分点，花的钱却约是它的 2.1 倍。这么小的提升，差不多就是两次运行之间的正常波动，和调高 effort 能换来的提升也差不多。
+
+### 把大批量的工作分给更便宜的模型
+
+上面说的子代理处理的是旁支任务，主线始终握在一个主模型手里。这里要说的模式，针对的是一个上下文窗口装不下的工作。由一个顶级模型带队，把任务拆开，把各部分并行交给许多更便宜的工作模型，再把交回来的结果合并。在一个内部的缺陷搜索基准上（源代码约 2200 万 token），Opus 5.5 带队、最多 25 个 Sonnet 5.5 同时做工作模型的方案，比单独用默认 effort 的 Opus 5.5 便宜约三分之一，得分基本相同。
+
+在 Claude Platform 上，Claude Managed Agents 的[多 agent 编排](https://platform.claude.com/docs/en/managed-agents/multiagent-orchestration)提供一个协调者 agent 和一组工作 agent。如果工作是一连串前后依赖的步骤，或者一个上下文窗口就装得下，就别用它。这种情况下，规划和合并花掉的比省下的还多。什么时候一个 agent 循环比一队子代理更好，见[构建 Agent：什么时候该把子代理并入主 Agent 循环](/blog/fold-subagents)。
+
+## 迁移之前先检查兼容性
+
+选模型主要看能力和成本，但并不是每次都能只改一个模型名、别的什么都不动。当前的每个模型都支持工具调用和图片输入，不过把请求从一个模型换到另一个模型之前，有几处差异要先测一下。
+
+- **Fable 5.2 让保留思考在每一个 API 账号上都生效。** 只要 Fable 5.2 某个思考块前面的内容有任何改动，不管改的是系统提示词、工具还是更早的消息，API 就会以 400 错误拒绝这个请求，除非您主动选择丢掉受影响的思考。如果您是通过 Claude Code、Claude Agent SDK 或 Claude Managed Agents 构造请求的，什么都不用改。如果您自己的代码会修改历史消息，请改成只追加、不改动，并在切换之前先测试。
+- **思考。** Opus 5.5 和 Fable 5.2 始终会思考，请求里关掉思考会返回错误。Sonnet 5.5 默认思考，`between_tools` 把思考限制在工具调用之间的间隙里。Haiku 5.5 默认思考，effort 为 `high` 或更低时可以关掉。不管用哪个模型，都要按 `type` 读取内容块，因为响应的第一个块可能是思考块。
+- **强制使用工具。** 在 Sonnet 5.5、Opus 5.5 和 Fable 5.2 上，`tool_choice` 设为 `any` 或 `tool` 会返回 400 错误。请改成发送 `auto`，给工具标上 `strict: true`，并在提示词里说明什么时候该用它。
+- **操作电脑（computer use）。** 在 Claude API 和 Claude Models on Google Cloud（由 Google 托管）上，Opus 5.5、Sonnet 5.5、Haiku 5.5 和 Fable 5.2 只通过 `computer_toolset_20260801` 这个工具集支持操作电脑。
+- **从 Haiku 4.5 换到 Haiku 5.5。** 把 `budget_tokens` 换成 effort 等级，并去掉不是默认值的 `temperature`、`top_p` 和 `top_k`，否则会返回 400 错误。`messages` 要以用户消息结尾：最后放一条助手消息让模型接着往下写，同样会返回 400 错误。
+- **安全回退。** Opus 5.5、Sonnet 5.5 和 Fable 5.2 会运行安全分类器，最常被标记的是网络安全和生物学内容。在 Claude Code 里，被标记的请求可能改由一个较早的模型重新运行，对话记录里会有一条提示告诉您是哪个模型。Fable 5.2 沿用 Fable 5.1 的回退模型：被标记的网络安全请求回退到 Opus 4.8，被标记的生物学请求回退到 Opus 5。
+
+如果一个系统里同时跑着好几个模型，那每个请求都按其中要求最严的那个来构造：历史只追加、不改动，发送 `tool_choice: auto` 并配上 strict 工具，按 `type` 读取内容块，提示词和工具描述写得足够精确，让最抠字面的那个模型也不会理解错。这样，任何一步往上或往下换一档，都不用改代码。如果路由规则很简单，比如每类步骤固定用一个模型，就让代码来选模型，不要让模型来选。
+
+## 在您自己的工作上实测
+
+公开的成绩，比如上面提到的 SWE-bench Pro 和 Terminal-Bench 数字，可以帮您定下起步的模型。接下来，在拿定主意之前，先用您自己的任务测一测候选模型。
+
+1. 抽一批真实任务做样本。给每个任务写一个结果检查，比如某个测试通过、某张工单关闭，或者数据行数对得上。
+2. 每个候选模型用两三个 effort 等级各跑一遍，每次都开一个独立的会话，免得各次运行共用缓存。根据每个响应的 `usage` 字段，记下每个完成的任务花了多少钱。
+3. 把得分和花费画成一张图。多模型的方案，只有比图上每一个单模型的点都好，才值得保留。
+4. 正式切换之前，先让胜出的方案在一小部分真实流量上以<Term tip="新方案跟着真实流量一起跑，但结果不对外生效，只用来和现有方案对比">影子模式</Term>跑一段时间。
+
+想在 Claude Code 里快速检查一下，可以从待办里挑一个任务，用 `/model` 换两个模型各跑一遍，再比较 `/usage` 报告的数字。
+
+## 延伸阅读
+
+- [Building with Claude Sonnet 5.5](https://claude.dev/blog/building-with-claude-sonnet-5-5/) 讲什么时候该选 Sonnet 而不是 Opus，以及定价、迁移和调优。
+- [在 Claude 和 Claude Code 中用好 Opus 5.5](/blog/opus-5-5-guide) 讲怎样给 Opus 5.5 写提示词、怎样在长时间运行中把握方向。
+- [What a task costs on Opus 5.5](https://claude.dev/blog/what-a-task-costs-on-opus-5-5/) 给 effort、模型选择和子代理都算了一笔账。
+- Claude 博客上的[为您的场景选择最合适的 Claude 模型](https://claude.com/blog/claude-models-explained-choosing-the-best-model-for-your-use-case)和[在 Claude Code 里选模型和 effort 等级](https://claude.com/blog/claude-model-and-effort-level-in-claude-code)讲得更深入。
+- 文档方面，可以看 [Choosing a model](https://platform.claude.com/docs/en/about-claude/models/choosing-a-model)、[Optimizing for cost and intelligence](https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence)、[Effort](https://platform.claude.com/docs/en/build-with-claude/effort)，以及 Claude Code 的[模型配置](https://code.claude.com/docs/en/model-config)和[子代理](https://code.claude.com/docs/en/sub-agents)。
+
+---
+
+*参考文章：[Which Claude model should you build with? Fable, Opus, Sonnet, or Haiku](https://claude.dev/blog/which-claude-model-should-you-build-with/)*

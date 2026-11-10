@@ -78,6 +78,7 @@ clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
+| which-claude-model | coral | cover-which-claude-model.svg | recipes/which-claude-model.js |
 | components-of-agent-memory | mineral | cover-components-of-agent-memory.svg | recipes/components-of-agent-memory.js |
 | super-agent-design | peach | cover-super-agent-design.svg | recipes/super-agent-design.js |
 | super-agent | clay | cover-super-agent.svg | recipes/super-agent.js |
