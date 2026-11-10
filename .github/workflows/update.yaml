@@ -95,6 +95,8 @@ jobs:
       contents: read
       pages: write
       id-token: write
+      # 部署卡住重试时要列出这次运行的产物
+      actions: read
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
