@@ -71,9 +71,15 @@ def wait_for_main(timeout=240, patience=6):
     sys.exit('等了 4 分钟广告还没放完')
 
 
+def window(c, span, step):
+    """疑点 c 前后要截的时刻。起点对齐到 step 的整数倍，相近的两个疑点才能共用同一批帧，少 seek 几次。"""
+    start = max(c - span, 0) // step * step
+    return range(start, c + span + 1, step)
+
+
 def grab(video, seconds, span, step, out):
     """截下所有要用的帧，返回 {秒数: 帧文件}。重叠的时间段只截一次；被限流时返回已截到的部分。"""
-    times = sorted({t for c in seconds for t in range(max(c - span, 0), c + span + 1, step)})
+    times = sorted({t for c in seconds for t in window(c, span, step)})
     ab('close')  # 旧会话可能是默认 UA 起的
     ab('open', f'https://www.youtube.com/watch?v={video}&t={times[0]}s')
     ab('set', 'viewport', '1920', '1300')
@@ -142,7 +148,7 @@ def main():
         ap.error('要给视频 ID 和至少一个秒数，或者用 --frames')
     frames, throttled = grab(args.video, args.seconds, args.span, args.step, out)
     for c in sorted(args.seconds):
-        mine = [frames[t] for t in range(max(c - args.span, 0), c + args.span + 1, args.step) if t in frames]
+        mine = [frames[t] for t in window(c, args.span, args.step) if t in frames]
         if mine:
             print(sheet(mine, os.path.join(out, f'sheet-{c}.png'), crop))
     if throttled:

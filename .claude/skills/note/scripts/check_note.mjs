@@ -6,14 +6,45 @@
 //   3. 相对链接、图片指向的文件不存在，或 #锚点 对不上小标题和 id="..."。
 //      CI 对坏锚点只报 WARNING、照样部署，坏锚点只有这里拦得住。
 // 有问题时逐条打印“文件:行 说明”，退出码 1。
-// 用到的 @mdx-js/mdx、remark-*、github-slugger 都是 Docusaurus 带进来的，新克隆的仓库先 npm ci。
+// 用到的 @mdx-js/mdx、remark-*、github-slugger 都是 Docusaurus 带进来的，装过依赖的仓库直接能跑。
+// 仓库没装依赖（内存小的机器装不动全量）时，在临时目录单独装这五个包，用 NOTE_CHECK_DEPS 指过去：
+//   npm i --prefix <目录> @mdx-js/mdx remark-gfm remark-math remark-directive github-slugger
+//   NOTE_CHECK_DEPS=<目录> node .claude/skills/note/scripts/check_note.mjs <笔记.md>...
+// 缺依赖时退出码 2，和“笔记有问题”的 1 区分开。
 import fs from 'node:fs';
 import path from 'node:path';
-import { compile } from '@mdx-js/mdx';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import remarkDirective from 'remark-directive';
-import GithubSlugger from 'github-slugger';
+import { createRequire } from 'node:module';
+import { pathToFileURL } from 'node:url';
+
+const DEPS = ['@mdx-js/mdx', 'remark-gfm', 'remark-math', 'remark-directive', 'github-slugger'];
+
+// 先按仓库正常解析；找不到再去 NOTE_CHECK_DEPS 目录里找（ESM 的 import 不认 NODE_PATH）
+async function load(name) {
+  try {
+    return await import(name);
+  } catch (e) {
+    if (e.code !== 'ERR_MODULE_NOT_FOUND') throw e;
+  }
+  const dir = process.env.NOTE_CHECK_DEPS;
+  if (!dir) return null;
+  try {
+    const resolve = createRequire(path.join(path.resolve(dir), 'noop.js')).resolve;
+    return await import(pathToFileURL(resolve(name)).href);
+  } catch {
+    return null;
+  }
+}
+
+const mods = await Promise.all(DEPS.map(load));
+const missing = DEPS.filter((_, i) => !mods[i]);
+if (missing.length) {
+  console.error(`缺依赖：${missing.join('、')}`);
+  console.error('仓库装过依赖就在根目录 npm ci；装不动全量依赖时，在临时目录单独装：');
+  console.error(`  npm i --prefix <目录> ${DEPS.join(' ')}`);
+  console.error('  NOTE_CHECK_DEPS=<目录> node .claude/skills/note/scripts/check_note.mjs <笔记.md>...');
+  process.exit(2);
+}
+const [{ compile }, { default: remarkGfm }, { default: remarkMath }, { default: remarkDirective }, { default: GithubSlugger }] = mods;
 
 const files = process.argv.slice(2);
 if (!files.length) {
@@ -81,6 +112,10 @@ const report = (file, line, msg) => {
 };
 
 for (const file of files) {
+  if (!fs.existsSync(file)) {
+    report(file, 0, '文件不存在');
+    continue;
+  }
   const src = fs.readFileSync(file, 'utf8');
 
   // 1. MDX 编译。去掉 frontmatter，行号再加回去
