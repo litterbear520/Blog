@@ -92,11 +92,11 @@ jobs:
       cancel-in-progress: false
     # 部署权限只给这个 job，npm ci 和构建都碰不到
     permissions:
-      contents: read
       pages: write
       id-token: write
-      # 部署卡住重试时要列出这次运行的产物
+      # 部署卡住重试时要列出这次运行的产物，并建一个不挂分支的新提交当部署版本号
       actions: read
+      contents: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -121,11 +121,18 @@ jobs:
             if (!artifacts.length) return core.setFailed('找不到这次构建的 github-pages 产物');
             const done = ['succeed'];
             const dead = ['deployment_failed', 'deployment_content_failed', 'deployment_cancelled', 'deployment_lost', 'deployment_attempt_error'];
+            // Pages 的部署版本号必须是一个真实的提交，同一个提交号重新部署会一直卡着。
+            // 建一个文件树和当前提交完全相同的新提交（不挂到任何分支上，main 的历史不变），用它的提交号
+            const { data: head } = await github.rest.git.getCommit({ owner, repo, commit_sha: context.sha });
             for (let attempt = 1; attempt <= 3; attempt++) {
+              const { data: commit } = await github.rest.git.createCommit({
+                owner, repo, tree: head.tree.sha, parents: [context.sha],
+                message: `ci: 重新部署 ${context.sha.slice(0, 9)}（第 ${attempt} 次）`,
+              });
               const { data: deployment } = await github.request('POST /repos/{owner}/{repo}/pages/deployments', {
                 owner, repo,
                 artifact_id: artifacts[0].id,
-                pages_build_version: `${context.sha}-retry-${context.runAttempt}-${attempt}`,
+                pages_build_version: commit.sha,
                 oidc_token: await core.getIDToken(),
               });
               core.info(`第 ${attempt} 次重新部署：${deployment.id}`);
@@ -157,6 +164,9 @@ jobs:
 
       - uses: actions/checkout@v7
         if: needs.build.outputs.browser != 'false'
+        with:
+          # 这个作业有写仓库的权限（重试部署用），检出的代码不留凭据
+          persist-credentials: false
       - uses: actions/setup-node@v7
         if: needs.build.outputs.browser != 'false'
         with:
