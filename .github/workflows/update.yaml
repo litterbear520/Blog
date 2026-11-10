@@ -99,11 +99,47 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # Pages 偶尔卡在 syncing_files 不动：正常部署十几秒完成，卡住的等多久都不会好。
+      # 3 分钟没完成就放弃，下一步换个版本号重新部署同一份产物（重跑同一次部署会复用提交号，照样卡住）
       - id: deployment
         uses: actions/deploy-pages@v5
+        continue-on-error: true
         with:
-          # 站点产物约 200MB，Pages 同步文件偶尔超过默认的 10 分钟，被当成失败取消
-          timeout: 1200000
+          timeout: 180000
+          # 临时：让第一次部署必然失败，验证下面的重试能把站点部署上去。验证完删掉这一行
+          artifact_name: retry-path-test
+
+      - name: Retry a stuck Pages deployment
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { data: { artifacts } } = await github.rest.actions.listWorkflowRunArtifacts({ owner, repo, run_id: context.runId, name: 'github-pages' });
+            if (!artifacts.length) return core.setFailed('找不到这次构建的 github-pages 产物');
+            const done = ['succeed'];
+            const dead = ['deployment_failed', 'deployment_content_failed', 'deployment_cancelled', 'deployment_lost', 'deployment_attempt_error'];
+            for (let attempt = 1; attempt <= 3; attempt++) {
+              const { data: deployment } = await github.request('POST /repos/{owner}/{repo}/pages/deployments', {
+                owner, repo,
+                artifact_id: artifacts[0].id,
+                pages_build_version: `${context.sha}-retry-${context.runAttempt}-${attempt}`,
+                oidc_token: await core.getIDToken(),
+              });
+              core.info(`第 ${attempt} 次重新部署：${deployment.id}`);
+              let status = '';
+              for (const until = Date.now() + 180000; Date.now() < until;) {
+                await new Promise((r) => setTimeout(r, 5000));
+                ({ data: { status } } = await github.request('GET /repos/{owner}/{repo}/pages/deployments/{id}', { owner, repo, id: deployment.id }));
+                core.info(`状态：${status}`);
+                if (done.includes(status) || dead.includes(status)) break;
+              }
+              if (done.includes(status)) return core.info('部署完成');
+              if (!dead.includes(status)) {
+                await github.request('POST /repos/{owner}/{repo}/pages/deployments/{id}/cancel', { owner, repo, id: deployment.id }).catch(() => {});
+              }
+            }
+            core.setFailed('重新部署了 3 次都没完成');
 
       - name: Confirm the new revision is live
         if: needs.build.outputs.browser == 'false'
