@@ -9,7 +9,8 @@ import styles from './styles.module.css';
 
 const RESET_MS = 2000;
 
-const pageUrl = () => window.location.origin + window.location.pathname.replace(/\/$/, '');
+// 中文路径解码后再拼，发给 Claude 的那句话里读得懂
+const pageUrl = () => window.location.origin + decodeURI(window.location.pathname).replace(/\/$/, '');
 const mdUrl = () => `${window.location.pathname.replace(/\/$/, '')}.md`;
 
 // 斜向箭头：从左下角伸到右上角，比 Lucide 的 ArrowUpRight 长，和参考站一致
