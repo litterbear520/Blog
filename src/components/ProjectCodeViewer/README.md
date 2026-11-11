@@ -7,7 +7,7 @@
 ## 教学适配层
 
 - `CodeWalkthrough`：项目快照演进、相邻步骤 diff、正文中的初始 step、可选 nav、预录终端。
-  Python unittest 和 `/roadmap` 的 commerce 路线都走这一层。
+  Python 笔记的演练都走这一层。
 - `McpWalkthrough`：完整项目的逐段讲解、步骤手风琴、首次引导和行定位。
   sampling、notifications、roots 三个演练都走这一层。
 

@@ -4,7 +4,7 @@
 
 ## 范围
 
-文件树和标签栏均由共用的 ProjectCodeViewer 使用此映射，覆盖 MCP 三个演练、Python unittest 与 commerce 路线。图标不随教学模式变化。
+文件树和标签栏均由共用的 ProjectCodeViewer 使用此映射，覆盖 MCP 三个演练和 Python 笔记的演练。图标不随教学模式变化。
 
 此目录内置当前演练所需的轻量子集，不打包完整的 VS Code 扩展：Python、Git、TOML / 环境配置、JSON、Markdown、文本、默认文件和文件夹，以及测试目录的红色代码文件夹。`.pyi` / `.pyw`、`.jsonc` / `.json5`、`.markdown` 和 `.env.*` 是同类文件的补充关联。未知文件或目录回退到 Symbols 默认图标，而不是 emoji。
 
