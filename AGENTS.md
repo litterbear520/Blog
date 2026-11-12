@@ -41,7 +41,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | `src/pages/` | `index.js` 首页、`bloglist.js` 博客列表（`POSTS`）、`skills.js` SkillHub（`/skills`） |
 | `plugins/` | `copy-markdown-source/`（构建后给每页生成同名 `.md` 和站点根目录的 `llms.txt`；新组件要在 `convert.mjs` 的 `RENDERERS` 里登记怎么转，单测在 `tools/copy-markdown.test.mjs`）、`remark-run-output.js`（单测在 `tools/plugins.test.mjs`，还会扫全站检查每个 `run` 围栏都配了 `output`） |
 | `tools/` | `covers/` 封面流水线；`figure-l10n/` 转载配图汉化；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证（用 `data-module.mjs` 在 Node 里导入 `src/data/` 的数据文件，数据文件可以引用别的文件） |
-| `.claude/skills/` | `blog-cover`、`lesson`、`note`、`academy-diagram-design`（Academy 课件风配图），用法见各自 `SKILL.md`；跨项目通用的 `/explain` 在全局 `~/.claude/skills/` |
+| `.claude/skills/` | `blog-cover`、`lesson`、`note`，用法见各自 `SKILL.md`。跨项目通用的 `/explain` 和 `academy-diagram-design`（Academy 课件风配图）在全局 `~/.claude/skills/`，是公开技能仓库 littlebear-skills 里那份；在博客里用 `academy-diagram-design` 的约定见下文“Academy 课件风配图” |
 
 ## 样式令牌
 
@@ -101,6 +101,16 @@ sidebar_position: 1
 `roadmap/` 下新开一条学习线时：docs 形态（非 blog），目录布局和文风都照 `docs/MCP` 课程章节。`roadmap/<项目>/index.mdx` 是课程索引页（`CourseHero` + 学习目标 + 前提条件 + `DocCardList`），分组用不带编号的中文目录（`index.md` 写 `sidebar_position`、`description`、H1、一句话、`DocCardList`），一课一页 `NN-english-slug.mdx`（frontmatter 只写 `description`，H1 是中文课名不带编号）。**不需要**封面、bloglist.js 元数据和 truncate 分隔符。
 
 文风是课程讲解口吻，用“我们”“您”，句子完整不省主语，每段先给结论再举具体例子，段落之间有过渡句；动画每帧、演练每步的说明同样口吻。小标题照 MCP 课文写成这一课内容的短语（“只会聊天还不够”“一次搜索怎样完成”），不用“起点 / 方案”这类通用标签；结尾不加收尾标题，直接一段话带到下一课。页面单独看就要能懂：不提自己学习计划里的步骤编号和私有仓库的文件路径，引用位置一律用课名或分组名。
+
+### Academy 课件风配图
+
+用 `academy-diagram-design` 技能画图时，画法照技能，下面是它留给项目定的部分：
+
+- **渲染**：在仓库根目录跑 `CJK_FONTS_CSS=static/fonts/google-fonts.css node ~/.claude/skills/academy-diagram-design/scripts/render.mjs <图>.svg`。设了 `CJK_FONTS_CSS`，图里的中文就和正文用同一套自托管字体，技能也会检查它真的加载上了。
+- **放哪**：docs 的图放 `docs/<分类>/image/<文档名>/<图名>.webp`，SVG 源文件放在同一目录，以后改图用；博文的图放 `blog/<slug>/`。正文引用 WebP：`![一句话说明](image/<文档名>/<图名>.webp)`。
+- **现成的例子**：`docs/服务器/image/` 下的 SVG。单行链路看 `VPS线路科普与选购/what-affects-speed.svg`，两行对比看 `VPS线路科普与选购/premium-vs-ordinary.svg`，虚线画被阻断的路径看 `CDN节点原理与搭建/cdn-unblock.svg` 和 `VPS线路科普与选购/how-lines-are-sold.svg`，括线分组看 `从零搭建VPS翻墙节点/three-combos.svg`。
+- **复刻原图**：Academy 原图在 `docs/MCP/**/image/*.webp`。图里的叫法照 docs/MCP 已有的说法，如“您的服务器”“选项1”“用户消息”“助手消息”。
+- **一次渲染很多张**（比如整门课重画）：放到 Mac 上跑。把 `static/fonts/` 和要渲染的 SVG 按仓库里的相对路径同步到 Mac，在对应的仓库根目录跑同样的命令，再把 WebP 取回。Mac 要有这个技能、Node 22 以上和 Google Chrome。
 
 ### 代码运行输出
 
