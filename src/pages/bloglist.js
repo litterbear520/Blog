@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: 'Home Repo 模式',
+    date: '2026-11-12',
+    slug: 'home-repo-pattern',
+    category: 'AI',
+    swatch: 'coral',
+    cover: '/img/blog/cover-home-repo-pattern.svg',
+  },
+  {
     title: '该用哪个 Claude 模型来构建？Fable、Opus、Sonnet 还是 Haiku',
     date: '2026-11-10',
     slug: 'which-claude-model',
