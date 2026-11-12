@@ -7,17 +7,17 @@ date: 2026-11-12
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-<Term tip="一个专门的仓库，集中存放技能、AGENTS.md 和共用文档，再用指针指向其他仓库">Home Repo</Term> 是一个仓库，里面放着你的技能、AGENTS.md 和共用文档。你在 Home Repo 里运行 Agent。它的 AGENTS.md 给你的其他每个仓库各写一条导航指针，Agent 需要哪个仓库，就能打开或克隆哪个仓库。
+<Term tip="专门用来启动 Agent 的总仓库：放共用的技能和文档，再记下其他仓库在哪里">Home Repo</Term> 是一个仓库，里面放着你的<Term tip="Claude 的 Skills 功能：写好的一套说明和脚本，Claude 需要时会加载">技能</Term>、<Term tip="放在仓库根目录、编程 Agent 每次开会话都会先读的说明文件；Claude Code 读的是同类的 CLAUDE.md">AGENTS.md</Term> 和共用文档。你在 Home Repo 里运行 Agent。它的 AGENTS.md 给你的其他每个仓库各写一条<Term tip="AGENTS.md 里的一行文字，写明某个仓库在本地哪个路径、本地没有时从哪里克隆">导航指针</Term>，Agent 需要哪个仓库，就能打开或克隆哪个仓库。
 
 {/* truncate */}
 
 ## 它解决什么问题
 
-一个项目分散在几个仓库里时，在其中一个仓库里启动的 Agent 只看得到这一个仓库。结果每个仓库都各存一份技能和 Agent 配置。要规划一个跨仓库的功能，你也只能在看不到全貌的情况下动手。
+一个项目分散在几个仓库里时，在其中一个仓库里启动的 Agent 只看得到这一个仓库。于是每个仓库都得各存一份技能和 Agent 配置。要规划一个跨仓库的功能时，Agent 也看不到全貌，只能凭一个仓库的信息动手。
 
 Home Repo 给你带来：
 
-- 一个地方，放你所有的<Term tip="写给 Agent、告诉它该怎么做事的文件，比如 AGENTS.md、技能、编码规范">引导文件</Term>和工具
+- 一个地方，放你所有的<Term tip="写给 Agent 看的说明文件，告诉它在项目里该怎么做事">引导文件</Term>和工具
 - 一个地方，运行你所有的 Agent
 - 在一次会话里，对多个仓库做大范围的修改
 
@@ -27,7 +27,7 @@ Home Repo 给你带来：
 
 ## 动手搭一个
 
-在存放你各个仓库的那个文件夹里，给编程 Agent 开一个新会话，把下面这段提示词粘贴进去。Agent 会自己找出你的仓库和其中的技能，再分几轮<Term tip="grilling：让 Agent 围绕一个计划一个接一个地追问你，直到每个决定都说清楚">盘问</Term>你，把要做的决定逐个问清楚；在你批准它的计划之前，它什么都不改。
+在存放你各个仓库的那个文件夹里，给编程 Agent 开一个新会话，把下面这段提示词粘贴进去。Agent 会自己找出你的仓库和其中的技能，再分几轮<Term tip="Agent 反过来一轮轮向你提问，直到计划里每件要你定的事都有答案">盘问</Term>你，把要做的决定都问清楚；在你批准它的计划之前，它什么都不改。
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -140,21 +140,21 @@ the reason.
   新建一个私有仓库）
 - 它是个人用，还是和团队共用
 - 我用的编程 Agent 在会话开始时加载哪个文件：AGENTS.md、CLAUDE.md
-  还是两个都加载（按我的配置显示的情况给建议）
+  还是两个都加载（看我的配置实际用的是哪个，据此给建议）
 
 完成标准：找到的每个仓库都标明了纳入或不纳入，另外三个问题都有了答案。
 
 ## 第 2 步：盘点共用材料
 
-在选中的仓库和我用户级的技能目录（比如 ~/.claude/skills）里，列出
+在选中的仓库和我的用户级技能目录（比如 ~/.claude/skills）里，列出
 每个技能（含 SKILL.md 的文件夹）、每个 AGENTS.md 和 CLAUDE.md，以及
-每份写给 Agent 的文档：编码规范、术语表、ADR。
+每份写给 Agent 的文档：编码规范、术语表、架构决策记录（ADR）。
 
 把每一项归入一类：
-- 共用：对各个仓库都成立
+- 共用：各个仓库都适用
 - 重复：同一项出现在好几处；对比各份副本，标出最新的那份
-- 仓库专属：只关于某一个仓库的代码、命令或业务领域
-- 已安装：来自公开发布的技能仓库或插件市场
+- 仓库专属：只和某一个仓库的代码、命令或业务领域有关
+- 已安装：来自公开发布的技能仓库或技能市场
 
 完成标准：每一项都恰好归入一类。
 
@@ -168,7 +168,7 @@ the reason.
 表下面给出 Home Repo 的 AGENTS.md：先是一段简短的介绍，然后是
 “其他仓库”一节，每个仓库一条指针：
 
-  <名称>（<它是什么>）：<本地路径>。如果不存在，从 <远程地址> 克隆。
+  <名称>（<它是什么>）：<本地路径>。本地没有的话，从 <远程地址> 克隆。
 
 某个仓库需要提示时就加一句，比如“先读它的 AGENTS.md”。仓库超过
 20 个左右时，按领域把指针分组，每个领域写一个文件，改为指向这些文件。
@@ -178,9 +178,9 @@ the reason.
 ## 第 4 步：执行计划
 
 1. 创建 Home Repo 和它的 AGENTS.md。如果我用的编程 Agent 加载的是
-   另一个文件，就加上这个文件，里面只写一行，指向 AGENTS.md。
+   另一个文件，就再建一个那个文件，内容只有一行：指向 AGENTS.md。
 2. 把每个共用项复制进来，技能文件夹整个复制。
-3. 在每个子仓库里新建一个本地分支，在这个分支上删掉已经移走的副本。
+3. 在被指向的每个仓库里新建一个本地分支，在这个分支上删掉已经移走的副本。
    仓库专属的材料保留。
 4. 在 Home Repo 里提交。推不推送由我决定。
 
@@ -197,9 +197,9 @@ the reason.
 
 **Home Repo 里放什么？** 你在多个仓库都用的技能、带指针的 AGENTS.md、引导文件，以及共用文档，比如编码规范、术语表和影响整个系统的决策。最先值得共用的文档是编码规范：一套通用的规范可以在各个项目之间沿用。Home Repo 还可以放一个由 Markdown 文件组成的小 wiki，以及各种工具。
 
-**每个仓库里留什么？** 只对这个仓库成立的东西：它自己的 AGENTS.md、它的构建和测试命令、它专属的文档。Home Repo 用指针指向它。代码留在原处，每个仓库保留自己的提交历史、远程地址和 issue 跟踪。
+**每个仓库里留什么？** 只适用于这个仓库的东西：它自己的 AGENTS.md、它的构建和测试命令、它专属的文档。Home Repo 只用一条指针指向这个仓库。代码留在原处，每个仓库保留自己的提交历史、远程地址和 issue 跟踪。
 
-**为什么用一个仓库，而不是 `~/.claude/skills`？** 理想的最终状态是每个人都用同一套技能，而且这套技能放在项目里。用户目录只是到那一步之前的权宜之计。Home Repo 本身就是一个项目：它的技能用 git 做版本管理，团队也能共用。
+**为什么用一个仓库，而不是把技能放在用户目录（`~/.claude/skills`）里？** 理想的最终状态是每个人都用同一套技能，而且这套技能放在项目里。用户目录只是到那一步之前的权宜之计。Home Repo 本身就是一个项目：它的技能用 git 做版本管理，团队也能共用。
 
 **用 AGENTS.md 还是 CLAUDE.md？** 本文写的是 AGENTS.md。指针写进你的编程 Agent 在会话开始时加载的那个文件就行。Claude Code 加载的是 CLAUDE.md。
 
@@ -208,35 +208,35 @@ the reason.
 **指针长什么样？** 每个仓库一行，写明是哪个仓库、它在哪里：
 
 ```markdown
-要用技能，把 mattpocock/skills 克隆到 ~/repos/skills。
-要用 Sandcastle，把 mattpocock/sandcastle 克隆到 ~/repos/sandcastle
+要用这些技能，把 mattpocock/skills 克隆到 ~/repos/skills。
+要用 Sandcastle，把 mattpocock/sandcastle 克隆到 ~/repos/sandcastle。
 ```
 
-某个仓库需要提示时就加一句：
+某个仓库需要提示时，就在它那一行加一句：
 
 ```markdown
 ## 其他仓库
 
-Storefront（Next.js 应用）：~/repos/acme/storefront。如果不存在，从 git@github.com:acme/storefront.git 克隆。
+Storefront（Next.js 应用）：~/repos/acme/storefront。本地没有的话，从 git@github.com:acme/storefront.git 克隆。
 Payments API：~/repos/acme/payments-api。改它之前先读它的 AGENTS.md。
 AI Hero：~/repos/ai/ai-hero（先 git pull 看最新版本，本地这份多半已经过时）
 ```
 
-**Agent 是克隆仓库，还是用磁盘上已有的副本？** 两种都会。仓库已经在指针写的路径上，Agent 就在那里工作；不在，Agent 就把它克隆到那里。也有的做法是把这些仓库克隆到 Home Repo 里面，再用 gitignore 把它们排除掉。
+**Agent 是克隆仓库，还是用磁盘上已有的副本？** 两种都会。仓库已经在指针写的路径上，Agent 就在那里工作；不在，Agent 就把它克隆到那里。也有的做法是把这些仓库克隆到 Home Repo 里面，再在 Home Repo 的 .gitignore 里忽略这些目录，免得它们被提交进 Home Repo。
 
 ### 跨仓库工作
 
-**会话从哪里开始？** 从 Home Repo 开始，而不是从某一个仓库里开始。要让 Agent 围绕一个跨仓库的功能盘问你，也是在这里。
+**会话从哪里开始？** 从 Home Repo 开始，而不是从某一个仓库里开始。规划跨仓库的功能、让 Agent 盘问你，也都在这里进行。
 
-**worktree 怎么配合？** 每个仓库只克隆一次。每个功能在这份克隆里建一个 worktree，这样几个 Agent 可以同时在同一个仓库里工作。
+**worktree 和 Home Repo 怎么配合？** 每个仓库只克隆一次。每个功能在这份克隆里建一个 <Term tip="git worktree：从同一个仓库再检出一个工作目录，切到另一个分支，和原目录共用提交历史">worktree</Term>，这样几个 Agent 可以同时在同一个仓库里工作。
 
-**issue 提到哪里？** Agent 能访问每个仓库的 issue 跟踪，所以能把这些 issue 放在一起理解。让 Agent 把每个 issue 提到最合适的仓库，效果就很好。
+**issue 提到哪里？** 交给 Agent 决定就行：它能看到每个仓库的 issue，能把它们放在一起看，再把新 issue 提到最合适的那个仓库。
 
-**团队能共用一个 Home Repo 吗？** 能。对团队来说，大家共享的就是 Home Repo，每个人都在里面运行自己的 Agent。
+**团队能共用一个 Home Repo 吗？** 能。团队共用一个 Home Repo，每个人在里面运行自己的 Agent。
 
 ### 规模和其他做法
 
-**能管多少个仓库？** 20 个左右没问题。到 400 个左右，每个仓库一条指针，Agent 要做的选择就太多了。这时改用<Term tip="Agent 平时只看到简短的描述，真正需要时才加载完整内容">渐进式披露</Term>：每个业务领域指向一个文件，在那个文件里列出这个领域的仓库。
+**能管多少个仓库？** 20 个左右，每个仓库一条指针没问题。到 400 个左右，几百条指针摆在一起，Agent 要做的选择就太多了。这时改用<Term tip="先只给 Agent 一份简短的目录，需要哪部分再打开详细内容">渐进式披露</Term>：每个业务领域指向一个文件，在那个文件里列出这个领域的仓库。
 
 ```markdown
 ## 其他仓库
@@ -246,17 +246,17 @@ AI Hero：~/repos/ai/ai-hero（先 git pull 看最新版本，本地这份多半
 内部工具：见 repos/internal.md
 ```
 
-到了几千个仓库，用这些技能的地方太多，改用技能市场更合适。
+到了几千个仓库，要用这些技能的项目太多，改用<Term tip="集中发布技能的目录，各个项目从这里按需安装，比如 Claude Code 的插件市场">技能市场</Term>来分发技能更合适。
 
-**要不要用 git submodules？** 可以用。5 到 10 个仓库时，类似 submodules 的做法没问题。不用 submodules，普通的指针也能起到同样的作用。
+**要不要用 <Term tip="git submodule：把另一个仓库固定在某个提交，挂进当前仓库的一个子目录">git submodules</Term>？** 可以用。5 到 10 个仓库时，用 submodules 这类做法把它们挂进 Home Repo 没问题。不用 submodules，普通的指针也能起到同样的作用。
 
-**Home Repo 和 monorepo 是什么关系？** 能用 monorepo 时，monorepo 很合适。用不了 monorepo 时，就用 Home Repo 代替它，比如你的仓库有公开也有私有，或者团队不愿意改用 monorepo。
+**Home Repo 和 <Term tip="把多个项目的代码放进同一个 git 仓库的做法">monorepo</Term> 是什么关系？** 条件允许时，monorepo 很合适。用不了时，就用 Home Repo 代替，比如你的仓库有公开也有私有，或者团队不愿意迁到 monorepo。
 
 ### 工具和 CI
 
 **需要 CLI 之类的工具吗？** 不需要。刚开始时，AGENTS.md 里的指针加上你手头已有的工具就够了。以后，Home Repo 很适合放工具，比如一个把 Agent 连到外部服务的 CLI，它需要的环境变量也放在同一个仓库里。
 
-**在 CI 里能用吗？** 能。在<Term tip="让 Agent 在沙箱里自动完成开发任务的整套流水线">软件工厂</Term>里，把 Home Repo 放进沙箱，Home Repo 会按需克隆其他仓库。运行软件工厂的代码放在 Home Repo 里，或者放在它指向的某个仓库里。
+**在 <Term tip="持续集成：每次推送代码后自动跑构建和测试的服务，比如 GitHub Actions">CI</Term> 里能用吗？** 能。比如在<Term tip="让 Agent 在隔离的容器或虚拟机里自动完成开发任务的整套流水线">软件工厂</Term>里，把 Home Repo 放进沙箱，Agent 照着里面的指针，按需克隆其他仓库。运行软件工厂的代码可以放在 Home Repo 里，也可以放在它指向的某个仓库里。
 
 ---
 
