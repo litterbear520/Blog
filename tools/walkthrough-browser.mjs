@@ -140,7 +140,7 @@ function inspectCopyButton() {
   return { failures, checks: 6 };
 }
 
-// 下拉菜单：三项、每项 32 高，左右离屏幕边至少 8px，焦点在第一项，页面不横向溢出
+// 下拉菜单：四项、每项 32 高，左右离屏幕边至少 8px，焦点在第一项，页面不横向溢出
 function inspectCopyMenu() {
   const failures = [];
   const check = (ok, message) => { if (!ok) failures.push(message); };
@@ -148,7 +148,7 @@ function inspectCopyMenu() {
   const r = menu.getBoundingClientRect();
   const vw = document.documentElement.clientWidth;
   const items = [...menu.querySelectorAll('[role=menuitem]')];
-  check(items.map((i) => i.textContent.trim()).join('|') === '复制为 Markdown|打开 Markdown|在 Claude.ai 中对话', 'copy menu items');
+  check(items.map((i) => i.textContent.trim()).join('|') === '复制为 Markdown|打开 Markdown|在 Claude.ai 中对话|在 ChatGPT 中对话', 'copy menu items');
   check(items.every((i) => Math.round(i.getBoundingClientRect().height) === 32), 'copy menu item height');
   check(r.left >= 7.5 && r.right <= vw - 7.5, `copy menu ${r.left}-${r.right} not inside viewport ${vw}`);
   check(document.activeElement === items[0], 'focus not on the first menu item');
