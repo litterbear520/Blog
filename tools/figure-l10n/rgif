@@ -1,0 +1,9 @@
+#!/bin/bash
+# 在 Mac 上渲染动图：./rgif <slug>/figNN [gif.py 的其他参数]，成品取回到 out/
+# 需要 `ssh mac` 免密可用，Mac 上有 uv 和 ffmpeg（Homebrew）。
+set -eo pipefail
+HERE="$(cd "$(dirname "$0")" && pwd)"
+REMOTE='figure-l10n'
+rsync -aq --exclude 'out/' --exclude '__pycache__' "$HERE/" "mac:$REMOTE/"
+ssh mac "export PATH=/opt/homebrew/bin:\$PATH; cd $REMOTE && uv run -q --no-project --with pillow --with numpy python gif.py $*" | sed "s|/Users/[^ ]*/$REMOTE/|$HERE/|"
+rsync -aq "mac:$REMOTE/out/" "$HERE/out/"

@@ -32,6 +32,18 @@ ssh mac 'export PATH=/opt/homebrew/bin:$PATH; oxipng -q -o max --strip safe pngo
 rsync -aq mac:pngopt/ blog/<slug>/ && ssh mac 'rm -rf pngopt'
 ```
 
+## 动图
+
+GIF 动图用 `gif.py` 逐帧处理：每帧按同一份规格盖住英文、写上中文，再用 ffmpeg 合回 GIF，帧时长和循环照原图。规格是一段 Python（`specs/<slug>/figNN.py`），`ITEMS` 的字段和静态图的 `figNN.js` 一样，另有 `fill: 'above' | 'below'`（逐列复制遮盖区上方 / 下方一行，底色左右渐隐或逐步填色时用）和 `ref`（取位置的帧号），完整说明在 `gif.py` 顶部。遮盖位置取自文字最清楚的那一帧；每帧的文字颜色取这一帧原文字迹的颜色，所以原文渐显、高亮换色时中文跟着变；某帧框内没有文字就不盖也不写。文字会移动的部分（如横向滚动的时间轴、换文字的气泡）在规格里写 `hook` 逐帧重画，例子见 `specs/building-always-on-agents/fig01.py`。
+
+```bash
+./rgif <slug>/figNN --frames 0,60,120 --debug   # 只出这几帧的 PNG，画洋红遮盖框
+./rgif <slug>/figNN --frames 0,60,120           # 只出这几帧，核对渐显、高亮、滚动时的样子
+./rgif <slug>/figNN                             # 整张输出 out/<slug>/figNN.gif
+```
+
+`rgif` 把本目录同步到 Mac，用 `uv` 带上 Pillow 和 numpy 跑 `gif.py`，再取回 `out/`。原图 `src/<slug>/figNN.gif` 和静态图放在一起。抽查时至少看三种帧：文字最清楚的、正在渐显或换色的、动的东西（圆点、填色）经过文字旁边的。
+
 ## 约定
 
 - 字号：中文 ≈ 同位置英文字号 × 0.92。英文字号从 debug 打印的字迹高度 h 估：同时有大写/升部和降部（g、y、p、j）时 ≈ h / 0.9，只有大写没有降部时 ≈ h / 0.7。粗体标题用 weight 600，正文 400。颜色默认自动取原文字迹色。
