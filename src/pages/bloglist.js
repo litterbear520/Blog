@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '构建始终在线的 Agent',
+    date: '2026-11-14',
+    slug: 'building-always-on-agents',
+    category: 'AI',
+    swatch: 'clay',
+    cover: '/img/blog/cover-building-always-on-agents.svg',
+  },
+  {
     title: 'Home Repo 模式',
     date: '2026-11-12',
     slug: 'home-repo-pattern',

@@ -79,6 +79,7 @@ clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
+| building-always-on-agents | clay | cover-building-always-on-agents.svg | recipes/building-always-on-agents.js |
 | home-repo-pattern | coral | cover-home-repo-pattern.svg | recipes/home-repo-pattern.js |
 | which-claude-model | plum | cover-which-claude-model.svg | recipes/which-claude-model.js |
 | components-of-agent-memory | heather | cover-components-of-agent-memory.svg，头图 components-of-agent-memory.jpg | recipes/components-of-agent-memory.js |
