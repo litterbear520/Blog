@@ -2,7 +2,7 @@
 slug: building-always-on-agents
 title: 构建始终在线的 Agent
 date: 2026-11-14
-description: 始终在线的 Agent 无限期地运行，跨越许多 session 自己决定何时行动、怎样行动。本文介绍支撑它的五个核心构件：event inbox、timer、记忆、权限和 outbox，以及它们怎样组合成一个循环。
+description: 始终在线的 Agent 无限期地运行，跨越许多 session 自己决定何时行动、怎样行动。本文介绍支撑它的五个核心构件：event inbox、timer、memory、permissions 和 outbox，以及它们怎样组合成一个循环。
 ---
 
 过去几个月，始终在线的 Agent 又重新流行起来。
@@ -29,7 +29,7 @@ description: 始终在线的 Agent 无限期地运行，跨越许多 session 自
 
 ## 核心构件
 
-始终在线的 Agent 的外围架构有五个核心构件：<Term tip="事件收件箱：所有事件先排进这里，再由 Worker 取走处理">event inbox</Term>、<Term tip="定时器：到点就往 inbox 里放一个事件，叫醒 Agent">timer</Term>、记忆、权限和 <Term tip="发件箱：Agent 要发给用户的消息先排进这里，再由 Dispatcher 送出去">outbox</Term>。下面逐个来看。
+始终在线的 Agent 的外围架构有五个核心构件：<Term tip="事件收件箱：所有事件先排进这里，再由 Worker 取走处理">event inbox</Term>、<Term tip="定时器：到点就往 inbox 里放一个事件，叫醒 Agent">timer</Term>、<Term tip="记忆：Agent 在多次 run 之间保留下来的信息，比如用户的指令、笔记和任务进度">memory</Term>、<Term tip="权限：决定 Agent 的每次工具调用是直接执行、拦下，还是等用户批准">permissions</Term> 和 <Term tip="发件箱：Agent 要发给用户的消息先排进这里，再由 Dispatcher 送出去">outbox</Term>。下面逐个来看。
 
 ### Event inbox
 
@@ -80,13 +80,13 @@ timer 自己不会发起 run。实际的做法是，一个 <Term tip="调度器�
 
 Scheduler 可以自己写一个服务，也可以用一个<Term tip="把流程每一步的状态持久保存下来的运行框架：进程崩溃或重启后，流程能从中断的地方接着执行">持久化执行引擎</Term>。
 
-### 记忆
+### Memory
 
-始终在线的 Agent 要在许多次互不相连的 run 之间干活，靠记忆来保持连续。
+始终在线的 Agent 要在许多次互不相连的 run 之间干活，靠 memory 来保持连续。
 
-和 event inbox、timer 一样，记忆也应该有自己的存储。在我们的产品里，比如 Claude Code 的[自动记忆](https://code.claude.com/docs/en/memory)和 Messages API 的[记忆工具](https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool)，记忆都实现成一个文件目录。对始终在线的 Agent 来说，这些目录应该映射到持久存储上，通常是数据库或对象存储。这样，Worker 没了，记忆还在。
+和 event inbox、timer 一样，memory 也应该有自己的存储。在我们的产品里，比如 Claude Code 的 [auto memory](https://code.claude.com/docs/en/memory) 和 Messages API 的 [memory tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool)，memory 都实现成一个文件目录。对始终在线的 Agent 来说，这些目录应该映射到持久存储上，通常是数据库或对象存储。这样，Worker 没了，memory 还在。
 
-有一条经验法则：记忆里只应该存 Agent 没办法再查到的东西。如果某样信息已经存在别的系统里（比如问题跟踪系统），就只存一个指向它的指针。始终在线的 Agent 应该存下面这几类记忆：
+有一条经验法则：memory 里只应该存 Agent 没办法再查到的东西。如果某样信息已经存在别的系统里（比如问题跟踪系统），就只存一个指向它的指针。始终在线的 Agent 应该存下面这几类 memory：
 
 - **用户的指令**：用户对 Agent 行为提出的任何指令，都应该存进单独的文件，在每次 run 开始时加载。用户不会一直守在旁边引导 Agent，所以这些指令必须能带到之后的每一次 run。
 - **关于用户的笔记**：Agent 应该记下它对用户的了解，比如用户的角色、偏好，或者用户纠正过它的地方。一开始可以只用一个文件，笔记多了再拆成几个小文件。拆开以后，每次 run 开始时只加载一个索引，Agent 需要更多细节时，再把具体的文件读进上下文。
@@ -95,29 +95,29 @@ Scheduler 可以自己写一个服务，也可以用一个<Term tip="把流程�
 
 下图是一种示例配置。
 
-![一种示例记忆配置，记忆是一个文件目录。instructions.md、index.md 和 reported.md 在每次 run 开始时加载，notes/ 和 progress/ 两个文件夹在需要时才读取。Agent 在 run 过程中写入记忆。](./memory.png)
+![一种示例 memory 配置，memory 是一个文件目录。instructions.md、index.md 和 reported.md 在每次 run 开始时加载，notes/ 和 progress/ 两个文件夹在需要时才读取。Agent 在 run 过程中写入 memory。](./memory.png)
 
-*一种示例记忆配置：几个文件每次 run 都加载，其余的需要时再读。*
+*一种示例 memory 配置：几个文件每次 run 都加载，其余的需要时再读。*
 
-上面说的都是在 run 过程中存下的记忆。你还可以加上“做梦”（dreaming）：回顾过去的 session，整理记忆。做梦可以替换过时的条目，也能发现那些要跨越许多次 run 才看得出来的规律。想了解更多，可以读我们[关于 Agent 记忆的文章](/blog/components-of-agent-memory)，里面讲得更详细。
+上面说的都是在 run 过程中存下的 memory。你还可以加上“做梦”（dreaming）：回顾过去的 session，整理 memory。做梦可以替换过时的条目，也能发现那些要跨越许多次 run 才看得出来的规律。想了解更多，可以读我们[关于 Agent 记忆的文章](/blog/components-of-agent-memory)，里面讲得更详细。
 
 #### 上下文窗口里有什么
 
-开始干活之前，Agent 会先加载系统提示词、工具定义和记忆文件。每次 run 都要背上这份初始的上下文“开销”，所以我们建议让它尽量精简，并用[提示词缓存](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)降低成本。
+开始干活之前，Agent 会先加载系统提示词、工具定义和 memory 文件。每次 run 都要背上这份初始的上下文“开销”，所以我们建议让它尽量精简，并用[提示词缓存](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)降低成本。
 
 新 session 开始时，上下文里只有这份开销，加上触发这次 run 的事件。已有的 session 则会把它之前几次 run 里的消息和工具调用都带回来。
 
-session 太长时，可以用 [compaction](https://platform.claude.com/docs/en/build-with-claude/compaction) 把较早的消息压缩成摘要，也可以另开一个新 session。两种做法都会丢掉细节，所以凡是需要长期保留的东西，都应该在过程中随时存进记忆。
+session 太长时，可以用 [compaction](https://platform.claude.com/docs/en/build-with-claude/compaction) 把较早的消息压缩成摘要，也可以另开一个新 session。两种做法都会丢掉细节，所以凡是需要长期保留的东西，都应该在过程中随时存进 memory。
 
-![动图：已用上下文随时间变化的图表。系统提示词、工具和记忆占着一段固定的区域，每次 run 都有。已有的 session 会带回它的全部 transcript，并不断增长，直到 compaction 把较早的 transcript 变成一份摘要。](./context-window.gif)
+![动图：已用上下文随时间变化的图表。系统提示词、工具和 memory 占着一段固定的区域，每次 run 都有。已有的 session 会带回它的全部 transcript，并不断增长，直到 compaction 把较早的 transcript 变成一份摘要。](./context-window.gif)
 
 *每次 run 都背着一份固定开销；已有的 session 越来越长，直到 compaction，或者换成新 session。*
 
-### 权限
+### Permissions
 
-权限是始终在线的 Agent 风险最大的地方。一次 run 持有用户的访问权限，而且按设计就是在无人值守的情况下进行的。对每一次工具调用，Agent 都要决定：自己直接执行，拦下来，还是等待批准。
+Permissions 是始终在线的 Agent 风险最大的地方。一次 run 持有用户的访问权限，而且按设计就是在无人值守的情况下进行的。对每一次工具调用，Agent 都要决定：自己直接执行，拦下来，还是等待批准。
 
-权限用到的组件，和其他 Agent 用的是同一套：
+Permissions 用到的组件，和其他 Agent 用的是同一套：
 
 - **凭据存储**：始终在线的 Agent 往往需要用户的敏感凭据（比如密码或访问令牌）才能真正派上用场。[推荐的做法](https://code.claude.com/docs/en/agent-sdk/secure-deployment#credential-management)是在 Agent 的环境之外放一个代理服务，由它给发出去的请求加上凭据。Agent 发出的请求本身不带凭据，代理服务在转发之前注入真实的凭据。
 - **auto mode**：始终在线的 Agent 应该能在用户不用时时给出指示的情况下工作。我们在 Claude Code 的 [auto mode](https://www.anthropic.com/research/claude-code-auto-mode)（自动模式）里已经应对过类似的问题。auto mode 用分类器审查风险较高的操作，拦下被判定为危险的操作，让 Claude 另找更安全的做法。不过，最重要的决定仍然需要用户亲自审查。
@@ -137,7 +137,7 @@ session 太长时，可以用 [compaction](https://platform.claude.com/docs/en/b
 
 - Agent 往 outbox 发一条消息；
 - Agent 判断没有需要发送的内容；
-- Agent 用一次延后的工具调用请求权限或更多输入。
+- Agent 用一次延后的工具调用请求批准或更多输入。
 
 大多数始终在线的 Agent 有一个“发送”工具、能把消息直接送到用户手里就够用了。只有当你想控制 Agent 发消息的节奏，或者想让 Agent 能从出错中恢复时，才需要一个正式的 outbox。
 
@@ -149,11 +149,11 @@ outbox 是一张单独的待发消息表，和 event inbox 相对应。还有一
 
 五个构件是这样组合在一起的：
 
-![动图：五个构件怎样组合在一起。Timer 和 event inbox 启动一次 run；run 在 session 里读写记忆，每次工具调用都要经过权限检查；outbox 把消息送给用户，用户的回答再作为事件回到 inbox。](./how-it-fits.gif)
+![动图：五个构件怎样组合在一起。Timer 和 event inbox 启动一次 run；run 在 session 里读写 memory，每次工具调用都要经过 permissions 检查；outbox 把消息送给用户，用户的回答再作为事件回到 inbox。](./how-it-fits.gif)
 
 *五个构件连成一个循环，让 Agent 看起来始终在线。*
 
-每次 run 都从 inbox 里的一个事件开始，这个事件可能是用户消息、webhook，也可能是 timer。Worker 取到事件后，启动一次 run，在新 session 或已有 session 里唤醒 Agent。Agent 先读记忆，掌握基本情况；在权限允许的范围内采取行动；再把学到的东西更新进记忆。run 结束后，Agent 往 outbox 写入一行，Dispatcher 把消息送到用户手里。
+每次 run 都从 inbox 里的一个事件开始，这个事件可能是用户消息、webhook，也可能是 timer。Worker 取到事件后，启动一次 run，在新 session 或已有 session 里唤醒 Agent。Agent 先读 memory，掌握基本情况；在 permissions 允许的范围内采取行动；再把学到的东西更新进 memory。run 结束后，Agent 往 outbox 写入一行，Dispatcher 把消息送到用户手里。
 
 这些构件合在一起，就构成了一个循环。一次 run 可以设一个 timer，让 Agent 稍后再次醒来；用户回复消息时，回答也会作为一个事件回到 inbox。每次 run 都很短暂，但这个循环会一直转下去，正是这一点让 Agent 感觉像是始终在线。
 

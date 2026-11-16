@@ -1,6 +1,5 @@
 window.SPEC = { src: 'src/building-always-on-agents/fig04.png', items: [
-  { r: [478, 86, 590, 116], t: '记忆', size: 26, weight: 600 },
-  { r: [604, 88, 780, 116], t: '文件目录', size: 20, dx: -40 },
+  { r: [604, 88, 780, 116], t: '文件目录', size: 20 },
   { r: [494, 136, 560, 162], t: '文件名', size: 19, weight: 600 },
   { r: [714, 136, 858, 162], t: '存放内容', size: 19, weight: 600 },
   { r: [1238, 136, 1296, 162], t: '读取时机', size: 19, weight: 600, anchor: 'end' },
