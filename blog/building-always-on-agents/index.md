@@ -21,7 +21,7 @@ description: 始终在线的 Agent 无限期地运行，跨越许多 session 自
 
 始终在线的 Agent 其实并不是真的“始终在线”。这个说法描述的只是用户的体验。
 
-实际上，Agent 大部分时间都在休眠，只是定期醒来干活。每一段工作叫作一次 **run**：Agent 收到一个事件，完成任务，再把这次发生的事情存下来。run 发生在一个 **session** 里，session 就是消息和工具调用的记录。run 结束后，Agent 回去休眠，这个循环就这样无限重复下去。
+实际上，Agent 大部分时间都在休眠，只是定期醒来干活。每一段工作叫作一次 **run**：Agent 收到一个事件，完成任务，再把这次发生的事情存下来。run 发生在一个 **session** 里，session 就是由消息和工具调用组成的一份 <Term tip="会话记录：一个 session 里所有消息和工具调用按顺序记下来的全文">transcript</Term>。run 结束后，Agent 回去休眠，这个循环就这样无限重复下去。
 
 ![动图：始终在线的 Agent 的时间轴。大段时间在休眠，不消耗 token，中间穿插着短暂的 run。每次 run 分四步：事件到达，session 开始，agent loop 运行，run 把结果写回持久状态；持久状态会在多次 run 之间保留下来。](./run-cycle.gif)
 
@@ -29,11 +29,11 @@ description: 始终在线的 Agent 无限期地运行，跨越许多 session 自
 
 ## 核心构件
 
-始终在线的 Agent 的外围架构有五个核心构件：<Term tip="事件收件箱：所有事件先排进这里，再由 Worker 取走处理">event inbox</Term>、<Term tip="定时器：到点就往 inbox 里放一个事件，叫醒 Agent">timer</Term>、<Term tip="记忆：Agent 在多次 run 之间保留下来的信息，比如用户的指令、笔记和任务进度">memory</Term>、<Term tip="权限：决定 Agent 的每次工具调用是直接执行、拦下，还是等用户批准">permissions</Term> 和 <Term tip="发件箱：Agent 要发给用户的消息先排进这里，再由 Dispatcher 送出去">outbox</Term>。下面逐个来看。
+始终在线的 Agent 的外围架构有五个核心构件：<Term tip="事件收件箱：所有事件先排进这里，再由后台进程取走处理">event inbox</Term>、<Term tip="定时器：到点就往 inbox 里放一个事件，叫醒 Agent">timer</Term>、<Term tip="记忆：Agent 在多次 run 之间保留下来的信息，比如用户的指令、笔记和任务进度">memory</Term>、<Term tip="权限：决定 Agent 的每次工具调用是直接执行、拦下，还是等用户批准">permissions</Term> 和 <Term tip="发件箱：Agent 要发给用户的消息先排进这里，再由后台服务送出去">outbox</Term>。下面逐个来看。
 
 ### Event inbox
 
-大多数 AI Agent 只在用户发消息时才运行。始终在线的 Agent 则不同，很多种事件都能触发它，包括 <Term tip="外部服务在某件事发生时，主动向你事先登记的地址发一个 HTTP 请求来通知你">webhook</Term>、定时任务和后台作业。
+大多数 AI Agent 只在用户发消息时才运行。始终在线的 Agent 则不同，很多种事件都能触发它，包括 <Term tip="外部服务在某件事发生时，主动向你事先登记的地址发一个 HTTP 请求来通知你">webhook</Term>、定时作业和后台任务。
 
 一种很诱人的做法是让每个事件源直接调用 Agent，但这样会在几种情况下出错。比如，两个事件同时到达，可能启动两次互相竞争的 run；一次崩溃，可能让某个事件彻底丢失。
 
@@ -42,27 +42,27 @@ event inbox 就是为此而设的。各个事件源不再直接调用 Agent，�
 最简单的版本由三部分组成：
 
 - 一份持久保存的事件列表，通常是一张数据库表；
-- 一个 <Term tip="事件进来的入口：外部服务、timer、用户发来的事件都先打到它。它只把事件记进 inbox、叫醒 Worker，然后马上回复“收到了”，不在这里干重活">Handler</Term>，通常是一个 HTTP 端点，负责把事件写进这份列表；
+- 一个 <Term tip="事件进来的入口：把事件记进 inbox、叫醒 Worker，然后马上回复“收到了”，重活留给 run 去做">Handler</Term>，通常是一个 HTTP 端点，负责把事件写进这份列表；
 - 一个 Worker，通常是一个后台服务，负责从列表里读取事件。
 
-inbox 应该记录每个事件的状态。事件源一般会给每个事件一个唯一标识，inbox 可以按它去重。关系型数据库很适合用来做 inbox，每来一个事件就追加一行。我们建议一开始每个用户一个 inbox；如果需要更多并行，可以再往下拆。
+inbox 应该记录每个事件的状态。事件源一般会给每个事件一个唯一标识，inbox 可以按它去重。关系型数据库很适合用来做 inbox，每来一个事件就追加一行。我们建议一开始每个用户一个 inbox；如果需要更多并行，可以再拆得更细。
 
 ![Event inbox 示意图。Handler（一个 HTTP 端点）把每个事件写进 event inbox，inbox 是一张数据库表，记录每个事件的状态，并丢弃重复的事件；Handler 同时唤醒 Worker。Worker 读取待处理的事件，启动 run，等它结束，再把这些事件标为已完成。](./event-inbox.png)
 
 *事件先写进 inbox，再由 Worker 统一读取、启动 run、标为已完成。*
 
-新事件到来时，Handler 把事件写进 inbox，并唤醒 Worker。Worker 读取所有待处理的事件，启动一次 run。如果事件是在接着之前的工作（比如用户的回复），就恢复已有的 session；其他事件都开启一个新 session。
+新事件到来时，Handler 把事件写进 inbox，并唤醒 Worker。Worker 读取所有待处理的事件，启动一次 run。如果事件延续的是之前的工作（比如用户的回复），就恢复已有的 session；其他事件都开启一个新 session。
 
 接下来，Worker 把事件交给 <Term tip="Agent 的核心循环：模型想一步、调用工具、看结果，再想下一步，直到任务完成">agent loop</Term>，等这次 run 结束，再把对应的事件标为已完成。实现细节可能比较棘手，下面是几条最佳实践：
 
-- **Handler 应该尽快确认收到了事件**。有些事件源（比如 webhook 的提供方）会把响应慢当作失败。Handler 仍然可以做一些轻量的检查，但更深入的验证（比如检查有没有<Term tip="攻击者把指令藏在 Agent 会读到的内容里，诱使 Agent 照着执行">提示注入</Term>）应该放到 run 里去做。
-- **inbox 应该是唯一可信的数据来源**。Worker 被唤醒时，应该先从 inbox 拉取最新的事件。这样，即使 Worker 在 run 中途挂掉，新的 Worker 也能接手同一个事件重试。
+- **Handler 应该尽快确认收到了事件**。有些事件源（比如 webhook 的提供方）会把响应慢当作失败。Handler 仍然可以做一些轻量的检查，但更深入的验证（比如检查有没有<Term tip="攻击者把指令藏在 Agent 会读到的内容里，诱使 Agent 照着执行">提示词注入</Term>）应该放到 run 里去做。
+- **inbox 应该是唯一的事实来源（source of truth）**。Worker 被唤醒时，应该先从 inbox 拉取最新的事件。这样，即使 Worker 在 run 中途挂掉，新的 Worker 也能接手同一个事件重试。
 - **一个 inbox 同一时间只应该有一个活跃的 Worker**。这样可以避免两次 run 重复干活，或者互相覆盖对方的结果。如果 run 中途来了新事件，可以把它留给下一次 run，也可以并入当前 run，或者中断当前 run 后重新开始。
 - **Worker 应该把待处理的事件合成一批**。比如用户连发了好几条消息，Worker 可以把它们合并进一次 run，这样 Agent 只需要回复一次。
 
 ### Timer
 
-timer 和 event inbox 一起，让始终在线的 Agent 能够主动做事。timer 一般分两类：<Term tip="跟进提醒：Agent 给自己定的一次性截止时间">follow-up</Term> 和 <Term tip="定时任务：按固定节奏重复执行的任务">schedule</Term>。follow-up 是 Agent 给自己定的截止时间，比如到点去看看对方回复了没有。schedule 则按已知的节奏重复执行，比如每天发一期的新闻简报。
+timer 和 event inbox 一起，让始终在线的 Agent 能够主动做事。timer 一般分两类：<Term tip="跟进提醒：一次性的">follow-up</Term> 和 <Term tip="定时任务：周期性的">schedule</Term>。follow-up 是 Agent 给自己定的截止时间，比如到点去看看对方回复了没有。schedule 则按已知的节奏重复执行，比如每天发一期的新闻简报。
 
 timer 放在自己的持久存储里，通常是另一张数据库表，和 inbox 分开。inbox 里只应该放已经可以开始处理的事件。follow-up 和 schedule 可以用差不多的表结构，但 schedule 还要记录它按什么规律重复。
 
@@ -70,15 +70,15 @@ timer 放在自己的持久存储里，通常是另一张数据库表，和 inbo
 
 *Scheduler 把到期的 timer 变成 inbox 里的一个事件，由它启动下一次 run。*
 
-timer 自己不会发起 run。实际的做法是，一个 <Term tip="调度器：定期查看哪些 timer 到期了，到期的就变成事件放进 inbox">Scheduler</Term>（通常是一个后台服务）按固定的间隔轮询存储，触发所有到期的 timer。每轮询一次，Scheduler 会：
+timer 自己不会发起 run。实际的做法是，一个 <Term tip="调度器：定期查看哪些 timer 到期了，到期的就变成事件放进 inbox">Scheduler</Term>（通常是一个后台服务）按固定的间隔轮询这份存储，触发所有到期的 timer。每轮询一次，Scheduler 会：
 
 - 扫描存储，找出到期的 timer。
 - 按类别更新每个 timer：
   - follow-up 标为已完成；
-  - schedule 把到期时间改成下一次的时间。
+  - schedule 的到期时间改成下一次的时间。
 - 往 inbox 里添加一个事件，并唤醒 Worker。
 
-Scheduler 可以自己写一个服务，也可以用一个<Term tip="把流程每一步的状态持久保存下来的运行框架：进程崩溃或重启后，流程能从中断的地方接着执行">持久化执行引擎</Term>。
+Scheduler 可以自己写一个服务，也可以用一个<Term tip="把流程每一步的状态持久保存下来的运行框架：进程崩溃或重启后，流程能从中断的地方接着执行">持久化执行（durable execution）引擎</Term>。
 
 ### Memory
 
@@ -86,7 +86,7 @@ Scheduler 可以自己写一个服务，也可以用一个<Term tip="把流程�
 
 和 event inbox、timer 一样，memory 也应该有自己的存储。在我们的产品里，比如 Claude Code 的 [auto memory](https://code.claude.com/docs/en/memory) 和 Messages API 的 [memory tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool)，memory 都实现成一个文件目录。对始终在线的 Agent 来说，这些目录应该映射到持久存储上，通常是数据库或对象存储。这样，Worker 没了，memory 还在。
 
-有一条经验法则：memory 里只应该存 Agent 没办法再查到的东西。如果某样信息已经存在别的系统里（比如问题跟踪系统），就只存一个指向它的指针。始终在线的 Agent 应该存下面这几类 memory：
+有一条经验法则：memory 里只应该存 Agent 没办法再查到的东西。如果某样信息已经存在别的系统里（比如 issue tracker），就只存一个指向它的指针。始终在线的 Agent 应该存下面这几类 memory：
 
 - **用户的指令**：用户对 Agent 行为提出的任何指令，都应该存进单独的文件，在每次 run 开始时加载。用户不会一直守在旁边引导 Agent，所以这些指令必须能带到之后的每一次 run。
 - **关于用户的笔记**：Agent 应该记下它对用户的了解，比如用户的角色、偏好，或者用户纠正过它的地方。一开始可以只用一个文件，笔记多了再拆成几个小文件。拆开以后，每次 run 开始时只加载一个索引，Agent 需要更多细节时，再把具体的文件读进上下文。
@@ -115,13 +115,13 @@ session 太长时，可以用 [compaction](https://platform.claude.com/docs/en/b
 
 ### Permissions
 
-Permissions 是始终在线的 Agent 风险最大的地方。一次 run 持有用户的访问权限，而且按设计就是在无人值守的情况下进行的。对每一次工具调用，Agent 都要决定：自己直接执行，拦下来，还是等待批准。
+permissions 是始终在线的 Agent 风险最大的地方。一次 run 持有用户的访问权限，而且按设计就是在无人值守的情况下进行的。对每一次工具调用，Agent 都要决定：自己直接执行，拦下来，还是等待批准。
 
-Permissions 用到的组件，和其他 Agent 用的是同一套：
+permissions 靠的机制，和其他 Agent 用的是同一套：
 
-- **凭据存储**：始终在线的 Agent 往往需要用户的敏感凭据（比如密码或访问令牌）才能真正派上用场。[推荐的做法](https://code.claude.com/docs/en/agent-sdk/secure-deployment#credential-management)是在 Agent 的环境之外放一个代理服务，由它给发出去的请求加上凭据。Agent 发出的请求本身不带凭据，代理服务在转发之前注入真实的凭据。
-- **auto mode**：始终在线的 Agent 应该能在用户不用时时给出指示的情况下工作。我们在 Claude Code 的 [auto mode](https://www.anthropic.com/research/claude-code-auto-mode)（自动模式）里已经应对过类似的问题。auto mode 用分类器审查风险较高的操作，拦下被判定为危险的操作，让 Claude 另找更安全的做法。不过，最重要的决定仍然需要用户亲自审查。
-- **延后的工具调用**：在 Claude Code 里，[hook 可以把一次工具调用延后](https://code.claude.com/docs/en/hooks#defer-a-tool-call-for-later)，等用户提供更多输入。同样的模式也适用于始终在线的 Agent：它们在执行某些操作之前，可能需要用户澄清或批准。工具调用被延后时，这次 run 就结束了，session 停在这次调用的中途，被原样保存下来。请求会展示给用户（比如用 [MCP Apps](https://modelcontextprotocol.io/extensions/apps/overview) 做的交互卡片），用户的回答作为一个事件回到 inbox。这个事件启动一次新的 run，带着用户的输入恢复之前保存的 session。延后的调用在等回应的时候，Worker 可以先去处理别的事件，所以 Agent 不会被卡住。
+- **凭据存储**：始终在线的 Agent 往往需要用户的敏感凭据（比如密码或 access token）才能真正派上用场。[推荐的做法](https://code.claude.com/docs/en/agent-sdk/secure-deployment#credential-management)是在 Agent 的环境之外放一个代理服务，由它给发出去的请求加上凭据。Agent 发出的请求本身不带凭据，代理服务在转发之前注入真实的凭据。
+- **<Term tip="自动模式：由分类器代替用户审查风险较高的操作，危险的拦下，其余的放行">Auto mode</Term>**：始终在线的 Agent 应该能在不需要用户时时给出指示的情况下工作。我们在 Claude Code 的 [auto mode](https://www.anthropic.com/research/claude-code-auto-mode) 里已经应对过类似的问题。auto mode 用分类器审查风险较高的操作，拦下被判定为危险的操作，让 Claude 另找更安全的做法。不过，最重要的决定仍然需要用户亲自审查。
+- **延后的工具调用**：在 Claude Code 里，<Term tip="钩子：在工具调用前后自动执行的一段脚本，可以放行、拦下或延后这次调用">hook</Term> [可以把一次工具调用延后](https://code.claude.com/docs/en/hooks#defer-a-tool-call-for-later)，等用户提供更多输入。同样的模式也适用于始终在线的 Agent：它们在执行某些操作之前，可能需要用户澄清或批准。工具调用被延后时，这次 run 就结束了，session 停在这次调用的中途，被原样保存下来。请求会展示给用户（比如用 [MCP Apps](https://modelcontextprotocol.io/extensions/apps/overview) 做的交互卡片），用户的回答作为一个事件回到 inbox。这个事件启动一次新的 run，带着用户的输入恢复之前保存的 session。延后的调用在等回应的时候，Worker 可以先去处理别的事件，所以 Agent 不会被卡住。
 
 ### Outbox
 
@@ -139,21 +139,21 @@ Permissions 用到的组件，和其他 Agent 用的是同一套：
 - Agent 判断没有需要发送的内容；
 - Agent 用一次延后的工具调用请求批准或更多输入。
 
-大多数始终在线的 Agent 有一个“发送”工具、能把消息直接送到用户手里就够用了。只有当你想控制 Agent 发消息的节奏，或者想让 Agent 能从出错中恢复时，才需要一个正式的 outbox。
+对大多数始终在线的 Agent 来说，有一个能把消息直接送到用户手里的“发送”工具就够用了。只有当你想控制 Agent 发消息的节奏，或者想让 Agent 能从出错中恢复时，才需要一个正式的 outbox。
 
 outbox 是一张单独的待发消息表，和 event inbox 相对应。还有一个 <Term tip="分发器：从 outbox 里取出待发的消息，决定发哪些、什么时候发，再送到用户手里">Dispatcher</Term>，通常是一个后台服务，和 Worker 相对应。Dispatcher 读取待发送的消息，决定送出哪些，再把它们发给用户。延后的工具调用产生的请求，既可以走 outbox，也可以直接在界面里展示。
 
-除了怎样送达，调好 Agent 发消息的多少也很重要。发得太多，Agent 就成了噪音；发得太少，又会漏掉用户需要知道的事。我们建议构建评测来找到合适的平衡。实践中，更好的做法是让 Agent 一开始少说话，再随着时间慢慢赢得用户更多的注意力。
+除了怎样送达，调好 Agent 发多少消息也很重要。发得太多，Agent 就成了噪音；发得太少，又会漏掉用户需要知道的事。我们建议构建评测来找到合适的平衡。实践中，更好的做法是让 Agent 一开始少说话，再随着时间慢慢赢得用户更多的注意力。
 
 ## 所有构件怎样组合在一起
 
 五个构件是这样组合在一起的：
 
-![动图：五个构件怎样组合在一起。Timer 和 event inbox 启动一次 run；run 在 session 里读写 memory，每次工具调用都要经过 permissions 检查；outbox 把消息送给用户，用户的回答再作为事件回到 inbox。](./how-it-fits.gif)
+![动图：五个构件怎样组合在一起。timer 和 event inbox 启动一次 run；run 在 session 里读写 memory，每次工具调用都要经过 permissions 检查；outbox 把消息送给用户，用户的回答再作为事件回到 inbox。](./how-it-fits.gif)
 
 *五个构件连成一个循环，让 Agent 看起来始终在线。*
 
-每次 run 都从 inbox 里的一个事件开始，这个事件可能是用户消息、webhook，也可能是 timer。Worker 取到事件后，启动一次 run，在新 session 或已有 session 里唤醒 Agent。Agent 先读 memory，掌握基本情况；在 permissions 允许的范围内采取行动；再把学到的东西更新进 memory。run 结束后，Agent 往 outbox 写入一行，Dispatcher 把消息送到用户手里。
+每次 run 都从 inbox 里的一个事件开始，这个事件可能是用户消息、webhook，也可能来自 timer。Worker 取到事件后，启动一次 run，在新 session 或已有 session 里唤醒 Agent。Agent 先读 memory，掌握基本情况；在 permissions 允许的范围内采取行动；再把学到的东西更新进 memory。run 结束后，Agent 往 outbox 写入一行，Dispatcher 把消息送到用户手里。
 
 这些构件合在一起，就构成了一个循环。一次 run 可以设一个 timer，让 Agent 稍后再次醒来；用户回复消息时，回答也会作为一个事件回到 inbox。每次 run 都很短暂，但这个循环会一直转下去，正是这一点让 Agent 感觉像是始终在线。
 
