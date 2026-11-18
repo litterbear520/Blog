@@ -9,6 +9,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '所有代码都是 slop（除了我的）',
+    date: '2026-11-18',
+    slug: 'all-code-is-slop',
+    category: 'AI',
+    swatch: 'cactus',
+    cover: '/img/blog/cover-all-code-is-slop.svg',
+  },
+  {
     title: '构建始终在线的 Agent',
     date: '2026-11-14',
     slug: 'building-always-on-agents',
