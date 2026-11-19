@@ -34,7 +34,7 @@
   --ifm-heading-font-family: 'Source Serif 4', 'Noto Serif SC', Georgia, 'Times New Roman', serif;
   --ifm-font-family-monospace: Menlo, Monaco, Consolas, 'Droid Sans Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
   --ifm-code-font-size: 95%;
-  --ifm-pre-line-height: 1.4616; /* 代码块 13px 字配 19px 行高，照 Academy */
+  --ifm-pre-line-height: 1.5715; /* 代码块 14px 字配 22px 行高；Academy 的 13px / 19px 在中文站里偏小 */
   --ifm-pre-padding: 0.75rem;     /* 代码块内边距 12px，照 Academy */
   --ifm-line-height-base: 1.65;
   --ifm-font-weight-semibold: 500;
@@ -762,9 +762,9 @@ html[data-theme='dark'] .theme-admonition [class*='admonitionHeading'] {
   box-shadow: 20px 0 0 #febc2e, 40px 0 0 #28c840;
 }
 
-/* 代码块正文：13px / 19px（照 Academy），无连字（Cursor 默认关闭 fontLigatures） */
+/* 代码块正文：14px / 22px，无连字（Cursor 默认关闭 fontLigatures） */
 .prism-code {
-  font-size: 13px;
+  font-size: 14px;
   font-variant-ligatures: none;
 }
 
@@ -873,7 +873,7 @@ html[data-theme] .theme-code-block.run-output-open pre {
 
 .run-output {
   font-family: var(--ifm-font-family-monospace);
-  font-size: 13px;
+  font-size: 14px; /* 与代码块正文同号 */
   line-height: 1.6;
   color: var(--th-text-2);
   background: var(--prism-background-color);
