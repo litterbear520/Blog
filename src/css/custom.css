@@ -17,7 +17,7 @@
   --th-surface-2: #ffffff;     /* 行内代码 / 弹层底 */
   --th-text: #0b0b0b;          /* 标题、强调文字 */
   --th-text-2: #52514e;        /* 正文 */
-  --th-text-3: #898781;        /* 次要信息 */
+  --th-text-3: #6d6b66;        /* 次要信息；页面底上约 5:1，小字也够 4.5:1 */
   --th-line: rgba(11, 11, 11, 0.1);
   --th-line-strong: rgba(11, 11, 11, 0.2);
   --th-fill: rgba(11, 11, 11, 0.05);
@@ -762,9 +762,9 @@ html[data-theme='dark'] .theme-admonition [class*='admonitionHeading'] {
   box-shadow: 20px 0 0 #febc2e, 40px 0 0 #28c840;
 }
 
-/* 代码块正文：14px / 22px，无连字（Cursor 默认关闭 fontLigatures） */
+/* 代码块正文：14px / 22px（0.875rem，跟随浏览器字号设置），无连字（Cursor 默认关闭 fontLigatures） */
 .prism-code {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-variant-ligatures: none;
 }
 
@@ -837,19 +837,10 @@ pre {
   border-radius: 8px !important;
 }
 
-/* 代码块滚动条样式 - Cursor 风格 */
-[data-theme='dark'] pre::-webkit-scrollbar {
-  height: 8px;
-  background-color: #1a1a1a;
-}
-
-[data-theme='dark'] pre::-webkit-scrollbar-thumb {
-  background-color: #404040;
-  border-radius: 4px;
-}
-
-[data-theme='dark'] pre::-webkit-scrollbar-thumb:hover {
-  background-color: #505050;
+/* 代码块滚动条：用标准属性。Infima 给 pre 加了 scrollbar-width: thin，
+   有了它浏览器就不再认 ::-webkit-scrollbar；滑块和轨道对比约 3:1 */
+[data-theme='dark'] pre {
+  scrollbar-color: #6d6b67 #1a1a1a;
 }
 
 /* 代码块复制按钮样式 */
@@ -873,7 +864,7 @@ html[data-theme] .theme-code-block.run-output-open pre {
 
 .run-output {
   font-family: var(--ifm-font-family-monospace);
-  font-size: 14px; /* 与代码块正文同号 */
+  font-size: 0.875rem; /* 与代码块正文同号 */
   line-height: 1.6;
   color: var(--th-text-2);
   background: var(--prism-background-color);
@@ -911,7 +902,7 @@ html[data-theme] .theme-code-block.run-output-open pre {
 }
 
 .run-output__running {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--th-text-3);
 }
 
@@ -983,7 +974,7 @@ html[data-theme] .theme-code-block.run-output-open pre {
   gap: 0.75rem;
   padding: 0.25rem var(--ifm-pre-padding) 0.3rem;
   border-top: 1px dashed var(--th-line);
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--th-text-3);
 }
 

@@ -10,6 +10,7 @@ import cursorLightTheme from './src/theme/prism-cursor-light-theme.js';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkRunOutput from './plugins/remark-run-output.js';
+import remarkEagerLeadImage from './plugins/remark-eager-lead-image.js';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -31,21 +32,19 @@ const config = {
   // For GitHub pages deployment, it is often '/<projectName>/'
   // baseUrl: '/Blog/',
   baseUrl: '/',
+  // GitHub Pages 会给目录页补结尾斜杠；生成的链接、canonical、sitemap 跟它一致，省掉一次 301
+  trailingSlash: true,
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'litterbear520',
+  projectName: 'Blog',
 
   onBrokenLinks: 'throw',
 
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
+  // 决定 <html lang>、og:locale 和框架自带界面文字的语言
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'zh-Hans',
+    locales: ['zh-Hans'],
   },
 
   plugins: [
@@ -58,7 +57,7 @@ const config = {
         routeBasePath: 'roadmap',
         sidebarPath: './sidebarsRoadmap.js',
         admonitions: { keywords: ['important'], extendDefaults: true }, // 补上 GitHub alerts 的 IMPORTANT 类型，组件见 src/theme/Admonition/Types.js
-        remarkPlugins: [remarkMath, remarkRunOutput],
+        remarkPlugins: [remarkMath, remarkRunOutput, remarkEagerLeadImage],
         rehypePlugins: [rehypeKatex],
       },
     ],
@@ -72,13 +71,13 @@ const config = {
         docs: {
           sidebarPath: './sidebars.js',
           admonitions: { keywords: ['important'], extendDefaults: true }, // 补上 GitHub alerts 的 IMPORTANT 类型，组件见 src/theme/Admonition/Types.js
-          remarkPlugins: [remarkMath, remarkRunOutput],
+          remarkPlugins: [remarkMath, remarkRunOutput, remarkEagerLeadImage],
           rehypePlugins: [rehypeKatex],
         },
         blog: {
           showReadingTime: true,
           admonitions: { keywords: ['important'], extendDefaults: true }, // 补上 GitHub alerts 的 IMPORTANT 类型，组件见 src/theme/Admonition/Types.js
-          remarkPlugins: [remarkRunOutput],
+          remarkPlugins: [remarkRunOutput, remarkEagerLeadImage],
           routeBasePath: '/blog',
           // blogSidebarTitle: false, // 禁用博客侧边栏标题
           blogSidebarCount: 0, // 禁用博客侧边栏计数，设置为0
@@ -93,6 +92,12 @@ const config = {
         },
         theme: {
           customCss: './src/css/custom.css',
+        },
+        // 官方推荐写法（v4 的默认值）：lastmod 取 git 提交时间，搜索引擎不看的 priority/changefreq 不输出
+        sitemap: {
+          lastmod: 'date',
+          priority: null,
+          changefreq: null,
         },
       }),
     ],
@@ -135,7 +140,7 @@ const config = {
       navbar: {
         // title: 'My Site',
         logo: {
-          alt: 'Blog Logo',
+          alt: '小熊的博客',
           src: 'img/icon.png',
         },
         items: [

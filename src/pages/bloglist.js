@@ -1,5 +1,4 @@
 import Layout from '@theme/Layout';
-import Head from '@docusaurus/Head';
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
@@ -200,14 +199,7 @@ export default function BlogListPage() {
 
   return (
     <Layout title="博客" description="记录技术探索与成长的旅程">
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-
-      <div className={styles.page}>
+      <main className={styles.page}>
         <header className={styles.hero}>
           <span className={styles.heroLabel}>Blog</span>
           <h1 className={styles.heroTitle}>博客</h1>
@@ -215,10 +207,12 @@ export default function BlogListPage() {
           <div className={styles.heroDivider} />
         </header>
 
-        <nav className={styles.filters}>
+        <div className={styles.filters} role="group" aria-label="按分类筛选">
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
+              type="button"
+              aria-pressed={activeFilter === cat}
               className={clsx(
                 styles.filterBtn,
                 activeFilter === cat && styles.filterActive,
@@ -228,7 +222,7 @@ export default function BlogListPage() {
               {cat}
             </button>
           ))}
-        </nav>
+        </div>
 
         <section className={styles.grid}>
           {filtered.map((post, i) => (
@@ -236,35 +230,37 @@ export default function BlogListPage() {
               key={post.slug}
               to={`/blog/${post.slug}`}
               className={styles.card}
-              style={{ '--delay': `${i * 120}ms` }}
+              style={{ '--delay': `${Math.min(i, 5) * 120}ms` }} // 封顶，后面的卡片不用排队干等
             >
               <div
                 className={styles.cardVisual}
                 style={{ background: SWATCHES[post.swatch] }}
               >
                 {post.cover && (
-                  <CoverImage src={withBaseUrl(post.cover)} alt={post.title} />
+                  <CoverImage src={withBaseUrl(post.cover)} eager={i < 3} />
                 )}
               </div>
               <div className={styles.cardContent}>
-                <time className={styles.cardDate}>
+                <time className={styles.cardDate} dateTime={post.date}>
                   {formatDate(post.date)}
                 </time>
                 <h2 className={styles.cardTitle}>{post.title}</h2>
                 <div className={styles.cardFooter}>
                   <span className={styles.cardTag}>{post.category}</span>
-                  <span className={styles.cardArrow}>→</span>
+                  <span className={styles.cardArrow} aria-hidden="true">→</span>
                 </div>
               </div>
             </Link>
           ))}
         </section>
-      </div>
+      </main>
     </Layout>
   );
 }
 
-function CoverImage({ src, alt }) {
+// 封面是装饰，卡片标题已经给出链接名，所以 alt 为空。
+// 只有第一行（桌面最多三张）立即加载，其余等滚到附近再下载。
+function CoverImage({ src, eager }) {
   const [error, setError] = React.useState(false);
 
   if (error) return null;
@@ -273,9 +269,8 @@ function CoverImage({ src, alt }) {
     <img
       className={styles.coverImg}
       src={src}
-      alt={alt}
-      loading="eager"
-      fetchPriority="high"
+      alt=""
+      loading={eager ? 'eager' : 'lazy'}
       onError={() => setError(true)}
     />
   );

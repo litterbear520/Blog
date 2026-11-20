@@ -24,7 +24,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 ## 框架注意事项
 
 - 站点运行在 Docusaurus v4 模式，部分 API 与 v3 不同：涉及框架 API、配置、插件用法时，先用 context7 查 Docusaurus 最新文档，再动手。
-- 三个内容插件：docs、roadmap（第二个 docs 实例，`/roadmap` 路由）、blog（列表页是自定义的 `/bloglist`）。提示块关键字和 `remark-run-output` 在三个插件里各配一遍，改动时三处一起改。
+- 三个内容插件：docs、roadmap（第二个 docs 实例，`/roadmap` 路由）、blog（列表页是自定义的 `/bloglist`）。提示块关键字、`remark-run-output` 和 `remark-eager-lead-image` 在三个插件里各配一遍，改动时三处一起改。
 - 新增文档分类：在 `docs/` 下建目录并加 `index.md`。
 
 ## 目录
@@ -39,7 +39,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 | `src/theme/` | swizzle 覆盖，见下文“主题覆盖” |
 | `src/css/custom.css` | 全局样式和主题令牌 |
 | `src/pages/` | `index.js` 首页、`bloglist.js` 博客列表（`POSTS`）、`skills.js` SkillHub（`/skills`） |
-| `plugins/` | `copy-markdown-source/`（构建后给每页生成同名 `.md` 和站点根目录的 `llms.txt`；新组件要在 `convert.mjs` 的 `RENDERERS` 里登记怎么转，单测在 `tools/copy-markdown.test.mjs`）、`remark-run-output.js`（单测在 `tools/plugins.test.mjs`，还会扫全站检查每个 `run` 围栏都配了 `output`） |
+| `plugins/` | `copy-markdown-source/`（构建后给每页生成同名 `.md` 和站点根目录的 `llms.txt`；新组件要在 `convert.mjs` 的 `RENDERERS` 里登记怎么转，单测在 `tools/copy-markdown.test.mjs`）、`remark-run-output.js`（单测在 `tools/plugins.test.mjs`，还会扫全站检查每个 `run` 围栏都配了 `output`）、`remark-eager-lead-image.js`（正文前 4 个块里的第一张图当首屏头图，改成立即加载、高优先级，其余图片保持懒加载；单测同上） |
 | `tools/` | `covers/` 封面流水线；`figure-l10n/` 转载配图汉化；`*.test.mjs` 单测；`walkthrough-browser.mjs` CI 浏览器验证（用 `data-module.mjs` 在 Node 里导入 `src/data/` 的数据文件，数据文件可以引用别的文件） |
 | `.claude/skills/` | `blog-cover`、`lesson`、`note`，用法见各自 `SKILL.md`。跨项目通用的 `/explain` 和 `academy-diagram-design`（Academy 课件风配图）在全局 `~/.claude/skills/`，是公开技能仓库 littlebear-skills 里那份；在博客里用 `academy-diagram-design` 的约定见下文“Academy 课件风配图” |
 | `.superpowers/specs/` | brainstorming 的设计文档，写成 `YYYY-MM-DD-<topic>-design.md`。这个目录被 git 忽略，文档只留在本地，不提交；`docs/` 下的文件都会发布成网页 |

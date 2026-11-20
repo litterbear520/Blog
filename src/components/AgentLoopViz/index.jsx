@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useId, useRef } from 'react';
 import clsx from 'clsx';
 import { Play, Pause, SkipBack, SkipForward, RotateCcw } from 'lucide-react';
 import RUNS from '@site/src/data/agentRuns';
@@ -62,6 +62,8 @@ function Viz({ run }) {
   const total = frames.length;
 
   const [current, setCurrent] = useState(0);
+  // 同一页放两个动画时箭头 marker 的 id 不能重复；useId 带的标点在 url(#…) 里要去掉
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const [playing, setPlaying] = useState(false);
   const timerRef = useRef(null);
 
@@ -99,10 +101,10 @@ function Viz({ run }) {
           <div className={styles.panelLabel}>{run.loopLabel}</div>
           <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className={styles.svg} role="img" aria-label={frame.title}>
             <defs>
-              <marker id="alv-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+              <marker id={`${uid}-arrow`} markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
                 <polygon points="0 0, 8 3, 0 6" className={styles.arrowHead} />
               </marker>
-              <marker id="alv-arrow-active" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+              <marker id={`${uid}-arrow-active`} markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
                 <polygon points="0 0, 8 3, 0 6" className={styles.arrowHeadActive} />
               </marker>
             </defs>
@@ -116,7 +118,7 @@ function Viz({ run }) {
                   <path
                     d={d}
                     className={clsx(styles.edge, active && styles.edgeActive)}
-                    markerEnd={active ? 'url(#alv-arrow-active)' : 'url(#alv-arrow)'}
+                    markerEnd={active ? `url(#${uid}-arrow-active)` : `url(#${uid}-arrow)`}
                   />
                   {edge.label && (
                     <text x={labelAt[0]} y={labelAt[1]} textAnchor="middle" className={styles.edgeLabel}>
@@ -179,7 +181,8 @@ function Viz({ run }) {
         </div>
       </div>
 
-      <div className={styles.annotation}>
+      {/* 手动翻帧时读屏读出新说明；自动播放时不念，免得一直打断 */}
+      <div className={styles.annotation} aria-live={playing ? 'off' : 'polite'}>
         <div className={styles.annotationTitle}>{frame.title}</div>
         <div className={styles.annotationDesc}>{frame.desc}</div>
       </div>

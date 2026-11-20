@@ -1,10 +1,11 @@
-// 代码运行输出插件的单测（复制 Markdown 的在 copy-markdown.test.mjs）；
+// 代码运行输出插件和开头图片插件的单测（复制 Markdown 的在 copy-markdown.test.mjs）；
 // 外加一遍全站扫描，保证每个 run 围栏后面都跟着 output 围栏。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import remarkRunOutput, { parseStatus, parseHighlight, hasRunFlag } from '../plugins/remark-run-output.js';
+import remarkEagerLeadImage from '../plugins/remark-eager-lead-image.js';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 
@@ -84,4 +85,44 @@ test('全站每个 run 围栏后面都紧跟 output 围栏，没有落单的 out
     });
   }
   assert.deepEqual(problems, []);
+});
+
+const p = (...children) => ({ type: 'paragraph', children });
+const text = (value) => ({ type: 'text', value });
+const jsxImg = (src) => ({
+  type: 'mdxJsxTextElement', name: 'img',
+  attributes: [{ type: 'mdxJsxAttribute', name: 'src', value: src }],
+});
+const attr = (node, name) => node.attributes.find((a) => a.name === name)?.value;
+
+test('开头的图片改成立即加载、高优先级，后面的图不动', () => {
+  const lead = jsxImg('a.png');
+  const later = jsxImg('b.png');
+  const tree = { type: 'root', children: [
+    { type: 'mdxjsEsm', value: "import x from './x.mp4';" },
+    { type: 'heading', depth: 1, children: [text('标题')] },
+    p(text('第一段')),
+    p(lead),
+    p(later),
+  ] };
+  remarkEagerLeadImage()(tree);
+  assert.equal(attr(lead, 'loading'), 'eager');
+  assert.equal(attr(lead, 'fetchPriority'), 'high');
+  assert.equal(attr(later, 'loading'), undefined);
+});
+
+test('第一张图在第四个正文块之后就不算开头图', () => {
+  const img = jsxImg('a.png');
+  const tree = { type: 'root', children: [
+    p(text('1')), p(text('2')), p(text('3')), p(text('4')), p(img),
+  ] };
+  remarkEagerLeadImage()(tree);
+  assert.equal(attr(img, 'loading'), undefined);
+});
+
+test('外链图片（image 节点）同样处理', () => {
+  const img = { type: 'image', url: 'https://example.com/a.png' };
+  const tree = { type: 'root', children: [p(img)] };
+  remarkEagerLeadImage()(tree);
+  assert.deepEqual(img.data.hProperties, { loading: 'eager', fetchPriority: 'high' });
 });

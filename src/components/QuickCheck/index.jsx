@@ -5,6 +5,7 @@ import styles from './styles.module.css';
 // 快速检查：课文里一道当场判对错的单选题，不计分、可以改选，每个选项都有解释。
 // <QuickCheck question="…" options={[{ text, explain }, { text, correct: true, explain }]} />
 // 题干、选项、解释里的 `反引号` 渲染成行内代码。已注册到 MDX 全局，正文里直接写。
+// 选项是原生单选框（藏起圆点、整颗胶囊可点），键盘行为由浏览器提供：一个 Tab 停靠点，方向键换选项。
 
 const inline = (text) =>
   String(text).split(/(`[^`]+`)/g).map((part, i) =>
@@ -20,28 +21,30 @@ export default function QuickCheck({ question, options, label = '快速检查' }
   const result = feedback(options, picked);
 
   return (
-    <section className={styles.card} aria-labelledby={`${id}-q`}>
+    <div className={styles.card}>
       <p className={styles.label}>{label}</p>
-      <p id={`${id}-q`} className={styles.question}>{inline(question)}</p>
-      <div className={styles.options} role="radiogroup" aria-labelledby={`${id}-q`}>
-        {options.map((option, i) => {
-          const state = optionState(i, picked, result.correctIndex);
-          return (
-            <button
-              key={i}
-              type="button"
-              role="radio"
-              aria-checked={picked === i}
-              className={`${styles.option} ${styles[state] || ''}`}
-              onClick={() => setPicked(i)}
-            >
-              {state === 'correct' || state === 'answer' ? <span aria-hidden="true" className={styles.mark}>✓</span> : null}
-              {state === 'wrong' ? <span aria-hidden="true" className={styles.mark}>✗</span> : null}
-              {inline(option.text)}
-            </button>
-          );
-        })}
-      </div>
+      <fieldset className={styles.fieldset}>
+        <legend className={styles.question}>{inline(question)}</legend>
+        <div className={styles.options}>
+          {options.map((option, i) => {
+            const state = optionState(i, picked, result.correctIndex);
+            return (
+              <label key={i} className={`${styles.option} ${styles[state] || ''}`}>
+                <input
+                  type="radio"
+                  name={id}
+                  className={styles.radio}
+                  checked={picked === i}
+                  onChange={() => setPicked(i)}
+                />
+                {state === 'correct' || state === 'answer' ? <span aria-hidden="true" className={styles.mark}>✓</span> : null}
+                {state === 'wrong' ? <span aria-hidden="true" className={styles.mark}>✗</span> : null}
+                {inline(option.text)}
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
       <div className={styles.live} aria-live="polite">
         {result.status !== 'idle' && (
           <p className={`${styles.explain} ${styles[result.status]}`}>
@@ -50,6 +53,6 @@ export default function QuickCheck({ question, options, label = '快速检查' }
           </p>
         )}
       </div>
-    </section>
+    </div>
   );
 }

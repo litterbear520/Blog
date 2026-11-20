@@ -32,6 +32,14 @@
   opacity: 1 !important;
 }
 
-:global(.theme-code-block:hover) .buttonGroup button {
+/* 键盘聚焦到代码块（<pre> 可聚焦）时也露出按钮，不只靠鼠标悬停 */
+:global(.theme-code-block:is(:hover, :focus-within)) .buttonGroup button {
   opacity: 0.4;
+}
+
+/* 触屏没有悬停，按钮一直显示，否则读者发现不了复制和 ▷ 运行 */
+@media (hover: none) {
+  .buttonGroup button {
+    opacity: 1;
+  }
 }

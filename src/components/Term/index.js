@@ -6,6 +6,7 @@ import styles from './styles.module.css';
  * 术语提示：正文里的词加虚线下划线，悬停 / 键盘聚焦时在上方弹出解释。
  * 显示靠 CSS，可聚焦（tabIndex）并用 aria-describedby 关联，读屏和键盘都能拿到解释。
  * 弹层用 fixed 定位，不会被表格这类带滚动的容器裁掉；坐标在弹出时算，见 placement.mjs。
+ * 按 Esc 关掉（焦点和鼠标不用移开）；鼠标可以移到弹层上，方便放大镜用户和选中文字。
  *
  *   <Term tip="读取局部变量">LOAD_FAST</Term>
  */
@@ -32,17 +33,24 @@ export default function Term({ tip, children }) {
     el.dataset.side = side;
   }, []);
 
+  const onKey = useCallback((e) => {
+    if (e.key === 'Escape' && termRef.current) termRef.current.dataset.dismissed = '';
+  }, []);
+
   const unfollow = useCallback(() => {
     window.removeEventListener('scroll', place, true);
     window.removeEventListener('resize', place);
-  }, [place]);
+    window.removeEventListener('keydown', onKey);
+    if (termRef.current) delete termRef.current.dataset.dismissed;
+  }, [place, onKey]);
 
   // fixed 不随页面滚动，弹出期间跟着词走；capture 才收得到表格内部的滚动
   const show = useCallback(() => {
     place();
     window.addEventListener('scroll', place, { capture: true, passive: true });
     window.addEventListener('resize', place);
-  }, [place]);
+    window.addEventListener('keydown', onKey);
+  }, [place, onKey]);
 
   useEffect(() => unfollow, [unfollow]);
 

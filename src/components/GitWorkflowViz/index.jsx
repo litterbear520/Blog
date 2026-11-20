@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { Cloud, GitBranch, HardDrive, Pause, Play, RotateCcw, SkipBack, SkipForward } from "lucide-react";
 import { BRANCH_NAME, COMMITS, STEPS } from "./steps";
 import styles from "./styles.module.css";
@@ -56,6 +56,8 @@ function arrowEndpoints(arrow, step) {
 
 export default function GitWorkflowViz() {
   const [step, setStep] = useState(0);
+  // 同一页放两个动画时箭头 marker 的 id 不能重复；useId 带的标点在 url(#…) 里要去掉
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const [playing, setPlaying] = useState(false);
   const timer = useRef(null);
   const total = STEPS.length;
@@ -83,10 +85,10 @@ export default function GitWorkflowViz() {
       <div className={styles.svgWrap}>
         <svg viewBox={`0 0 ${W} ${H}`} className={styles.svg} role="img" aria-label={`Git 工作流第 ${step + 1} 步：${s.title}`}>
           <defs>
-            <marker id="gwv-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <marker id={`${uid}-arrow`} markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
               <polygon points="0 0, 8 3, 0 6" className={styles.arrowHead} />
             </marker>
-            <marker id="gwv-arrow-hl" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <marker id={`${uid}-arrow-hl`} markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
               <polygon points="0 0, 8 3, 0 6" className={styles.arrowHeadHl} />
             </marker>
           </defs>
@@ -148,7 +150,7 @@ export default function GitWorkflowViz() {
                                 y2={y}
                                 className={isHl ? styles.edgeHl : styles.edge}
                                 strokeDasharray={c.dirty ? "4 3" : undefined}
-                                markerEnd={isHl ? "url(#gwv-arrow-hl)" : "url(#gwv-arrow)"}
+                                markerEnd={isHl ? `url(#${uid}-arrow-hl)` : `url(#${uid}-arrow)`}
                               />
                             )}
                             <rect x={x - NODE_W / 2} y={y - NODE_H / 2} width={NODE_W} height={NODE_H} rx={7} className={cls} />
@@ -173,14 +175,15 @@ export default function GitWorkflowViz() {
                 key={`${step}-${i}`}
                 x1={e.x} y1={e.y1} x2={e.x} y2={e.y2}
                 className={`${styles.transfer} ${styles.appear}`}
-                markerEnd="url(#gwv-arrow-hl)"
+                markerEnd={`url(#${uid}-arrow-hl)`}
               />
             );
           })}
         </svg>
       </div>
 
-      <div className={styles.annotation}>
+      {/* 手动翻帧时读屏读出新说明；自动播放时不念，免得一直打断 */}
+      <div className={styles.annotation} aria-live={playing ? "off" : "polite"}>
         <div className={styles.annotationHead}>
           <span className={styles.stepBadge}>{step + 1}</span>
           <span className={styles.annotationTitle}>{s.title}</span>

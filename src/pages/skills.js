@@ -1,7 +1,6 @@
 // src/pages/skills.js
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
-import Head from '@docusaurus/Head';
 import clsx from 'clsx';
 import SkillCard from '@site/src/components/SkillCard';
 import { CATEGORIES, SKILLS } from '@site/src/data/skills';
@@ -22,14 +21,7 @@ export default function SkillsPage() {
 
   return (
     <Layout title="Skills" description="我常用的和自己创建的 Claude 技能">
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-
-      <div className={styles.page}>
+      <main className={styles.page}>
         <header className={styles.hero}>
           <span className={styles.heroLabel}>Skill Hub</span>
           <h1 className={styles.heroTitle}>Skills</h1>
@@ -37,11 +29,12 @@ export default function SkillsPage() {
           <div className={styles.heroDivider} />
         </header>
 
-        <nav className={styles.filters}>
+        <div className={styles.filters} role="group" aria-label="按分类筛选">
           {FILTERS.map((filter) => (
             <button
               key={filter}
               type="button"
+              aria-pressed={activeFilter === filter}
               className={clsx(
                 styles.filterBtn,
                 activeFilter === filter && styles.filterActive,
@@ -55,7 +48,7 @@ export default function SkillsPage() {
               <span className={styles.filterCount}>{countOf(filter)}</span>
             </button>
           ))}
-        </nav>
+        </div>
 
         <section className={styles.grid}>
           {filtered.map((skill, i) => (
@@ -70,7 +63,7 @@ export default function SkillsPage() {
             />
           ))}
         </section>
-      </div>
+      </main>
     </Layout>
   );
 }

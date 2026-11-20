@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
 
@@ -66,6 +66,18 @@ export default function McpQuiz({ questions, passingPercentage = 70 }) {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const confirmId = useId();
+  const submitRef = useRef(null);
+  const backRef = useRef(null);
+  // 确认框出现时焦点移到“返回”（安全的那个选项），读屏会读出它所在的确认框；
+  // 点“返回”后焦点回到“提交”
+  useEffect(() => {
+    if (confirming) backRef.current?.focus();
+  }, [confirming]);
+  const cancelConfirm = () => {
+    setConfirming(false);
+    submitRef.current?.focus();
+  };
   const [attempt, setAttempt] = useState(1);
   // orders[qi] = 该题展示顺序对应的原始选项下标；answers 里存的是原始下标
   const [orders, setOrders] = useState(() => identityOrders(questions));
@@ -205,6 +217,7 @@ export default function McpQuiz({ questions, passingPercentage = 70 }) {
           </button>
           {isLast ? (
             <button
+              ref={submitRef}
               type="button"
               onClick={() => (unanswered > 0 ? setConfirming(true) : submit())}
               className={clsx(styles.btn, styles.btnPrimary)}
@@ -224,13 +237,19 @@ export default function McpQuiz({ questions, passingPercentage = 70 }) {
       </div>
 
       {confirming && (
-        <div className={styles.confirm} role="alertdialog" aria-labelledby="mcp-quiz-confirm-title">
-          <p id="mcp-quiz-confirm-title" className={styles.confirmTitle}>
+        // 页内的确认提示，不是模态框，所以用 group 而不是 alertdialog
+        <div
+          className={styles.confirm}
+          role="group"
+          aria-labelledby={`${confirmId}-title`}
+          aria-describedby={`${confirmId}-body`}
+        >
+          <p id={`${confirmId}-title`} className={styles.confirmTitle}>
             有 {unanswered} 道题未作答，确定提交？
           </p>
-          <p className={styles.confirmBody}>未作答的题目将被视为答错。</p>
+          <p id={`${confirmId}-body`} className={styles.confirmBody}>未作答的题目将被视为答错。</p>
           <div className={styles.confirmActions}>
-            <button type="button" onClick={() => setConfirming(false)} className={clsx(styles.btn, styles.btnSecondary)}>
+            <button ref={backRef} type="button" onClick={cancelConfirm} className={clsx(styles.btn, styles.btnSecondary)}>
               返回
             </button>
             <button type="button" onClick={submit} className={clsx(styles.btn, styles.btnPrimary)}>

@@ -27,19 +27,29 @@
 }
 
 /* 按钮放在标题旁边、不放进 h1 里，读屏时标题不会多出“复制页面”几个字。
-   Root.js 给标题所在的 header 加上 copy-md-row：标题和按钮同一行，header 里的其他内容（博客的日期）另起一行 */
-:global(.copy-md-row) {
+   标题和按钮同一行，header 里的其他内容（博客的日期）另起一行。
+   按钮要等页面加载后由 Root.js 插进来；为了插入时正文不跳，笔记、路线和博文页的 header
+   从首次渲染起就按这个两列布局排好，窄屏先空出按钮那一行的高度。
+   这几类页面线上都有 .md，按钮一定会来；本地开发服务器没有 .md，会留一块空白。
+   Root.js 加的 copy-md-row 类留给别的页面（标题不在这两种 header 里的情况）。 */
+:global(.copy-md-row),
+:global(html.docs-doc-page article .markdown > header),
+:global(html.blog-post-page article > header) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   column-gap: 16px;
   align-items: start;
 }
 
-:global(.copy-md-row) > * {
+:global(.copy-md-row) > *,
+:global(html.docs-doc-page article .markdown > header) > *,
+:global(html.blog-post-page article > header) > * {
   grid-column: 1 / -1;
 }
 
-:global(.copy-md-row) > h1 {
+:global(.copy-md-row) > h1,
+:global(html.docs-doc-page article .markdown > header) > h1,
+:global(html.blog-post-page article > header) > h1 {
   grid-column: 1;
   grid-row: 1;
 }
@@ -51,8 +61,16 @@
 
 /* 窄屏：照参考站的手机版，按钮挪到标题下面靠左（博客文章在日期下面），尺寸不变 */
 @media (max-width: 1023px) {
-  :global(.copy-md-row) {
+  :global(.copy-md-row),
+  :global(html.docs-doc-page article .markdown > header),
+  :global(html.blog-post-page article > header) {
     column-gap: 0;
+  }
+
+  /* 按钮还没插进来时先空出它的位置：按钮高 28px + 下边距 20px */
+  :global(html.docs-doc-page article .markdown > header:not(:has(> [data-copy-md-btn]))),
+  :global(html.blog-post-page article > header:not(:has(> [data-copy-md-btn]))) {
+    padding-bottom: 48px;
   }
 
   :global(.copy-md-row) > [data-copy-md-btn] {

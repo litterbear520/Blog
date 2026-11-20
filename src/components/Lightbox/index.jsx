@@ -41,10 +41,8 @@ export default function Lightbox({ label, onClose, children }) {
     const dialog = dialogRef.current;
     if (!dialog) return undefined;
     if (!dialog.open) dialog.showModal();
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    // 背后页面不滚动靠 CSS 的 overscroll-behavior，不改 body 的 overflow（那样滚动条会消失、页面横跳）
     return () => {
-      document.body.style.overflow = prevOverflow;
       if (dialog.open) dialog.close();
     };
   }, []);

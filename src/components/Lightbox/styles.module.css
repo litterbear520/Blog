@@ -46,6 +46,7 @@
 .dialog {
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   max-width: none;
   max-height: none;
   margin: 0;
@@ -55,7 +56,16 @@
   overflow: hidden;
 }
 
+/* 滚动不传到背后的页面。Chrome/Edge 144+、Firefox 150+ 全面生效；
+   Safari 只在长图内部滚到头时不传，背后页面仍可能被滚动 */
+.dialog:modal,
+.scroller {
+  overscroll-behavior: contain;
+}
+
 .dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
   background: rgba(0, 0, 0, 0.86);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);

@@ -1,10 +1,10 @@
 // src/components/SkillCard/index.js
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import clsx from 'clsx';
 import { Check, Copy, Github, X } from 'lucide-react';
 import styles from './styles.module.css';
 
-function CopyButton({ command, tabbable }) {
+function CopyButton({ command }) {
   // 状态：idle → copied / failed，2 秒后回到 idle
   const [state, setState] = useState('idle');
 
@@ -20,11 +20,11 @@ function CopyButton({ command, tabbable }) {
   };
 
   return (
+    <>
     <button
       className={styles.copyBtn}
       onClick={handleCopy}
       type="button"
-      tabIndex={tabbable ? 0 : -1}
       aria-label={state === 'failed' ? '复制失败，请手动复制' : '复制命令'}
       title={state === 'failed' ? '复制失败，请手动复制' : '复制'}
     >
@@ -36,27 +36,32 @@ function CopyButton({ command, tabbable }) {
         <Copy size={14} />
       )}
     </button>
+    <span role="status" className={styles.srOnly}>
+      {state === 'copied' ? '已复制' : ''}
+    </span>
+    </>
   );
 }
 
 export default function SkillCard({ skill, expanded, onToggle, delay }) {
+  const detailId = useId();
   return (
+    // 开合由标题里的按钮负责；卡片上的点击只是给鼠标的方便，按钮的点击也冒泡到这里
     <article
       className={clsx(styles.card, expanded && styles.cardExpanded)}
       style={{ '--delay': `${delay}ms` }}
       onClick={onToggle}
-      role="button"
-      tabIndex={0}
-      aria-expanded={expanded}
-      onKeyDown={(e) => {
-        if (e.target !== e.currentTarget) return; // 内部按钮/链接的按键不触发卡片开合
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onToggle();
-        }
-      }}
     >
-      <h2 className={styles.cardName}>{skill.name}</h2>
+      <h2 className={styles.cardName}>
+        <button
+          type="button"
+          className={styles.toggle}
+          aria-expanded={expanded}
+          aria-controls={detailId}
+        >
+          {skill.name}
+        </button>
+      </h2>
       <p className={clsx(styles.cardDesc, !expanded && styles.cardDescClamp)}>
         {skill.description}
       </p>
@@ -64,12 +69,16 @@ export default function SkillCard({ skill, expanded, onToggle, delay }) {
         <span>{skill.author}</span>
         <span className={styles.cardBadge}>{skill.category}</span>
         <span className={styles.cardBadge}>{skill.source}</span>
-        <span className={clsx(styles.cardChevron, expanded && styles.chevronUp)}>
+        <span
+          className={clsx(styles.cardChevron, expanded && styles.chevronUp)}
+          aria-hidden="true"
+        >
           ▾
         </span>
       </div>
 
-      <div className={styles.cardDetail}>
+      {/* 收起时 inert：读屏和 Tab 都跳过详情，只剩视觉上的收起动画 */}
+      <div className={styles.cardDetail} id={detailId} inert={!expanded}>
         <div className={styles.cardDetailInner}>
           <div className={styles.cardDetailContent}>
             {skill.install.map((item) => (
@@ -77,7 +86,7 @@ export default function SkillCard({ skill, expanded, onToggle, delay }) {
                 <span className={styles.installLabel}>{item.label}</span>
                 <div className={styles.installRow}>
                   <code className={styles.installCommand}>{item.command}</code>
-                  <CopyButton command={item.command} tabbable={expanded} />
+                  <CopyButton command={item.command} />
                 </div>
               </div>
             ))}
@@ -86,7 +95,6 @@ export default function SkillCard({ skill, expanded, onToggle, delay }) {
               href={skill.repo}
               target="_blank"
               rel="noopener noreferrer"
-              tabIndex={expanded ? 0 : -1}
               onClick={(e) => e.stopPropagation()}
             >
               <Github size={15} />
