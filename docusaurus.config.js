@@ -56,6 +56,7 @@ const config = {
         path: './roadmap',
         routeBasePath: 'roadmap',
         sidebarPath: './sidebarsRoadmap.js',
+        showLastUpdateTime: true, // 页底显示最后更新时间；sitemap 的 lastmod 也靠它读 git 历史
         admonitions: { keywords: ['important'], extendDefaults: true }, // 补上 GitHub alerts 的 IMPORTANT 类型，组件见 src/theme/Admonition/Types.js
         remarkPlugins: [remarkMath, remarkRunOutput, remarkEagerLeadImage],
         rehypePlugins: [rehypeKatex],
@@ -70,12 +71,14 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
+          showLastUpdateTime: true, // 页底显示最后更新时间；sitemap 的 lastmod 也靠它读 git 历史
           admonitions: { keywords: ['important'], extendDefaults: true }, // 补上 GitHub alerts 的 IMPORTANT 类型，组件见 src/theme/Admonition/Types.js
           remarkPlugins: [remarkMath, remarkRunOutput, remarkEagerLeadImage],
           rehypePlugins: [rehypeKatex],
         },
         blog: {
           showReadingTime: true,
+          showLastUpdateTime: true, // 页底显示最后更新时间；sitemap 的 lastmod 也靠它读 git 历史
           admonitions: { keywords: ['important'], extendDefaults: true }, // 补上 GitHub alerts 的 IMPORTANT 类型，组件见 src/theme/Admonition/Types.js
           remarkPlugins: [remarkRunOutput, remarkEagerLeadImage],
           routeBasePath: '/blog',
@@ -93,7 +96,8 @@ const config = {
         theme: {
           customCss: './src/css/custom.css',
         },
-        // 官方推荐写法（v4 的默认值）：lastmod 取 git 提交时间，搜索引擎不看的 priority/changefreq 不输出
+        // 官方推荐写法（v4 的默认值）：lastmod 取 git 提交时间（要求三个内容插件开 showLastUpdateTime），
+        // 搜索引擎不看的 priority/changefreq 不输出
         sitemap: {
           lastmod: 'date',
           priority: null,
