@@ -20,8 +20,8 @@ export function buildTree(paths) {
       }
     });
   }
-  const sort = (nodes) => [...nodes]
-    .sort((a, b) => a.type === b.type ? a.name.localeCompare(b.name) : a.type === 'folder' ? -1 : 1)
+  const sort = (nodes) => nodes
+    .toSorted((a, b) => a.type === b.type ? a.name.localeCompare(b.name) : a.type === 'folder' ? -1 : 1)
     .map((node) => node.type === 'folder' ? { ...node, children: sort(node.children) } : node);
   return sort(root.children);
 }
