@@ -2,6 +2,7 @@
 slug: ambitious-with-ai
 title: 如何更有雄心地使用 AI
 date: 2026-10-19
+image: /img/blog/hero-ambitious-with-ai.jpg
 ---
 
 import Tabs from '@theme/Tabs';

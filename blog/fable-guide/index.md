@@ -2,6 +2,7 @@
 slug: fable-guide
 title: 探索你的未知领域
 date: 2026-07-04
+image: /img/blog/hero-field-guide-fable.jpg
 ---
 
 import Tabs from '@theme/Tabs';

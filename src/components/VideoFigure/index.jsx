@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Pause, Play } from 'lucide-react';
 import { attachLazyVideo } from './lazy.mjs';
 import styles from './styles.module.css';
 
@@ -12,7 +13,8 @@ import styles from './styles.module.css';
 // - 封面图和视频索引都是滚到视口附近才加载，视口外的视频打开页面时一个请求都不发；逻辑见 lazy.mjs。
 // - eager：文章开头、首屏就能看到的视频加上，封面图直接写进标记，不等脚本。
 // - preload="none"：始终不预取，点播放才发请求。索引很大的长视频用。
-// - loop：无声循环短片，当动图用。进视口自动播、出视口暂停，不显示控件。
+// - loop：无声循环短片，当动图用。进视口自动播、出视口暂停，不显示原生控件；
+//   右下角有暂停 / 播放按钮（超过 5 秒的动画要能停下），读者暂停后不再自动播。
 // - 不写图注时只有视频本身，可以放进 Tabs，图注另写在下面。
 // - 视频文件用 H.264 MP4，导出时把索引放在文件开头（ffmpeg 的 -movflags +faststart）。
 
@@ -32,31 +34,60 @@ export default function VideoFigure({
 }) {
   const videoRef = useRef(null);
   const [failed, setFailed] = useState(false);
+  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     if (!videoRef.current) return undefined;
     return attachLazyVideo(videoRef.current, { loop, preload, poster: eager ? undefined : poster });
   }, [src, poster, eager, loop, preload]);
 
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      delete video.dataset.userPaused;
+      video.play()?.catch(() => {});
+    } else {
+      video.dataset.userPaused = '';
+      video.pause();
+    }
+  };
+
   return (
     <figure className={styles.figure}>
-      <video
-        ref={videoRef}
-        className={styles.video}
-        controls={!loop}
-        loop={loop}
-        muted={loop}
-        playsInline
-        preload="none"
-        poster={eager ? poster : undefined}
-        width={width}
-        height={height}
-        aria-label={label}
-        style={{ aspectRatio: `${width} / ${height}` }}
-      >
-        <source src={src} type={typeOf(src)} onError={() => setFailed(true)} />
-        <a href={src}>下载视频</a>
-      </video>
+      <div className={styles.frame}>
+        <video
+          ref={videoRef}
+          className={styles.video}
+          controls={!loop}
+          loop={loop}
+          muted={loop}
+          playsInline
+          preload="none"
+          poster={eager ? poster : undefined}
+          width={width}
+          height={height}
+          aria-label={label}
+          style={{ aspectRatio: `${width} / ${height}` }}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+        >
+          <source src={src} type={typeOf(src)} onError={() => setFailed(true)} />
+          <a href={src}>下载视频</a>
+        </video>
+        {/* 按钮文字随状态变，所以不加 aria-pressed */}
+        {loop && (
+          <button
+            type="button"
+            className={styles.playToggle}
+            onClick={togglePlay}
+            aria-label={playing ? '暂停动画' : '播放动画'}
+            title={playing ? '暂停' : '播放'}
+          >
+            {playing ? <Pause size={14} aria-hidden="true" /> : <Play size={14} aria-hidden="true" />}
+          </button>
+        )}
+      </div>
       {failed && (
         <p className={styles.failed}>
           视频没能加载，可以<a href={src}>直接下载</a>后观看。

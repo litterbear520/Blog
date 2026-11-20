@@ -131,7 +131,8 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      // 分享预览图：首页壁纸 + 站名，1200×630；有头图的博文在 frontmatter 写 image 用自己的头图
+      image: 'img/social-card.jpg',
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: false,

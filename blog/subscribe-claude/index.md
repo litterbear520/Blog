@@ -2,6 +2,7 @@
 slug: subscribe-claude
 title: 如何自己订阅Claude
 date: 2026-05-08
+image: /img/blog/hero-subscribe-claude.png
 ---
 
 ![如何自己订阅 Claude](/img/blog/hero-subscribe-claude.png)

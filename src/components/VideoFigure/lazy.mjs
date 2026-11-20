@@ -4,7 +4,8 @@
 // 滚到离视口 POSTER_MARGIN 以内先加载封面图；再近到 NEAR_MARGIN 以内才改成 preload="metadata"，
 // 浏览器这时取文件开头的索引，读者滚到跟前时封面、时长和进度条都已就绪，点播放才下载正片。
 // 首屏就能看到的视频由组件直接把 poster 写进标记（eager），不走这里，免得封面等脚本加载完才出现。
-// 循环短片（loop）进入视口才播放，离开就暂停；系统开了“减少动态效果”时不自动播，改成显示控件。
+// 循环短片（loop）进入视口才播放，离开就暂停；系统开了“减少动态效果”时不自动播。
+// 读者用组件里的暂停按钮停下后（video.dataset.userPaused），再进视口也不自动播。
 
 export const POSTER_MARGIN = '1200px 0px';
 export const NEAR_MARGIN = '600px 0px';
@@ -62,15 +63,15 @@ export function attachLazyVideo(video, { loop = false, preload = 'near', poster 
     // 服务端渲染出的 HTML 里没有 muted 属性，不手动静音浏览器不肯自动播放
     video.muted = true;
     if (!autoplay) {
-      video.controls = true;
+      // 不自动播，读者用组件里的播放按钮开始
     } else if (!hasObserver) {
       video.play()?.catch(() => {});
     } else {
       const visible = new IntersectionObserver(
         (entries) => {
           const entry = entries[entries.length - 1];
-          if (entry.isIntersecting) video.play()?.catch(() => {});
-          else video.pause();
+          if (!entry.isIntersecting) video.pause();
+          else if (video.dataset.userPaused === undefined) video.play()?.catch(() => {});
         },
         { threshold: 0.25 },
       );

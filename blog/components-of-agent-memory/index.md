@@ -4,6 +4,7 @@ title: Agent 记忆的组成部分
 date: 2026-11-07
 description: Anthropic 怎样给 Claude 设计记忆：会话中写记忆笔记，会话外靠“做梦”对照会话记录纠错、构建 wiki、决定每个会话预先加载什么，附 CL-Bench、宝可梦和法律文档上的实验。
 toc_max_heading_level: 2
+image: /img/blog/components-of-agent-memory.jpg
 ---
 
 ![两个带网格纹的半圆，一绿一粉，隔着一道空隙在浅蓝底上相对。](/img/blog/components-of-agent-memory.jpg)

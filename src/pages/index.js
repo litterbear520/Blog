@@ -192,10 +192,11 @@ function HomepageHeader() {
 
 export default function Home() {
   return (
-    <Layout>
-      <HomepageHeader />
+    <Layout description="小熊的个人技术博客：AI Agent、Claude Code、MCP、服务器与网络、编程笔记">
       <main>
-        {/* No content here, or add other components as needed */}
+        {/* 首页只放壁纸；标题给读屏和搜索引擎，视觉上不显示 */}
+        <h1 className={styles.visuallyHidden}>小熊的博客</h1>
+        <HomepageHeader />
       </main>
     </Layout>
   );

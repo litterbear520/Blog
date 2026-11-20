@@ -2,6 +2,7 @@
 slug: html-effectiveness
 title: HTML 的惊人效果
 date: 2026-07-08
+image: /img/blog/hero-html-effectiveness.jpg
 ---
 
 import Tabs from '@theme/Tabs';
