@@ -54,9 +54,13 @@ jobs:
           done
           exit 1
 
-      # 测试上面已经单独跑过，这里跳过 prebuild 不再重复
+      # 测试上面已经单独跑过，这里跳过 prebuild 不再重复。
+      # Docusaurus 用 git log --name-status 一次读出每个文件的最后提交时间；git 默认把中文文件名
+      # 转义成 "\345..."，和真实路径对不上，中文路径的页面就没有最后更新时间和 sitemap 的 lastmod
       - name: Build site
-        run: npm run build --ignore-scripts
+        run: |
+          git config --global core.quotepath false
+          npm run build --ignore-scripts
 
       # 线上版本的标记：部署后靠它确认新版本到了，下次 push 靠它算改动范围
       - name: Write revision marker
