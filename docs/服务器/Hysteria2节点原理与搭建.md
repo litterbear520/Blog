@@ -3,6 +3,9 @@ sidebar_position: 2.8
 description: Hysteria 2（HY2）节点为什么快、哪些网络不适合：Brutal 和 TCP 两种拥塞控制、TCP 节点与 UDP 节点的区别，用 3x-ui 搭建带域名证书的 HY2 节点，再和 Reality 在高端、低端 VPS 上对比测速。
 ---
 
+import overtakingClip from './image/Hysteria2节点原理与搭建/overtaking.mp4';
+import overtakingPoster from './image/Hysteria2节点原理与搭建/overtaking-poster.jpg';
+
 # Hysteria 2 节点原理与搭建
 
 <ReadMore id="简介" label="简介" title="0基础搭建HY2高速翻墙节点 | Hysteria强在哪？有哪些缺点？| 什么是拥塞控制？| HY2搭建全流程 | 无限芝士">
@@ -78,7 +81,7 @@ HY2 节点之所以快，其最核心的优势，就是内置独家 Brutal 拥�
 
 就像两台车同时遇到堵车，Reality 会放慢速度排队，保证车辆平稳行驶。而 HY2 则想办法疯狂超车、变道，尽量往前挤。
 
-![堵车时，Reality 减速排队、让出主干道，HY2 派出更多车辆连续变道、抢空位通过](image/Hysteria2节点原理与搭建/overtaking.gif)
+<VideoFigure loop src={overtakingClip} poster={overtakingPoster} width={1080} height={258} label="堵车时，Reality 减速排队、让出主干道，HY2 派出更多车辆连续变道、抢空位通过" />
 
 前者是一种君子协议，大家都遵守规定，有序排队。后者说直接点就是流氓协议，有带宽就抢，有空就占，主打一个力大砖飞。因此 HY2 可以理解为一种强效加速器，能榨干你服务器的物理带宽。
 

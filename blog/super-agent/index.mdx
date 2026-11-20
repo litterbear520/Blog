@@ -8,6 +8,12 @@ toc_max_heading_level: 2
 
 import superAgentVideo from './super-agent.mp4';
 import superAgentPoster from './super-agent-poster.jpg';
+import triggerFilterClip from './trigger-filter.mp4';
+import triggerFilterPoster from './trigger-filter-poster.jpg';
+import eventDrivenClip from './event-driven.mp4';
+import eventDrivenPoster from './event-driven-poster.jpg';
+import storageComputeClip from './storage-compute.mp4';
+import storageComputePoster from './storage-compute-poster.jpg';
 
 <VideoFigure
   src={superAgentVideo}
@@ -47,11 +53,11 @@ DeepSeek Super-agent 是什么？跟普通 agent 有什么区别？
 
 所以这里分两层筛选，先用写死的规则，按来源、发消息的人和所在的群，把明显没用的挡掉。剩下的再交给大模型判断，值不值得动手。这些从群、GitHub、CI 传入的消息就叫 Trigger。用 Trigger 驱动 agent 干活的模式，就是事件驱动。
 
-![上千条消息先被写死的规则挡掉大半，剩下的再经大模型筛一遍，只有少数送到 Router](./trigger-filter.gif)
+<VideoFigure loop src={triggerFilterClip} poster={triggerFilterPoster} width={960} height={430} label="上千条消息先被写死的规则挡掉大半，剩下的再经大模型筛一遍，只有少数送到 Router" />
 
 普通 agent 要等你打字才动。而在事件驱动里，有人在群里随口说了句，“某个功能好像挂了”，没 @ 任何人，过一会就有个 Worker 自己复现、修好，提了个 PR 上来。我们可以自定义新增不同类型的 Trigger，比如日程提醒或者一封会议邀约邮件，通过不同的方式，唤醒 AI 干活。
 
-![普通 agent 一直等着回车；事件驱动这边，群里一句没 @ 人的话就让 Worker 自己复现、修好并提了 PR](./event-driven.gif)
+<VideoFigure loop src={eventDrivenClip} poster={eventDrivenPoster} width={960} height={412} label="普通 agent 一直等着回车；事件驱动这边，群里一句没 @ 人的话就让 Worker 自己复现、修好并提了 PR" />
 
 ## 订阅和直通
 
@@ -89,7 +95,7 @@ agent 跑在你这台机器上，推着它一步步思考的循环、它的会�
 
 可思考搬上云了，命令最终还得在机器上跑。干活用的环境要是也搬上云，你本地有没提交的改动，只有内网能连的服务，一堆私人凭据，搬起来又麻烦又容易漏。所以环境留在本地，每台机器上只放一个很轻的小程序，听云上的指令，在本地跑命令，再把结果传回去。这种把思考和会话记录搬上云，执行环境留在本地的拆法，就是所谓的存算分离。
 
-![思考和会话记录在云上，每台机器只跑一个小程序，接收云上的指令，在本地执行后把结果传回](./storage-compute.gif)
+<VideoFigure loop src={storageComputeClip} poster={storageComputePoster} width={960} height={468} label="思考和会话记录在云上，每台机器只跑一个小程序，接收云上的指令，在本地执行后把结果传回" />
 
 普通 agent 跟一台机器绑在一起，机器一睡，它就停，也用不了别的机器。存算分离之后，它一直在云上在线，哪台机器开着就用哪台。你合上笔记本，它照样在群里接活，在别的机器上干活。需要你笔记本才能做的，等它重新上线，再自动接着做。
 

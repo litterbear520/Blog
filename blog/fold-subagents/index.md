@@ -5,6 +5,11 @@ date: 2026-10-27
 toc_max_heading_level: 2
 ---
 
+import fiveLayersVsOneLoopClip from './five-layers-vs-one-loop.mp4';
+import fiveLayersVsOneLoopPoster from './five-layers-vs-one-loop-poster.jpg';
+import foldingInSubagentsClip from './folding-in-subagents.mp4';
+import foldingInSubagentsPoster from './folding-in-subagents-poster.jpg';
+
 在 Claude Platform 上构建 Agent 时，少用子代理，改用<Term tip="Agent 平时只看到简短的描述，真正需要时才加载完整内容">渐进式披露</Term>的上下文和工具，往往能在提升质量的同时降低成本和延迟。本文讲什么时候该迁移、怎么迁移。
 
 :::note
@@ -23,7 +28,7 @@ toc_max_heading_level: 2
 
 遇到这种方案，我们给的反馈往往是：这些结构大多在替模型做它早已不需要别人代劳的事；一个清晰的系统提示词、4–5 个轻量的数据工具，再加上严格的输出护栏，就能覆盖大部分用例。
 
-![常见做法是在模型外面套五层结构，我们通常建议的是一个循环：一个系统提示词、4–5 个工具和输出护栏](./five-layers-vs-one-loop.gif)
+<VideoFigure loop src={fiveLayersVsOneLoopClip} poster={fiveLayersVsOneLoopPoster} width={2024} height={884} label="常见做法是在模型外面套五层结构，我们通常建议的是一个循环：一个系统提示词、4–5 个工具和输出护栏" />
 
 需要说明的是，子代理仍然有它的用武之地，在前沿研究中也是如此。遇到下面这些情况时适合用子代理：
 
@@ -97,7 +102,7 @@ toc_max_heading_level: 2
 
 走向单 Agent 循环，就是把子代理逐步并入工具和技能。具体有三种做法：合并领域子代理、把子代理当作工具来调用，或者用技能和工具取代子代理。
 
-![并入子代理的三种做法：合并共享上下文的子代理；主 Agent 把子代理当作工具调用并继续主持对话；把子代理的提示词变成技能、API 调用变成工具](./folding-in-subagents.gif)
+<VideoFigure loop src={foldingInSubagentsClip} poster={foldingInSubagentsPoster} width={2024} height={892} label="并入子代理的三种做法：合并共享上下文的子代理；主 Agent 把子代理当作工具调用并继续主持对话；把子代理的提示词变成技能、API 调用变成工具" />
 
 ### 合并领域 Agent
 

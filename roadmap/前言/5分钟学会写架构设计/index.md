@@ -4,6 +4,13 @@ title: 5分钟学会写架构设计
 description: 通过重构一个课程报名的用例，把代码拆成 domain、service、api、db 四层，学会依赖倒置和依赖注入。
 ---
 
+import layerVolatilityClip from './layer-volatility.mp4';
+import layerVolatilityPoster from './layer-volatility-poster.jpg';
+import layerDependencyClip from './layer-dependency.mp4';
+import layerDependencyPoster from './layer-dependency-poster.jpg';
+import serverPostgresClip from './server-postgres.mp4';
+import serverPostgresPoster from './server-postgres-poster.jpg';
+
 # 5分钟学会写架构设计
 
 AI 在编程上的设计能力基本为零。举个例子，我让 AI 帮我实现一个课程报名的用例，它有可能实现成这样。先从数据库里取数据，然后写几个 `if` 判断，根据判断的结果抛出 `HTTPException`，又或者是把结果存储到数据库里面。
@@ -30,11 +37,11 @@ AI 在编程上的设计能力基本为零。举个例子，我让 AI 帮我实�
 
 像 api 和 db 就是容易变化的层，我们很有可能哪天突然想从 Flask 换成 FastAPI，或者从 SQLite 换成 Postgres。而 domain 就是不容易变化的层，人满了就是没法报上名，这一点无论技术怎么变都不会变。
 
-![api 和 db 容易变化，移到上面；domain 不容易变化，沉到下面](./layer-volatility.gif)
+<VideoFigure loop src={layerVolatilityClip} poster={layerVolatilityPoster} width={960} height={496} label="api 和 db 容易变化，移到上面；domain 不容易变化，沉到下面" />
 
 而 service 刚好在中间，没有 domain 层那么固定，但也没有 api 或者 db 那么灵活。于是我们可以得到一条依赖关系，db 和 api 依赖于 service，service 依赖于 domain。
 
-![api 和 db 依赖 service，service 依赖 domain](./layer-dependency.gif)
+<VideoFigure loop src={layerDependencyClip} poster={layerDependencyPoster} width={960} height={532} label="api 和 db 依赖 service，service 依赖 domain" />
 
 为了方便展示，这个用例比较小，所以在重构过程中，你可能会觉得似乎看起来更复杂了。但那只是因为这个用例太小了，对于现实中的用例，这样的重构肯定会是利大于弊的。接下来我们开始依次完成这几层。
 
@@ -90,7 +97,7 @@ AI 在编程上的设计能力基本为零。举个例子，我让 AI 帮我实�
 
 之后比如说我们要把 db 从 SQLite，换成 Postgres，也只需要把这里从 SQLite 换成 Postgres 就可以了，就像这样。这样我们就完成了从 SQLite 换成 Postgres，非常方便。
 
-![import 加上 PostgresDb，db 这一行换成 PostgresDb，其余组装代码不变](./server-postgres.gif)
+<VideoFigure loop src={serverPostgresClip} poster={serverPostgresPoster} width={1264} height={428} label="import 加上 PostgresDb，db 这一行换成 PostgresDb，其余组装代码不变" />
 
 那么到这里我们就完成了我们从一团乱麻到井井有条的重构。
 

@@ -5,9 +5,28 @@ date: 2026-11-01
 toc_max_heading_level: 2
 ---
 
+import agentLoopClip from './agent-loop.mp4';
+import agentLoopPoster from './agent-loop-poster.jpg';
+import workflowClip from './workflow.mp4';
+import workflowPoster from './workflow-poster.jpg';
+import workflowLoopClip from './workflow-loop.mp4';
+import workflowLoopPoster from './workflow-loop-poster.jpg';
+import adapterTranslationClip from './adapter-translation.mp4';
+import adapterTranslationPoster from './adapter-translation-poster.jpg';
+import dependencyInversionClip from './dependency-inversion.mp4';
+import dependencyInversionPoster from './dependency-inversion-poster.jpg';
+import modelClientsClip from './model-clients.mp4';
+import modelClientsPoster from './model-clients-poster.jpg';
+import compositionRootClip from './composition-root.mp4';
+import compositionRootPoster from './composition-root-poster.jpg';
+import forkClip from './fork.mp4';
+import forkPoster from './fork-poster.jpg';
+import compactClip from './compact.mp4';
+import compactPoster from './compact-poster.jpg';
+
 众所周知，agent 就是个循环，看起来非常简单。但如果真要做一个 agent，要考虑的问题其实不少。如何适配多种模型，如何确保命令执行安全，以及在模型快速进化的现在，要如何设计 harness 来保持可扩展性。这篇文章将从零设计一个 agent 后端。你不仅能了解一个 agent 到底应该怎么设计，更重要的是，这套设计思路可以移植到任何系统上。
 
-![Agent 循环本身只有几行，难点在于要接多家模型、防住危险的命令，还要给 harness 留出扩展的空间](./agent-loop.gif)
+<VideoFigure loop src={agentLoopClip} poster={agentLoopPoster} width={960} height={310} label="Agent 循环本身只有几行，难点在于要接多家模型、防住危险的命令，还要给 harness 留出扩展的空间" />
 
 {/* truncate */}
 
@@ -15,11 +34,11 @@ toc_max_heading_level: 2
 
 首先，让我们梳理一下一个 agent 后端的工作流程。第一步，开始一个新对话，或者继续之前的旧对话，然后收到前端发送的用户信息，接着将指令，可用工具，历史消息等信息组织成上下文，再将上下文发送给模型，收到模型回复。如果模型的回复中有工具调用，就另外调一次模型来审核工具调用是否合理。当然也需要另外组织一份上下文。接着，如果审核通过，就执行工具，并将执行结果，带着之前的上下文一起重新传给模型。如果审核不通过，就返回拒绝结果。
 
-![工作流程的前六步：开始或继续对话、收到用户消息、组织上下文、调用模型、审核工具调用、执行工具或拒绝](./workflow.gif)
+<VideoFigure loop src={workflowClip} poster={workflowPoster} width={1080} height={464} label="工作流程的前六步：开始或继续对话、收到用户消息、组织上下文、调用模型、审核工具调用、执行工具或拒绝" />
 
 重复前面的步骤 3 到步骤 6，直到模型的响应中不再有工具调用，或者循环次数达到上限，就结束这轮对话，将信息返回给前端。这个过程中，每条信息产生的时候，都会做持久化存储。
 
-![第 3 到第 6 步循环执行，没有工具调用或次数达到上限时结束，每条消息都会持久化](./workflow-loop.gif)
+<VideoFigure loop src={workflowLoopClip} poster={workflowLoopPoster} width={1080} height={542} label="第 3 到第 6 步循环执行，没有工具调用或次数达到上限时结束，每条消息都会持久化" />
 
 这个流程其实实现起来并不难。如果我们不带着任何设计去实现这个流程，大概就是一个函数负责其中一个步骤。但这样会让代码变得难以维护又难以测试。比如，想把使用的模型从 OpenAI 换成 Anthropic 的协议，得同时修改多个地方。又或者想要测试一下流程，却得真正调用模型，既花钱又很慢。
 
@@ -39,7 +58,7 @@ toc_max_heading_level: 2
 
 举个例子，如果要存储对话，我们的对话是一个 `Session` 对象，而存到 JSONL 文件里是一行行的 JSON，存进数据库是表里一条条记录。我们需要做一个翻译的动作，才能让 `Session` 顺利地在我们的系统和外部之间流动。于是有了适配层。
 
-![适配层把同一个 Session 翻译成 JSONL 的一行行记录，或数据库表里的一条条记录](./adapter-translation.gif)
+<VideoFigure loop src={adapterTranslationClip} poster={adapterTranslationPoster} width={1080} height={508} label="适配层把同一个 Session 翻译成 JSONL 的一行行记录，或数据库表里的一条条记录" />
 
 当我们要使用外部存储，它将我们的概念翻译成存储要用的格式。当我们要调用外部模型，它将我们的概念翻译成需要的参数，并将模型的回复翻译成我们定义的概念。
 
@@ -65,7 +84,7 @@ toc_max_heading_level: 2
 
 这样我们等会儿编排流程的时候，就可以直接依赖接口，而不用依赖具体的类。换技术实现的时候，会很方便。测试的时候，也可以换一个假的存储。这就是我们在[上一篇文章](/roadmap/前言/5分钟学会写架构设计)提过的依赖倒置。如果还是不太理解，没有关系，往后看，你会越来越理解这一点。
 
-![应用层只依赖 SessionStore 接口，测试时可以换上假的存储](./dependency-inversion.gif)
+<VideoFigure loop src={dependencyInversionClip} poster={dependencyInversionPoster} width={1080} height={508} label="应用层只依赖 SessionStore 接口，测试时可以换上假的存储" />
 
 然后我们要在适配层实现 `SessionStore` 接口。我打算用 JSONL 来存对话，所以定义一个 `JsonlSessionStore`。相比起刚刚的接口，它多出了一个文件路径的字段。这样我们就完成了对话在领域层，应用层和适配层的定义。
 
@@ -95,7 +114,7 @@ toc_max_heading_level: 2
 
 适配层我们实现三个主流协议，分别是 OpenAI，Anthropic 和 Google。这三家的请求格式都不太一样。就拿思考深度来说，在我们的系统里我们叫 `effort`，而 OpenAI 叫 `reasoning_effort`，Anthropic 叫 `output_config.effort`，Gemini 叫 `thinking_level`。所以我们必须有一个翻译的动作。之后如果出现了新的协议，再在适配层重新定义一个类即可。只要实现了 `ModelClient` 接口，我们的应用层都可以直接使用，而不用修改任何代码。
 
-![同一个 effort，三家客户端各自翻译成厂商要的请求字段](./model-clients.gif)
+<VideoFigure loop src={modelClientsClip} poster={modelClientsPoster} width={1080} height={346} label="同一个 effort，三家客户端各自翻译成厂商要的请求字段" />
 
 ## 两个角色与审核结论
 
@@ -121,7 +140,7 @@ toc_max_heading_level: 2
 
 以后换模型换存储，换入口，换任何具体实现，都只要改这一个文件。比如说我们想从 Claude 模型换成 GPT 模型，就只需要修改这一行。
 
-![从 Claude 换成 GPT，只改组装根 main.py 里创建 model_client 的那一行](./composition-root.gif)
+<VideoFigure loop src={compositionRootClip} poster={compositionRootPoster} width={1080} height={510} label="从 Claude 换成 GPT，只改组装根 main.py 里创建 model_client 的那一行" />
 
 最后的目录差不多长这样。
 
@@ -143,10 +162,10 @@ toc_max_heading_level: 2
 
 首先是分叉对话。用户可以从一个已有对话的某条消息开始，分支出一个新的对话。新对话带着这条信息之前的全部历史，之后就各走各的互不影响。
 
-![分叉对话从某条消息分出新对话，新对话带着之前的全部历史，之后各走各的](./fork.gif)
+<VideoFigure loop src={forkClip} poster={forkPoster} width={860} height={710} label="分叉对话从某条消息分出新对话，新对话带着之前的全部历史，之后各走各的" />
 
 然后是对话压缩，对话越长，发给模型的上下文就越大，费用和延迟都会更高。压缩就是在对话变长之后，让模型把较早的消息总结成一段摘要。之后发给模型的就是这段摘要，加上最近的消息。
 
-![对话压缩把较早的消息换成摘要，发给模型的上下文变短，费用和延迟随之下降](./compact.gif)
+<VideoFigure loop src={compactClip} poster={compactPoster} width={800} height={660} label="对话压缩把较早的消息换成摘要，发给模型的上下文变短，费用和延迟随之下降" />
 
 试试设计一下这两个功能吧。

@@ -4,6 +4,9 @@ title: AI毁了我的代码，直到我开始TDD
 description: 用测试驱动开发管住 AI：先写需求文档，让 AI 把需求翻译成测试，再按测试实现功能。
 ---
 
+import requirementGapsClip from './requirement-gaps.mp4';
+import requirementGapsPoster from './requirement-gaps-poster.jpg';
+
 # AI毁了我的代码，直到我开始TDD
 
 前阵子 AI 用我不熟的技术栈写了个功能。最后的结果不能说不能用，但总和我的需求差那么一点点。我想自己调整，可面对几千行陌生框架的代码，根本修不了。
@@ -32,7 +35,7 @@ TDD 其实是有些年头的概念了，全称是测试驱动开发。它强调�
 
 就像我们刚刚写的这段，看着挺合理，但是，输入密码是明文还是加密？返回登录成功是返回 `true`，还是返回用户信息，还是返回 token？如果账户状态是停用，要怎么办？这些东西，如果我们不先都明确好，实现出来就容易跟我们想的不一样。
 
-![需求文档的每一行都还有没说清楚的问题](./requirement-gaps.gif)
+<VideoFigure loop src={requirementGapsClip} poster={requirementGapsPoster} width={1080} height={388} label="需求文档的每一行都还有没说清楚的问题" />
 
 ## 先写测试再实现
 

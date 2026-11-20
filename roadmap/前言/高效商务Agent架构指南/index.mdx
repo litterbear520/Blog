@@ -5,6 +5,12 @@ description: 让线上买卖更顺畅的 Agent：架构、延迟与成本技巧�
 ---
 
 import { CardGrid, Card, SkillList } from '@site/src/components/InfoCards';
+import presentationToolClip from './presentation-tool.mp4';
+import presentationToolPoster from './presentation-tool-poster.jpg';
+import eagerDispatchClip from './eager-dispatch.mp4';
+import eagerDispatchPoster from './eager-dispatch-poster.jpg';
+import perceivedLatencyClip from './perceived-latency.mp4';
+import perceivedLatencyPoster from './perceived-latency-poster.jpg';
 
 # 高效商务 Agent 架构指南
 
@@ -125,7 +131,7 @@ Agent 的工具应该调用这些系统，而不是重新实现它们。工具�
 
 由于组件就是工具调用，它们本来就以原生格式存在于 messages 数组中，重新加载旧对话时不需要再解析一遍。下面的动图和[参考仓库](https://github.com/anthropics/commerce-agents)里有一个展示工具（presentation tool）接口定义的示例。
 
-![](./presentation-tool.gif)
+<VideoFigure loop src={presentationToolClip} poster={presentationToolPoster} width={920} height={430} />
 
 代价是流式输出的粒度变粗。工具调用的每个顶层参数都要先在服务端攒齐才能校验，所以即便开了流式输出，展示工具的各个子组件也是一块一块到达的。这会影响感知延迟。
 
@@ -174,7 +180,7 @@ Agent 的工具应该调用这些系统，而不是重新实现它们。工具�
 * **优化工具自身的后端。** 有时一个工具确实需要在内部同时调用多个后端服务（即 fan-out）——比如商家 Agent 的“获取今日概况”查询，会分三次独立调用分别读取销售、库存和营销活动状态。但我们更常看到的是，工具边界变成了把后端缺失的逻辑临时拼凑起来的地方：一个库存检查先调商品目录查 SKU，再按门店调库存服务，再调履约服务查截止时间，然后在工具自己的代码里套用替换规则、判断自提资格，最后才作答。这样的工具塞进了太多领域知识，规则一变就容易出错，而且这些逻辑本来就该放在上游系统里。发现自己在工具里写这种逻辑时，正确的修法是在后端做一个能直接回答这个问题的接口，再让 Agent 工具去调它。
 * **提前派发工具。** 工具参数和其他 token 一样是从模型里一个个流出来的，所以 harness 不必等整个回复结束：哪个工具调用的参数先生成完，就先执行哪个，模型还在输出其他并行工具或内容块时，前面的工具已经在跑了。我们见过这一招把数秒的空档压缩到几百毫秒，[Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview) 默认就是这么做的。想让收益最大化，就提示模型把最慢的那个调用放在最前面发出。
 
-![](./eager-dispatch.gif)
+<VideoFigure loop src={eagerDispatchClip} poster={eagerDispatchPoster} width={920} height={396} />
 
 ### 感知延迟
 感知延迟是用户感受到的等待时间，从发出请求一直到屏幕上出现任何反应为止。在面向消费者的用例中它尤其关键，交易过程中的任何摩擦都会影响结账率和收入。有两个技巧可以在不碰模型的前提下缩短它：
@@ -182,7 +188,7 @@ Agent 的工具应该调用这些系统，而不是重新实现它们。工具�
 * **组件一边生成一边流式输出。** 一条渲染出来的商务回复通常有 500–700 个输出 token，不做流式输出，用户就要盯着转圈五秒甚至更久。展示工具的每个参数一生成完就发给客户端，让页面一块一块地渲染出来。
 * **展示工作过程。** 在 Agent 收集上下文时，为每一步渲染一行简短、直白的进度文字（例如“正在查找海边的酒店”）。这行文字可以直接由工具已有的参数生成（比如商品搜索的查询词），也可以给工具额外加一个 user_facing_message 参数，让模型自己来写。
 
-![](./perceived-latency.gif)
+<VideoFigure loop src={perceivedLatencyClip} poster={perceivedLatencyPoster} width={920} height={484} />
 
 *上面两个面板运行的是同一个 Agent，工具和提示词完全相同，只有 harness 不同。总耗时差不多，但用户多早能看到东西，差别很大。*
 
