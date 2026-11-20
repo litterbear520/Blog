@@ -54,7 +54,9 @@
   grid-row: 1;
 }
 
-:global(.copy-md-row) > [data-copy-md-btn] {
+:global(.copy-md-row) > [data-copy-md-btn],
+:global(html.docs-doc-page article .markdown > header) > [data-copy-md-btn],
+:global(html.blog-post-page article > header) > [data-copy-md-btn] {
   grid-column: 2;
   grid-row: 1;
 }
@@ -73,7 +75,9 @@
     padding-bottom: 48px;
   }
 
-  :global(.copy-md-row) > [data-copy-md-btn] {
+  :global(.copy-md-row) > [data-copy-md-btn],
+  :global(html.docs-doc-page article .markdown > header) > [data-copy-md-btn],
+  :global(html.blog-post-page article > header) > [data-copy-md-btn] {
     grid-column: 1 / -1;
     grid-row: auto;
     order: 1;
