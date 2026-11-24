@@ -8,6 +8,14 @@ import SWATCHES from '../data/swatches.json';
 
 const POSTS = [
   {
+    title: '毫无保留地分享一下，我是如何让Claude、GPT和Gemini完美协同的',
+    date: '2026-11-24',
+    slug: 'claude-gpt-gemini',
+    category: 'AI',
+    swatch: 'olive',
+    cover: '/img/blog/cover-claude-gpt-gemini.svg',
+  },
+  {
     title: '所有代码都是 slop（除了我的）',
     date: '2026-11-18',
     slug: 'all-code-is-slop',

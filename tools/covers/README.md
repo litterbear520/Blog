@@ -79,6 +79,7 @@ clay `#d97757` · peach `#ebc9b7` · sky `#6a9bcc` · cactus `#bcd1ca` · plum `
 
 | 文章 slug | 底色 | 封面文件 | 配方 |
 | ---- | ---- | ---- | ---- |
+| claude-gpt-gemini | olive | cover-claude-gpt-gemini.svg | recipes/claude-gpt-gemini.js |
 | all-code-is-slop | cactus | cover-all-code-is-slop.svg | recipes/all-code-is-slop.js |
 | building-always-on-agents | clay | cover-building-always-on-agents.svg | recipes/building-always-on-agents.js |
 | home-repo-pattern | coral | cover-home-repo-pattern.svg | recipes/home-repo-pattern.js |
