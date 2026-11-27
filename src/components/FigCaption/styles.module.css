@@ -1,0 +1,22 @@
+/* 图注：正体、14px、浅一级文字色，左对齐，和正文一眼分开。
+   图片段落本来上下各留 16px 内边距和 16px 段距（见 custom.css「图片段落」），
+   后面跟图注时去掉下方留白，图注离图 10px；图注自己补回同样的下方留白，
+   所以图注到下一段正文仍是 32px，到下一个 h2 仍是 80px。
+   选择器照抄 custom.css 的图片段落规则再加 :has(+ .caption)，优先级比它高，和加载顺序无关。 */
+:global(:is(.theme-doc-markdown, .blog-post-page .markdown)) > p:has(> [class*='wrap_'] > img):has(+ .caption) {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.caption {
+  margin-top: 0.625rem;
+  padding-bottom: 1rem;
+  color: var(--th-text-3);
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+/* 深色主题的正文字重是 360，14px 的浅色字会发虚，图注用 400 */
+:global(html[data-theme='dark']) .caption {
+  font-weight: 400;
+}

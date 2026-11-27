@@ -461,6 +461,7 @@ const RENDERERS = {
     if (!rows.length) return '';
     return [rows[0], rows[0].map(() => '----'), ...rows.slice(1)].map((r) => `| ${r.join(' | ')} |`).join('\n');
   },
+  FigCaption: async (props, inner) => `*${(await inner()).replace(/\s*\n\s*/g, ' ')}*`,
   VideoFigure: async (props, inner) => {
     const caption = (await inner()).replace(/\s*\n\s*/g, ' ');
     const label = [props.fig && `图 ${props.fig}`, caption].filter(Boolean).join('：') || '视频';

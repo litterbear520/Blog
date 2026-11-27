@@ -154,6 +154,23 @@ test('图片、视频、站内链接换成绝对地址', async () => {
   ].join('\n'));
 });
 
+test('图注写成斜体段落，里面的术语只留文字', async () => {
+  const md = body(await convert([
+    '![幻灯片](./img/a.png)',
+    '',
+    '<FigCaption>“标题”：图上的 <Term tip="解释">feature map</Term> 和 [链接](/blog/fold-subagents)。</FigCaption>',
+    '',
+    '下一段。',
+  ].join('\n')));
+  assert.equal(md, [
+    `![幻灯片](${SITE}/assets/a.png)`,
+    '',
+    `*“标题”：图上的 feature map 和 [链接](${SITE}/blog/fold-subagents.md)。*`,
+    '',
+    '下一段。',
+  ].join('\n'));
+});
+
 test('快速检查和测验写出选项、答案和解释', async () => {
   const md = body(await convert(`<QuickCheck
   question="哪个对？"
