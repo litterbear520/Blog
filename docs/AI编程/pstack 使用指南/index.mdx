@@ -18,16 +18,16 @@ import CourseHero from '@site/src/components/McpCourse/CourseHero';
 
 ## 学习目标
 
-1. 安装和配置 pstack：安装插件，并选定要使用的模型。
-2. 用 /poteto-mode 分派工作：给出一个目标，看它如何挑选对应的 playbook。
-3. 改代码之前先读懂代码：先做一次只读调查，再用 `/how`、`/why`、`/teach` 和 `/recall` 摸清现状，然后再动手改代码。
-4. 写代码之前先做设计：在代码把形态定死之前，先用 `/architect`、`/arena`、`/swarm`、`/interrogate`、原型和计划敲定方向。
-5. 实现改动并清理 diff：了解各类构建 playbook，以及 `/tdd`、`/unslop` 和 `/no-comments`。
-6. 验证结果并提交 PR：在真实应用上证明改动有效，用形式化验证覆盖测试很少触及的角落，用 `/benchmark-checklist` 核查性能数据，然后提交一个范围集中的 PR，并一直推进到合并。
-7. 睡觉时让工作继续跑：先建立信任再开循环，定好通宵运行的约定，保留可供事后审查的 <Term tip="决策日志：Agent 每做一个决定记一行，事后可以审查">decision log</Term>，并用 Cursor 的 Project 和自动化任务突破单个 Agent 的上限。
-8. 用原则名引导 Agent：记住 24 条原则的名字，在任务中途一句话把 Agent 拉回正轨。
-9. 打造您自己的版本：定制您自己的模式，用 `/correct` 纠正反复出现的错误，并学会怎样测试技能改动。
-10. 常用配方与常见误区：拿来就能复制的提示词，以及值得提前避开的坑。
+1. [安装和配置 pstack](./01-setup.mdx)：安装插件，并选定要使用的模型。
+2. [用 /poteto-mode 分派工作](./02-poteto-mode.mdx)：给出一个目标，看它如何挑选对应的 playbook。
+3. [改代码之前先读懂代码](./03-understand.mdx)：先做一次只读调查，再用 `/how`、`/why`、`/teach` 和 `/recall` 摸清现状，然后再动手改代码。
+4. [写代码之前先做设计](./04-design.mdx)：在代码把形态定死之前，先用 `/architect`、`/arena`、`/swarm`、`/interrogate`、原型和计划敲定方向。
+5. [实现改动并清理 diff](./05-build-and-clean.mdx)：了解各类构建 playbook，以及 `/tdd`、`/unslop` 和 `/no-comments`。
+6. [验证结果并提交 PR](./06-verify-and-ship.mdx)：在真实应用上证明改动有效，用形式化验证覆盖测试很少触及的角落，用 `/benchmark-checklist` 核查性能数据，然后提交一个范围集中的 PR，并一直推进到合并。
+7. [睡觉时让工作继续跑](./07-overnight.mdx)：先建立信任再开循环，定好通宵运行的约定，保留可供事后审查的 <Term tip="决策日志：Agent 每做一个决定记一行，事后可以审查">decision log</Term>，并用 Cursor 的 Project 和自动化任务突破单个 Agent 的上限。
+8. [用原则名引导 Agent](./08-principles.mdx)：记住 24 条原则的名字，在任务中途一句话把 Agent 拉回正轨。
+9. [打造您自己的版本](./09-make-it-yours.mdx)：定制您自己的模式，用 `/correct` 纠正反复出现的错误，并学会怎样测试技能改动。
+10. [常用配方与常见误区](./10-recipes-and-pitfalls.mdx)：拿来就能复制的提示词，以及值得提前避开的坑。
 
 第一次阅读时，请按顺序读完这十章。读过一遍之后，每一章都可以单独拿来查阅。
 
@@ -74,6 +74,8 @@ import CourseHero from '@site/src/components/McpCourse/CourseHero';
 </Tabs>
 
 您不需要指名用哪个 playbook，也不用列出要调用哪些技能。“repro first”（先复现）加上一个可验证的结果，就足够让 `/poteto-mode` 判断该走哪个 playbook。它会自动匹配 Bug fix playbook，把步骤复制到待办列表里，并在每一步推进时调用对应的技能。
+
+下一章：[安装和配置 pstack](./01-setup.mdx)。
 
 ## 课程内容
 

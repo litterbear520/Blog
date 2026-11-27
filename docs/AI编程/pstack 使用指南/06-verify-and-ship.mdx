@@ -295,3 +295,5 @@ Babysit 做到可以合并就停手。就算所有检查全绿，它也绝不主
 </Tabs>
 
 [Shipping](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/shipping.md) playbook 会在触发任何合并之前，逐个独立验证 stack 里的每一份 PR。每个 PR 都由一个全新的 Agent 实跑验证行为，而且负责把关的 Agent 绝不是当初写这段代码的那一个。验证完之后，Shipping 只会从栈底开始，按顺序逐个合并连续通过验证的那一段 PR（默认走 GitHub，环境里有 Origin CLI 时走 Origin），并把链条里第一个没过关的 PR 报给您。排在未验证 PR 上面的已验证 PR 会先等着，因为要是硬把它合进去，下面还没通过验证的改动就会被一并带进主干。
+
+下一章：[睡觉时让工作继续跑](./07-overnight.mdx)。
