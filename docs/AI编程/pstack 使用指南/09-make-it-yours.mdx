@@ -11,7 +11,7 @@ poteto-mode 体现的只是某个人的工作风格，它底层的 <Term tip="�
 
 起步要比您想的更小。第一天根本不需要装一大堆技能，甚至不需要用到整套插件。先平平常常地写提示词，留意 Agent 在哪里栽跟头，等同一个问题出现第二次时，再补一个技能或一条检查。
 
-## 用 `/automate-me` 生成您自己的模式 {#generate-your-own-mode-with-automate-me}
+## 用 `/automate-me` 生成您自己的模式 {/* #generate-your-own-mode-with-automate-me */}
 
 ```text
 /automate-me
@@ -40,7 +40,7 @@ poteto-mode 体现的只是某个人的工作风格，它底层的 <Term tip="�
 
 运行更新时，它只读取这份技能上次修改之后的新会话记录。您没有推翻过的旧规则会原样保留，有新证据的规则会被修订，只有出现新习惯时才会增补新章节。
 
-## 用 `/reflect` 沉淀一次会话的教训 {#capture-a-sessions-lessons-with-reflect}
+## 用 `/reflect` 沉淀一次会话的教训 {/* #capture-a-sessions-lessons-with-reflect */}
 
 刚结束一个让您有所收获的任务，趁热运行：
 
@@ -63,7 +63,7 @@ poteto-mode 体现的只是某个人的工作风格，它底层的 <Term tip="�
 
 [`/reflect`](https://github.com/cursor/plugins/blob/main/pstack/skills/reflect/SKILL.md) 会通读本次会话记录，只留下真正能改变以后 Agent 行为的教训，并把每条改进提议归进 `Accepted`、`Rejected` 和 `Backlog` 三类。在改动任何技能之前，它会先等您批准。只有能实打实改变未来某次决策的提议才值得批准——一次反常的会话只是个案，算不上规则。
 
-## 用 `/correct` 修复仓库环境 {#fix-the-environment-with-correct}
+## 用 `/correct` 修复仓库环境 {/* #fix-the-environment-with-correct */}
 
 如果您因为同一个错误反复纠正 Agent，真正该改的是代码库本身，而不是您的下一条提示词。把可选手段按靠得住的程度从高到低排个序：
 
@@ -95,7 +95,7 @@ poteto-mode 体现的只是某个人的工作风格，它底层的 <Term tip="�
 
 不带参数直接运行 `/correct`，它就会自己从历史记录里归纳出错误类别。`/reflect` 和 `/correct` 各司其职：`/reflect` 从单次会话里打磨技能，`/correct` 则改造仓库让某类错误再也回不来。如果要靠划定新的边界来根治问题，就把 `/correct` 和 `/architect` 搭配起来用。[睡觉时让工作继续跑](./07-overnight.mdx#run-many-projects-in-parallel)一章的“并行推进多个 Project”一节里，有一条在整个仓库范围同时用上这两者的示例提示词。
 
-## 编写目标明确的技能 {#author-a-focused-skill}
+## 编写目标明确的技能 {/* #author-a-focused-skill */}
 
 当您已经清楚想沉淀哪一套固定流程时：
 
@@ -120,7 +120,7 @@ poteto-mode 体现的只是某个人的工作风格，它底层的 <Term tip="�
 
 有两种特殊技能各自配了专门的生成器。用来驱动应用并证明行为正常的，叫验证技能，应该改用 [`/create-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-verification-skill/SKILL.md) 和 [`/maintain-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/maintain-verification-skill/SKILL.md)。用来配合模型检验器、数学证明或其他验证器检查代码性质的，叫形式化验证技能，应该改用 [`/create-formal-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-formal-verification-skill/SKILL.md) 和 [`/maintain-formal-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/maintain-formal-verification-skill/SKILL.md)。这两类在[验证结果并提交 PR](./06-verify-and-ship.mdx#prove-a-property-with-a-formal-verification-skill)里都有详细介绍。
 
-## 用 `/technical-writing` 按标准写文档 {#write-docs-to-a-standard-with-technical-writing}
+## 用 `/technical-writing` 按标准写文档 {/* #write-docs-to-a-standard-with-technical-writing */}
 
 要交付的文字不止有技能。写文档、RFC、README、PR 说明和提交信息时，都可以用：
 
@@ -143,7 +143,7 @@ poteto-mode 体现的只是某个人的工作风格，它底层的 <Term tip="�
 
 [`/technical-writing`](https://github.com/cursor/plugins/blob/main/pstack/skills/technical-writing/SKILL.md) 套用的是一套分层的写作标准，目标是让一个已经很疲惫的工程师第一遍读就能看懂。它会先定好文档类型（教程、操作指南、参考手册还是原理解析），然后逐句推敲：说清谁做了什么、一句只讲一件事、绝不留歧义。既可以用它来审您或 Agent 刚写完的稿子，也可以在让 Agent 写文档时一开始就点名带上它。
 
-## 对技能改动做盲测 {#test-a-skill-change-blind}
+## 对技能改动做盲测 {/* #test-a-skill-change-blind */}
 
 改一次技能会影响往后的每一次会话，所以要像做实验一样去测它。打算采用别人写的技能时也是同理：留下来之前，先确认它在您的实际工作里真的让 Agent 变得更好。
 
@@ -189,7 +189,7 @@ poteto-mode 体现的只是某个人的工作风格，它底层的 <Term tip="�
 
 接受结论之前，务必亲自把每一份输出都读一遍。如果您和裁判的判断不一致，先怀疑评分标准有没有写偏，不要先怀疑您自己的判断。
 
-## 用 `/make-bot-ui` 给机器人搭一个小界面 {#build-a-bot-ui-with-make-bot-ui}
+## 用 `/make-bot-ui` 给机器人搭一个小界面 {/* #build-a-bot-ui-with-make-bot-ui */}
 
 还有一个面向特定场景的技能，专供 Grok Bot 用户使用。[`/make-bot-ui`](https://github.com/cursor/plugins/blob/main/pstack/skills/make-bot-ui/SKILL.md) 会搭出一个小页面，页面上的按钮可以通过 webhook 触发的 routine 唤醒机器人。举个例子，您可以像刷卡片一样逐条滑过待评审队列里的条目，每滑一条就让机器人对这一项采取动作。webhook 的发送密钥保存在您本机的服务端里，绝不会流到浏览器或聊天记录里。这个技能也包含如何通过 Tailscale 把页面暴露出来。
 

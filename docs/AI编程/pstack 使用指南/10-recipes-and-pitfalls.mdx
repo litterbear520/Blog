@@ -11,7 +11,7 @@ import TabItem from '@theme/TabItem';
 
 ![她正在品尝做好的菜肴，机器人们照着食谱盒忙碌烹饪，料理台上方钉着写有 /how、/tdd 和 /loop 的卡片。](./images/recipes.jpg)
 
-## 搞懂一个不熟悉的子系统 {#understand-an-unfamiliar-subsystem}
+## 搞懂一个不熟悉的子系统 {/* #understand-an-unfamiliar-subsystem */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -32,7 +32,7 @@ use /how first to understand how this initialization works. then use /why to fig
 
 先弄清机制，再查历史脉络。两个技能的报告里都会写明它们检索了哪些信息源，您一眼就能知道结论靠的是什么依据。
 
-## 动代码前，先把杂乱的反馈复述清楚 {#restate-a-noisy-report-before-touching-code}
+## 动代码前，先把杂乱的反馈复述清楚 {/* #restate-a-noisy-report-before-touching-code */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -53,7 +53,7 @@ use /how first to understand how this initialization works. then use /why to fig
 
 只要理解偏了，复述时就会立刻露馅，这时花一条消息就能掰回来。在 Agent 说出自己的判断之前，先把您的猜测藏在心里。如果只要复述、不需要走任何 <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term>，直接用 `/in-your-own-words`。
 
-## 发出去之前，先把提示词磨锋利 {#sharpen-a-prompt-before-you-send-it}
+## 发出去之前，先把提示词磨锋利 {/* #sharpen-a-prompt-before-you-send-it */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -74,7 +74,7 @@ use /how first to understand how this initialization works. then use /why to fig
 
 Agent 会点出一位资深专家会做、但您没提出来的事：他们会从哪些原始材料入手、用什么方法和工具，以及靠什么外部标准验证结果对不对。它会把您的提示词改写成包含这些要求的新版本交还给您，而不会直接动手干活。觉得改得顺手了，再把新提示词发出去。
 
-## 先做原型，再做选择 {#prototype-before-you-pick}
+## 先做原型，再做选择 {/* #prototype-before-you-pick */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -95,7 +95,7 @@ Agent 会点出一位资深专家会做、但您没提出来的事：他们会�
 
 您是在真能跑的东西里挑，而不是对着文字描述空想。Agent 在动手搭原型的过程中，顺带就把布局和时序这类问题自己解掉了。
 
-## 把敲定的设计落成计划 {#turn-a-settled-design-into-a-plan}
+## 把敲定的设计落成计划 {/* #turn-a-settled-design-into-a-plan */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -116,7 +116,7 @@ Agent 会点出一位资深专家会做、但您没提出来的事：他们会�
 
 等设计真正定下来再提这一步。这份计划本身就是交付物，而且里面会写明后续由哪个 playbook 来执行。
 
-## 给设计找一份第二意见 {#get-a-second-opinion-on-a-design}
+## 给设计找一份第二意见 {/* #get-a-second-opinion-on-a-design */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -137,7 +137,7 @@ ask /arena for a second opinion on this thread and our approach
 
 您当前的设计会成为几个候选方案之一，最终的综合报告会告诉您：评审组是找到了更好的路子，还是印证了您原来的方案。比起以后返工一个很难推翻的设计，这一步花不了多少成本。
 
-## 并行检查彼此独立的切片 {#check-independent-slices-in-parallel}
+## 并行检查彼此独立的切片 {/* #check-independent-slices-in-parallel */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -158,7 +158,7 @@ ask /arena for a second opinion on this thread and our approach
 
 每个 <Term tip="worker：被派去完成其中一份工作的子代理，各管一片、各自汇报">worker</Term> 只管一个包。主对话等所有切片跑完后，汇总返回一份标着 `PASS`、`ISSUES` 或 `BLOCKED` 的统一报告，不会把各个 worker 的原始日志一股脑甩给您。
 
-## 带着怀疑审一整个分支 {#review-a-branch-skeptically}
+## 带着怀疑审一整个分支 {/* #review-a-branch-skeptically */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -179,7 +179,7 @@ ask /arena for a second opinion on this thread and our approach
 
 里面的限定词非常管用。“don't change anything yet”（先别改任何东西）保证它只看不改，不挑小毛病的规矩则提前滤掉噪音，让留下来经复核确认的问题每条都值得您花时间看。
 
-## 通过失败测试来修 bug {#fix-a-bug-through-a-failing-test}
+## 通过失败测试来修 bug {/* #fix-a-bug-through-a-failing-test */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -200,7 +200,7 @@ ask /arena for a second opinion on this thread and our approach
 
 “if there's a cheap test path”（如果有低成本的测试路径）这句话很关键。硬拿脆弱的 mock 拼出一条测试，证明力反而不如直接跑真实命令；加上这句，playbook 就可以如实说明这一点，改用真实命令。
 
-## 带着证据复现并修复问题反馈 {#repro-and-fix-a-report-with-proof}
+## 带着证据复现并修复问题反馈 {/* #repro-and-fix-a-report-with-proof */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -221,7 +221,7 @@ ask /arena for a second opinion on this thread and our approach
 
 “if it repros on main”（如果在 main 上能复现）能让任务在 bug 已经不存在时提前收手。附上的录屏让您甚至不用先看 <Term tip="这次改动前后的差异">diff</Term>，就能先确认问题确实修好了。
 
-## 证明常规测试很难触及的性质 {#prove-a-property-tests-rarely-reach}
+## 证明常规测试很难触及的性质 {/* #prove-a-property-tests-rarely-reach */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -242,7 +242,7 @@ ask /arena for a second opinion on this thread and our approach
 
 您会得到三样东西：一条在明确范围内做过全覆盖检验的性质；如果现有代码已经违背它，还有一份用您代码里的概念写成的反例；外加一个项目本地技能——以后谁再改这段代码，下一个 Agent 都会自动拿它来查。
 
-## 发出去之前，先核查性能数字 {#vet-a-number-before-you-post-it}
+## 发出去之前，先核查性能数字 {/* #vet-a-number-before-you-post-it */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -263,7 +263,7 @@ ask /arena for a second opinion on this thread and our approach
 
 它会给出 faster（更快）、slower（更慢）、no measurable difference（无明显差异）或 inconclusive（无法定论）的结论，并附上运行次数、数值区间和瓶颈所在。
 
-## 别再一遍遍纠正同一个错误 {#stop-correcting-the-same-mistake}
+## 别再一遍遍纠正同一个错误 {/* #stop-correcting-the-same-mistake */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -284,7 +284,7 @@ ask /arena for a second opinion on this thread and our approach
 
 修复会以架构约束、类型检查、lint 或测试的形式落进代码库，让下一个 Agent 想犯都犯不了。
 
-## 只问怎么做，先别开工 {#ask-how-without-starting-the-work}
+## 只问怎么做，先别开工 {/* #ask-how-without-starting-the-work */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -305,7 +305,7 @@ ask /arena for a second opinion on this thread and our approach
 
 您会拿到一份解答、一条可以直接发的提示词，以及答案出处（技能或指南页面）的链接。在您真的发出那条提示词之前，什么都不会启动。
 
-## 离开期间让任务老老实实跑完 {#keep-a-run-honest-while-youre-away}
+## 离开期间让任务老老实实跑完 {/* #keep-a-run-honest-while-youre-away */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -326,7 +326,7 @@ im going to bed，自己一直跑下去，直到所有测试样例都通过。�
 
 完整的交接约定见[睡觉时让工作继续跑](./07-overnight.mdx)。只要任务和完成条件已经在当前对话里交代清楚，这种简短写法就够用了。
 
-## 把跑偏的任务拉回正轨 {#redirect-a-drifting-run}
+## 把跑偏的任务拉回正轨 {/* #redirect-a-drifting-run */}
 
 纠偏用的提示词一行就够：
 
@@ -383,7 +383,7 @@ apply prove it works. show me the real output, not the build log.
 
 您很少需要写长篇大论。您只需要叫出对的名字，而[用原则名引导 Agent](./08-principles.mdx)就是您的词表。
 
-## 让回复说人话 {#get-the-reply-in-plain-words}
+## 让回复说人话 {/* #get-the-reply-in-plain-words */}
 
 ```text
 /bro
@@ -391,7 +391,7 @@ apply prove it works. show me the real output, not the build log.
 
 整条提示词就这一个命令。[`/bro`](https://github.com/cursor/plugins/blob/main/pstack/skills/bro/SKILL.md) 会把上一条回复翻成普通人之间聊天的大白话，去掉黑话，篇幅也更短。如果一条回复技术上写得滴水不漏、您读完却还是没懂它在说什么，就用它。
 
-## 快速跟进挂在后台跑的对话 {#catch-up-on-a-chat-you-left-running}
+## 快速跟进挂在后台跑的对话 {/* #catch-up-on-a-chat-you-left-running */}
 
 ```text
 /ketchup
@@ -401,7 +401,7 @@ apply prove it works. show me the real output, not the build log.
 
 如果您更想看视频来了解进展，可以运行 [`/ketchup-video`](https://github.com/cursor/plugins/blob/main/pstack/skills/ketchup-video/SKILL.md)。它会把发生过的事情做成一段带字幕的幻灯片短视频，并在下面用文字列出等您决定的事。
 
-## 常见误区 {#the-pitfalls}
+## 常见误区 {/* #the-pitfalls */}
 
 - **在提示词里逐个列技能名**：写“use /architect then /arena then /interrogate”（先用 /architect，再用 /arena，最后用 /interrogate）会打乱 playbook 原本排好的步骤。说清目标和约束就行，只有在需要覆盖默认行为时才点名技能。
 - **完成条件含糊不清**：“make it better”（把它改好一点）没给 `/loop` 任何可以检查的标准。要给出一条能明确判出通过或失败的命令或 <Term tip="产物：改动实际产出、能拿来检查的东西，例如命令输出、截图、写进数据库的值">artifact</Term>。

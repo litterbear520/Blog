@@ -13,7 +13,7 @@ import TabItem from '@theme/TabItem';
 
 ![一架原型机正在真实测试航线上飞行，她手持秒表计时，机器人们在一旁录像并逐项核对清单；终端屏幕上显示着 verify: pass, evidence: captured。](./images/verification.jpg)
 
-## 一开始就把完成条件说清楚 {#state-the-finish-condition-up-front}
+## 一开始就把完成条件说清楚 {/* #state-the-finish-condition-up-front */}
 
 在第一条提示词里，就用最贴合任务的说法把“做到什么程度才算完成”写明白：
 
@@ -48,7 +48,7 @@ import TabItem from '@theme/TabItem';
 
 如果有一小段您不太放心的 <Term tip="这次改动前后的差异">diff</Term>，可以用 [`/blast-radius`](https://github.com/cursor/plugins/blob/main/pstack/skills/blast-radius/SKILL.md) 找出它可能影响的其他位置。它会找出保证这次改动安全的那个关键前提，然后通过运行代码去证明它，而不是光靠嘴上推论。
 
-## 用 `/benchmark-checklist` 核查实测数据 {#vet-a-measured-number-with-benchmark-checklist}
+## 用 `/benchmark-checklist` 核查实测数据 {/* #vet-a-measured-number-with-benchmark-checklist */}
 
 改动前后的性能对比数据，是最容易无意中测错的证据。缓存已经预热、其中一边跑了 debug 构建，或者真正干活的代码根本没落在计时区间内——随便哪一种，都能跑出看似很有说服力的加速数字。在把数据写进报告或据此做决定之前，先输入：
 
@@ -81,7 +81,7 @@ import TabItem from '@theme/TabItem';
 
 最后它会给出结论：faster（更快）、slower（更慢）、no measurable difference（无明显差异）或 inconclusive（无法定论），并附上运行次数、数值区间和瓶颈所在。只要说不出瓶颈在哪，或者其中一方没按生产配置调优，它就会判为 inconclusive。`/poteto-mode` 在 Perf issue 和 Hillclimb playbook 里已经内置了这套核查；如果是您在这两个 playbook 之外自己测的数字，或者别人报上来的提速好得不太真实，就可以手动调用它。这个技能正是 [Explain the Number](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-explain-the-number/SKILL.md) 原则的落地形式。
 
-## 为项目创建验证技能 {#create-a-project-verification-skill}
+## 为项目创建验证技能 {/* #create-a-project-verification-skill */}
 
 前面 UI 那一条其实藏着一个硬前提：Agent 得有一套能用脚本驱动您应用的方法。如果项目里本来就有，直接用就行；如果没有，就运行：
 
@@ -142,7 +142,7 @@ import TabItem from '@theme/TabItem';
 
 顺手把本地开发环境也做成可复现的：准备好种子数据、测试账号，再配一条每次都能拉起一模一样环境的命令。
 
-## 让验证技能始终贴合现状 {#keep-the-verification-skill-honest}
+## 让验证技能始终贴合现状 {/* #keep-the-verification-skill-honest */}
 
 应用一直在变，feature map 用不了多久就会过时。至少每天跑一次下面这条命令，最好放进定时自动化任务里，免得靠人去记：
 
@@ -152,7 +152,7 @@ import TabItem from '@theme/TabItem';
 
 [`/maintain-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/maintain-verification-skill/SKILL.md) 会对生成的验证技能做一次全面体检：先给每个功能各派一个只读的源码检查者并行核对，再做一轮实跑，把清单里的每项功能都驱动一遍。最终只会出现三种结果之一：`clean` 表示覆盖完整、无需改动；`changed` 表示开出一个只改验证技能目录的 PR，里面都是经实跑验证的修正；`blocked` 则会写明卡在什么地方。它绝不改业务代码。如果实跑时撞上了产品本身的回归问题，它会如实报告回归，而不会通过改文档来掩盖。
 
-## 用形式化验证技能证明关键性质 {#prove-a-property-with-a-formal-verification-skill}
+## 用形式化验证技能证明关键性质 {/* #prove-a-property-with-a-formal-verification-skill */}
 
 验证技能证明的是您能驱动到的路径。可有些 bug 躲在没人会去走的路径里：两次重试正好撞在一起、锁在写到一半时过期、状态变更乱序到达。常规测试很少能撞上这些情况。对于这类一旦出事就代价高昂的代码，运行：
 
@@ -187,7 +187,7 @@ import TabItem from '@theme/TabItem';
 
 这份技能还会记下每项检查覆盖了哪些代码，以及上一次与代码对齐时的提交记录。如果后续的合并或重构绕过了这个技能，检查可能还在对着早已改掉的旧描述跑并照样通过。碰到这种情况，运行 [`/maintain-formal-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/maintain-formal-verification-skill/SKILL.md)。它会按最新代码更新验证内容、重新运行、确认更新后的每项检查依然能抓住错误，并告诉您每一处失败究竟是验证本身和代码脱节了，还是代码里真的出了 bug。
 
-## 把行为画成 statechart {#show-the-behavior-as-a-statechart}
+## 把行为画成 statechart {/* #show-the-behavior-as-a-statechart */}
 
 用模型术语写出的反例能说服您自己，但负责产品行为的产品经理或设计师，需要用他们熟悉的语言来看懂这件事。运行：
 
@@ -210,7 +210,7 @@ import TabItem from '@theme/TabItem';
 
 [`/statechart`](https://github.com/cursor/plugins/blob/main/pstack/skills/statechart/SKILL.md) 会根据 TLA+ 模型生成一张 Mermaid <Term tip="状态图：用状态和状态之间的转换画出系统行为的图">statechart</Term>，展示用户实际看到的状态流转，这样图示和被检验过的模型就不会各自跑偏。他们关心的业务规则（比如“离线时绝不应该看到 Synced 状态”）会被写成不变量。图上会标出每一个违背规则的状态，报告里则会用他们熟悉的日常用语给出走到这个状态的最短路径。交接之前，Agent 会先在真实代码里把每条出错路径复现一遍，免得把建模误差当成真 bug 报给对方。
 
-## 提交 PR {#open-the-pr}
+## 提交 PR {/* #open-the-pr */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -231,7 +231,7 @@ import TabItem from '@theme/TabItem';
 
 [Opening a PR](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/opening-a-pr.md) playbook 会在独立的 <Term tip="工作树：同一个 git 仓库再检出一份独立的工作目录，各自一个分支，互不干扰">worktree</Term> 里干活，把改动 rebase 成一串能按顺序落地的干净小提交，清理 diff，写一份一分钟就能读完的简报作为 PR 说明，再直接以可评审状态（不是草稿）发起 PR。把后续改动拆成一串按顺序叠加的 PR，比把同一个分支越堆越大好得多。
 
-## 用 Babysit 把 PR 推进到可以合并 {#drive-the-pr-to-merge-ready-with-babysit}
+## 用 Babysit 把 PR 推进到可以合并 {/* #drive-the-pr-to-merge-ready-with-babysit */}
 
 PR 一旦打开，各种阻碍马上就会找上门：检查挂了、评审提了意见、主干又往前走了。把这些琐碎的来回交给 [Babysit](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/babysit.md) playbook：
 
@@ -273,7 +273,7 @@ Babysit 会持续盯着这个 PR（在 GitHub 上用内置的监听脚本，如�
 
 Babysit 做到可以合并就停手。就算所有检查全绿，它也绝不主动合并，因为“要不要合进去”是另一个决定。
 
-## 用 Shipping 合并整个 stack {#land-the-stack-with-shipping}
+## 用 Shipping 合并整个 stack {/* #land-the-stack-with-shipping */}
 
 检查全绿不代表绝对安全。准备好把整个 <Term tip="PR 栈：一串前后依赖、按顺序合并的 PR">stack</Term> 合并进主干时，直接告诉它：
 

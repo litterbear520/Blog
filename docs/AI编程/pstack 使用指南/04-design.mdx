@@ -14,7 +14,7 @@ import Diagram from '@site/src/components/Diagram';
 
 ![三台机器人分别在挂着 /architect、/arena 和 /interrogate 牌子的桌前搭建各自的桥梁设计方案，一台手拿写字板的裁判机器人正带着怀疑的目光在一旁检查。](./images/design.jpg)
 
-## 用 `/architect` 敲定结构 {#settle-the-shape-with-architect}
+## 用 `/architect` 敲定结构 {/* #settle-the-shape-with-architect */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -37,7 +37,7 @@ import Diagram from '@site/src/components/Diagram';
 
 代码一旦开写，设计也并非神圣不可侵犯。如果写着写着同一种临时变通方案反复冒头，`/architect` 会回头重新设计，而不是继续打补丁硬撑。
 
-## 用 `/arena` 并行试出多种方案 {#fan-out-attempts-with-arena}
+## 用 `/arena` 并行试出多种方案 {/* #fan-out-attempts-with-arena */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -79,7 +79,7 @@ import Diagram from '@site/src/components/Diagram';
 </TabItem>
 </Tabs>
 
-## 用 `/swarm` 分片覆盖与多路竞速 {#cover-slices-and-races-with-swarm}
+## 用 `/swarm` 分片覆盖与多路竞速 {/* #cover-slices-and-races-with-swarm */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -102,7 +102,7 @@ import Diagram from '@site/src/components/Diagram';
 
 当您想用并行来换覆盖面，或者让几路独立检查赛跑时，就该找 `/swarm`。`/arena` 是给每个子代理同一份设计或代码说明，再挑一版底稿并嫁接各方精华；`/swarm` 则是分片覆盖，或者按事先声明的挑选规则跑一场竞速，不走选底稿再嫁接那套流程。
 
-## 用 `/interrogate` 找出破绽 {#break-it-with-interrogate}
+## 用 `/interrogate` 找出破绽 {/* #break-it-with-interrogate */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -125,7 +125,7 @@ import Diagram from '@site/src/components/Diagram';
 
 报告里的已丢弃（Dropped）列表也值得看一眼，您随时可以推翻它的判定。
 
-## 做原型，不要空谈 {#prototype-instead-of-debating}
+## 做原型，不要空谈 {/* #prototype-instead-of-debating */}
 
 永远别直接拿第一版设计就开工。多要几个方案，看着实实在在的证据来挑：
 
@@ -169,7 +169,7 @@ import Diagram from '@site/src/components/Diagram';
 
 不要把对手模型浪费在一份抽象计划上。凡是没法靠实跑证明的问题，`/interrogate` 都会直接丢弃，所以手里没有代码时，对手模型基本无从下手。先让原型把问题落地验证，再回头审查真正做出来的东西。
 
-## 共享代码先写 README {#write-the-readme-first-for-shared-code}
+## 共享代码先写 README {/* #write-the-readme-first-for-shared-code */}
 
 如果您要写的是一个供其他代码调用的包或 API，不妨从使用者会读的文档写起：
 
@@ -192,7 +192,7 @@ import Diagram from '@site/src/components/Diagram';
 
 先写教程会逼着您站到调用方的视角去思考：先向一位假想中的用户介绍这套 API，再倒推底层实现。写出来的文档还会成为一个具体的对照标准，Agent 写完代码后可以直接拿它来核对自己的工作。如果文档本身的质量也很重要，请点名调用 [`/technical-writing`](https://github.com/cursor/plugins/blob/main/pstack/skills/technical-writing/SKILL.md)，确保教程始终是教程，不会写着写着就混成参考手册和原理讲解的大杂烩。
 
-## 设计定了再写计划 {#plan-after-the-design-settles}
+## 设计定了再写计划 {/* #plan-after-the-design-settles */}
 
 pstack 故意没有提供“写计划”的技能。如果您确实想要一份书面计划，等设计定下来之后再提：
 
@@ -236,7 +236,7 @@ pstack 故意没有提供“写计划”的技能。如果您确实想要一份�
 
 加上“bugs included”（连同 bug 一起），能防止迁移过程顺手悄悄修掉旧问题——否则新旧两版的输出就没法逐项对齐了。对于要跨好几天的项目，您可以先把这份计划临时提交进仓库，方便其他 Agent 看到整体进度，等工作全部合并后再删掉。
 
-## 一个任务值得花多少精力做设计？ {#how-much-design-work-does-a-task-deserve}
+## 一个任务值得花多少精力做设计？ {/* #how-much-design-work-does-a-task-deserve */}
 
 您可能会想，是不是每次改动都得走这一整套流程？完全不用。大多数改动根本不需要这些步骤。下面是一条大致的阶梯供您参考：
 

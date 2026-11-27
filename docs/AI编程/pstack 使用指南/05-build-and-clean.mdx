@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 所有实现类的 <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term> 都遵守同一条纪律：您只需说出自己观察到的现象，剩下的交由 playbook 去向 Agent 追要证据。这一章先讲每种常见开发任务的提示词该怎么写，再介绍一套清理习惯，让您的 <Term tip="这次改动前后的差异">diff</Term> 始终清爽易读、便于审查。
 
-## 用您已知的信息驱动每个构建 playbook {#prompt-each-build-playbook-with-what-you-know}
+## 用您已知的信息驱动每个构建 playbook {/* #prompt-each-build-playbook-with-what-you-know */}
 
 修 bug 的提示词先讲症状，并要求先复现：
 
@@ -112,7 +112,7 @@ import TabItem from '@theme/TabItem';
 </TabItem>
 </Tabs>
 
-## 用 `/tdd` 先写一个会失败的测试 {#write-the-failing-test-first-with-tdd}
+## 用 `/tdd` 先写一个会失败的测试 {/* #write-the-failing-test-first-with-tdd */}
 
 当一个 bug 在本地有低成本的测试路径时，整条提示词只需要两个词：
 
@@ -122,11 +122,11 @@ import TabItem from '@theme/TabItem';
 
 在已有上下文里，这就足够了。[`/tdd`](https://github.com/cursor/plugins/blob/main/pstack/skills/tdd/SKILL.md) 会先写出一个因为预期原因而失败的最小测试，再写修复代码，最后重跑测试。如果写单测需要搭一大套 harness 或者写很脆弱的 mock，这个技能会如实告诉您，并改用最接近真实场景的可执行检查。真命令能拿出更有力的证据时，别硬逼着写单测。
 
-## 按名字加载 TypeScript 规则 {#load-the-typescript-rules-by-name}
+## 按名字加载 TypeScript 规则 {/* #load-the-typescript-rules-by-name */}
 
 [`typescript-best-practices`](https://github.com/cursor/plugins/blob/main/pstack/skills/typescript-best-practices/SKILL.md) 把类型系统原则落成了具体规则：可辨识联合类型（discriminated unions）、在边界处使用 `unknown`、穷举所有分支、从 schema 派生类型。它不会自动加载，所以只要任务涉及 `.ts` 或 `.tsx` 文件，请手动输入 `/typescript-best-practices`。
 
-## 提交之前先做清理 {#clean-before-you-commit}
+## 提交之前先做清理 {/* #clean-before-you-commit */}
 
 [Opening a PR](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/opening-a-pr.md) playbook 会在每次提交前对 diff 跑一遍 `/deslop`，而 `/poteto-mode` 则会对 PR 描述和提交信息正文运行 [`/unslop`](https://github.com/cursor/plugins/blob/main/pstack/skills/unslop/SKILL.md)。`/deslop` 附带在 `cursor-team-kit` 插件里，不在 pstack 中。如果您没有安装它，直接用大白话提同样的要求就行：删掉复述代码的注释、没有依据的防御性判断、已经用不上的兼容分支，以及和本次任务无关的改动。
 
@@ -151,7 +151,7 @@ import TabItem from '@theme/TabItem';
 
 用久了您也会形成自己的简写习惯。哪怕只发一句很短的“unslop that, tighten it”（去一下 <Term tip="AI 写出来的冗余内容：没用的注释、多余的防御代码、空话">slop</Term>，写紧凑点），这个技能也能准确理解您的意图。
 
-## 用 `/no-comments` 删掉多余注释 {#strip-the-comments-with-no-comments}
+## 用 `/no-comments` 删掉多余注释 {/* #strip-the-comments-with-no-comments */}
 
 注释需要单独过一遍筛子，而且不能交给写下它们的同一个 Agent。作者总会替自己写的注释辩护，Agent 也一样。所以在提审之前，把它们交给一双全新的眼睛来看：
 

@@ -13,7 +13,7 @@ pstack 给您提供了四个入口。`/how` 解释代码现在是怎么运转的
 
 ![一名侦探拿着放大镜研究机器蓝图，几台机器人正搬来卷宗；她身后的线索板在 /how 和 /why 两栏下串联起各种线索。](./images/understanding.jpg)
 
-## 先做一次只读调查 {#start-with-a-read-only-investigation}
+## 先做一次只读调查 {/* #start-with-a-read-only-investigation */}
 
 原因还没摸清时，先要调查结论，不要直接要修复方案：
 
@@ -36,7 +36,7 @@ pstack 给您提供了四个入口。`/how` 解释代码现在是怎么运转的
 
 “don't change any code yet”（先不要改任何代码）会把这次任务路由到 [Investigation](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/investigation.md) <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term>。它会追踪代码链路，遇到涉及设计动机的问题时补上 `/why`，最后给出一份附带出处的说明。如果您要在几个方案之间做选择，它会给出一份推荐结论和一张权衡对比表。多问一句“what data you used”（你用了哪些数据），能促使 Agent 把确凿证据和自己的猜测分开。等调查结果明确指向修复方案后，再把它当作一个新任务来动手修。
 
-## 用 `/how` 追踪行为 {#trace-behavior-with-how}
+## 用 `/how` 追踪行为 {/* #trace-behavior-with-how */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -57,7 +57,7 @@ pstack 给您提供了四个入口。`/how` 解释代码现在是怎么运转的
 
 心里有什么具体问题就直接问。[`/how`](https://github.com/cursor/plugins/blob/main/pstack/skills/how/SKILL.md) 会通读代码，像资深工程师带您熟悉一个子系统那样给出回答，讲清楚运行时流程、关键类型以及那些一眼看不出来的门道。它会在后台启动一个只读子代理，专门探索代码并整理出这份讲解。
 
-## 用 `/why` 挖出历史 {#dig-up-history-with-why}
+## 用 `/why` 挖出历史 {/* #dig-up-history-with-why */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -80,7 +80,7 @@ pstack 给您提供了四个入口。`/how` 解释代码现在是怎么运转的
 
 `/how` 和 `/why` 天然可以组合使用。当您怀疑这段代码之所以这么乱是历史原因造成的，输入“do why first then how”（先跑 why 再跑 how）会非常顺手。
 
-## 用 `/teach` 真正弄懂它 {#actually-understand-it-with-teach}
+## 用 `/teach` 真正弄懂它 {/* #actually-understand-it-with-teach */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -122,7 +122,7 @@ pstack 给您提供了四个入口。`/how` 解释代码现在是怎么运转的
 
 让 Agent 讲给您听，帮到的不只是您，也帮到了 Agent 自己。不得不把做法讲清楚的 Agent，必须老老实实去读代码，并用证据支撑每一句论断，而不能自信满满地甩出一句结论就往下走了。
 
-## 用 `/recall` 找回您自己的上下文 {#rebuild-your-own-context-with-recall}
+## 用 `/recall` 找回您自己的上下文 {/* #rebuild-your-own-context-with-recall */}
 
 <Tabs groupId="prompt-lang">
 <TabItem value="en" label="English">
@@ -162,7 +162,7 @@ pstack 给您提供了四个入口。`/how` 解释代码现在是怎么运转的
 
 如果您想续上的是某一段具体的对话，应该用下面讲的 Session pickup playbook，而不是 `/recall`。
 
-## 用 Session pickup 接手之前做到一半的工作 {#take-over-prior-work-with-session-pickup}
+## 用 Session pickup 接手之前做到一半的工作 {/* #take-over-prior-work-with-session-pickup */}
 
 当另一个 Agent（或者上周的您自己）留下了一个做到一半的分支时：
 

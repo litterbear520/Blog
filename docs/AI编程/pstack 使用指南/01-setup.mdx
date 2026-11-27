@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 在这一章里，您会安装 pstack 插件、选定它要使用的模型，并跑通第一个任务。整个配置只需要一条命令，再加上几轮简短的对话。
 
-## 安装插件 {#install-the-plugin}
+## 安装插件 {/* #install-the-plugin */}
 
 在 Cursor 对话框中运行：
 
@@ -21,7 +21,7 @@ Cursor 会提示插件已安装完成。
 
 如果您在 Claude Code 里使用，请依次运行 `/plugin marketplace add cursor/plugins` 和 `/plugin install pstack@cursor-plugins`。Claude Code 会给所有插件命令统一加上 `pstack:` 前缀，因此本指南里出现的所有命令在 Claude Code 中都要写成带前缀的形式——例如 `/setup-pstack` 要写成 `/pstack:setup-pstack`，后文的 `/poteto-mode` 也要写成 `/pstack:poteto-mode`。运行 `/pstack:setup-pstack` 后，它会把模型规则写入 `~/.claude/rules/pstack-models.md`。其他差异见 [Claude Code 适配说明](https://github.com/cursor/plugins/blob/main/pstack/docs/harness/claude-code.md)。
 
-## 选择模型 {#pick-your-models}
+## 选择模型 {/* #pick-your-models */}
 
 运行：
 
@@ -37,7 +37,7 @@ Cursor 会提示插件已安装完成。
 
 您可能会好奇，如果平时用的是 Auto 模式会怎样。只要把某个角色设为 `inherit-parent` 或 `auto`，pstack 在派发子代理时就不会传 `model` 字段，子代理会直接继承当前主对话的模型。这两个值意思完全一样，都不是具体的模型标识名。评审组角色的值是一个列表，列表里每写一项就会启动一个子代理，所以列表长度决定了评审组的人数。配置过程还会设置 `swarm workers` 这一项，用来指定 `/swarm` 下各个 worker 的默认模型。如果某次多路竞速给每条路线单独指定了模型，就以那次指定的为准。
 
-## 要不要生成验证技能 {#accept-the-verification-offers-or-dont}
+## 要不要生成验证技能 {/* #accept-the-verification-offers-or-dont */}
 
 配置快结束时，`/setup-pstack` 会在您的项目里寻找能证明应用行为的手段——要么是一个 `verify-*` 技能，要么是一套现成的 <Term tip="驱动和检查应用的现成脚本或工具">harness</Term>。如果两样都没找到，它会主动问您一次，要不要用 [`/create-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-verification-skill/SKILL.md) 生成一个。
 
@@ -49,7 +49,7 @@ Cursor 会提示插件已安装完成。
 
 配置完成后，请新开一段对话。模型规则只会对新会话生效。
 
-## 控制好开销 {#keep-the-cost-in-check}
+## 控制好开销 {/* #keep-the-cost-in-check */}
 
 pstack 会在子代理和评审组上额外消耗 token，这是换取严谨度的代价。如果想少花一些，可以这样做：
 
@@ -58,7 +58,7 @@ pstack 会在子代理和评审组上额外消耗 token，这是换取严谨度�
 - 缩短评审组列表。列表里每多一项，就会多跑一个子代理。
 - 把 `/poteto-mode` 留给确实需要严谨把关的活。一眼就能看明白的小改动用不着它。
 
-## 跑通您的第一个任务 {#run-your-first-task}
+## 跑通您的第一个任务 {/* #run-your-first-task */}
 
 挑一件真实但规模不大的活，像跟同事交代任务一样把它说出来：
 

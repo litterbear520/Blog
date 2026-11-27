@@ -12,7 +12,7 @@ import Diagram from '@site/src/components/Diagram';
 
 ![她在门口挥手道晚安，机器人们继续维持工厂运转，其中一个正在 BUILD LOOP ACTIVE 标志下更新 DECISION LOG 墙面看板。](./images/overnight.jpg)
 
-## 先赢得信任，再放手让循环自己跑 {#earn-the-trust-before-the-loop}
+## 先赢得信任，再放手让循环自己跑 {/* #earn-the-trust-before-the-loop */}
 
 一个您还信不过的循环，只会把未经检查的烂摊子越产越快，而且每跑一轮问题都在叠加。放手让它独自跑之前，先确认下面四条都已经满足：
 
@@ -23,7 +23,7 @@ import Diagram from '@site/src/components/Diagram';
 
 这四条全部成立之后，再让循环自主运行。在此之前，先在您盯着的情况下跑。
 
-## 过夜交接的约定 {#the-overnight-contract}
+## 过夜交接的约定 {/* #the-overnight-contract */}
 
 一份好用的过夜交接不需要写得很长，只要包含目标、完成条件、权限边界和退路就够了：
 
@@ -63,13 +63,13 @@ keep a decision log. don't ask me before committing.
 
 如果想中途主动停下，直接告诉 Agent 暂停，或者说您马上要离线、要重启 Cursor。[Pause safely](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/pause-safely.md) playbook 会把当前这一步收尾或回退干净，提交一个中途进度检查点，并写下一份续接说明。回头新开一段对话时，Agent 会通过 Session pickup playbook 读这份说明接着往下做。说“keep going”（继续）绝不会触发暂停。
 
-## 循环整晚都在做什么 {#what-the-loop-does-all-night}
+## 循环整晚都在做什么 {/* #what-the-loop-does-all-night */}
 
 <Diagram variant="pstackOvernightLoop" />
 
 每一轮迭代都只做一件事：改一小步、验一次、记一行日志。没有带来进展的改动会被直接丢弃，不会留在代码里混着。如果遇到瓶颈停滞不前，应该换一条思路，而不是直接停下，更不能偷偷放宽完成条件来宣布胜利。
 
-## 早晨如何审查成果 {#the-morning-audit}
+## 早晨如何审查成果 {/* #the-morning-audit */}
 
 让整晚的工作变得可审查的，是 [`/show-me-your-work`](https://github.com/cursor/plugins/blob/main/pstack/skills/show-me-your-work/SKILL.md)。它把每条决定记成 TSV 文件里的一行，字段包括时间、阶段、决定内容、原因、证据位置和结果，默认存在 `decisions.tsv`（如果多个任务共用一个目录，则存在 `.audit/<task-slug>.tsv`）。这份文件默认留在本地，不进版本库；如果改动足够大、评审人需要看到决策轨迹才敢放心，您再把它提交上去。
 
@@ -96,7 +96,7 @@ keep a decision log. don't ask me before committing.
 
 如果您只想要个简短进展而不是正式审计，可以在跑任务的那个对话里直接输入 [`/ketchup`](https://github.com/cursor/plugins/blob/main/pstack/skills/ketchup/SKILL.md)。它只读不改，会用大白话告诉您从您上一条消息到现在发生了哪些变化，并附上过程中生成的截图和小示意图。接着它会列出每一件等您决定的事——比如合并、审批或在几个方案里选一个——同时给出它的推荐、证据和风险，让您光看这一条回复就能做决定。
 
-## 当过夜的不是单个任务，而是一整条队列 {#when-the-night-holds-a-queue-not-a-task}
+## 当过夜的不是单个任务，而是一整条队列 {/* #when-the-night-holds-a-queue-not-a-task */}
 
 上面的约定是把一个任务推向一个完成条件。但有些晚上要跑的不止一件事，可能是一排彼此独立的改动，甚至是一项跨多个模块的大工程。有两个 playbook 和一个技能可以把同样的信任机制往上扩展。
 
@@ -157,7 +157,7 @@ keep a decision log. don't ask me before committing.
 </TabItem>
 </Tabs>
 
-## 并行推进多个 Project {#run-many-projects-in-parallel}
+## 并行推进多个 Project {/* #run-many-projects-in-parallel */}
 
 [Cursor 的 Project](https://cursor.com/blog/projects) 给一个协调者 Agent 配了一条长期保留的对话线程。协调者自己不写代码，只负责指挥子代理；这些子代理默认跑在云端，所以哪怕您合上笔记本，工作也照样往下走。给协调者发指令时以 `/poteto-mode` 开头，它拉起的子代理就会照着 playbook 执行。每个新启动的 <Term tip="worker：被派去完成其中一份工作的子代理，各管一片、各自汇报">worker</Term> 都会先读 [`worker.md`](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/worker.md)，因此它们会守住开局定下的标准，遇到可逆的决定自己拿主意而不来打扰您，并把 PR 整理到可以直接评审的状态。
 
@@ -187,7 +187,7 @@ keep a decision log. don't ask me before committing.
 </TabItem>
 </Tabs>
 
-## 让循环自己启动 {#let-loops-start-themselves}
+## 让循环自己启动 {/* #let-loops-start-themselves */}
 
 前面所有的循环，都还得等您手动发一条消息来启动。换成定时或事件驱动的自动化任务，连这一步都可以省掉。软件维护天然能拆成几个适合自动化的阶段：分诊问题反馈、复现问题、修复问题、验证修复。有两条规矩能让这条流水线始终靠得住：
 

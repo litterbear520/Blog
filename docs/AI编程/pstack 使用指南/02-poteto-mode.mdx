@@ -12,13 +12,13 @@ import Diagram from '@site/src/components/Diagram';
 
 ![一名调度员拉动扳道杆，将轨道手摇车上的机器人分流到亮着灯的各个道口；上方的 /poteto-mode 发车指示牌写着 BUG FIX、FEATURE 和 INVESTIGATION。](./images/router.jpg)
 
-## 您的提示词会经历什么 {#what-happens-to-your-prompt}
+## 您的提示词会经历什么 {/* #what-happens-to-your-prompt */}
 
 <Diagram variant="pstackRouting" />
 
 上面这张图展示的是最常见的几条路线。除此之外，pstack 还有针对更多场景的 playbook：持续优化某项指标、诊断运行时的异常表现或已采集的调用追踪、做原型、对齐视觉效果、编写和评估技能、自主运行、发起 PR、把单个 PR 或一串 <Term tip="PR 栈：一串前后依赖、按顺序合并的 PR">stack</Term> 一路跟进到可以合并、合并已经验证好的 stack、全自动推进 PR 队列或 stack、接手未完成的会话、安全暂停、制定多阶段计划，以及清理 <Term tip="工作树：同一个 git 仓库再检出一份独立的工作目录，各自一个分支，互不干扰">worktree</Term>。完整清单都在 [playbook 目录](https://github.com/cursor/plugins/tree/main/pstack/skills/poteto-mode/playbooks/)里。
 
-## 直说目标，省去繁文缛节 {#say-the-goal-not-the-ceremony}
+## 直说目标，省去繁文缛节 {/* #say-the-goal-not-the-ceremony */}
 
 您不需要写规格文档。只要说出哪里出了问题，或者您想要什么，再补上任何您已经知道、能帮 Agent 省时间的线索就行：
 
@@ -41,7 +41,7 @@ import Diagram from '@site/src/components/Diagram';
 
 这是一条典型的 Bug fix 提示词。“repro first”（先复现）是一条实打实的约束，而不是客套话，playbook 会严格照办。您可以看着待办列表被 Bug fix 的步骤一条条填满。
 
-## 提示词里该写什么 {#what-goes-in-a-prompt}
+## 提示词里该写什么 {/* #what-goes-in-a-prompt */}
 
 一条好用的提示词最多包含五样东西，每样一句话就能说清：
 
@@ -138,7 +138,7 @@ Agent 会说出几件事：顶尖专家会做但您没提到的事、他们会�
 
 Agent 会给出 8 到 12 个业内专业术语，并按它们对最终方案的影响大小排好序。每个术语都会附上三样东西：它对应您原话里的哪部分、一个真正用过它的项目（而且链接经过核实），以及有了这个词之后您可以向 Agent 提出什么具体要求。它还会从 2 到 3 个相邻领域借来同类问题的不同叫法，并指出每个类比在哪里会失效。最后，它会用这些新词重写您的描述。您可以直接把改写后的版本发出去，或者再拿去跑一遍 `/sharpen`。
 
-## 后续追问尽量简短 {#follow-up-short}
+## 后续追问尽量简短 {/* #follow-up-short */}
 
 一旦对话里已经有了上下文，您的提示词就可以缩到极短。下面这几句每一句都够用：
 
@@ -169,7 +169,7 @@ keep going until done
 
 这么简短照样管用，是因为 playbook 替您撑起了流程结构，而 <Term tip="Cursor 的自定义模式：把一个技能挂在整段对话上，每一轮都在上下文里">Custom Mode</Term> 会让 `/poteto-mode` 在每一轮都留在上下文里。[安装和配置 pstack](./01-setup.mdx#run-your-first-task) 演示了怎么开启 Custom Mode。您的话负责传达意图，技能负责守住严谨度。
 
-## 用“new task”切换任务 {#switch-tasks-with-new-task}
+## 用“new task”切换任务 {/* #switch-tasks-with-new-task */}
 
 聊得久的对话会攒下上一个任务的上下文。换话题时，请直接说出来：
 
@@ -192,7 +192,7 @@ keep going until done
 
 “new task”（新任务）会告诉 `/poteto-mode` 重新匹配 playbook，而不是接着跑上一个。“don't change any code yet”（先不要改任何代码）则会把这次任务路由到 Investigation playbook。要是漏掉这两句，正跑到 Feature playbook 一半的 `/poteto-mode` 往往会把您的提问当成这个功能的下一步。
 
-## 给并行任务独立的工作环境 {#give-parallel-work-its-own-machine}
+## 给并行任务独立的工作环境 {/* #give-parallel-work-its-own-machine */}
 
 如果您在同一台电脑上对着同一个仓库同时跑好几个 Agent，它们会争抢工作目录、端口和构建输出。最干净的隔离办法是用[云端子代理](https://cursor.com/docs/subagents#cloud-subagents)。每个云端子代理都有自己独立的 VM 和分支，可以放心装依赖、跑应用、录下结果视频，完全不会碰您的本机。在任务前加上 `/in-cloud`，或者直接让主对话把活交给云端子代理就行。
 
@@ -238,7 +238,7 @@ worktree 用久了会越积越多。磁盘吃紧时，直接这样问：
 
 [Worktree cleanup](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/worktree-cleanup.md) playbook 会按合并状态、未提交改动以及还有哪些对话正在使用，给每个 worktree 归类。它只删除经核实可以安全清理的目录，遇到还有未提交改动的就会停下来等您决定。
 
-## 放手让它继续跑 {#leave-it-running}
+## 放手让它继续跑 {/* #leave-it-running */}
 
 要离开电脑一会儿时，把完成标准交代清楚就可以走了：
 
