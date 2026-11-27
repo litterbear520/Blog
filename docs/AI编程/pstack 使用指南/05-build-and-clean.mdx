@@ -1,0 +1,170 @@
+---
+description: 用构建 playbook 实现改动，并在提交前清理代码与注释里的冗余。
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 实现改动并清理 diff
+
+所有实现类的 <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term> 都遵守同一条纪律：您只需说出自己观察到的现象，剩下的交由 playbook 去向 Agent 追要证据。这一章先讲每种常见开发任务的提示词该怎么写，再介绍一套清理习惯，让您的 <Term tip="这次改动前后的差异">diff</Term> 始终清爽易读、便于审查。
+
+## 用您已知的信息驱动每个构建 playbook {#prompt-each-build-playbook-with-what-you-know}
+
+修 bug 的提示词先讲症状，并要求先复现：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode this command emits two records after a retry. repro first, then fix and verify.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 这个命令在重试之后会输出两条记录。先复现，再修复并验证。
+```
+
+</TabItem>
+</Tabs>
+
+做新功能的提示词说清楚新行为，以及哪些东西绝不能变：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode add a --json flag. text output stays byte-identical. verify both forms.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 加上 --json 参数。普通文本输出保持逐字节完全一致。两种格式都验证一下。
+```
+
+</TabItem>
+</Tabs>
+
+重构的提示词先钉死现有行为，再动代码结构：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode move parsing into one module, zero behavior change. record the current output first and prove it's unchanged after.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 把解析逻辑挪到同一个模块里，行为零改动。先记录下当前输出，改完后证明输出完全没变。
+```
+
+</TabItem>
+</Tabs>
+
+性能优化的提示词给出实测数字，而不是主观感觉：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode startup takes 1.8s on this fixture. trace it, fix the measured cause, show me before and after.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 在这个测试样本上启动花了 1.8 秒。做一次性能追踪，修掉实测出来的瓶颈，把优化前后的数据给我看。
+```
+
+</TabItem>
+</Tabs>
+
+这几条提示词会分别路由到对应的 playbook（[Bug fix](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/bug-fix.md)、[Feature](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/feature.md)、[Refactoring](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/refactoring.md)、[Perf issue](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/perf-issue.md)），由 playbook 替您补齐那些没写进提示词的步骤：修之前先复现、写之前先定好数据结构、重构前先锁住行为、优化前先做性能剖析。
+
+如果要持续拉升某一项指标，可以用 [Hillclimb](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/hillclimb.md) playbook。只要给它指标、目标值和最少尝试次数，它就会锁死一套固定的测量 <Term tip="驱动和检查应用的现成脚本或工具">harness</Term>，每次只验证一个假设，循环迭代。变好了就保留，没变好就全部回滚。
+
+两个性能 playbook 都会用 [`/benchmark-checklist`](https://github.com/cursor/plugins/blob/main/pstack/skills/benchmark-checklist/SKILL.md) 核查自己的数据：Perf issue 会核查基线以及之后的每一个数字，Hillclimb 则会在锁死测量 harness 之前，先拿这份清单把 harness 核查一遍。[验证结果并提交 PR](./06-verify-and-ship.mdx#vet-a-measured-number-with-benchmark-checklist) 会讲什么时候值得您自己手动调用它。
+
+有时候，您在动手修之前只想先查清根因。如果是正在运行时出现的症状——比如内存泄漏、空闲时 CPU 空转或画面闪烁——[Runtime forensics](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/runtime-forensics.md) playbook 会对正在运行的进程插桩排查。如果您手里已经有一份采集好的性能剖析文件，[Trace forensics](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/trace-forensics.md) playbook 会读取这份 <Term tip="产物：改动实际产出、能拿来检查的东西，例如命令输出、截图、写进数据库的值">artifact</Term>，把热点调用帧对应回源码行。这两个 playbook 都只交诊断报告，不会直接改代码：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode here's a cpuprofile from the slow startup. tell me where the time goes and which source lines own it. no fix yet.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 这是一份启动变慢时的 cpuprofile。告诉我时间都花在哪了，具体对应哪几行源码。先不要修。
+```
+
+</TabItem>
+</Tabs>
+
+## 用 `/tdd` 先写一个会失败的测试 {#write-the-failing-test-first-with-tdd}
+
+当一个 bug 在本地有低成本的测试路径时，整条提示词只需要两个词：
+
+```text
+/tdd implement
+```
+
+在已有上下文里，这就足够了。[`/tdd`](https://github.com/cursor/plugins/blob/main/pstack/skills/tdd/SKILL.md) 会先写出一个因为预期原因而失败的最小测试，再写修复代码，最后重跑测试。如果写单测需要搭一大套 harness 或者写很脆弱的 mock，这个技能会如实告诉您，并改用最接近真实场景的可执行检查。真命令能拿出更有力的证据时，别硬逼着写单测。
+
+## 按名字加载 TypeScript 规则 {#load-the-typescript-rules-by-name}
+
+[`typescript-best-practices`](https://github.com/cursor/plugins/blob/main/pstack/skills/typescript-best-practices/SKILL.md) 把类型系统原则落成了具体规则：可辨识联合类型（discriminated unions）、在边界处使用 `unknown`、穷举所有分支、从 schema 派生类型。它不会自动加载，所以只要任务涉及 `.ts` 或 `.tsx` 文件，请手动输入 `/typescript-best-practices`。
+
+## 提交之前先做清理 {#clean-before-you-commit}
+
+[Opening a PR](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/opening-a-pr.md) playbook 会在每次提交前对 diff 跑一遍 `/deslop`，而 `/poteto-mode` 则会对 PR 描述和提交信息正文运行 [`/unslop`](https://github.com/cursor/plugins/blob/main/pstack/skills/unslop/SKILL.md)。`/deslop` 附带在 `cursor-team-kit` 插件里，不在 pstack 中。如果您没有安装它，直接用大白话提同样的要求就行：删掉复述代码的注释、没有依据的防御性判断、已经用不上的兼容分支，以及和本次任务无关的改动。
+
+针对文档和说明文字，`/unslop` 可以指定目标以及您的额外要求：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/unslop the readme changes, no emdashes
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/unslop 清理一下 readme 的改动，不要用破折号
+```
+
+</TabItem>
+</Tabs>
+
+用久了您也会形成自己的简写习惯。哪怕只发一句很短的“unslop that, tighten it”（去一下 <Term tip="AI 写出来的冗余内容：没用的注释、多余的防御代码、空话">slop</Term>，写紧凑点），这个技能也能准确理解您的意图。
+
+## 用 `/no-comments` 删掉多余注释 {#strip-the-comments-with-no-comments}
+
+注释需要单独过一遍筛子，而且不能交给写下它们的同一个 Agent。作者总会替自己写的注释辩护，Agent 也一样。所以在提审之前，把它们交给一双全新的眼睛来看：
+
+```text
+/no-comments the diff
+```
+
+[`/no-comments`](https://github.com/cursor/plugins/blob/main/pstack/skills/no-comments/SKILL.md) 会派发 [Comment Sicko](https://github.com/cursor/plugins/blob/main/pstack/agents/comment-sicko.md)——一个只读的审查子代理，它手里的“允许保留清单”非常短：许可证头、公开 API 的文档注释、解释代码本身说不清的外部链接，以及由无法改动的外部依赖强加的特殊行为。除此之外的注释一律删掉。您自己代码里让人意外的写法，注释也拿不到豁免：这条注释会被当成“需要重构”的信号退回来，凡是 `/no-comments` 认可的信号，它都会从根因上改代码解决。如果某条注释声明了某种约束（比如“do not remove”，不要删除），这个技能会提议把这条约束改写成类型、测试或 lint 规则。不管走哪条路，注释最终都会被删掉。
+
+这三个工具的分工值得记清楚：`/deslop` 清理代码里的 slop，`/unslop` 清理文字里的 slop，而 `/no-comments` 则把注释交给一个没参与编写它们的独立审查者来把关。
+
+:::warning[误区]
+
+清理工作不是可有可无的润色。一份塞满复述式注释和多余防御代码的 diff，在审查者眼里就像是半成品，而且下一个 bug 往往就藏在这些多出来的代码里。只要觉得 diff 显得臃肿，请在提交之前就说一句“deslop it”（清理一下 slop），别等代码审查时被人指出来。
+
+:::

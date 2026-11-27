@@ -27,5 +27,8 @@ import superAgentRecall from './superAgentRecall';
 import superAgentSpeculative from './superAgentSpeculative';
 import superAgentAsyncLoop from './superAgentAsyncLoop';
 import superAgentDecouple from './superAgentDecouple';
+import pstackRouting from './pstackRouting';
+import pstackArena from './pstackArena';
+import pstackOvernightLoop from './pstackOvernightLoop';
 
-export default { modsHookChain, superAgentChannels, superAgentProactive, superAgentArch, superAgentTwoLayer, superAgentFilter, superAgentThreads, superAgentSubscribe, superAgentRecall, superAgentSpeculative, superAgentAsyncLoop, superAgentDecouple };
+export default { modsHookChain, superAgentChannels, superAgentProactive, superAgentArch, superAgentTwoLayer, superAgentFilter, superAgentThreads, superAgentSubscribe, superAgentRecall, superAgentSpeculative, superAgentAsyncLoop, superAgentDecouple, pstackRouting, pstackArena, pstackOvernightLoop };

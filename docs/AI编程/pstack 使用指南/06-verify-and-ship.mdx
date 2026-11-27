@@ -1,0 +1,297 @@
+---
+description: 定完成条件、查实测数据、搭验证与形式化验证技能，把 PR 推进到合并。
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 验证结果并提交 PR
+
+“能编译通过”不算证据。[Prove It Works](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-prove-it-works/SKILL.md) 原则要求 Agent 在汇报成功之前，必须先核验真实的 <Term tip="产物：改动实际产出、能拿来检查的东西，例如命令输出、截图、写进数据库的值">artifact</Term>；而您的职责，就是让这份真实的 artifact 变得可检查。本章会介绍如何提前说清完成条件、核查实测性能数据、为您的应用生成验证技能、对测试很难覆盖到的性质做形式化验证，以及提交 PR 并一路推进到合并。
+
+验证通常是 Agent 协作里最慢的一环，因为这一步往往得等人类来把关。只要让 Agent 自己有能力完成验证，您就不再是瓶颈。要是跳过这一步，多开再多 Agent，也只是多出一堆未经核验的改动等您自己去审。
+
+![一架原型机正在真实测试航线上飞行，她手持秒表计时，机器人们在一旁录像并逐项核对清单；终端屏幕上显示着 verify: pass, evidence: captured。](./images/verification.jpg)
+
+## 一开始就把完成条件说清楚 {#state-the-finish-condition-up-front}
+
+在第一条提示词里，就用最贴合任务的说法把“做到什么程度才算完成”写明白：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode add json output to this command. text output stays byte-identical, the json parses, both run against the sample project. show me the evidence.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 给这个命令加上 json 输出。原有的文本输出要逐字节保持一致，json 能正常解析，两种输出都在示例项目上跑一遍。把证据给我看。
+```
+
+</TabItem>
+</Tabs>
+
+这样一来，Agent 手头就有了三项能直接跑的检查，而不用去揣摩您是否满意。回复回来时，里面应当附上实际执行的命令和输出。如果某项检查没能跑起来，靠谱的回复会如实标为“inconclusive”（无法定论）。一份语气笃定却拿不出证据的回复，本身就是危险信号。
+
+检查方式要和改动类型相匹配：
+
+- CLI 改动：跑一遍真实命令。
+- UI 改动：在运行中的应用里把改过的流程走一遍。如果需要逐像素对齐参考图，[Visual parity](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/visual-parity.md) <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term> 会拿截图和固定的基线做像素比对，而不是靠肉眼判断。
+- 解析器或数据迁移改动：拿一份保存好的输入数据重放一遍。
+- 性能改动：对比改动前后的性能剖析数据。
+- 存储改动：把刚写进去的值再读出来核对。
+
+让 Agent 把证据做成您自己也能直接检查的 artifact：比如先失败、后通过的测试结果，改动前后的录屏、追踪记录或截图。如果修复已经合进主干，可以让它在 main 上再跑一遍同样的检查。一份实打实的 artifact 胜过头头是道的解释，因为您不用重跑整次任务，就能直接质疑和核查它。
+
+如果有一小段您不太放心的 <Term tip="这次改动前后的差异">diff</Term>，可以用 [`/blast-radius`](https://github.com/cursor/plugins/blob/main/pstack/skills/blast-radius/SKILL.md) 找出它可能影响的其他位置。它会找出保证这次改动安全的那个关键前提，然后通过运行代码去证明它，而不是光靠嘴上推论。
+
+## 用 `/benchmark-checklist` 核查实测数据 {#vet-a-measured-number-with-benchmark-checklist}
+
+改动前后的性能对比数据，是最容易无意中测错的证据。缓存已经预热、其中一边跑了 debug 构建，或者真正干活的代码根本没落在计时区间内——随便哪一种，都能跑出看似很有说服力的加速数字。在把数据写进报告或据此做决定之前，先输入：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/benchmark-checklist vet the export speedup before it goes in the pr
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/benchmark-checklist 把导出提速的数据核查一遍，没问题再写进 pr
+```
+
+</TabItem>
+</Tabs>
+
+[`/benchmark-checklist`](https://github.com/cursor/plugins/blob/main/pstack/skills/benchmark-checklist/SKILL.md) 会逐一追问七个问题，而且每个问题都要拿实跑的证据作答：
+
+1. 是什么限制了这个数字？为什么没能快一倍？
+2. 被对比的各方，是不是都按生产环境的配置做了调优？
+3. 结果有没有违背物理上限（例如磁盘带宽或 CPU 核心数）？
+4. 运行过程中有没有报错，或者返回了错误的输出？
+5. 交替多跑几轮之后，结果能不能稳定复现？有没有给出中位数和波动范围？
+6. 放在用户实际等待的端到端路径上，这项提升真的有意义吗？
+7. 实际要做的工作，真的发生在计时区间之内吗？
+
+最后它会给出结论：faster（更快）、slower（更慢）、no measurable difference（无明显差异）或 inconclusive（无法定论），并附上运行次数、数值区间和瓶颈所在。只要说不出瓶颈在哪，或者其中一方没按生产配置调优，它就会判为 inconclusive。`/poteto-mode` 在 Perf issue 和 Hillclimb playbook 里已经内置了这套核查；如果是您在这两个 playbook 之外自己测的数字，或者别人报上来的提速好得不太真实，就可以手动调用它。这个技能正是 [Explain the Number](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-explain-the-number/SKILL.md) 原则的落地形式。
+
+## 为项目创建验证技能 {#create-a-project-verification-skill}
+
+前面 UI 那一条其实藏着一个硬前提：Agent 得有一套能用脚本驱动您应用的方法。如果项目里本来就有，直接用就行；如果没有，就运行：
+
+```text
+/create-verification-skill
+```
+
+[`/create-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-verification-skill/SKILL.md) 会去翻查代码库，而不是先拉着您问东问西。它会弄清用户会操作哪些界面、应用怎么在本地启动、拿什么驱动它（优先用现成的 <Term tip="驱动和检查应用的现成脚本或工具">harness</Term>，没有再考虑浏览器加 CDP、PTY 或纯 HTTP）、什么证据能证明行为正确，以及能不能同时跑两个实例。只有代码里查不到答案的事，它才会来问您。
+
+它会生成 `.cursor/skills/verify-<app>/`，里面是写给 Agent 看的操作说明，包含明确的 Launch、Doctor、Drive、Evidence 和 Cleanup 小节，若附带脚本还会有 Helpers 小节；同时在 `features/` 目录下建一份 <Term tip="功能清单：列出应用的每个功能，以及什么结果能证明它正常">feature map</Term>，列出应用的每个功能，以及什么结果能证明对应功能正常。`/create-verification-skill` 自带一份[完整的 feature map 示例](https://github.com/cursor/plugins/tree/main/pstack/skills/create-verification-skill/references/feature-map-example/)，包含一个 README 索引文件和“每项功能一个文件”的结构，每个文件都写齐四个必填的二级标题。交工之前，生成器会照着新生成的这份技能端到端实跑一遍，验证它确实能用：启动应用、跑 Doctor 检查、驱动一项功能、采集证据、执行清理，再确认清理之后证据依然完好保留。如果这一遍自证失败了，就别用它生成的东西。
+
+从那以后，在这个仓库里，“在应用里验证一下”就成了任何 Agent 都能直接执行的步骤，不用再从头交代环境怎么搭。如果您想要特定形式的证据，在提示词里直接点名这个技能即可：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode build the bulk-archive action. use /verify-<app> to verify your changes and show me a video and screenshots as proof.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 实现批量归档功能。用 /verify-<app> 验证你的改动，把录屏和截图作为证据发给我。
+```
+
+</TabItem>
+</Tabs>
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode repro this with /verify-<app>. if it repros on main, fix it and show me a video as proof.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 用 /verify-<app> 复现一下这个问题。如果在 main 上能复现，就修好它并给我看录屏作为证据。
+```
+
+</TabItem>
+</Tabs>
+
+验证技能跑通之后，[`/swarm`](https://github.com/cursor/plugins/blob/main/pstack/skills/swarm/SKILL.md) 就能按 feature map 里的条目把一次全量检查拆给多个 Agent 并行跑，最后汇总结果。您也可以拉起一组验证者，在足够大的样本上确认性能提升，或者在 PR 提交前对应用做模糊测试，提前揪出回归问题。
+
+把验证技能当成基础设施来维护，别当成一次性脚本。把它提交进仓库，这样团队里每个人、每个 Agent 都能用同一种方式驱动应用。接着按 [Build the Lever](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-build-the-lever/SKILL.md) 原则去做：如果 Agent 总在反复写一次性脚本去点界面，就让它做一个小巧的控制 CLI，改由验证技能去调用这个 CLI。这样 Agent 省 token，每次运行也都能稳定复现。一个让 Agent 用着顺手的 CLI，通常有下面这些特点：
+
+- 只有少量可组合的命令，每条都干实事，而不是拆出一堆只做了一层简单包装的命令。
+- 凡是带破坏性的操作，都提供 `--dry-run` 选项。
+- 用子命令把功能分层展开，而不是一股脑全摊出来。
+- 报错信息里直接告诉调用方接下来该怎么做。
+- 提供详尽的 `--help` 说明。
+- 输出支持机器可读的格式，例如 JSON。
+
+顺手把本地开发环境也做成可复现的：准备好种子数据、测试账号，再配一条每次都能拉起一模一样环境的命令。
+
+## 让验证技能始终贴合现状 {#keep-the-verification-skill-honest}
+
+应用一直在变，feature map 用不了多久就会过时。至少每天跑一次下面这条命令，最好放进定时自动化任务里，免得靠人去记：
+
+```text
+/maintain-verification-skill
+```
+
+[`/maintain-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/maintain-verification-skill/SKILL.md) 会对生成的验证技能做一次全面体检：先给每个功能各派一个只读的源码检查者并行核对，再做一轮实跑，把清单里的每项功能都驱动一遍。最终只会出现三种结果之一：`clean` 表示覆盖完整、无需改动；`changed` 表示开出一个只改验证技能目录的 PR，里面都是经实跑验证的修正；`blocked` 则会写明卡在什么地方。它绝不改业务代码。如果实跑时撞上了产品本身的回归问题，它会如实报告回归，而不会通过改文档来掩盖。
+
+## 用形式化验证技能证明关键性质 {#prove-a-property-with-a-formal-verification-skill}
+
+验证技能证明的是您能驱动到的路径。可有些 bug 躲在没人会去走的路径里：两次重试正好撞在一起、锁在写到一半时过期、状态变更乱序到达。常规测试很少能撞上这些情况。对于这类一旦出事就代价高昂的代码，运行：
+
+```text
+/create-formal-verification-skill
+```
+
+[`/create-formal-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-formal-verification-skill/SKILL.md) 会从代码里挑出验证目标：代码对外部许下的某个承诺，一旦违背就会伤害用户，而且常规测试很难触发违背它的场景。它挑的是最关键的目标，而不是最好验证的那个。您也可以直接指定模块或问题，让它从那里下手：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/create-formal-verification-skill the job lease and retry logic. a job must never run twice at once.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/create-formal-verification-skill 检查一下任务租约和重试逻辑。同一个任务绝不能同时跑两份。
+```
+
+</TabItem>
+</Tabs>
+
+用什么工具，取决于您要验证的问题。想检查“事件会不会以错误顺序发生”，适合针对设计建一个小模型并用模型检验器去穷举，无论代码用什么语言，默认工具都是 TLA+。想检查“代码在所有输入下是否都表现正确”，则适合直接跑在源码上的验证器。如果您的编程语言没有对应的验证器，Agent 会如实说明，转而用自动生成的输入测试真实代码，而不是给函数手写一个假想模型。至于在任意规模下都必须成立的性质，可能还需要数学证明。Agent 会告诉您它选了什么工具，以及为什么选它。
+
+它会验证一条性质，还会故意把代码改坏一版，演示这项检查真的会报错——因为一项从没见它报过错的检查，什么也证明不了。如果现有代码本身就已经违背了这条性质，您会拿到一个反例，用您代码里的概念写成一串简短的步骤。原来的性质定义保持不动，不会为了让检查通过而放宽标准，查出来的问题就一直算问题。除非您明确要求，否则业务代码不会被改动。
+
+接着，它会生成一个项目本地技能，告诉下一位 Agent：某次改动是否碰到了已验证的代码、用哪一条命令跑这项检查，以及怎么区分真实 bug 和建模误差。交工之前，生成器会先做一次临时改动故意破坏这条性质，照着技能跑一遍，确保检查真的能把问题拦下来。交接说明里会写清验证了什么、用了什么工具和边界范围、查出了什么，以及哪些范围没有覆盖到。检查通过只说明模型或设定边界之内没有问题，不代表整个系统都没有问题。
+
+这份技能还会记下每项检查覆盖了哪些代码，以及上一次与代码对齐时的提交记录。如果后续的合并或重构绕过了这个技能，检查可能还在对着早已改掉的旧描述跑并照样通过。碰到这种情况，运行 [`/maintain-formal-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/maintain-formal-verification-skill/SKILL.md)。它会按最新代码更新验证内容、重新运行、确认更新后的每项检查依然能抓住错误，并告诉您每一处失败究竟是验证本身和代码脱节了，还是代码里真的出了 bug。
+
+## 把行为画成 statechart {#show-the-behavior-as-a-statechart}
+
+用模型术语写出的反例能说服您自己，但负责产品行为的产品经理或设计师，需要用他们熟悉的语言来看懂这件事。运行：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/statechart what the user sees when they edit a note offline
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/statechart 画出用户在离线状态下编辑笔记时看到的界面行为
+```
+
+</TabItem>
+</Tabs>
+
+[`/statechart`](https://github.com/cursor/plugins/blob/main/pstack/skills/statechart/SKILL.md) 会根据 TLA+ 模型生成一张 Mermaid <Term tip="状态图：用状态和状态之间的转换画出系统行为的图">statechart</Term>，展示用户实际看到的状态流转，这样图示和被检验过的模型就不会各自跑偏。他们关心的业务规则（比如“离线时绝不应该看到 Synced 状态”）会被写成不变量。图上会标出每一个违背规则的状态，报告里则会用他们熟悉的日常用语给出走到这个状态的最短路径。交接之前，Agent 会先在真实代码里把每条出错路径复现一遍，免得把建模误差当成真 bug 报给对方。
+
+## 提交 PR {#open-the-pr}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode open the pr. small ordered commits, evidence in the description.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 提交这个 pr。拆成顺序清晰的小提交，把验证证据写进描述里。
+```
+
+</TabItem>
+</Tabs>
+
+[Opening a PR](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/opening-a-pr.md) playbook 会在独立的 <Term tip="工作树：同一个 git 仓库再检出一份独立的工作目录，各自一个分支，互不干扰">worktree</Term> 里干活，把改动 rebase 成一串能按顺序落地的干净小提交，清理 diff，写一份一分钟就能读完的简报作为 PR 说明，再直接以可评审状态（不是草稿）发起 PR。把后续改动拆成一串按顺序叠加的 PR，比把同一个分支越堆越大好得多。
+
+## 用 Babysit 把 PR 推进到可以合并 {#drive-the-pr-to-merge-ready-with-babysit}
+
+PR 一旦打开，各种阻碍马上就会找上门：检查挂了、评审提了意见、主干又往前走了。把这些琐碎的来回交给 [Babysit](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/babysit.md) playbook：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode babysit this pr. get it green.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 帮我盯着这个 pr，把它弄绿。
+```
+
+</TabItem>
+</Tabs>
+
+Babysit 会持续盯着这个 PR（在 GitHub 上用内置的监听脚本，如果装了 Origin CLI 则用 Origin CLI），并按固定顺序清理阻碍：先解冲突，再处理评审讨论，最后修 CI。它绝不自动 rebase 或 force-push。一旦遇到冲突或基线落后，它会把需要 rebase 的分支交回给您。它对评审意见抱有审慎怀疑的态度，因为人类和机器人都经常把真问题和噪音混在同一张列表里。真正的问题会被修掉，对噪音则会把反证贴在讨论串里直接驳回。如果您只想看一眼当前状态，提个更小的要求就行，Babysit 会直接回答而不会启动持续循环：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode check on pr 123. anything outstanding?
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 看看 pr 123 现在怎么样，还有什么没解决的吗？
+```
+
+</TabItem>
+</Tabs>
+
+Babysit 做到可以合并就停手。就算所有检查全绿，它也绝不主动合并，因为“要不要合进去”是另一个决定。
+
+## 用 Shipping 合并整个 stack {#land-the-stack-with-shipping}
+
+检查全绿不代表绝对安全。准备好把整个 <Term tip="PR 栈：一串前后依赖、按顺序合并的 PR">stack</Term> 合并进主干时，直接告诉它：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode land the stack.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 合并这个 stack。
+```
+
+</TabItem>
+</Tabs>
+
+[Shipping](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/shipping.md) playbook 会在触发任何合并之前，逐个独立验证 stack 里的每一份 PR。每个 PR 都由一个全新的 Agent 实跑验证行为，而且负责把关的 Agent 绝不是当初写这段代码的那一个。验证完之后，Shipping 只会从栈底开始，按顺序逐个合并连续通过验证的那一段 PR（默认走 GitHub，环境里有 Origin CLI 时走 Origin），并把链条里第一个没过关的 PR 报给您。排在未验证 PR 上面的已验证 PR 会先等着，因为要是硬把它合进去，下面还没通过验证的改动就会被一并带进主干。

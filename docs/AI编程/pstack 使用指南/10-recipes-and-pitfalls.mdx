@@ -1,0 +1,421 @@
+---
+description: 可以直接照抄的提示词配方，以及用 pstack 时最常踩的坑。
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 常用配方与常见误区
+
+先是几条值得直接照抄的提示词，后面是每个人差不多都会踩一次的坑。把里面的路径和完成条件换成您自己的就行。这些配方故意写得很口语化——实战里大家本来就是这么随手敲的，技能完全能读懂您的意图。
+
+![她正在品尝做好的菜肴，机器人们照着食谱盒忙碌烹饪，料理台上方钉着写有 /how、/tdd 和 /loop 的卡片。](./images/recipes.jpg)
+
+## 搞懂一个不熟悉的子系统 {#understand-an-unfamiliar-subsystem}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+use /how first to understand how this initialization works. then use /why to figure out why it broke recently.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+先用 /how 搞清楚这套初始化流程是怎么运转的，再用 /why 查清它最近为什么坏了。
+```
+
+</TabItem>
+</Tabs>
+
+先弄清机制，再查历史脉络。两个技能的报告里都会写明它们检索了哪些信息源，您一眼就能知道结论靠的是什么依据。
+
+## 动代码前，先把杂乱的反馈复述清楚 {#restate-a-noisy-report-before-touching-code}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode read this thread. restate the underlying issue in your own words, in plain english. don't change any code yet.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 读一下这串讨论。用你自己的大白话把背后的真正问题复述一遍。先别改任何代码。
+```
+
+</TabItem>
+</Tabs>
+
+只要理解偏了，复述时就会立刻露馅，这时花一条消息就能掰回来。在 Agent 说出自己的判断之前，先把您的猜测藏在心里。如果只要复述、不需要走任何 <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term>，直接用 `/in-your-own-words`。
+
+## 发出去之前，先把提示词磨锋利 {#sharpen-a-prompt-before-you-send-it}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/sharpen write the onboarding doc for the new billing service.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/sharpen 给新的计费服务写一份上手文档。
+```
+
+</TabItem>
+</Tabs>
+
+Agent 会点出一位资深专家会做、但您没提出来的事：他们会从哪些原始材料入手、用什么方法和工具，以及靠什么外部标准验证结果对不对。它会把您的提示词改写成包含这些要求的新版本交还给您，而不会直接动手干活。觉得改得顺手了，再把新提示词发出去。
+
+## 先做原型，再做选择 {#prototype-before-you-pick}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode prototype a few options for the settings layout. put them behind a switcher and send me screenshots of each.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 给设置页的布局做几个原型方案。用一个切换开关挂起来，把每个方案的截图发给我。
+```
+
+</TabItem>
+</Tabs>
+
+您是在真能跑的东西里挑，而不是对着文字描述空想。Agent 在动手搭原型的过程中，顺带就把布局和时序这类问题自己解掉了。
+
+## 把敲定的设计落成计划 {#turn-a-settled-design-into-a-plan}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode turn this design into a plan. small verifiable PRs, each with its own proof.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 把这个设计整理成一份实施计划。拆成可验证的小 PR，每个 PR 都带各自的验证证据。
+```
+
+</TabItem>
+</Tabs>
+
+等设计真正定下来再提这一步。这份计划本身就是交付物，而且里面会写明后续由哪个 playbook 来执行。
+
+## 给设计找一份第二意见 {#get-a-second-opinion-on-a-design}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+ask /arena for a second opinion on this thread and our approach
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+让 /arena 看看这串讨论和我们的方案，给一份第二意见
+```
+
+</TabItem>
+</Tabs>
+
+您当前的设计会成为几个候选方案之一，最终的综合报告会告诉您：评审组是找到了更好的路子，还是印证了您原来的方案。比起以后返工一个很难推翻的设计，这一步花不了多少成本。
+
+## 并行检查彼此独立的切片 {#check-independent-slices-in-parallel}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/swarm check every package under packages/ against its check.sh. one worker per package. one report.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/swarm 用各自的 check.sh 检查 packages/ 下的每一个包。每个包派一个 worker，最后汇总成一份报告。
+```
+
+</TabItem>
+</Tabs>
+
+每个 <Term tip="worker：被派去完成其中一份工作的子代理，各管一片、各自汇报">worker</Term> 只管一个包。主对话等所有切片跑完后，汇总返回一份标着 `PASS`、`ISSUES` 或 `BLOCKED` 的统一报告，不会把各个 worker 的原始日志一股脑甩给您。
+
+## 带着怀疑审一整个分支 {#review-a-branch-skeptically}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/interrogate the whole branch, but skeptically. don't change anything yet. no nitpicks unless it's an actual bug or regression in behavior.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/interrogate 带着怀疑的态度审查整个分支。先别改任何东西。除非是真 bug 或行为回归，否则别挑小毛病。
+```
+
+</TabItem>
+</Tabs>
+
+里面的限定词非常管用。“don't change anything yet”（先别改任何东西）保证它只看不改，不挑小毛病的规矩则提前滤掉噪音，让留下来经复核确认的问题每条都值得您花时间看。
+
+## 通过失败测试来修 bug {#fix-a-bug-through-a-failing-test}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode repro the duplicate write first. if there's a cheap test path, /tdd it. then fix and rerun.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 先复现重复写入的问题。如果有低成本的测试路径，就走 /tdd。然后修复并重跑。
+```
+
+</TabItem>
+</Tabs>
+
+“if there's a cheap test path”（如果有低成本的测试路径）这句话很关键。硬拿脆弱的 mock 拼出一条测试，证明力反而不如直接跑真实命令；加上这句，playbook 就可以如实说明这一点，改用真实命令。
+
+## 带着证据复现并修复问题反馈 {#repro-and-fix-a-report-with-proof}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode repro this with /verify-<app>. if it repros on main, fix it and show me a video as proof.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 用 /verify-<app> 复现一下这个问题。如果在 main 上能复现，就修好它并给我看录屏作为证据。
+```
+
+</TabItem>
+</Tabs>
+
+“if it repros on main”（如果在 main 上能复现）能让任务在 bug 已经不存在时提前收手。附上的录屏让您甚至不用先看 <Term tip="这次改动前后的差异">diff</Term>，就能先确认问题确实修好了。
+
+## 证明常规测试很难触及的性质 {#prove-a-property-tests-rarely-reach}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/create-formal-verification-skill the retry queue. a message must never be delivered twice.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/create-formal-verification-skill 检查一下重试队列。同一条消息绝不能被投递两次。
+```
+
+</TabItem>
+</Tabs>
+
+您会得到三样东西：一条在明确范围内做过全覆盖检验的性质；如果现有代码已经违背它，还有一份用您代码里的概念写成的反例；外加一个项目本地技能——以后谁再改这段代码，下一个 Agent 都会自动拿它来查。
+
+## 发出去之前，先核查性能数字 {#vet-a-number-before-you-post-it}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/benchmark-checklist vet this 40% speedup before it goes in the pr description
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/benchmark-checklist 先核查一下这 40% 的提速，确认没问题再写进 pr 描述
+```
+
+</TabItem>
+</Tabs>
+
+它会给出 faster（更快）、slower（更慢）、no measurable difference（无明显差异）或 inconclusive（无法定论）的结论，并附上运行次数、数值区间和瓶颈所在。
+
+## 别再一遍遍纠正同一个错误 {#stop-correcting-the-same-mistake}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/correct agents keep adding new config flags without registering them in the schema
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/correct Agent 总是加了新的配置项却忘了注册到 schema 里
+```
+
+</TabItem>
+</Tabs>
+
+修复会以架构约束、类型检查、lint 或测试的形式落进代码库，让下一个 Agent 想犯都犯不了。
+
+## 只问怎么做，先别开工 {#ask-how-without-starting-the-work}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-help how do i get poteto-mode to stay on every turn?
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-help 怎么让 poteto-mode 每一轮都保持开启？
+```
+
+</TabItem>
+</Tabs>
+
+您会拿到一份解答、一条可以直接发的提示词，以及答案出处（技能或指南页面）的链接。在您真的发出那条提示词之前，什么都不会启动。
+
+## 离开期间让任务老老实实跑完 {#keep-a-run-honest-while-youre-away}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+im going to bed, keep going autonomously until every fixture passes. do not stop. keep a decision log i can audit in the morning.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+im going to bed，自己一直跑下去，直到所有测试样例都通过。不要停。记一份 decision log，我明天早上回来审查。
+```
+
+</TabItem>
+</Tabs>
+
+完整的交接约定见[睡觉时让工作继续跑](./07-overnight.mdx)。只要任务和完成条件已经在当前对话里交代清楚，这种简短写法就够用了。
+
+## 把跑偏的任务拉回正轨 {#redirect-a-drifting-run}
+
+纠偏用的提示词一行就够：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+i said the goal is to repro. i did not ask for a fix yet.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+我说过目标是先复现，还没让你修。
+```
+
+</TabItem>
+</Tabs>
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+apply prove it works. show me the real output, not the build log.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+用 prove it works。给我看真实运行输出，别给我看构建日志。
+```
+
+</TabItem>
+</Tabs>
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/unslop that, no emdashes
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/unslop 处理一下，别用破折号
+```
+
+</TabItem>
+</Tabs>
+
+您很少需要写长篇大论。您只需要叫出对的名字，而[用原则名引导 Agent](./08-principles.mdx)就是您的词表。
+
+## 让回复说人话 {#get-the-reply-in-plain-words}
+
+```text
+/bro
+```
+
+整条提示词就这一个命令。[`/bro`](https://github.com/cursor/plugins/blob/main/pstack/skills/bro/SKILL.md) 会把上一条回复翻成普通人之间聊天的大白话，去掉黑话，篇幅也更短。如果一条回复技术上写得滴水不漏、您读完却还是没懂它在说什么，就用它。
+
+## 快速跟进挂在后台跑的对话 {#catch-up-on-a-chat-you-left-running}
+
+```text
+/ketchup
+```
+
+[`/ketchup`](https://github.com/cursor/plugins/blob/main/pstack/skills/ketchup/SKILL.md) 会用大白话告诉您从上一条消息到现在改了什么，再列出每一件等您决定的事，附上它的推荐、证据和风险。汇报过程中它不会改动任何东西。
+
+如果您更想看视频来了解进展，可以运行 [`/ketchup-video`](https://github.com/cursor/plugins/blob/main/pstack/skills/ketchup-video/SKILL.md)。它会把发生过的事情做成一段带字幕的幻灯片短视频，并在下面用文字列出等您决定的事。
+
+## 常见误区 {#the-pitfalls}
+
+- **在提示词里逐个列技能名**：写“use /architect then /arena then /interrogate”（先用 /architect，再用 /arena，最后用 /interrogate）会打乱 playbook 原本排好的步骤。说清目标和约束就行，只有在需要覆盖默认行为时才点名技能。
+- **完成条件含糊不清**：“make it better”（把它改好一点）没给 `/loop` 任何可以检查的标准。要给出一条能明确判出通过或失败的命令或 <Term tip="产物：改动实际产出、能拿来检查的东西，例如命令输出、截图、写进数据库的值">artifact</Term>。
+- **一上来就把自己的病因猜测塞给 Agent**：您指哪，Agent 就会一头扎去查哪。先让它用自己的话复述问题，再分享您的直觉。
+- **拿第一个方案就动手**：只试一次，就会被模型最先想到的那种结构锁死。先要几个原型，或者跑一遍 `/architect`，凭证据做选择。
+- **死抠一份没有代码支撑的抽象计划**：对还没有代码落地的计划做对抗式审查，只会凭空造出一堆永远不会发生的风险。先用原型把悬而未决的问题验证清楚，再审查真正做出来的东西。
+- **多个 Agent 共用同一个 <Term tip="工作树：同一个 git 仓库再检出一份独立的工作目录，各自一个分支，互不干扰">worktree</Term>**：它们会互相覆盖改动，最后谁也分不清哪一行是哪个 Agent 改的。要么让它们作为云端 Agent 跑，要么在提示词里写上“own worktree per attempt”（每次尝试各用独立的 worktree）。
+- **还没信得过循环就放手让它循环**：一个连自己成果都验不了的循环，只会更快地制造未经核验的改动。先把验证技能跑顺再说。
+- **轻信未经核查的数字**：缓存预热或者代码路径根本没走到，都能造出假的提速。数字发出去之前，先跑一遍 `/benchmark-checklist`。
+- **靠手动反复纠正同一个错**：在对话里纠正一次，只对这一次运行有效。用 `/correct` 把约束落进仓库，往后再也不会重演。
+- **拿 `/arena` 当并行覆盖工具**：`/arena` 是拿同一份设计或代码需求重复做多份，再挑一个底子把各家的亮点嫁接进去。如果是按切片分头跑，或者按事先定好的几条路线并行竞速、最后汇总成一份报告，应该用 `/swarm`。
+- **照单全收每一条评审意见**：机器人和人类评审都会把真问题和噪音混在同一张列表里。`/interrogate` 只保留经复跑证实的发现，同时列出筛掉了什么以及为什么，而且留还是删您随时都能改判。
+- **把 `auto` 当成模型名来用**：`auto` 和 `inherit-parent` 的意思是“省略 model 字段，让子代理继承主对话所使用的模型”。关于模型角色的说明见[安装和配置 pstack](./01-setup.mdx)。
+- **光看构建变绿就报喜**：构建通过只能说明能编译。要让 Agent 去跑真实命令、走完真实流程、读回写入的值或对比性能剖析数据，并把证据附在回复里。
+- **徒手写 `SKILL.md`**：把它交由 [Authoring or modifying a skill](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/authoring-a-skill.md) playbook 来走，确保格式校验和评审都不落空。
+
+整份指南就到这里。如果您之前跳过前面直接翻到了这一章，不妨回到[安装和配置 pstack](./01-setup.mdx)，亲手跑一个真实任务。这些习惯靠用才能养成，光靠读是记不住的。

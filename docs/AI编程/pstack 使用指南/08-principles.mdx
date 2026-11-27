@@ -1,0 +1,116 @@
+---
+description: 用 pstack 的 24 条原则名精准纠偏 Agent，附全部原则简明速查。
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 用原则名引导 Agent
+
+pstack 内置了 24 条原则，每一条都是一个独立的技能。`/poteto-mode` 在开始任何多步骤任务前，都会先读一遍它们的索引，把当前任务触发的原则用上，并在回复里点名用了哪几条原则、分别改变了哪项决定。
+
+您不需要主动调用这些原则技能，而是用它们的名字来纠偏和引导。每个名字背后都对应一条 Agent 已经读过的完整规则，所以短短一句话，往往比写一大段嘱咐更能精准扭转方向。
+
+## 实战中怎么引导 {#steering-in-practice}
+
+假设 Agent 正准备在三个旧适配器上再硬接第四个：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+use subtract before you add. delete the obsolete adapters first, then design what's left.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+用 subtract before you add。先把废弃的适配器删掉，再设计剩下的部分。
+```
+
+</TabItem>
+</Tabs>
+
+假设它光凭构建通过就宣布大功告成：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+apply prove it works. run the real import flow and show me the written records.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+用 prove it works。把真实的导入流程跑一遍，把写进去的记录给我看。
+```
+
+</TabItem>
+</Tabs>
+
+假设两个并行跑的方案正准备往同一个分支里写东西：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+separate before serializing shared state. give each attempt its own worktree, no locks.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+用 separate before serializing shared state。每次尝试各自开一个 worktree，别加锁。
+```
+
+</TabItem>
+</Tabs>
+
+这些短语之所以管用，是因为它们背后的规则非常具体。而且 Agent 必须在回复里讲清楚，这条规则具体改变了哪一个决定。如果只挂了个原则名，后面却说不出它改变了什么决定，那就说明 Agent 只是嘴上提了一句，根本没真的照做。
+
+## 24 条原则一览 {#the-24-briefly}
+
+核心原则用来决定要写多少代码，以及什么时候该推倒重想：
+
+- [Laziness Protocol](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-laziness-protocol/SKILL.md)（能省则省）：优先做减法，用能解决问题的最小改动收手。
+- [Foundational Thinking](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-foundational-thinking/SKILL.md)（先立根基）：动笔写逻辑之前，先把核心数据结构选对。
+- [Redesign from First Principles](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-redesign-from-first-principles/SKILL.md)（从第一性原理重新设计）：把新需求融进系统，就像它从第一天起就存在一样。
+- [Attack the Premise](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-attack-the-premise/SKILL.md)（推翻前提）：如果两次以上修复都失败了，把它们共同依赖的前提写出来，先直接检验这个前提，再动手做下一次修复。
+- [Subtract Before You Add](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-subtract-before-you-add/SKILL.md)（先做减法，再做加法）：先把多余的包袱清掉，再往上添新东西。
+- [Minimize Reader Load](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-minimize-reader-load/SKILL.md)（减轻读者负担）：把读者必须在脑子里记着的中间层和隐藏状态尽量合并压平。
+- [Outcome-Oriented Execution](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-outcome-oriented-execution/SKILL.md)（以终态为导向）：重写时直接朝目标设计收敛，不要为了过渡保留一堆很快就会扔掉的兼容层。
+- [Experience First](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-experience-first/SKILL.md)（体验优先）：优先保住用户拿到手的体验，而不是图自己实现省事。
+- [Exhaust the Design Space](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-exhaust-the-design-space/SKILL.md)（穷尽设计空间）：没有现成先例可循时，做出两三个不同思路的原型来比较。
+- [Build the Lever](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-build-the-lever/SKILL.md)（打造杠杆）：把干活或验证的过程写成脚本，让评审人也能一键重跑。一旦发现 Agent 反复手动做同一件事，就让它写出自己最趁手的工具或技能。凡是脚本每次都能按同样方式办妥的步骤，就交给脚本，把 Agent 留给真正需要做判断的地方。
+
+架构原则用来决定状态、校验和兼容性应该放在哪里：
+
+- [Model the Domain](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-model-the-domain/SKILL.md)（为领域建模）：把反复出现的业务规则收进同一个数据结构里，别让条件判断散落各处。
+- [Boundary Discipline](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-boundary-discipline/SKILL.md)（严守边界）：只在系统边界做校验，进入内部后就信任类型定义。
+- [Type System Discipline](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-type-system-discipline/SKILL.md)（用好类型系统）：让非法状态在类型层面根本表达不出来。
+- [Make Operations Idempotent](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-make-operations-idempotent/SKILL.md)（让操作保持幂等）：不管重试多少次，最终都收敛到同一个状态。
+- [Migrate Callers Then Delete Legacy APIs](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md)（迁完调用方就删旧 API）：迁移调用方和删除旧接口一波做完，不留尾巴。
+- [Separate Before Serializing Shared State](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-separate-before-serializing-shared-state/SKILL.md)（先拆分共享状态，再考虑串行同步）：先想办法去掉共享，实在去不掉再加协调机制。
+
+验证原则用来界定什么才算真正的证据：
+
+- [Prove It Works](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-prove-it-works/SKILL.md)（证明它能跑通）：核验真实的 <Term tip="产物：改动实际产出、能拿来检查的东西，例如命令输出、截图、写进数据库的值">artifact</Term>，而不是拿间接信号充数。
+- [Fix Root Causes](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-fix-root-causes/SKILL.md)（直击根因）：改代码前先复现问题，并顺藤摸瓜查到根本原因。
+- [Sequence Work into Verifiable Units](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-sequence-verifiable-units/SKILL.md)（拆成可验证的小单元推进）：每做完一个小单元就先验完再动下一个。
+- [Test Behavior, Not Implementation](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-test-behavior-not-implementation/SKILL.md)（测行为，不测实现）：断言代码的使用者能观察到的外部行为，这样行为坏了测试就会挂，而内部重构时测试依然能过。
+- [Explain the Number](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-explain-the-number/SKILL.md)（把数字讲清楚）：在任何人采信或公布一个实测数字之前，先说清瓶颈是什么，并排除“其实测到了别的东西”的可能。[`/benchmark-checklist`](https://github.com/cursor/plugins/blob/main/pstack/skills/benchmark-checklist/SKILL.md) 把它落成了七个必须拿实跑证据回答的问题。
+
+委派原则让并行协作不至于失控：
+
+- [Guard the Context Window](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-guard-the-context-window/SKILL.md)（守好上下文窗口）：把大批量阅读代码的工作派给子代理，主对话里只留结论。
+- [Never Block on the Human](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-never-block-on-the-human/SKILL.md)（别卡着等人类）：可逆的工作先往前推进，把结果直接呈给您看。
+
+还有一条元原则：
+
+- [Encode Lessons in Structure](https://github.com/cursor/plugins/blob/main/pstack/skills/principle-encode-lessons-in-structure/SKILL.md)（把教训写进结构里）：同一条建议重复讲过两次，就把它变成 lint、检查项或脚本。[`/correct`](https://github.com/cursor/plugins/blob/main/pstack/skills/correct/SKILL.md) 会把这条原则用到整个仓库，具体做法见[打造您自己的版本](./09-make-it-yours.mdx#fix-the-environment-with-correct)。
+
+不用去死记这张清单。现在粗略扫一遍就行，以后要是撞见 Agent 犯了错，而清单里某条原则本来就能拦住它，再翻回来看看。这套词汇就是在实战里慢慢记住的。

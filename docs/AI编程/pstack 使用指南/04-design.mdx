@@ -1,0 +1,251 @@
+---
+description: 用 /architect、/arena 与原型在写代码前敲定方案与边界。
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Diagram from '@site/src/components/Diagram';
+
+# 写代码之前先做设计
+
+碰上棘手的设计，如果只试一次，就会被模型最先想到的那种方案锁死。`/architect` 负责在动手实现之前敲定类型和模块边界；`/arena` 会对着同一份任务说明并行试出好几种方案，再把各自的亮点合并进来；`/interrogate` 则派其他模型来想方设法挑出漏洞。如果您的目标不是综合出一个设计，而是扩大覆盖面，`/swarm` 可以把任务拆成多片或开一场竞速，然后汇总所有结果。
+
+设计阶段最常见的两个错误，一是直接照单全收 Agent 给的第一版方案，二是对着一份从未跑过代码的纸面计划反复打磨。这一章同时解决这两个问题：我们通过代码来做规划。未决问题靠原型回答，目标靠 README 或教程定下来，书面计划放在最后再写。
+
+![三台机器人分别在挂着 /architect、/arena 和 /interrogate 牌子的桌前搭建各自的桥梁设计方案，一台手拿写字板的裁判机器人正带着怀疑的目光在一旁检查。](./images/design.jpg)
+
+## 用 `/architect` 敲定结构 {#settle-the-shape-with-architect}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/architect design the import pipeline before writing any code. i care most about how callers use it.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/architect 写任何代码之前，先设计一下导入流水线。我最关心调用方用起来顺不顺手。
+```
+
+</TabItem>
+</Tabs>
+
+[`/architect`](https://github.com/cursor/plugins/blob/main/pstack/skills/architect/SKILL.md) 会先梳理这次改动会波及的所有系统，然后勾勒出两套不同的架构方案，每套都写明类型、函数签名和模块边界。接着它会从中挑出更干净的那一套——每份状态只有一个归属方、每件事只有一种做法、调用方需要了解的细节最少。遇到规模较大或有争议的设计时，它不会自己闷头画两稿，而是直接调用 `/arena`。如果您想在写任何代码之前先过目设计方案，在提示词里明说就行。
+
+代码一旦开写，设计也并非神圣不可侵犯。如果写着写着同一种临时变通方案反复冒头，`/architect` 会回头重新设计，而不是继续打补丁硬撑。
+
+## 用 `/arena` 并行试出多种方案 {#fan-out-attempts-with-arena}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/arena take my prompt to the arena verbatim. i want to compare their proposals with yours.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/arena 把我的提示词原封不动拿去跑 arena。我想把它们的提案和你的方案对比一下。
+```
+
+</TabItem>
+</Tabs>
+
+[`/arena`](https://github.com/cursor/plugins/blob/main/pstack/skills/arena/SKILL.md) 是底层通用的多方案比选工具。它会让 N 个子代理对着同一份设计或代码说明并行作答，每个子代理都在自己独立的 <Term tip="工作树：同一个 git 仓库再检出一份独立的工作目录，各自一个分支，互不干扰">worktree</Term> 或目录里写代码。随后，一个来自不同模型厂商的只读裁判会按评分标准给所有候选方案打分；如果当前没有其他厂商的模型可用，就跳过裁判，由协调者（发起 `/arena` 的那个 Agent）自己选底稿。不管有没有裁判，协调者都会把每个候选方案从头到尾读一遍，挑出一版作为底稿，把落选方案里最好的想法嫁接进来，最后验证合并后的结果。
+
+<Diagram variant="pstackArena" />
+
+评审组来自您在 [`/setup-pstack`](https://github.com/cursor/plugins/blob/main/pstack/skills/setup-pstack/SKILL.md) 里的配置，不过您也可以按具体任务临时调整。决定越关键就多要几个候选方案，没那么重要就少要几个：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/arena this, 5 candidates. the cache key format is expensive to change later.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/arena 这个任务跑 5 个候选方案。缓存键格式以后改起来代价很高。
+```
+
+</TabItem>
+</Tabs>
+
+## 用 `/swarm` 分片覆盖与多路竞速 {#cover-slices-and-races-with-swarm}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/swarm check every package under packages/ against its check.sh. one worker per package. one report.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/swarm 用各自的 check.sh 检查 packages/ 下的每一个包。每个包派一个 worker，最后汇总成一份报告。
+```
+
+</TabItem>
+</Tabs>
+
+[`/swarm`](https://github.com/cursor/plugins/blob/main/pstack/skills/swarm/SKILL.md) 会把 N 个 <Term tip="worker：被派去完成其中一份工作的子代理，各管一片、各自汇报">worker</Term> 分派到彼此独立的工作上：可以是互不相干的切片、覆盖矩阵里的格子、一道道关卡检查、划好范围的探索分区，也可以是事先声明好的几条竞速路线。每个 worker 都有自己的负责范围和检查项，跑完后回报 `PASS`、`ISSUES` 或 `BLOCKED`。主对话会等所有 worker 跑完，整理出一份紧凑的报告，同时标出所有遗漏或中途掉队的部分。
+
+当您想用并行来换覆盖面，或者让几路独立检查赛跑时，就该找 `/swarm`。`/arena` 是给每个子代理同一份设计或代码说明，再挑一版底稿并嫁接各方精华；`/swarm` 则是分片覆盖，或者按事先声明的挑选规则跑一场竞速，不走选底稿再嫁接那套流程。
+
+## 用 `/interrogate` 找出破绽 {#break-it-with-interrogate}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/interrogate the whole branch, but skeptically. no nitpicks unless it's an actual bug or regression.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/interrogate 带着怀疑的态度审一遍整个分支。不要吹毛求疵，除非是真正的 bug 或回归问题。
+```
+
+</TabItem>
+</Tabs>
+
+[`/interrogate`](https://github.com/cursor/plugins/blob/main/pstack/skills/interrogate/SKILL.md) 会把代码改动连同它的设计意图交给配置好的对手模型（专门负责挑错的模型），让它们各自对着真实代码实跑，想办法把改动弄坏。不同的对手模型往往能找到不同的故障点。只有重跑对应的复现命令、确实复现出违背设计意图的故障时，这条问题才会被留下来。最终报告会列出每一条经过验证的问题以及发现它的对手模型，后面还会附上每个对手模型丢弃了哪些条目、为什么丢弃，但不会直接改您的代码。
+
+报告里的已丢弃（Dropped）列表也值得看一眼，您随时可以推翻它的判定。
+
+## 做原型，不要空谈 {#prototype-instead-of-debating}
+
+永远别直接拿第一版设计就开工。多要几个方案，看着实实在在的证据来挑：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode prototype a few options for the new dropdown menu. take screenshots or videos for me to compare.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 给新的下拉菜单做几个方案的原型。截图或录视频给我对比。
+```
+
+</TabItem>
+</Tabs>
+
+[Prototype](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/prototype.md) <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term> 会在临时目录里搭出用完即扔的草稿原型，把几个备选方案挂在同一个切换器下，逐个跑一遍，然后截下画面或记下耗时。它不只适用于界面设计，拿来验证行为逻辑和算法同样好用。做原型其实就是用代码做规划：Agent 靠实跑来自己回答未决问题，不必事事都来问您，而且往往还能试出您原本没想到的新方案。
+
+同样的思路也能直接用到正式设计上。把 `/architect` 和原型配在一起用，再留一道人工把关：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode we need rate limiting for external webhooks. /architect it first, and answer open questions with prototypes. let me review before proceeding.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 我们需要给外部 webhook 加上限流。先用 /architect 做设计，未决问题用原型验证。继续之前先让我审一下。
+```
+
+</TabItem>
+</Tabs>
+
+不要把对手模型浪费在一份抽象计划上。凡是没法靠实跑证明的问题，`/interrogate` 都会直接丢弃，所以手里没有代码时，对手模型基本无从下手。先让原型把问题落地验证，再回头审查真正做出来的东西。
+
+## 共享代码先写 README {#write-the-readme-first-for-shared-code}
+
+如果您要写的是一个供其他代码调用的包或 API，不妨从使用者会读的文档写起：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode write a tutorial for how i would use the new config package first. then /teach me why it beats the current one.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 先写一篇教程，演示我以后该怎么用新的 config 包。然后用 /teach 给我讲讲它为什么比现在这个更好。
+```
+
+</TabItem>
+</Tabs>
+
+先写教程会逼着您站到调用方的视角去思考：先向一位假想中的用户介绍这套 API，再倒推底层实现。写出来的文档还会成为一个具体的对照标准，Agent 写完代码后可以直接拿它来核对自己的工作。如果文档本身的质量也很重要，请点名调用 [`/technical-writing`](https://github.com/cursor/plugins/blob/main/pstack/skills/technical-writing/SKILL.md)，确保教程始终是教程，不会写着写着就混成参考手册和原理讲解的大杂烩。
+
+## 设计定了再写计划 {#plan-after-the-design-settles}
+
+pstack 故意没有提供“写计划”的技能。如果您确实想要一份书面计划，等设计定下来之后再提：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode turn this design into a plan. small verifiable PRs, each with its own verification steps.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 把这份设计整理成一份实施计划。拆成小而可验证的 PR，每个 PR 都写明各自的验证步骤。
+```
+
+</TabItem>
+</Tabs>
+
+[Multi-phase plan](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/multi-phase-plan.md) playbook 会先用原型把剩下的未决问题解决掉，然后按每个 PR 写一节，每节都以“能证明改动生效的证据”收尾——光是测试套件跑过并不算证据。这份计划本身就是交付物，这个 playbook 不会擅自开工，只有等您发话之后才会开始执行。
+
+做迁移类工作时，请在提示词里把验收标准立清楚：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode plan the migration of our ui library to the new styling system. small verifiable PRs, each with visual regression checks. the result must match the original exactly, bugs included.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 规划一下把我们的 UI 库迁移到新样式系统的方案。拆成小而可验证的 PR，每个都带视觉回归检查。结果必须和原版完全一致，连同已有的 bug 一起保留。
+```
+
+</TabItem>
+</Tabs>
+
+加上“bugs included”（连同 bug 一起），能防止迁移过程顺手悄悄修掉旧问题——否则新旧两版的输出就没法逐项对齐了。对于要跨好几天的项目，您可以先把这份计划临时提交进仓库，方便其他 Agent 看到整体进度，等工作全部合并后再删掉。
+
+## 一个任务值得花多少精力做设计？ {#how-much-design-work-does-a-task-deserve}
+
+您可能会想，是不是每次改动都得走这一整套流程？完全不用。大多数改动根本不需要这些步骤。下面是一条大致的阶梯供您参考：
+
+- 一处已经写完、但您心里有点没底的小改动，单独跑一次 `/interrogate` 就够了。
+- 跨越函数边界或者涉及状态归属转移的改动，值得上 `/architect`；如果设计规模大或存在分歧，它会自动把 `/arena` 也带进来。
+- 需要多份独立尝试才好决定的单项决策（比如命名、数据格式或算法），直接用 `/arena`。
+- 覆盖矩阵、一组并行检查，或者事先声明好路线的竞速，交给 `/swarm`。
+- 只要跑点代码就能出答案的未决问题（比如布局、耗时或实现思路），直接做原型，不要干聊。
+- 有争议而且事后推翻成本很高的设计，先跑 `/architect`，上线前再跑 `/interrogate`。
+- 横跨多个 PR 的工作，等设计定稳之后再写一份计划。
+
+`/poteto-mode` 本身就已经内置了这条阶梯：遇到跨边界的工作，它会自动触发 `/architect`。所以，您大多只在想要比默认更严或更轻的把关力度时，才需要直接点名调用上面这些技能。

@@ -1,0 +1,270 @@
+---
+description: 用目标和检查标准驱动 /poteto-mode，让它自动选定并推进任务。
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Diagram from '@site/src/components/Diagram';
+
+# 用 /poteto-mode 分派工作
+
+`/poteto-mode` 是整套工具的正门。您给它一个目标，它会从 22 个 <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term> 里挑出匹配的那一个，把步骤复制到待办列表里，再随着每一步推进自动调用其他技能。在这一章里，您会看到一条好提示词长什么样，以及其实根本用不了几个字。
+
+![一名调度员拉动扳道杆，将轨道手摇车上的机器人分流到亮着灯的各个道口；上方的 /poteto-mode 发车指示牌写着 BUG FIX、FEATURE 和 INVESTIGATION。](./images/router.jpg)
+
+## 您的提示词会经历什么 {#what-happens-to-your-prompt}
+
+<Diagram variant="pstackRouting" />
+
+上面这张图展示的是最常见的几条路线。除此之外，pstack 还有针对更多场景的 playbook：持续优化某项指标、诊断运行时的异常表现或已采集的调用追踪、做原型、对齐视觉效果、编写和评估技能、自主运行、发起 PR、把单个 PR 或一串 <Term tip="PR 栈：一串前后依赖、按顺序合并的 PR">stack</Term> 一路跟进到可以合并、合并已经验证好的 stack、全自动推进 PR 队列或 stack、接手未完成的会话、安全暂停、制定多阶段计划，以及清理 <Term tip="工作树：同一个 git 仓库再检出一份独立的工作目录，各自一个分支，互不干扰">worktree</Term>。完整清单都在 [playbook 目录](https://github.com/cursor/plugins/tree/main/pstack/skills/poteto-mode/playbooks/)里。
+
+## 直说目标，省去繁文缛节 {#say-the-goal-not-the-ceremony}
+
+您不需要写规格文档。只要说出哪里出了问题，或者您想要什么，再补上任何您已经知道、能帮 Agent 省时间的线索就行：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode users get two notifications after a retry. repro first, then fix and verify.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 用户在一次重试之后收到了两条通知。先复现，再修复并验证。
+```
+
+</TabItem>
+</Tabs>
+
+这是一条典型的 Bug fix 提示词。“repro first”（先复现）是一条实打实的约束，而不是客套话，playbook 会严格照办。您可以看着待办列表被 Bug fix 的步骤一条条填满。
+
+## 提示词里该写什么 {#what-goes-in-a-prompt}
+
+一条好用的提示词最多包含五样东西，每样一句话就能说清：
+
+- **目标**：说出哪里出了问题，或者您想要什么。
+- **完成检查**：必须能明确判定通过还是失败。“把它改好”或“先弄上一个小时”都不算有效的检查标准。
+- **您想看到的证据**：要求它给出真实的命令输出、操作流程录屏、实际写进存储的值，或者改动前后的对比数据。
+- **您已经掌握的线索**：一个现象、一步复现方式、一行日志或一个链接，都能帮 Agent 省下大量搜索时间。
+- **真正的约束条件**：“repro first”（先复现）、“don't change any code yet”（先不要改任何代码）、“zero behavior change”（行为零改动）和“let me review before proceeding”（继续之前先让我审一下），每一句都会切实改变 Agent 的做法。
+
+下面这条提示词把这五样都占全了：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode the csv export drops its last row since yesterday's deploy. failing job id is 4812. repro first, then fix. done means the 60k-row fixture exports every row. show me the row counts before and after.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 昨天部署之后，csv 导出会漏掉最后一行。失败的任务 id 是 4812。先复现，再修复。完成标准是 60k 行的测试样本能完整导出每一行。把修复前后的行数对比给我看。
+```
+
+</TabItem>
+</Tabs>
+
+另外有两样东西，最好先别写进提示词：
+
+- **具体怎么做**：只说要达成什么，给 Agent 留出空间，让它有机会找到比您自己想到的更好的做法。不要在提示词里列技能清单也是同样的道理，下文“误区”一节会具体讲。
+- **您对原因的猜测**（一开始先别说）：一上来就说出自己的猜测，会把 Agent 的排查范围框死在您指的方向上。先让 Agent 把问题复述清楚，再分享您的直觉。
+
+遇到信息杂乱的报告（比如很长的讨论串或含糊不清的 bug 描述），可以把“先复述问题”作为第一步：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode read this thread. restate the underlying issue in your own words, in plain english. don't change any code yet.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 读一下这段讨论。用你自己的大白话把背后的真正问题复述出来。先不要改任何代码。
+```
+
+</TabItem>
+</Tabs>
+
+如果 Agent 理解偏了，复述阶段就会立刻露馅，这时一行代码都还没动。在这里纠偏只花您一条消息，而不是搭进去一次错误的修复。如果只想让它复述、不想走任何 playbook，直接运行 [`/in-your-own-words`](https://github.com/cursor/plugins/blob/main/pstack/skills/in-your-own-words/SKILL.md)，它会把理解到的目标以及您想解决的问题重新讲一遍。
+
+如果您拿不准自己的提示词有没有瞄准要害，发出去之前可以先用 [`/sharpen`](https://github.com/cursor/plugins/blob/main/pstack/skills/sharpen/SKILL.md) 打磨一遍：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/sharpen write a migration guide for the v2 config format.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/sharpen 给 v2 配置格式写一份迁移指南。
+```
+
+</TabItem>
+</Tabs>
+
+Agent 会说出几件事：顶尖专家会做但您没提到的事、他们会从哪份最原始的一手材料入手、他们会用什么方法和工具，以及除了您和 Agent 之外还有什么外部依据能证明结果是对的。然后它会照着这些要点重写您的提示词——让任务挖得更深，但不扩大范围。凡是做个实验就能定夺的技术选择，重写后的提示词都会要求 Agent 先做原型、再根据实测结果给出推荐，同时把产品和偏好类的决定留给您。`/sharpen` 本身不会动手做任务。您读过改写后的提示词觉得合适，再发出去就行，比如前面加上 `/poteto-mode`。
+
+如果您连自己想要的东西叫什么名字都说不出来，可以先拿自己的描述和相关文件跑一遍 [`/reframe`](https://github.com/cursor/plugins/blob/main/pstack/skills/reframe/SKILL.md)：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/reframe the settings page saves some fields right away and others only on submit, and people lose edits.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/reframe 设置页面里有些字段改完立刻保存，另一些要点提交才保存，用户经常丢掉编辑内容。
+```
+
+</TabItem>
+</Tabs>
+
+Agent 会给出 8 到 12 个业内专业术语，并按它们对最终方案的影响大小排好序。每个术语都会附上三样东西：它对应您原话里的哪部分、一个真正用过它的项目（而且链接经过核实），以及有了这个词之后您可以向 Agent 提出什么具体要求。它还会从 2 到 3 个相邻领域借来同类问题的不同叫法，并指出每个类比在哪里会失效。最后，它会用这些新词重写您的描述。您可以直接把改写后的版本发出去，或者再拿去跑一遍 `/sharpen`。
+
+## 后续追问尽量简短 {#follow-up-short}
+
+一旦对话里已经有了上下文，您的提示词就可以缩到极短。下面这几句每一句都够用：
+
+```text
+/poteto-mode do it
+```
+
+```text
+continue
+```
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+keep going until done
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+继续做，直到完成
+```
+
+</TabItem>
+</Tabs>
+
+这么简短照样管用，是因为 playbook 替您撑起了流程结构，而 <Term tip="Cursor 的自定义模式：把一个技能挂在整段对话上，每一轮都在上下文里">Custom Mode</Term> 会让 `/poteto-mode` 在每一轮都留在上下文里。[安装和配置 pstack](./01-setup.mdx#run-your-first-task) 演示了怎么开启 Custom Mode。您的话负责传达意图，技能负责守住严谨度。
+
+## 用“new task”切换任务 {#switch-tasks-with-new-task}
+
+聊得久的对话会攒下上一个任务的上下文。换话题时，请直接说出来：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode new task. figure out why the cache entry survives logout. don't change any code yet.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode new task. 查清楚为什么退出登录后缓存项还在。先不要改任何代码。
+```
+
+</TabItem>
+</Tabs>
+
+“new task”（新任务）会告诉 `/poteto-mode` 重新匹配 playbook，而不是接着跑上一个。“don't change any code yet”（先不要改任何代码）则会把这次任务路由到 Investigation playbook。要是漏掉这两句，正跑到 Feature playbook 一半的 `/poteto-mode` 往往会把您的提问当成这个功能的下一步。
+
+## 给并行任务独立的工作环境 {#give-parallel-work-its-own-machine}
+
+如果您在同一台电脑上对着同一个仓库同时跑好几个 Agent，它们会争抢工作目录、端口和构建输出。最干净的隔离办法是用[云端子代理](https://cursor.com/docs/subagents#cloud-subagents)。每个云端子代理都有自己独立的 VM 和分支，可以放心装依赖、跑应用、录下结果视频，完全不会碰您的本机。在任务前加上 `/in-cloud`，或者直接让主对话把活交给云端子代理就行。
+
+如果任务必须留在本地跑，请一开始就要一个 worktree：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode new task. branch off <base> in a fresh worktree, then port the parser change there.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode new task. 从 <base> 切出一个新 worktree 和分支，然后把解析器的改动移植过去。
+```
+
+</TabItem>
+</Tabs>
+
+每个任务各有各的分支和 worktree，Agent 之间就不会踩坏彼此的文件。worktree 会占磁盘和机器资源，一台笔记本同时只能跑上寥寥几个。[Opening a PR](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/opening-a-pr.md) playbook 做代码改动时本来就会在 worktree 里工作，所以通常只有在您需要指定基线分支或存放位置时，才要特意说一句。
+
+worktree 用久了会越积越多。磁盘吃紧时，直接这样问：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode what's eating my disk? prune the worktrees that are safe to prune.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 是什么占满了我的磁盘？把可以安全清理的 worktree 都清掉。
+```
+
+</TabItem>
+</Tabs>
+
+[Worktree cleanup](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/worktree-cleanup.md) playbook 会按合并状态、未提交改动以及还有哪些对话正在使用，给每个 worktree 归类。它只删除经核实可以安全清理的目录，遇到还有未提交改动的就会停下来等您决定。
+
+## 放手让它继续跑 {#leave-it-running}
+
+要离开电脑一会儿时，把完成标准交代清楚就可以走了：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode im stepping away. keep going until the migration check reports zero old callers. log your decisions.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 我要离开一会儿。一直做到迁移检查报告零个旧调用方为止。把你的决策记下来。
+```
+
+</TabItem>
+</Tabs>
+
+这类等您回来再审查的任务会自动路由到 [`/figure-it-out`](https://github.com/cursor/plugins/blob/main/pstack/skills/figure-it-out/SKILL.md)，由它规划执行阶段，并用 [`/show-me-your-work`](https://github.com/cursor/plugins/blob/main/pstack/skills/show-me-your-work/SKILL.md) 记下一份 <Term tip="决策日志：Agent 每做一个决定记一行，事后可以审查">decision log</Term>。[睡觉时让工作继续跑](./07-overnight.mdx)会详细介绍完整的通宵运行约定。
+
+:::warning[误区]
+
+不要在提示词里自己罗列一串技能（例如“先用 `/architect`，再用 `/arena`，再用 `/interrogate`……”）。playbook 本身已经排好了它们的调用顺序，手写清单往往会打乱顺序，或者漏掉 playbook 原本会保留的步骤。只有当您想特意覆盖某一步的默认选择时，才去点名某个技能。
+
+:::
+
+完整的路由规则，请直接阅读 [`poteto-mode`](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/SKILL.md) 技能文件本身。

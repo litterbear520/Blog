@@ -1,0 +1,192 @@
+---
+description: 改代码前先用 /how、/why、/teach 和 /recall 摸清现状。
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 改代码之前先读懂代码
+
+没读懂代码就动手改，往往就会把隐蔽的回归问题带进线上——这对 Agent 和对您一样适用。Agent 出错通常逃不出两种原因：要么误解了您想要什么，要么缺少把活干对所需的上下文。[提示词里该写什么](./02-poteto-mode.mdx#what-goes-in-a-prompt)解决第一种问题，这一章解决第二种。
+
+pstack 给您提供了四个入口。`/how` 解释代码现在是怎么运转的；`/why` 挖出它当初为什么写成这样；`/teach` 把前两者揉进同一份讲解里；`/recall` 帮您重新拼回自己最近在某个主题上的上下文。而且这四个技能都会要求 Agent 给出您可以核验的解释。哪怕 Agent 比您更熟悉这片代码，您依然能靠这套办法监督它。
+
+![一名侦探拿着放大镜研究机器蓝图，几台机器人正搬来卷宗；她身后的线索板在 /how 和 /why 两栏下串联起各种线索。](./images/understanding.jpg)
+
+## 先做一次只读调查 {#start-with-a-read-only-investigation}
+
+原因还没摸清时，先要调查结论，不要直接要修复方案：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode investigate why background jobs time out every few hours. give me what we know, what data you used, and your best hypotheses. don't change any code yet.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 调查一下为什么后台任务每隔几小时就会超时。告诉我我们目前掌握了什么、你用了哪些数据，以及你认为最有可能的假设。先不要改任何代码。
+```
+
+</TabItem>
+</Tabs>
+
+“don't change any code yet”（先不要改任何代码）会把这次任务路由到 [Investigation](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/investigation.md) <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term>。它会追踪代码链路，遇到涉及设计动机的问题时补上 `/why`，最后给出一份附带出处的说明。如果您要在几个方案之间做选择，它会给出一份推荐结论和一张权衡对比表。多问一句“what data you used”（你用了哪些数据），能促使 Agent 把确凿证据和自己的猜测分开。等调查结果明确指向修复方案后，再把它当作一个新任务来动手修。
+
+## 用 `/how` 追踪行为 {#trace-behavior-with-how}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/how do we dedupe notifications? is there an n+1 when we look up subscribers?
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/how 我们是怎么给通知去重的？查询订阅者的时候存在 N+1 查询问题吗？
+```
+
+</TabItem>
+</Tabs>
+
+心里有什么具体问题就直接问。[`/how`](https://github.com/cursor/plugins/blob/main/pstack/skills/how/SKILL.md) 会通读代码，像资深工程师带您熟悉一个子系统那样给出回答，讲清楚运行时流程、关键类型以及那些一眼看不出来的门道。它会在后台启动一个只读子代理，专门探索代码并整理出这份讲解。
+
+## 用 `/why` 挖出历史 {#dig-up-history-with-why}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/why was the retry limit set to five? does the reason still hold?
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/why 重试上限当初为什么设成了 5 次？那个理由现在还成立吗？
+```
+
+</TabItem>
+</Tabs>
+
+[`/why`](https://github.com/cursor/plugins/blob/main/pstack/skills/why/SKILL.md) 从历史记录里找答案，而不是只盯着代码猜。它会去翻引入这段代码以及后来每一次修改的 commit 和 PR 讨论，如果这些线索太少，还会继续查其他资料。给出的回答会直接引用作者当年写的原话，把 Agent 自己的推断明确标成推断，并如实说明记录里没交代的部分——因为“没人记下来为什么”本身就是一个重要答案。
+
+`/how` 和 `/why` 天然可以组合使用。当您怀疑这段代码之所以这么乱是历史原因造成的，输入“do why first then how”（先跑 why 再跑 how）会非常顺手。
+
+## 用 `/teach` 真正弄懂它 {#actually-understand-it-with-teach}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/teach me how this PR changes retries. convince me it fixes the cause and not the symptom.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/teach 给我讲讲这个 PR 是怎么改重试逻辑的。说服我它修的是根因，而不只是表面症状。
+```
+
+</TabItem>
+</Tabs>
+
+当一份摘要远远不够用时，就该用 [`/teach`](https://github.com/cursor/plugins/blob/main/pstack/skills/teach/SKILL.md)。它会同时运行 `/how` 和 `/why`（改动很小时可能只跑其中一个），再把查到的东西整合成一段通俗易懂的讲解，一张图接一张图地帮您把全貌搭起来。“convince me”（说服我）这个问法很值得复用，它能把原本走马观花式的介绍，变成一段您可以逐条检验的论证。
+
+您也可以拿它来拷问 Agent 自己做的选择：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/teach me why you implemented it this way and not with a queue. what did you trade off, and why?
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/teach 给我讲讲你为什么这么实现，而不用队列。你做了哪些权衡，理由是什么？
+```
+
+</TabItem>
+</Tabs>
+
+让 Agent 讲给您听，帮到的不只是您，也帮到了 Agent 自己。不得不把做法讲清楚的 Agent，必须老老实实去读代码，并用证据支撑每一句论断，而不能自信满满地甩出一句结论就往下走了。
+
+## 用 `/recall` 找回您自己的上下文 {#rebuild-your-own-context-with-recall}
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/recall catch me up on the export work from last week
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/recall 帮我回顾一下上周做的导出功能进展
+```
+
+</TabItem>
+</Tabs>
+
+[`/recall`](https://github.com/cursor/plugins/blob/main/pstack/skills/recall/SKILL.md) 会翻找您自己最近的对话记录以及团队共享的记录（issue、之前的修复、仍在触发的报错），然后交回一份简报，说明目前进展到哪了、接下来该做什么。您的旧对话里存着新 Agent 根本不知道的背景，所以要在老话题上接着开新活时，先把这段历史背景加载进来，再把新的输入交给新 Agent：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/recall my work on the virtualized list from yesterday, then read this bug report.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/recall 回顾一下我昨天在虚拟列表上做的工作，然后读一下这份 bug 报告。
+```
+
+</TabItem>
+</Tabs>
+
+如果您想续上的是某一段具体的对话，应该用下面讲的 Session pickup playbook，而不是 `/recall`。
+
+## 用 Session pickup 接手之前做到一半的工作 {#take-over-prior-work-with-session-pickup}
+
+当另一个 Agent（或者上周的您自己）留下了一个做到一半的分支时：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode take over this branch. read the decision log, figure out what's done, and continue from there. don't redo finished work.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 接手这个分支。读一下 decision log，弄清楚哪些已经做完，从那儿接着往下做。已经做完的不要重做。
+```
+
+</TabItem>
+</Tabs>
+
+[Session pickup](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/session-pickup.md) playbook 会把之前的记录当作权威依据。它会还原分支当前的状态和已经做过的决定，标明该从哪里接着往下做，并对照最初的目标核验前人留下的结论，而不是把所有事情推倒重来。
+
+:::warning[误区]
+
+不要因为觉得“反正 Agent 自己会读代码”就跳过这一章的技能。还没理清代码是怎么运转的就急着动手改，Agent 往往一看到第一个像问题的地方就急着打补丁，治标不治本。先跑一遍 `/how`，总比事后多修一个 bug 便宜得多。
+
+:::

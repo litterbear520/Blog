@@ -1,0 +1,200 @@
+---
+description: 生成个人模式、沉淀会话教训、用 /correct 改仓库，以及编写和盲测技能。
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 打造您自己的版本
+
+poteto-mode 体现的只是某个人的工作风格，它底层的 <Term tip="剧本：poteto-mode 里一类任务的固定步骤，例如 Bug fix、Feature">playbook</Term>、路由机制和模型角色，套在您自己的风格上一样顺手。本章会介绍如何生成个人专属模式、从会话里沉淀教训、改造仓库让 Agent 不再重犯老毛病、编写目标明确的技能，以及在信任一项技能改动前先做盲测。
+
+起步要比您想的更小。第一天根本不需要装一大堆技能，甚至不需要用到整套插件。先平平常常地写提示词，留意 Agent 在哪里栽跟头，等同一个问题出现第二次时，再补一个技能或一条检查。
+
+## 用 `/automate-me` 生成您自己的模式 {#generate-your-own-mode-with-automate-me}
+
+```text
+/automate-me
+```
+
+您不用自己费劲总结个人风格，因为 [`/automate-me`](https://github.com/cursor/plugins/blob/main/pstack/skills/automate-me/SKILL.md) 会直接从您的历史记录里挖出来。它会扫描当前工作区里最近的会话记录，找出您反复流露的偏好——包括回复风格、任务委派、验证习惯、代码品味、行文风格和流程要求——再向您确认哪些习惯真的符合您的风格。确认之后，它会走 Cursor 内置的 `create-skill` 流程起草 `.cursor/skills/<your-name>-mode/SKILL.md`，用 [`/unslop`](https://github.com/cursor/plugins/blob/main/pstack/skills/unslop/SKILL.md) 过一遍草稿，再从一个独立的 <Term tip="工作树：同一个 git 仓库再检出一份独立的工作目录，各自一个分支，互不干扰">worktree</Term> 打开 PR，让您像评审普通代码一样审查它。
+
+以后您的工作习惯变了，随时再跑一次更新即可：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/automate-me update my mode skill with everything since its last edit
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/automate-me 用上次修改以来的所有新记录，更新我的个人模式技能
+```
+
+</TabItem>
+</Tabs>
+
+运行更新时，它只读取这份技能上次修改之后的新会话记录。您没有推翻过的旧规则会原样保留，有新证据的规则会被修订，只有出现新习惯时才会增补新章节。
+
+## 用 `/reflect` 沉淀一次会话的教训 {#capture-a-sessions-lessons-with-reflect}
+
+刚结束一个让您有所收获的任务，趁热运行：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/reflect that took way too long. capture what we learned so the next run doesn't repeat it.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/reflect 这趟耗得太久了。把我们学到的东西记下来，免得下次再踩同样的坑。
+```
+
+</TabItem>
+</Tabs>
+
+[`/reflect`](https://github.com/cursor/plugins/blob/main/pstack/skills/reflect/SKILL.md) 会通读本次会话记录，只留下真正能改变以后 Agent 行为的教训，并把每条改进提议归进 `Accepted`、`Rejected` 和 `Backlog` 三类。在改动任何技能之前，它会先等您批准。只有能实打实改变未来某次决策的提议才值得批准——一次反常的会话只是个案，算不上规则。
+
+## 用 `/correct` 修复仓库环境 {#fix-the-environment-with-correct}
+
+如果您因为同一个错误反复纠正 Agent，真正该改的是代码库本身，而不是您的下一条提示词。把可选手段按靠得住的程度从高到低排个序：
+
+1. 用架构设计或更好的数据结构，让这类错误根本不可能发生。
+2. 用类型系统拦住它，或者加一条 lint / CI 检查，并且报错信息里直接写明怎么修。
+3. 用测试把它抓出来。
+4. 写进文档或 Agent 规则里。Agent 漏看了一条规则也不会有任何东西报错，所以这一层排在最后。
+
+人工评审压根不在这份列表里。每次 PR 都要靠评审人去捉同一个错，这正是要解决的问题本身。[`/correct`](https://github.com/cursor/plugins/blob/main/pstack/skills/correct/SKILL.md) 就是专门干这件事的：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/correct agents keep calling the database client directly instead of going through the repository layer
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/correct Agent 总是直接调数据库客户端，不走 repository 层
+```
+
+</TabItem>
+</Tabs>
+
+它会翻查最近的提交、回滚记录、评审意见，以及解释临时变通方案的代码注释，然后把错误归成几大类。同一类错误至少出现过两次，才算作一类。接下来，它会挑出最常犯的那几类，每类单独做一次提交，尽量选能落地的最高层级来修，并证明每条新检查在历史上的真实错例上真的会报错。它还会在 Agent 说明文件里维护一张对照表，把每条规则和背后的强制手段一一对应起来，这样哪条规则没有硬约束兜底，一旦老问题再次出现，就能一眼看出来。回复里会列出每一类错误、对应的证据、选用的层级，以及为什么没能做到更高一层。
+
+不带参数直接运行 `/correct`，它就会自己从历史记录里归纳出错误类别。`/reflect` 和 `/correct` 各司其职：`/reflect` 从单次会话里打磨技能，`/correct` 则改造仓库让某类错误再也回不来。如果要靠划定新的边界来根治问题，就把 `/correct` 和 `/architect` 搭配起来用。[睡觉时让工作继续跑](./07-overnight.mdx#run-many-projects-in-parallel)一章的“并行推进多个 Project”一节里，有一条在整个仓库范围同时用上这两者的示例提示词。
+
+## 编写目标明确的技能 {#author-a-focused-skill}
+
+当您已经清楚想沉淀哪一套固定流程时：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode write a skill for verifying database migrations in this repo
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 写一个技能，用来验证这个仓库里的数据库迁移
+```
+
+</TabItem>
+</Tabs>
+
+写技能会命中 [Authoring or modifying a skill](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/authoring-a-skill.md) playbook，它会走 Cursor 内置的 `create-skill` 流程、校验 frontmatter 和链接，再通过 Opening a PR playbook 提交成果。写给 Agent 读的文字，标准比写给人读的还要高，因为一句没用的废话，日后就可能变成某个 Agent 死板照做的指令。交给这个 playbook 来把关，比自己徒手写 `SKILL.md` 稳妥得多。
+
+有两种特殊技能各自配了专门的生成器。用来驱动应用并证明行为正常的，叫验证技能，应该改用 [`/create-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-verification-skill/SKILL.md) 和 [`/maintain-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/maintain-verification-skill/SKILL.md)。用来配合模型检验器、数学证明或其他验证器检查代码性质的，叫形式化验证技能，应该改用 [`/create-formal-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/create-formal-verification-skill/SKILL.md) 和 [`/maintain-formal-verification-skill`](https://github.com/cursor/plugins/blob/main/pstack/skills/maintain-formal-verification-skill/SKILL.md)。这两类在[验证结果并提交 PR](./06-verify-and-ship.mdx#prove-a-property-with-a-formal-verification-skill)里都有详细介绍。
+
+## 用 `/technical-writing` 按标准写文档 {#write-docs-to-a-standard-with-technical-writing}
+
+要交付的文字不止有技能。写文档、RFC、README、PR 说明和提交信息时，都可以用：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/technical-writing review the readme changes
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/technical-writing 审一下这次 readme 的改动
+```
+
+</TabItem>
+</Tabs>
+
+[`/technical-writing`](https://github.com/cursor/plugins/blob/main/pstack/skills/technical-writing/SKILL.md) 套用的是一套分层的写作标准，目标是让一个已经很疲惫的工程师第一遍读就能看懂。它会先定好文档类型（教程、操作指南、参考手册还是原理解析），然后逐句推敲：说清谁做了什么、一句只讲一件事、绝不留歧义。既可以用它来审您或 Agent 刚写完的稿子，也可以在让 Agent 写文档时一开始就点名带上它。
+
+## 对技能改动做盲测 {#test-a-skill-change-blind}
+
+改一次技能会影响往后的每一次会话，所以要像做实验一样去测它。打算采用别人写的技能时也是同理：留下来之前，先确认它在您的实际工作里真的让 Agent 变得更好。
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode run the eval playbook on this skill change. same task for both variants, candidates stay blind.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 对这次技能改动跑一遍 eval playbook。两个版本做同一个任务，各候选方案保持盲测。
+```
+
+</TabItem>
+</Tabs>
+
+如果一个技能老是漏掉某件事，而您又明确知道它该怎么做，可以把修改和评测合在同一个任务里做：
+
+<Tabs groupId="prompt-lang">
+<TabItem value="en" label="English">
+
+```text
+/poteto-mode update the review skill so it flags missing migrations, and eval the change.
+```
+
+</TabItem>
+<TabItem value="zh" label="中文">
+
+```text
+/poteto-mode 更新一下评审技能，让它能标出漏掉的数据库迁移，并对这次改动做评测。
+```
+
+</TabItem>
+</Tabs>
+
+从一开始就要求做评测，能倒逼修改保持克制和诚实。对着某一次糟糕的会话打补丁，很容易只拟合那一次场景；改得多了，整个技能就会逐渐跑偏。评测能在改动上线前把这种偏移拦下来。
+
+[Eval](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/eval.md) playbook 专门防范一种失效模式：观察者效应。Agent 一旦察觉自己在接受评测，举止就会和平时不一样。因此，各个候选方案的 Agent 都是在清理干净的目录里接到一个看似平常的任务，绝不出现“eval”或“candidate”这两个词，彼此也完全不知道其他候选方案的存在。最后由一个裁判在中性匿名标签下给所有输出打分；检查候选方案有没有按技能里的指引去读相关文件时，依据的也是它实际读取的文件记录，而不是听它嘴上怎么说。
+
+接受结论之前，务必亲自把每一份输出都读一遍。如果您和裁判的判断不一致，先怀疑评分标准有没有写偏，不要先怀疑您自己的判断。
+
+## 用 `/make-bot-ui` 给机器人搭一个小界面 {#build-a-bot-ui-with-make-bot-ui}
+
+还有一个面向特定场景的技能，专供 Grok Bot 用户使用。[`/make-bot-ui`](https://github.com/cursor/plugins/blob/main/pstack/skills/make-bot-ui/SKILL.md) 会搭出一个小页面，页面上的按钮可以通过 webhook 触发的 routine 唤醒机器人。举个例子，您可以像刷卡片一样逐条滑过待评审队列里的条目，每滑一条就让机器人对这一项采取动作。webhook 的发送密钥保存在您本机的服务端里，绝不会流到浏览器或聊天记录里。这个技能也包含如何通过 Tailscale 把页面暴露出来。
+
+:::warning[误区]
+
+别在任务做到一半时，因为某个技能表现不对劲就顺手去改它。把技能修复放进单独的 PR 里，眼前的主线任务继续往前走。夹杂在功能代码里一起合进去的技能改动，评审时根本看不清，也完全没法单独评测。
+
+:::
