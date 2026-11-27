@@ -8,6 +8,12 @@
   margin-bottom: 0;
 }
 
+/* 图示（Diagram）、视频、标签页、表格这些块下方本来留 32px，后面跟图注时去掉，图注同样离它 10px。
+   :not(p) 把上面的图片段落留给上一条规则；优先级高于 custom.css 给标签页、表格设边距的规则 */
+:global(:is(.theme-doc-markdown, .blog-post-page .markdown)) > :not(p):has(+ .caption) {
+  margin-bottom: 0;
+}
+
 .caption {
   margin-top: 0.625rem;
   padding-bottom: 1rem;

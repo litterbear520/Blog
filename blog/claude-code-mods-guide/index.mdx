@@ -49,11 +49,11 @@ Claude Code 本来就允许您调整很多行为：settings、权限规则、斜
 </TabItem>
 </Tabs>
 
-*图 A：Token Weather、Blast Radius 和 Replay Theater 在一个终端会话里依次登场。*
+<FigCaption>图 A：Token Weather、Blast Radius 和 Replay Theater 在一个终端会话里依次登场。</FigCaption>
 
-<VideoFigure loop width={860} height={44} src={figBBand} poster={figBBandStill} label="终端里一行横栏轮流显示三种预报：黄色太阳表示 Clear，蓝色雨伞表示 Showers，粉色闪电表示 Storm，每种都带着已用 token 数（满额 200k）和最近几轮的小柱状图。" />
-
-*图 B：随着上下文窗口填满，Token Weather 的横栏依次变成 18% 的 Clear、67% 的 Showers、81% 的 Storm。*
+<VideoFigure loop width={860} height={44} src={figBBand} poster={figBBandStill} label="终端里一行横栏轮流显示三种预报：黄色太阳表示 Clear，蓝色雨伞表示 Showers，粉色闪电表示 Storm，每种都带着已用 token 数（满额 200k）和最近几轮的小柱状图。">
+  图 B：随着上下文窗口填满，Token Weather 的横栏依次变成 18% 的 Clear、67% 的 Showers、81% 的 Storm。
+</VideoFigure>
 
 **需要 Claude Code 2.1.287 或更高版本。** mod 默认开启，不需要额外打开什么。API 在不同版本之间可能会变。Claude Code 每次加载 mod 时，都会把与您当前版本对应的类型声明写进 mod 的 `.claude-plugin/types/` 文件夹，一切以这些声明为准。
 
@@ -80,7 +80,7 @@ hook 像中间件一样串成一条链。您的 hook 先运行，`next(e)` 把�
 
 <Diagram variant="modsHookChain" />
 
-*hook 串成一条链：事件依次经过您的 hook、其他插件，最后到达 Claude Code。*
+<FigCaption>hook 串成一条链：事件依次经过您的 hook、其他插件，最后到达 Claude Code。</FigCaption>
 
 | <span style={{ whiteSpace: 'nowrap' }}>做法</span> | 写法 | 例子 |
 | ---- | ---- | ---- |
@@ -117,7 +117,7 @@ Token Weather 在每一轮结束后读取上下文窗口的占用情况，然后
 </TabItem>
 </Tabs>
 
-*图 C：Token Weather 在一个完整的终端会话里跑了三轮，200k 的窗口依次用到 18%、67%、81%。*
+<FigCaption>图 C：Token Weather 在一个完整的终端会话里跑了三轮，200k 的窗口依次用到 18%、67%、81%。</FigCaption>
 
 ### 捷径：让 Claude 来写 {/* #the-shortcut-let-claude-build-it */}
 
@@ -511,7 +511,7 @@ Token Weather 只负责观察和绘制。接下来这两个 mod 会介入事件�
 </TabItem>
 </Tabs>
 
-*图 D：Blast Radius 扣下 rm -rf build，列出它会删除的 9 个文件（1.1 MB）。按 Cancel 就拒绝执行；第二次尝试时按 Proceed，命令才运行。*
+<FigCaption>图 D：Blast Radius 扣下 rm -rf build，列出它会删除的 9 个文件（1.1 MB）。按 Cancel 就拒绝执行；第二次尝试时按 Proceed，命令才运行。</FigCaption>
 
 它用到三个 hook：Bash 上的 `tool.call`，以及 `Pane` 和 `AbovePrompt` 上的 `ui.render`。核心就是上面表格里的“作答”：
 
@@ -542,7 +542,7 @@ on("tool.call", { tool: "Bash" }, async ($, e, next) => {
 
 ![一个没有侧边面板的终端：输入框上方一个黄色边框的框里写着这条命令、它会丢弃的两个有未提交改动的文件，以及带编号的 Proceed 和 Cancel 两个选项。](./fig-e-band.png)
 
-*图 E：在 120 列宽的终端里，Blast Radius 把 git reset --hard 的报告画在输入框上方的横栏里。*
+<FigCaption>图 E：在 120 列宽的终端里，Blast Radius 把 git reset --hard 的报告画在输入框上方的横栏里。</FigCaption>
 
 它是一张安全网，不是权限系统。它读的是命令文本，所以 `$(…)`、别名，以及内部调用 `rm` 的脚本都能绕过它。要硬性拦截，请用权限规则。
 
@@ -559,7 +559,7 @@ on("tool.call", { tool: "Bash" }, async ($, e, next) => {
 </TabItem>
 </Tabs>
 
-*图 F：一次横跨 3 个文件、共 5 处编辑的重命名之后，Replay Theater 给出提示，然后在面板里依次显示第 1 到第 5 步。*
+<FigCaption>图 F：一次横跨 3 个文件、共 5 处编辑的重命名之后，Replay Theater 给出提示，然后在面板里依次显示第 1 到第 5 步。</FigCaption>
 
 它从不拦截或改动任何编辑，只是观察：
 
@@ -594,7 +594,7 @@ on("command.run", { command: "replay" }, async ($, e) => ({ text: (await openRep
 
 ![一个很高的终端窗口，输入框上方有一个品红色边框的框：一排带编号的步骤、文件 greet.js、一行 diff，以及 Prev、Next 和 Close 按钮。](./fig-g-inline.png)
 
-*图 G：80 列宽时，Replay Theater 内联画在输入框上方。*
+<FigCaption>图 G：80 列宽时，Replay Theater 内联画在输入框上方。</FigCaption>
 
 ## 值得养成的四个习惯 {/* #four-habits-worth-keeping */}
 

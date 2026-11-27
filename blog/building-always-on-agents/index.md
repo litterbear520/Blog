@@ -30,9 +30,9 @@ import howItFitsPoster from './how-it-fits-poster.jpg';
 
 实际上，Agent 大部分时间都在休眠，只是定期醒来干活。每一段工作叫作一次 **run**：Agent 收到一个事件，完成任务，再把这次发生的事情存下来。run 发生在一个 **session** 里，session 就是由消息和工具调用组成的一份 <Term tip="会话记录：一个 session 里所有消息和工具调用按顺序记下来的全文">transcript</Term>。run 结束后，Agent 回去休眠，这个循环就这样无限重复下去。
 
-<VideoFigure loop src={runCycleClip} poster={runCyclePoster} width={1200} height={674} label="动图：始终在线的 Agent 的时间轴。大段时间在休眠，不消耗 token，中间穿插着短暂的 run。每次 run 分四步：事件到达，session 开始，agent loop 运行，run 把结果写回持久状态；持久状态会在多次 run 之间保留下来。" />
-
-*Agent 大部分时间在休眠，只在事件到来时短暂醒来，完成一次 run。*
+<VideoFigure loop src={runCycleClip} poster={runCyclePoster} width={1200} height={674} label="动图：始终在线的 Agent 的时间轴。大段时间在休眠，不消耗 token，中间穿插着短暂的 run。每次 run 分四步：事件到达，session 开始，agent loop 运行，run 把结果写回持久状态；持久状态会在多次 run 之间保留下来。">
+  Agent 大部分时间在休眠，只在事件到来时短暂醒来，完成一次 run。
+</VideoFigure>
 
 ## 核心构件
 
@@ -56,7 +56,7 @@ inbox 应该记录每个事件的状态。事件源一般会给每个事件一�
 
 ![Event inbox 示意图。Handler（一个 HTTP 端点）把每个事件写进 event inbox，inbox 是一张数据库表，记录每个事件的状态，并丢弃重复的事件；Handler 同时唤醒 Worker。Worker 读取待处理的事件，启动 run，等它结束，再把这些事件标为已完成。](./event-inbox.png)
 
-*事件先写进 inbox，再由 Worker 统一读取、启动 run、标为已完成。*
+<FigCaption>事件先写进 inbox，再由 Worker 统一读取、启动 run、标为已完成。</FigCaption>
 
 新事件到来时，Handler 把事件写进 inbox，并唤醒 Worker。Worker 读取所有待处理的事件，启动一次 run。如果事件延续的是之前的工作（比如用户的回复），就恢复已有的 session；其他事件都开启一个新 session。
 
@@ -75,7 +75,7 @@ timer 放在自己的持久存储里，通常是另一张数据库表，和 inbo
 
 ![Timer 示意图。一次 run 在数据库表里设置一个 timer：要么是由 Agent 设置的 follow-up，要么是由用户设置的 schedule。Scheduler 找出到期的 timer，往 event inbox 里添加一个事件，由这个事件启动下一次 run。](./timers.png)
 
-*Scheduler 把到期的 timer 变成 inbox 里的一个事件，由它启动下一次 run。*
+<FigCaption>Scheduler 把到期的 timer 变成 inbox 里的一个事件，由它启动下一次 run。</FigCaption>
 
 timer 自己不会发起 run。实际的做法是，一个 <Term tip="调度器：定期查看哪些 timer 到期了，到期的就变成事件放进 inbox">Scheduler</Term>（通常是一个后台服务）按固定的间隔轮询这份存储，触发所有到期的 timer。每轮询一次，Scheduler 会：
 
@@ -104,7 +104,7 @@ Scheduler 可以自己写一个服务，也可以用一个<Term tip="把流程�
 
 ![一种示例 memory 配置，memory 是一个文件目录。instructions.md、index.md 和 reported.md 在每次 run 开始时加载，notes/ 和 progress/ 两个文件夹在需要时才读取。Agent 在 run 过程中写入 memory。](./memory.png)
 
-*一种示例 memory 配置：几个文件每次 run 都加载，其余的需要时再读。*
+<FigCaption>一种示例 memory 配置：几个文件每次 run 都加载，其余的需要时再读。</FigCaption>
 
 上面说的都是在 run 过程中存下的 memory。你还可以加上“做梦”（dreaming）：回顾过去的 session，整理 memory。做梦可以替换过时的条目，也能发现那些要跨越许多次 run 才看得出来的规律。想了解更多，可以读我们[关于 Agent 记忆的文章](/blog/components-of-agent-memory)，里面讲得更详细。
 
@@ -116,9 +116,9 @@ Scheduler 可以自己写一个服务，也可以用一个<Term tip="把流程�
 
 session 太长时，可以用 [compaction](https://platform.claude.com/docs/en/build-with-claude/compaction) 把较早的消息压缩成摘要，也可以另开一个新 session。两种做法都会丢掉细节，所以凡是需要长期保留的东西，都应该在过程中随时存进 memory。
 
-<VideoFigure loop src={contextWindowClip} poster={contextWindowPoster} width={1200} height={674} label="动图：已用上下文随时间变化的图表。系统提示词、工具和 memory 占着一段固定的区域，每次 run 都有。已有的 session 会带回它的全部 transcript，并不断增长，直到 compaction 把较早的 transcript 变成一份摘要。" />
-
-*每次 run 都背着一份固定开销；已有的 session 越来越长，直到 compaction，或者换成新 session。*
+<VideoFigure loop src={contextWindowClip} poster={contextWindowPoster} width={1200} height={674} label="动图：已用上下文随时间变化的图表。系统提示词、工具和 memory 占着一段固定的区域，每次 run 都有。已有的 session 会带回它的全部 transcript，并不断增长，直到 compaction 把较早的 transcript 变成一份摘要。">
+  每次 run 都背着一份固定开销；已有的 session 越来越长，直到 compaction，或者换成新 session。
+</VideoFigure>
 
 ### Permissions
 
@@ -138,7 +138,7 @@ permissions 靠的机制，和其他 Agent 用的是同一套：
 
 ![Outbox 示意图。一次 run 有三种结束方式：没什么要说的；调用发送工具；或者用延后的工具调用询问用户。消息进入 outbox（一张数据库表），由 Dispatcher 送到用户手里。延后的请求可以作为消息走 outbox，也可以在你自己的界面里展示。](./outbox.png)
 
-*一次 run 有三种结局：什么都不说、发一条消息，或者询问用户。*
+<FigCaption>一次 run 有三种结局：什么都不说、发一条消息，或者询问用户。</FigCaption>
 
 一次 run 可能以下面三种方式之一结束：
 
@@ -156,9 +156,9 @@ outbox 是一张单独的待发消息表，和 event inbox 相对应。还有一
 
 五个构件是这样组合在一起的：
 
-<VideoFigure loop src={howItFitsClip} poster={howItFitsPoster} width={1200} height={674} label="动图：五个构件怎样组合在一起。timer 和 event inbox 启动一次 run；run 在 session 里读写 memory，每次工具调用都要经过 permissions 检查；outbox 把消息送给用户，用户的回答再作为事件回到 inbox。" />
-
-*五个构件连成一个循环，让 Agent 看起来始终在线。*
+<VideoFigure loop src={howItFitsClip} poster={howItFitsPoster} width={1200} height={674} label="动图：五个构件怎样组合在一起。timer 和 event inbox 启动一次 run；run 在 session 里读写 memory，每次工具调用都要经过 permissions 检查；outbox 把消息送给用户，用户的回答再作为事件回到 inbox。">
+  五个构件连成一个循环，让 Agent 看起来始终在线。
+</VideoFigure>
 
 每次 run 都从 inbox 里的一个事件开始，这个事件可能是用户消息、webhook，也可能来自 timer。Worker 取到事件后，启动一次 run，在新 session 或已有 session 里唤醒 Agent。Agent 先读 memory，掌握基本情况；在 permissions 允许的范围内采取行动；再把学到的东西更新进 memory。run 结束后，Agent 往 outbox 写入一行，Dispatcher 把消息送到用户手里。
 

@@ -56,7 +56,7 @@ npm run cover -- <slug> --preview  # 渲染博客封面，用法见 tools/covers
 
 ## 组件
 
-正文要用组件、新增或修改组件时，先读 `src/components/README.md`：每个组件的写法、约定和数据位置都在那里。`Term`、`QuickCheck`、`ReadMore`、`LessonMeta`、`VideoFigure` 全局注册，正文直接写；正文里的视频一律用 `VideoFigure`。
+正文要用组件、新增或修改组件时，先读 `src/components/README.md`：每个组件的写法、约定和数据位置都在那里。`Term`、`QuickCheck`、`ReadMore`、`LessonMeta`、`VideoFigure`、`FigCaption` 全局注册，正文直接写；正文里的视频一律用 `VideoFigure`，图注一律用 `FigCaption`。
 
 ## 主题覆盖
 
@@ -90,7 +90,7 @@ sidebar_position: 1
 
 **文章头图**（正文开头的大图）可以用编辑排版风或用户提供的图，放在 `static/img/blog/`，正文首行用 `![alt](/img/blog/xxx)` 引入。
 
-**转载外文文章**：配图下载到文章文件夹（原站多半禁止跨站引用，直接引用会裂图）；图里的英文用 `tools/figure-l10n/` 换成中文，用法见其 README。文章点名的核心概念和开发者平时直接说英文的术语（memory、permissions、session、run、inbox、Worker 这类）在正文和图里都保留原词，第一次出现时用 `Term` 写中文名和一句解释，例子是 `blog/building-always-on-agents`。图下一行写斜体图注，原文按编号引用图时写成 `*图 N：……*`。图里的术语和正文、图注、alt 叫法一致。原文的作者与致谢不搬。文末 `---` 后写 `*参考文章：[原标题](原文链接)*`。
+**转载外文文章**：配图下载到文章文件夹（原站多半禁止跨站引用，直接引用会裂图）；图里的英文用 `tools/figure-l10n/` 换成中文，用法见其 README。文章点名的核心概念和开发者平时直接说英文的术语（memory、permissions、session、run、inbox、Worker 这类）在正文和图里都保留原词，第一次出现时用 `Term` 写中文名和一句解释，例子是 `blog/building-always-on-agents`。图下一行写 `<FigCaption>图注</FigCaption>`，原文按编号引用图时写成 `<FigCaption>图 N：……</FigCaption>`；视频的图注写进 `VideoFigure`。图里的术语和正文、图注、alt 叫法一致。原文的作者与致谢不搬。文末 `---` 后写 `*参考文章：[原标题](原文链接)*`。
 
 ### 课程
 

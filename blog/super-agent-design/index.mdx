@@ -28,11 +28,11 @@ import Diagram from '@site/src/components/Diagram';
 
 <Diagram variant="superAgentChannels" />
 
-*同一个任务在 IM 群聊与 GitHub Pull Request 评审之间连续推进*
+<FigCaption>同一个任务在 IM 群聊与 GitHub Pull Request 评审之间连续推进</FigCaption>
 
 <Diagram variant="superAgentProactive" />
 
-*持续关注公共群聊，在无人 @ 的情况下主动识别缺陷并提交修复 Pull Request*
+<FigCaption>持续关注公共群聊，在无人 @ 的情况下主动识别缺陷并提交修复 Pull Request</FigCaption>
 
 具体来说，我们认为 Super-agent 具备以下四个基础特征：
 
@@ -49,7 +49,7 @@ import Diagram from '@site/src/components/Diagram';
 
 <Diagram variant="superAgentArch" />
 
-*Super-agent 整体系统架构，标号 [2] 至 [6] 对应下文第 2 至第 6 节*
+<FigCaption>Super-agent 整体系统架构，标号 [2] 至 [6] 对应下文第 2 至第 6 节</FigCaption>
 
 ## 2. 双层架构
 
@@ -63,7 +63,7 @@ import Diagram from '@site/src/components/Diagram';
 
 <Diagram variant="superAgentTwoLayer" />
 
-*双层架构：Router 层统一负责路由与对外交互，多个 Worker Session 隔离并发执行任务*
+<FigCaption>双层架构：Router 层统一负责路由与对外交互，多个 Worker Session 隔离并发执行任务</FigCaption>
 
 通过这一双层架构，系统在底层接管了上下文管理与并发执行，从而在用户侧淡化了 Session 的存在，使用户面对的始终是同一个 Super-agent。从这个角度看，让用户手动管理 Session，在很大程度上是从底层 LLM API 延续下来的设计惯性；Session 应当是系统的实现细节，而不应是用户的认知负担。
 
@@ -113,7 +113,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 
 <Diagram variant="superAgentFilter" />
 
-*两级过滤：先由程序层策略筛除大部分无关消息，再交由语义层策略判断*
+<FigCaption>两级过滤：先由程序层策略筛除大部分无关消息，再交由语义层策略判断</FigCaption>
 
 ### 3.2 事件路由
 
@@ -123,7 +123,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 
 <Diagram variant="superAgentThreads" />
 
-*Thread 示例：同一个 IM 话题或同一个 GitHub Pull Request 下的连续 Trigger 构成一条 Thread*
+<FigCaption>Thread 示例：同一个 IM 话题或同一个 GitHub Pull Request 下的连续 Trigger 构成一条 Thread</FigCaption>
 
 在 Router 层根据某个 Thread 的初始事件创建 Worker Session 后，该 Worker 会直接订阅对应的 Thread，从而将事件路由分为如下图所示的两条路径：
 
@@ -132,7 +132,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 
 <Diagram variant="superAgentSubscribe" />
 
-*订阅与直通：初始事件经由 Router 层创建 Worker 并建立订阅，同一 Thread 的后续事件直接发往该 Worker*
+<FigCaption>订阅与直通：初始事件经由 Router 层创建 Worker 并建立订阅，同一 Thread 的后续事件直接发往该 Worker</FigCaption>
 
 此外，Thread 与 Worker 之间的订阅是多对多的关系。一个 Worker 可以同时订阅多个相关的 Thread，同一个 Thread 也可以被多个 Worker 订阅。当多个 Worker 在同一个工作环境或讨论中发生交集时，该 Thread 下的新事件会同时直通给所有订阅它的 Worker，使它们无需点对点通信，也有机会获知彼此的操作并自行解决冲突。而在输出侧，Worker 仍将关键结论汇报给 Router 层，由 Router 层统一向用户回复并同步全局记忆。
 
@@ -152,7 +152,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 
 <Diagram variant="superAgentRecall" />
 
-*链式召回：每次召回的对象均内联下一跳关联对象的 ID，支持沿引用关系逐跳展开上下文*
+<FigCaption>链式召回：每次召回的对象均内联下一跳关联对象的 ID，支持沿引用关系逐跳展开上下文</FigCaption>
 
 具体来说，系统为 Trigger、Thread 和 Worker Session 等对象赋予唯一 ID，并在注入时内联紧密关联对象的 ID，使这些对象在底层构成一张引用图。由于每一次调用工具召回的对象本身同样遵循 Inline & Spill，其返回结果中又会内联下一跳关联对象的摘要与 ID，模型便可以从当前事件出发，顺着引用关系逐步按需召回上下文。
 
@@ -166,7 +166,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 
 <Diagram variant="superAgentSpeculative" />
 
-*投机执行示例：群内还在讨论解决方案时，Super-agent 已在后台提交了修复 Pull Request*
+<FigCaption>投机执行示例：群内还在讨论解决方案时，Super-agent 已在后台提交了修复 Pull Request</FigCaption>
 
 ## 4. 面向人的交互
 
@@ -178,7 +178,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 
 <Diagram variant="superAgentAsyncLoop" />
 
-*经典 ReAct Loop 与异步 ReAct Loop 对比：异步调用立即返回 Started 通知，后台工具运行期间仍可响应新消息*
+<FigCaption>经典 ReAct Loop 与异步 ReAct Loop 对比：异步调用立即返回 Started 通知，后台工具运行期间仍可响应新消息</FigCaption>
 
 为此，我们将耗时的命令与子任务工具调用改为异步的 `start()` 和 `stop()`，构成**异步 ReAct Loop**。模型调用 `start()` 后立即收到“已启动（Started）”的返回，循环不再等待该工具；在后台工具执行完成后，系统再将最终结果作为一条新的事件消息投递进会话；同时，模型也可以根据上下文调用 `stop()` 主动终止执行时间过长的后台命令。
 
@@ -217,7 +217,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 
 <Diagram variant="superAgentDecouple" />
 
-*存算分离与执行环境解耦：Agent Loop 与持久化状态在云端分离，并通过端侧 daemon 按需接入各类执行环境*
+<FigCaption>存算分离与执行环境解耦：Agent Loop 与持久化状态在云端分离，并通过端侧 daemon 按需接入各类执行环境</FigCaption>
 
 ## 6. Watchdog
 
@@ -245,7 +245,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 
 ![折线图“工作请求的累计到达与完成”：横轴是时间（分钟），纵轴是累计任务数（每轮平均）。黑线是到达的工作请求，约 20 分钟内全部到达；Super-agent（蓝）和去掉直通的 Super-agent（绿虚线）几乎重合，约 30 分钟完成全部任务；单 Session + Subagent 工具、中性提示（红）明显落后，约 35 分钟才完成；提示优先委派（紫）前段略领先蓝线，约 18 分钟后落后，最后有一条拖到约 50 分钟的长尾。](./cumulative-completion.png)
 
-*工作请求的累计到达曲线与四种方案的累计完成曲线（5 次实验运行均值；消息间隔与工作时长按 1/4 缩放，模型调用耗时为真实值）*
+<FigCaption>工作请求的累计到达曲线与四种方案的累计完成曲线（5 次实验运行均值；消息间隔与工作时长按 1/4 缩放，模型调用耗时为真实值）</FigCaption>
 
 | 方案 | 任务完成时间 P50 / P95（分钟） | 单次实验读缓存 Token（全部 Session） |
 | ---- | ---- | ---- |
@@ -254,7 +254,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 | 单 Session + Subagent 工具，中性提示 | 20.4 / 29.5 | 605 万 |
 | 单 Session + Subagent 工具，提示优先委派 | 13.8 / 29.0 | 1082 万 |
 
-*注：每种方案重复运行 5 次；任务完成时间指从工作请求到结果消息的耗时。*
+<FigCaption>注：每种方案重复运行 5 次；任务完成时间指从工作请求到结果消息的耗时。</FigCaption>
 
 从任务完成时间看，Super-agent 的 p50 与 p95 分别为 12.4 分钟与 15.7 分钟，显著优于带 Subagent 工具的单 Session。原因在于，带 Subagent 的单 Session 在实验场景下受提示词影响较大，主 Session 常常决定自己直接执行任务，导致总完成时间长、性能不稳定。在中性提示下，模型在 5 次运行中一次都没有调用 Subagent，所有工作都在主 Session 中进行并不断被新消息打断，p95 达到 29.5 分钟；改为提示优先委派后，模型在 5 次运行中有 4 次进行了委派，完成时间有所缩短但整体仍慢于 Super-agent，且剩下 1 次它判断工作“很小”而选择自己执行，形成了图中的紫色长尾。相比于在单 Session 中依赖提示词工程和模型临场判断分不分工，双层架构通过让 Router 不直接执行具体工作、Worker 仅接收所订阅 Thread 的消息，在系统层面上缓解了这一问题。
 
@@ -266,7 +266,7 @@ Worker 不会直接与人类交互，其推理过程和工具调用不会直接�
 
 ![两张折线图，横轴都是需要决定的 trigger 到达速率（条/分钟）。左图“batch 大小与单次请求耗时”：batch 大小 B 从 1.0 升到约 2.8，单次请求耗时 T 只从约 2.5 秒升到约 3.9 秒。右图“单个决定的分摊推理时间”：从约 6.4 秒一路降到约 1.6 秒。](./router-batching.png)
 
-*不同 Trigger 到达速率下 Router Session 的 batch 大小、单次请求耗时与单个决定的分摊推理时间*
+<FigCaption>不同 Trigger 到达速率下 Router Session 的 batch 大小、单次请求耗时与单个决定的分摊推理时间</FigCaption>
 
 如上图所示，当需要决定的 Trigger 到达速率从每分钟约 1 条升至约 40 条时，平均 batch 大小从 1.0 升至 2.8，而单次请求耗时仅从 2.5 秒增至 3.9 秒，增长慢于 batch 大小，从而使单个决定分摊的推理时间从 6.4 秒降至 1.6 秒。这意味着当外部事件突发拥堵时，Router 层能够通过自动合并积压事件提高有效吞吐。这也解释了为什么在 7.1 节中，即使去掉直通使 Router 的峰值负载增加，仍未触及单 Router 的吞吐瓶颈。因此在我们目前的团队规模下，无需过早对 Router 层做水平切分而牺牲全局上下文的连续性。
 
