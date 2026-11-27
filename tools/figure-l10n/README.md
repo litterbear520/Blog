@@ -44,6 +44,12 @@ GIF 动图用 `gif.py` 逐帧处理：每帧按同一份规格盖住英文、写
 
 `rgif` 把本目录同步到 Mac，用 `uv` 带上 Pillow 和 numpy 跑 `gif.py`，再取回 `out/`。原图 `src/<slug>/figNN.gif` 和静态图放在一起。抽查时至少看三种帧：文字最清楚的、正在渐显或换色的、动的东西（圆点、填色）经过文字旁边的。
 
+## 字体和特殊底色
+
+规格顶层可写 `font`（中文字体文件）和 `latinFont`（只用于字母、数字、半角标点的英文字体），不写就用思源黑体。原图是手写风时换成配套的手写体，例子是 `specs/all-code-is-slop/`：中文用小赖（`curl -sL -o fonts/Xiaolai-Regular.ttf https://github.com/lxgw/kose-font/releases/latest/download/Xiaolai-Regular.ttf`），英文用 Excalidraw 仓库 `packages/excalidraw/fonts/Excalifont/` 里覆盖 U+20–7E 的那个 woff2。分段着色 `segs` 的某段写 `ul: true` 会画同色下划线。
+
+文字压在不规则的气泡、纸纹、蜡笔排线这类底上时，整块遮盖会切掉边框或露出平涂。这时先用一个 Pillow 脚本把原图里的文字抹掉、生成 `-clean.png`，规格的 `src` 指向它，对应项写 `noPatch: true` 并手工给 `x`、`y`、`color`。`specs/all-code-is-slop/clean.py` 有三种抹法：封闭气泡里只保留碰到框边的笔画（边框）；纸纹借同一列上下方的纹理；排线天空平铺一块取样纹理再匹配深浅。
+
 ## 约定
 
 - 字号：中文 ≈ 同位置英文字号 × 0.92。英文字号从 debug 打印的字迹高度 h 估：同时有大写/升部和降部（g、y、p、j）时 ≈ h / 0.9，只有大写没有降部时 ≈ h / 0.7。粗体标题用 weight 600，正文 400。颜色默认自动取原文字迹色。

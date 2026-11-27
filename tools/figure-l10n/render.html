@@ -25,9 +25,12 @@ body { margin: 0; }
 //   lh                行高倍数，默认 1.3
 //   mono              true 用等宽字体
 //   noPatch           true 不遮盖（只写字）
-//   segs              [{t, color, weight}] 单行分段着色（如后半句换色），t 仍写全文
+//   segs              [{t, color, weight, ul}] 单行分段着色（如后半句换色），ul: true 给这一段加下划线；t 仍写全文
 //   inpaint           {color, tol, grow}：不整块遮盖，只抹掉 patch 内接近 color 的字迹再从周围补回（字压在连线上时用，需同时写 patch、x、y、color）
 //   rot               旋转角度（如 -90），以原文字迹中心为锚点居中书写；x/y 可覆盖锚点
+// SPEC 顶层还可写：
+//   font              中文字体文件（相对本目录），如 'fonts/Xiaolai-Regular.ttf'；不写用 NotoSansSC
+//   latinFont         英文字体文件，只用于 U+20–7E（字母、数字、半角标点），中文和全角标点仍走 font
 const q = new URLSearchParams(location.search);
 const fig = q.get('fig'), debug = q.get('debug') === '1', orig = q.get('orig') === '1';
 const rep = [];
@@ -53,7 +56,10 @@ const parse = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
     for (let y = y0 - m; y <= y1 + m; y += 2) for (const x of [x0 - m, x1 + m]) if (x >= 0 && y >= 0 && x < W && y < H) a.push(px(x, y));
     return median(a);
   }
-  await document.fonts.load('400 40px SC'); await document.fonts.load('700 40px SC');
+  let FAM = 'SC';
+  if (S.font) { const f = new FontFace('SPEC', `url(${S.font})`); document.fonts.add(await f.load()); FAM = 'SPEC, SC'; }
+  if (S.latinFont) { const f = new FontFace('SPECLATIN', `url(${S.latinFont})`, { unicodeRange: 'U+20-7E' }); document.fonts.add(await f.load()); FAM = 'SPECLATIN, ' + FAM; }
+  await document.fonts.load(`400 40px ${FAM}`, '中A'); await document.fonts.load(`700 40px ${FAM}`, '中A');
   const jobs = [];
   for (const it of S.items) {
     const r = it.r;
@@ -110,20 +116,25 @@ const parse = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
       if (debug) { ctx.strokeStyle = '#ff00ff'; ctx.lineWidth = 2; const p = j.patch; ctx.strokeRect(p[0], p[1], p[2] - p[0], p[3] - p[1]); }
       if (!it.t || debug) continue;
       const size = it.size, lines = it.t.split('\n'), lh = (it.lh ?? 1.3) * size;
-      ctx.font = `${it.weight ?? 400} ${size}px ${it.mono ? '"DejaVu Sans Mono", monospace' : 'SC'}`;
+      ctx.font = `${it.weight ?? 400} ${size}px ${it.mono ? '"DejaVu Sans Mono", monospace' : FAM}`;
       ctx.fillStyle = col; ctx.textBaseline = 'middle';
       const anchor = it.anchor || 'start'; ctx.textAlign = anchor === 'start' ? 'left' : anchor === 'end' ? 'right' : 'center';
       let x = it.x ?? (anchor === 'start' ? ink[0] : anchor === 'end' ? ink[2] : (ink[0] + ink[2]) / 2);
       let y = it.y ?? ((ink[1] + ink[3]) / 2 - (lines.length - 1) * lh / 2);
       x += it.dx || 0; y += it.dy || 0;
       if (it.segs) {
-        // 分段着色（单行）：segs: [{t, color?, weight?}]，未写的沿用本项的 color / weight；t 仍需写全文
-        const fontOf = s => `${s.weight ?? it.weight ?? 400} ${size}px SC`;
+        // 分段着色（单行）：segs: [{t, color?, weight?, ul?}]，未写的沿用本项的 color / weight；t 仍需写全文
+        const fontOf = s => `${s.weight ?? it.weight ?? 400} ${size}px ${FAM}`;
         const ws = it.segs.map(s => { ctx.font = fontOf(s); return ctx.measureText(s.t).width; });
         const total = ws.reduce((a, b) => a + b, 0);
         let sx = anchor === 'start' ? x : anchor === 'end' ? x - total : x - total / 2;
         ctx.textAlign = 'left';
-        it.segs.forEach((s, k) => { ctx.font = fontOf(s); ctx.fillStyle = s.color || col; ctx.fillText(s.t, sx, y); sx += ws[k]; });
+        it.segs.forEach((s, k) => {
+          ctx.font = fontOf(s); ctx.fillStyle = s.color || col; ctx.fillText(s.t, sx, y);
+          // ul: true 在这一段下面画同色下划线（原图里带下划线的强调词）
+          if (s.ul) { const lw = Math.max(2, size * 0.08); ctx.fillRect(sx, y + size * 0.62, ws[k], lw); }
+          sx += ws[k];
+        });
       } else if (it.rot) {
         // 旋转书写：默认以原文字迹中心为锚点，文字在旋转后的坐标系里居中
         const cx = (it.x ?? (ink[0] + ink[2]) / 2) + (it.dx || 0), cy = (it.y ?? (ink[1] + ink[3]) / 2) + (it.dy || 0);
